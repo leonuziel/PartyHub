@@ -1,5 +1,5 @@
 import { Server, Socket } from 'socket.io';
-import { RoomManager } from '../room/RoomManager';
+import { RoomManager } from '../room/RoomManager.js';
 
 export class SocketManager {
   private io: Server;

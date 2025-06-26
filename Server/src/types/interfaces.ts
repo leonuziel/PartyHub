@@ -1,4 +1,4 @@
-import { RoomState } from './enums';
+import { RoomState } from './enums.js';
 
 export interface Player {
   id: string; // socket.id

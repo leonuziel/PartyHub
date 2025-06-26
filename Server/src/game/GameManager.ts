@@ -1,6 +1,6 @@
-import { BaseGame } from './BaseGame';
-import { GameFactory } from './GameFactory';
-import { Player } from '../types/interfaces';
+import { BaseGame } from './BaseGame.js';
+import { GameFactory } from './GameFactory.js';
+import { Player } from '../types/interfaces.js';
 
 export class GameManager {
   private currentGame: BaseGame | null = null;

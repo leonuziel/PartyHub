@@ -1,4 +1,4 @@
-import { Player, BaseGameState } from '../types/interfaces';
+import { Player, BaseGameState } from '../types/interfaces.js';
 
 // The abstract contract for all mini-games.
 export abstract class BaseGame {

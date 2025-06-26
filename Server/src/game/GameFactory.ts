@@ -1,6 +1,6 @@
-import { BaseGame } from './BaseGame';
-import { QuizClashGame } from './games/QuizClashGame';
-import { Player } from '../types/interfaces';
+import { BaseGame } from './BaseGame.js';
+import { QuizClashGame } from './games/QuizClashGame.js';
+import { Player } from '../types/interfaces.js';
 
 export class GameFactory {
   public static createGame(

@@ -1,6 +1,6 @@
 import { Server, Socket } from 'socket.io';
-import { Room } from './Room';
-import { generateRoomCode } from '../utils/codeGenerator';
+import { Room } from './Room.js';
+import { generateRoomCode } from '../utils/codeGenerator.js';
 
 // Singleton class to manage all rooms
 export class RoomManager {

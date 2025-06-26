@@ -1,19 +1,15 @@
 import { BaseGame } from '../BaseGame.js';
-import { Player, QuizClashGameState, QuizClashQuestion } from '../../types/interfaces.js';
-
 // A sample question bank
-const questions: QuizClashQuestion[] = [
+const questions = [
     { questionText: 'What is 2 + 2?', answers: ['3', '4', '5', '6'], correctAnswerIndex: 1 },
     { questionText: 'What is the capital of France?', answers: ['London', 'Berlin', 'Paris', 'Madrid'], correctAnswerIndex: 2 }
 ];
-
 export class QuizClashGame extends BaseGame {
-    protected gameState: QuizClashGameState;
-    private playerAnswers: Map<string, { answerIndex: number, time: number }> = new Map();
-    private currentQuestion: QuizClashQuestion | null = null;
-    private timerId: NodeJS.Timeout | null = null;
-
-    constructor(players: Map<string, Player>, broadcast: (event: string, payload: any) => void) {
+    gameState;
+    playerAnswers = new Map();
+    currentQuestion = null;
+    timerId = null;
+    constructor(players, broadcast) {
         super(players, broadcast);
         const initialScores = Array.from(players.keys()).reduce((acc, id) => ({ ...acc, [id]: 0 }), {});
         this.gameState = {
@@ -26,20 +22,17 @@ export class QuizClashGame extends BaseGame {
             timer: 0,
         };
     }
-
-    public start(): void {
+    start() {
         this.nextQuestion();
     }
-
-    private nextQuestion(): void {
-        if(this.timerId) clearTimeout(this.timerId);
+    nextQuestion() {
+        if (this.timerId)
+            clearTimeout(this.timerId);
         this.currentQuestion = questions[this.gameState.round];
-
         if (!this.currentQuestion) {
             this.endGame();
             return;
         }
-
         this.playerAnswers.clear();
         this.gameState.round++;
         this.gameState.status = 'ASKING_QUESTION';
@@ -47,23 +40,21 @@ export class QuizClashGame extends BaseGame {
         const { correctAnswerIndex, ...questionForPlayers } = this.currentQuestion;
         this.gameState.question = questionForPlayers;
         this.gameState.timer = 15;
-
         this.broadcastState();
-
         this.timerId = setInterval(() => {
             this.gameState.timer--;
             if (this.gameState.timer <= 0) {
                 this.revealAnswers();
-            } else {
+            }
+            else {
                 this.broadcastState();
             }
         }, 1000);
     }
-
-    private revealAnswers(): void {
-        if(this.timerId) clearInterval(this.timerId);
+    revealAnswers() {
+        if (this.timerId)
+            clearInterval(this.timerId);
         this.gameState.status = 'REVEALING_ANSWERS';
-
         // Calculate scores
         this.playerAnswers.forEach((answer, playerId) => {
             if (answer.answerIndex === this.currentQuestion?.correctAnswerIndex) {
@@ -72,7 +63,6 @@ export class QuizClashGame extends BaseGame {
                 this.gameState.scores[playerId] += points;
             }
         });
-        
         // Include correct answer in the broadcast
         const revealState = {
             ...this.getSanitizedGameState(),
@@ -80,37 +70,31 @@ export class QuizClashGame extends BaseGame {
             playerAnswers: Object.fromEntries(this.playerAnswers)
         };
         this.broadcast('game:state_update', revealState);
-
         // Move to next question after a delay
         setTimeout(() => this.nextQuestion(), 5000);
     }
-
-    private endGame(): void {
+    endGame() {
         this.gameState.status = 'FINISHED';
         this.broadcastState();
     }
-
-    public handlePlayerAction(playerId: string, action: { answerIndex: number }): void {
+    handlePlayerAction(playerId, action) {
         if (this.gameState.status !== 'ASKING_QUESTION' || this.playerAnswers.has(playerId)) {
             return; // Ignore late or duplicate answers
         }
-        
         this.playerAnswers.set(playerId, {
             answerIndex: action.answerIndex,
             time: (15 - this.gameState.timer) * 1000 // Time taken in ms
         });
-
         // If all players have answered, reveal early
         if (this.playerAnswers.size === this.players.size) {
             this.revealAnswers();
         }
     }
-
-    private broadcastState(): void {
+    broadcastState() {
         this.broadcast('game:state_update', this.getSanitizedGameState());
     }
-
-    private getSanitizedGameState(): any {
+    getSanitizedGameState() {
         return this.gameState;
     }
 }
+//# sourceMappingURL=QuizClashGame.js.map

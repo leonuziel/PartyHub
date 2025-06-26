@@ -3,6 +3,7 @@ import { usePlayerStore } from '../store/playerStore';
 import { useRoomStore } from '../store/roomStore';
 import { useGameStore } from '../store/gameStore';
 import { RoomData } from '../types/types';
+import { useDebugStore } from '../store/debugStore';
 
 const BACKEND_URL = 'http://localhost:4000';
 
@@ -19,27 +20,40 @@ class SocketService {
   }
 
   private setupListeners(): void {
+    const debugStore = useDebugStore.getState();
+
     this.socket.on('connect', () => {
       usePlayerStore.getState().setSocketId(this.socket.id!);
+      debugStore.setConnectionStatus('connected');
+      debugStore.setLastEvent('connect');
       console.log('Connected to server with ID:', this.socket.id);
     });
 
+    this.socket.on('disconnect', () => {
+      debugStore.setConnectionStatus('disconnected');
+      debugStore.setLastEvent('disconnect');
+      console.log('Disconnected from server');
+      usePlayerStore.getState().setSocketId(null);
+      useRoomStore.getState().clearRoom();
+      useGameStore.getState().clearGameState();
+    });
+
+    this.socket.on('connect_error', () => {
+      debugStore.setConnectionStatus('error');
+      debugStore.setLastEvent('connect_error');
+      console.error('Connection error');
+    });
+
     this.socket.on('room:update', (data: RoomData) => {
+      debugStore.setLastEvent('room:update');
       console.log('Room update received:', data);
       useRoomStore.getState().setRoom(data);
     });
 
     this.socket.on('game:state_update', (data: any) => {
+      debugStore.setLastEvent('game:state_update');
       console.log('Game state update received:', data);
       useGameStore.getState().setGameState(data);
-    });
-
-    this.socket.on('disconnect', () => {
-      console.log('Disconnected from server');
-      // Optionally reset state on disconnect
-      usePlayerStore.getState().setSocketId(null);
-      useRoomStore.getState().clearRoom();
-      useGameStore.getState().clearGameState();
     });
   }
 

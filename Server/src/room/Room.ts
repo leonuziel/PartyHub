@@ -1,7 +1,7 @@
 import { Socket, Server } from 'socket.io';
-import { Player, RoomData } from '../types/interfaces';
-import { RoomState } from '../types/enums';
-import { GameManager } from '../game/GameManager';
+import { Player, RoomData } from '../types/interfaces.js';
+import { RoomState } from '../types/enums.js';
+import { GameManager } from '../game/GameManager.js';
 
 export class Room {
   public hostId: string;

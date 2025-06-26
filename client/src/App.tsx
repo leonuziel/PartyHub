@@ -4,6 +4,7 @@ import HomePage from './pages/HomePage';
 import LobbyPage from './pages/LobbyPage';
 import GamePage from './pages/GamePage';
 import { socketService } from './services/socketService';
+import { DebugPanel } from './components/DebugPanel';
 
 function App() {
   // Establish socket connection when the app loads
@@ -18,6 +19,8 @@ function App() {
         <Route path="/lobby/:roomCode" element={<LobbyPage />} />
         <Route path="/game/:roomCode" element={<GamePage />} />
       </Routes>
+
+      {process.env.NODE_ENV === 'development' && <DebugPanel />}
     </Router>
   );
 }
