@@ -1,0 +1,26 @@
+/* Full screen center layout for loading screen */
+.game-loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #111827;
+  /* gray-900 */
+  color: white;
+}
+
+/* Loading text spacing */
+.loading-message {
+  margin-top: 1rem;
+  font-size: 1rem;
+}
+
+/* Game container wrapper */
+.game-container {
+  min-height: 100vh;
+  background-color: #111827;
+  /* gray-900 */
+  color: white;
+  padding: 1rem;
+}

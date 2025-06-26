@@ -1,0 +1,172 @@
+/* Container */
+.lobby-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    min-height: 100vh;
+    background: linear-gradient(to bottom right, #eef2ff, #dbeafe);
+    /* Soft Indigo gradient */
+}
+
+/* Card Wrapper */
+.lobby-card {
+    width: 100%;
+    max-width: 700px;
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.lobby-card:hover {
+    transform: translateY(-4px);
+}
+
+/* Room Code */
+.room-code-label {
+    color: #6b7280;
+    /* Gray-500 */
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.05em;
+}
+
+.room-code {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #4338ca;
+    /* Indigo-700 */
+    background-color: #f3f4f6;
+    /* Gray-100 */
+    padding: 1rem;
+    border-radius: 0.75rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+    font-family: monospace;
+}
+
+/* Heading */
+.players-heading {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #1f2937;
+    /* Gray-800 */
+    margin-bottom: 1.5rem;
+}
+
+/* Player Grid */
+.players-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+@media (min-width: 640px) {
+    .players-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 768px) {
+    .players-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Player Card */
+.player-card {
+    background: #ffffff;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    border: 2px solid #e5e7eb;
+    /* Gray-200 */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s ease;
+}
+
+.player-card:hover {
+    transform: scale(1.03);
+}
+
+.player-nickname {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #111827;
+    /* Gray-900 */
+}
+
+.player-host-label {
+    display: block;
+    font-size: 0.75rem;
+    color: #6366f1;
+    /* Indigo-500 */
+    margin-top: 0.25rem;
+}
+
+/* Start Button */
+.start-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    background-color: #4f46e5;
+    /* Indigo-600 */
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.start-button:hover:not(:disabled) {
+    background-color: #4338ca;
+    /* Indigo-700 */
+}
+
+.start-button:disabled {
+    background-color: #a5b4fc;
+    /* Lighter indigo */
+    cursor: not-allowed;
+}
+
+/* Waiting message */
+.waiting-message {
+    color: #4b5563;
+    /* Gray-600 */
+    font-style: italic;
+    font-size: 0.95rem;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #f3f4f6;
+    /* gray-100 */
+}
+
+/* Optional spinner spacing */
+.loading-text {
+    margin-top: 1rem;
+    color: #4b5563;
+    /* gray-600 */
+    font-size: 1rem;
+}
