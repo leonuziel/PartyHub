@@ -1,8 +1,8 @@
 import React from 'react';
 import { useGameStore } from '../store/gameStore';
 import { usePlayerRole } from '../hooks/usePlayerRole';
-import { QuizClashHostView } from './QuizClashHostView';
-import { QuizClashPlayerView } from './QuizClashPlayerView';
+import { QuizClashHostView } from './QuizClash/QuizClashHostView';
+import { QuizClashPlayerView } from './QuizClash/QuizClashPlayerView';
 
 export const GameContainer: React.FC = () => {
   const gameState = useGameStore((state) => state.gameState);

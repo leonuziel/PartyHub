@@ -1,6 +1,6 @@
 import React from 'react';
-import { useGameStore } from '../store/gameStore';
-import { QuizClashGameState, QuizClashRevealState } from '../types/types';
+import { useGameStore } from '../../store/gameStore';
+import { QuizClashGameState, QuizClashRevealState } from '../../types/types';
 import './QuizClashHostView.css';
 
 const colorClasses = ['color-red', 'color-blue', 'color-yellow', 'color-green'];

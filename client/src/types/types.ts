@@ -24,7 +24,14 @@ export interface QuizClashQuestion {
   answers: string[];
 }
 
-export interface QuizClashGameState {
+
+export interface GameState {
+  gameState: any | null; // Can be any game's state
+  setGameState: (state: any) => void;
+  clearGameState: () => void;
+}
+
+export interface QuizClashGameState extends GameState {
   gameId: 'quizclash';
   status: 'STARTING' | 'ASKING_QUESTION' | 'REVEALING_ANSWERS' | 'FINISHED';
   players: Player[];
@@ -33,6 +40,7 @@ export interface QuizClashGameState {
   round: number;
   timer: number;
 }
+
 
 // This is the state received during the reveal phase
 export interface QuizClashRevealState extends QuizClashGameState {

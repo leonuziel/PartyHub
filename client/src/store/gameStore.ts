@@ -1,10 +1,5 @@
 import { create } from 'zustand';
-
-interface GameState {
-  gameState: any | null; // Can be any game's state
-  setGameState: (state: any) => void;
-  clearGameState: () => void;
-}
+import { GameState } from '../types/types';
 
 export const useGameStore = create<GameState>((set) => ({
   gameState: null,

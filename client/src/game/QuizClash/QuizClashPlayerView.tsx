@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { useGameStore } from '../store/gameStore';
-import { useRoomStore } from '../store/roomStore';
-import { usePlayerRole } from '../hooks/usePlayerRole';
-import { socketService } from '../services/socketService';
-import { QuizClashGameState, QuizClashRevealState } from '../types/types';
-import { Spinner } from '../components/Spinner';
+import { useGameStore } from '../../store/gameStore';
+import { useRoomStore } from '../../store/roomStore';
+import { usePlayerRole } from '../../hooks/usePlayerRole';
+import { socketService } from '../../services/socketService';
+import { QuizClashGameState, QuizClashRevealState } from '../../types/types';
+import { Spinner } from '../../components/Spinner';
 import './QuizClashPlayerView.css';
 
 const colorClasses = ['btn-red', 'btn-blue', 'btn-yellow', 'btn-green'];
