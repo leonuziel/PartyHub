@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useRoomStore } from '../store/roomStore';
 import { usePlayerRole } from '../hooks/usePlayerRole';
@@ -12,10 +12,16 @@ import './LobbyPage.css';
 const LobbyPage: React.FC = () => {
   const room = useRoomStore((state) => state.room);
   const { isHost } = usePlayerRole();
+  const [selectedGame, setSelectedGame] = useState('quizclash');
+
+  const games = [
+    { id: 'quizclash', name: 'QuizClash' },
+    { id: 'fakenews', name: 'FakeNews' },
+  ];
 
   const handleStartGame = () => {
     if (room && isHost) {
-      socketService.startGame(room.roomCode, 'quizclash');
+      socketService.startGame(room.roomCode, selectedGame);
     }
   };
 
@@ -48,9 +54,22 @@ const LobbyPage: React.FC = () => {
           ))}
         </div>
         {isHost ? (
-          <Button className="start-button" onClick={handleStartGame} disabled={room.players.length < 1}>
-            Start QuizClash!
-          </Button>
+          <div className="host-controls">
+            <select
+              className="game-selector"
+              value={selectedGame}
+              onChange={(e) => setSelectedGame(e.target.value)}
+            >
+              {games.map((game) => (
+                <option key={game.id} value={game.id}>
+                  {game.name}
+                </option>
+              ))}
+            </select>
+            <Button className="start-button" onClick={handleStartGame} disabled={room.players.length < 1}>
+              Start Game!
+            </Button>
+          </div>
         ) : (
           <p className="waiting-message">Waiting for the host to start the game...</p>
         )}

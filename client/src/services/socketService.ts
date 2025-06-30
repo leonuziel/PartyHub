@@ -59,8 +59,8 @@ class SocketService {
 
   // --- Emitters ---
 
-  public createRoom(callback: (response: { roomCode: string }) => void) {
-    this.socket.emit('room:create', callback);
+  public createRoom(nickname: string, callback: (response: { roomCode:string }) => void) {
+    this.socket.emit('room:create', { nickname }, callback);
   }
 
   public joinRoom(roomCode: string, nickname: string, callback: (response: { success: boolean; message?: string, roomCode?: string }) => void) {

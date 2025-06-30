@@ -47,3 +47,17 @@ export interface QuizClashRevealState extends QuizClashGameState {
     correctAnswerIndex: number;
     playerAnswers: Record<string, { answerIndex: number }>;
 }
+
+// --- FakeNews Interfaces ---
+export interface FakeNewsGameState extends GameState {
+  gameId: 'fakenews';
+  status: 'STARTING' | 'WRITING' | 'VOTING' | 'REVEAL' | 'FINISHED';
+  players: Player[];
+  question: string;
+  options?: string[];
+  submissions: Record<string, string>; // playerId -> submitted lie
+  votes: Record<string, string>; // playerId -> votedForPlayerId
+  correctAnswer?: string;
+  scores: Record<string, number>;
+  round: number;
+}

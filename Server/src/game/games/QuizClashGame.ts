@@ -7,15 +7,19 @@ const questions: QuizClashQuestion[] = [
     { questionText: 'What is the capital of France?', answers: ['London', 'Berlin', 'Paris', 'Madrid'], correctAnswerIndex: 2 }
 ];
 
-export class QuizClashGame extends BaseGame {
-    protected gameState: QuizClashGameState;
+export class QuizClashGame extends BaseGame<QuizClashGameState> {
     private playerAnswers: Map<string, { answerIndex: number, time: number }> = new Map();
     private currentQuestion: QuizClashQuestion | null = null;
     private timerId: NodeJS.Timeout | null = null;
 
-    constructor(players: Map<string, Player>, broadcast: (event: string, payload: any) => void) {
-        super(players, broadcast);
-        const initialScores = Array.from(players.keys()).reduce((acc, id) => ({ ...acc, [id]: 0 }), {});
+    constructor(players: Map<string, Player>, hostId: string, broadcast: (event: string, payload: any) => void) {
+        super(players, hostId, broadcast);
+        const initialScores = Array.from(players.keys()).reduce((acc, id) => {
+            if (id !== hostId) {
+                acc[id] = 0;
+            }
+            return acc;
+        }, {} as Record<string, number>);
         this.gameState = {
             gameId: 'quizclash',
             status: 'STARTING',
@@ -91,8 +95,8 @@ export class QuizClashGame extends BaseGame {
     }
 
     public handlePlayerAction(playerId: string, action: { answerIndex: number }): void {
-        if (this.gameState.status !== 'ASKING_QUESTION' || this.playerAnswers.has(playerId)) {
-            return; // Ignore late or duplicate answers
+        if (this.gameState.status !== 'ASKING_QUESTION' || this.playerAnswers.has(playerId) || playerId === this.hostId) {
+            return; // Ignore late, duplicate, or host answers
         }
         
         this.playerAnswers.set(playerId, {
@@ -100,8 +104,8 @@ export class QuizClashGame extends BaseGame {
             time: (15 - this.gameState.timer) * 1000 // Time taken in ms
         });
 
-        // If all players have answered, reveal early
-        if (this.playerAnswers.size === this.players.size) {
+        // If all players (except host) have answered, reveal early
+        if (this.playerAnswers.size === this.players.size - 1) {
             this.revealAnswers();
         }
     }

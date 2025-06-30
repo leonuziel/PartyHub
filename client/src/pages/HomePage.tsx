@@ -19,14 +19,8 @@ const HomePage: React.FC = () => {
       return;
     }
     setPlayerNickname(nickname);
-    socketService.createRoom((response) => {
-      socketService.joinRoom(response.roomCode, nickname, (joinResponse) => {
-        if (joinResponse.success) {
-          navigate(`/lobby/${response.roomCode}`);
-        } else {
-          setError(joinResponse.message || 'Failed to join the new room.');
-        }
-      });
+    socketService.createRoom(nickname, (response) => {
+        navigate(`/lobby/${response.roomCode}`);
     });
   };
 

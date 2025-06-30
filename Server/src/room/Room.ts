@@ -13,9 +13,11 @@ export class Room {
     public readonly roomCode: string,
     private io: Server,
     hostSocket: Socket,
+    hostNickname: string,
   ) {
     this.hostId = hostSocket.id;
-    this.gameManager = new GameManager(this.players, this.broadcast.bind(this));
+    this.addPlayer(hostSocket, hostNickname);
+    this.gameManager = new GameManager(this.players, this.hostId, this.broadcast.bind(this));
   }
   
   public addPlayer(socket: Socket, nickname: string): void {

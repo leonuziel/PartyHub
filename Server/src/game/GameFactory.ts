@@ -1,16 +1,20 @@
 import { BaseGame } from './BaseGame.js';
 import { QuizClashGame } from './games/QuizClashGame.js';
-import { Player } from '../types/interfaces.js';
+import { FakeNewsGame } from './games/FakeNewsGame.js';
+import { BaseGameState, Player } from '../types/interfaces.js';
 
 export class GameFactory {
   public static createGame(
     gameId: string,
     players: Map<string, Player>,
+    hostId: string,
     broadcast: (event: string, payload: any) => void
-  ): BaseGame {
+  ): BaseGame<BaseGameState> {
     switch (gameId) {
       case 'quizclash':
-        return new QuizClashGame(players, broadcast);
+        return new QuizClashGame(players, hostId, broadcast);
+      case 'fakenews':
+        return new FakeNewsGame(players, hostId, broadcast);
       // case 'fibfinders':
       //   return new FibFindersGame(players, broadcast);
       default:

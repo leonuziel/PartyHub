@@ -15,11 +15,10 @@ export class SocketManager {
     this.io.on('connection', (socket: Socket) => {
       console.log(`[SocketIO] User connected: ${socket.id}`);
 
-      socket.on('room:create', (callback) => {
-          const room = roomManager.createRoom(socket);
-          // room.addPlayer(socket, 'Host'); // Auto-add host as a player
-          callback({ roomCode: room.roomCode });
-      });
+      socket.on('room:create', ({ nickname }, callback) => {
+        const room = roomManager.createRoom(socket, nickname);
+        callback({ roomCode: room.roomCode });
+    });
 
       socket.on('room:join', ({ roomCode, nickname }, callback) => {
         const room = roomManager.getRoom(roomCode);

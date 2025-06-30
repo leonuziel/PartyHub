@@ -1,0 +1,115 @@
+✅ guide: How To Add a New Game to PartyHub
+🔁 General Metadata
+ Choose unique gameId (e.g. fibfinders, emojiwars)
+
+ Define display name (e.g. FakeNews, Emoji Wars)
+
+ Define core phases/states for gameplay
+
+ Decide: is this game host-driven or auto-progressing?
+
+🧠 Backend (/Server/)
+🔲 1. Create the Game Logic
+ Create new file under Server/src/game/games/<NewGame>.ts
+
+ Extend BaseGame, implement:
+
+constructor(players, broadcast)
+
+start()
+
+handlePlayerAction(playerId, action)
+
+state transitions: ASKING, VOTING, REVEAL, etc.
+
+scoring logic
+
+ Use broadcastState() internally on state changes
+
+🔲 2. Register Game in Factory
+ In Server/src/game/GameFactory.ts, import and register:
+
+ts
+Copy
+Edit
+import { MyNewGame } from './games/MyNewGame';
+...
+case 'mynewgame': return new MyNewGame(players, broadcast);
+🔲 3. Build + Restart Server
+ npm run build
+
+ npm run start
+
+🖥 Frontend (/Client/)
+🔲 4. Define Game State Type
+ In Client/src/types/gameTypes.ts, add:
+
+ts
+Copy
+Edit
+export interface MyNewGameState extends BaseGameState {
+  gameId: 'mynewgame';
+  ...
+}
+🔲 5. Create Host & Player Views
+ Create files:
+
+Client/src/game/MyNewGame/MyNewGameHostView.tsx
+
+Client/src/game/MyNewGame/MyNewGamePlayerView.tsx
+
+ Use useGameStore, useRoomStore, usePlayerRole, socketService
+
+🔲 6. Add View Switching in GameContainer.tsx
+ Add:
+
+ts
+Copy
+Edit
+case 'mynewgame':
+  return isHost ? <MyNewGameHostView /> : <MyNewGamePlayerView />;
+🔲 7. Add to Lobby Game Selector
+ Update game list in LobbyPage.tsx:
+
+ts
+Copy
+Edit
+const games = [
+  { id: 'trivia', name: 'Trivia Quiz' },
+  { id: 'mynewgame', name: 'My Game Display Name' }
+];
+🎨 Styling & UX
+🔲 8. Create Style File
+ Create MyNewGameView.css
+
+ Apply CSS classes in JSX
+
+ Style:
+
+Question/Answer display
+
+Input fields or buttons
+
+Score/reveal views
+
+🧪 Testing
+🔲 9. Test Full Flow with 2+ Clients
+ Test from lobby ➜ play ➜ end
+
+ Edge cases:
+
+Player disconnects
+
+Empty answer
+
+Duplicate votes, etc.
+
+🧩 Optional Features
+ Add timer/auto-advance
+
+ Add multi-round support
+
+ Track per-question stats
+
+ Animate transitions (reveal, score)
+

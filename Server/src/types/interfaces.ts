@@ -33,8 +33,21 @@ export interface QuizClashQuestion {
 
 export interface QuizClashGameState extends BaseGameState {
   gameId: 'quizclash';
+  status: 'STARTING' | 'ASKING_QUESTION' | 'REVEALING_ANSWERS' | 'FINISHED';
   question: Omit<QuizClashQuestion, 'correctAnswerIndex'> | null;
   scores: Record<string, number>; // playerId -> score
   round: number;
   timer: number;
+}
+
+// --- FakeNews Specific Interfaces ---
+export interface FakeNewsGameState extends BaseGameState {
+    gameId: 'fakenews';
+    status: 'STARTING' | 'WRITING' | 'VOTING' | 'REVEAL' | 'FINISHED';
+    question: string;
+    options?: string[]; // The shuffled list of real answer + lies
+    submissions?: Record<string, string>; // PlayerId -> their lie
+    votes?: Record<string, string>; // PlayerId -> their vote
+    correctAnswer?: string;
+    scores: Record<string, number>;
 }
