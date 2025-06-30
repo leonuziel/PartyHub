@@ -12,8 +12,8 @@ export class FakeNewsGame extends BaseGame<FakeNewsGameState> {
     private votes: Map<string, string> = new Map();
     private currentQuestionIndex = 0;
 
-    constructor(players: Map<string, Player>, hostId: string, broadcast: (type: string, payload: any) => void) {
-        super(players, hostId, broadcast);
+    constructor(players: Map<string, Player>, hostId: string, broadcast: (type: string, payload: any) => void, onGameEnd: () => void) {
+        super(players, hostId, broadcast, onGameEnd);
         this.gameState = {
             ...this.gameState,
             gameId: 'fakenews',
@@ -146,6 +146,11 @@ export class FakeNewsGame extends BaseGame<FakeNewsGameState> {
             scores: this.gameState.scores,
         };
         this.broadcastState();
+
+        // After a delay, signal that the game is over
+        setTimeout(() => {
+            this.onGameEnd();
+        }, 5000); // 5-second delay to show final scores
     }
 
     private getInitialScores(): Record<string, number> {

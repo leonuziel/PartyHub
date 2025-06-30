@@ -12,8 +12,8 @@ export class QuizClashGame extends BaseGame<QuizClashGameState> {
     private currentQuestion: QuizClashQuestion | null = null;
     private timerId: NodeJS.Timeout | null = null;
 
-    constructor(players: Map<string, Player>, hostId: string, broadcast: (event: string, payload: any) => void) {
-        super(players, hostId, broadcast);
+    constructor(players: Map<string, Player>, hostId: string, broadcast: (event: string, payload: any) => void, onGameEnd: () => void) {
+        super(players, hostId, broadcast, onGameEnd);
         const initialScores = Array.from(players.keys()).reduce((acc, id) => {
             if (id !== hostId) {
                 acc[id] = 0;
@@ -92,6 +92,10 @@ export class QuizClashGame extends BaseGame<QuizClashGameState> {
     private endGame(): void {
         this.gameState.status = 'FINISHED';
         this.broadcastState();
+
+        setTimeout(() => {
+            this.onGameEnd();
+        }, 5000);
     }
 
     public handlePlayerAction(playerId: string, action: { answerIndex: number }): void {

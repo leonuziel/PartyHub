@@ -8,13 +8,14 @@ export class GameFactory {
     gameId: string,
     players: Map<string, Player>,
     hostId: string,
-    broadcast: (event: string, payload: any) => void
+    broadcast: (event: string, payload: any) => void,
+    onGameEnd: () => void
   ): BaseGame<BaseGameState> {
     switch (gameId) {
       case 'quizclash':
-        return new QuizClashGame(players, hostId, broadcast);
+        return new QuizClashGame(players, hostId, broadcast, onGameEnd);
       case 'fakenews':
-        return new FakeNewsGame(players, hostId, broadcast);
+        return new FakeNewsGame(players, hostId, broadcast, onGameEnd);
       // case 'fibfinders':
       //   return new FibFindersGame(players, broadcast);
       default:

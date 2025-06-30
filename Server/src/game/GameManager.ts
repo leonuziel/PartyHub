@@ -8,11 +8,12 @@ export class GameManager {
   constructor(
     private players: Map<string, Player>,
     private hostId: string,
-    private broadcast: (event: string, payload: any) => void
+    private broadcast: (event: string, payload: any) => void,
+    private onGameEnd: () => void
   ) { }
 
   public startGame(gameId: string): void {
-    this.currentGame = GameFactory.createGame(gameId, this.players, this.hostId, this.broadcast);
+    this.currentGame = GameFactory.createGame(gameId, this.players, this.hostId, this.broadcast, this.onGameEnd);
     this.currentGame!.start();
   }
 

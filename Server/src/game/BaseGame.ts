@@ -7,7 +7,8 @@ export abstract class BaseGame<T extends BaseGameState> {
   constructor(
     protected players: Map<string, Player>,
     protected hostId: string,
-    protected broadcast: (event: string, payload: any) => void
+    protected broadcast: (event: string, payload: any) => void,
+    protected onGameEnd: () => void
   ) {
     this.gameState = {
         gameId: 'base',

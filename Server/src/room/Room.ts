@@ -17,7 +17,7 @@ export class Room {
   ) {
     this.hostId = hostSocket.id;
     this.addPlayer(hostSocket, hostNickname);
-    this.gameManager = new GameManager(this.players, this.hostId, this.broadcast.bind(this));
+    this.gameManager = new GameManager(this.players, this.hostId, this.broadcast.bind(this), this.handleGameEnd.bind(this));
   }
   
   public addPlayer(socket: Socket, nickname: string): void {
@@ -52,6 +52,12 @@ export class Room {
     this.io.to(this.roomCode).emit(event, payload);
   }
   
+  private handleGameEnd(): void {
+    this.state = RoomState.LOBBY;
+    // Potentially clear game-specific data here in the future
+    this.broadcastState();
+  }
+
   private broadcastState(): void {
     const roomData: RoomData = {
       roomCode: this.roomCode,
