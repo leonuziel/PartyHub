@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { socketService } from '../services/socketService';
 import { usePlayerStore } from '../store/playerStore';
 import { Button } from '../components/Button';
@@ -12,6 +12,15 @@ const HomePage: React.FC = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const setPlayerNickname = usePlayerStore((state) => state.setNickname);
+  const location = useLocation();
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const codeFromUrl = queryParams.get('roomCode');
+    if (codeFromUrl) {
+      setRoomCode(codeFromUrl.toUpperCase());
+    }
+  }, [location.search]);
 
   const handleCreateRoom = () => {
     if (!nickname) {
