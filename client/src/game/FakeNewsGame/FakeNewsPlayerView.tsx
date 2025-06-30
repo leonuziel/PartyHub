@@ -4,6 +4,7 @@ import { useRoomStore } from '../../store/roomStore';
 import { socketService } from '../../services/socketService';
 import { FakeNewsGameState } from '../../types/types';
 import { Button } from '../../components/Button';
+import './FakeNewsPlayerView.css';
 
 const FakeNewsPlayerView: React.FC = () => {
     const { gameState } = useGameStore();
@@ -31,47 +32,50 @@ const FakeNewsPlayerView: React.FC = () => {
 
     const renderContent = () => {
         if (submitted) {
-            return <h2>Waiting for other players...</h2>;
+            return <h2 className="status-text">Waiting for other players...</h2>;
         }
 
         switch (state.status) {
             case 'WRITING':
                 return (
-                    <div>
-                        <h1>{state.question}</h1>
-                        <input
-                            type="text"
+                    <div className="player-input-container">
+                        <h1 className="question-text">{state.question}</h1>
+                        <textarea
+                            className="lie-input"
                             value={lie}
                             onChange={(e) => setLie(e.target.value)}
-                            placeholder="Enter your lie"
+                            placeholder="Enter your most believable lie..."
+                            rows={3}
                         />
                         <Button onClick={handleSubmitLie} disabled={!lie}>
-                            Submit
+                            Submit Lie
                         </Button>
                     </div>
                 );
             case 'VOTING':
                 return (
-                    <div>
-                        <h1>Vote for the real answer!</h1>
-                        {state.options?.map((option, index) => (
-                            <Button key={index} onClick={() => handleVote(option)}>
-                                {option}
-                            </Button>
-                        ))}
+                    <div className="player-input-container">
+                        <h1 className="question-text">Vote for the truth!</h1>
+                        <div className="voting-options">
+                            {state.options?.map((option, index) => (
+                                <Button key={index} onClick={() => handleVote(option)} variant="secondary">
+                                    {option}
+                                </Button>
+                            ))}
+                        </div>
                     </div>
                 );
             case 'REVEAL':
-                return <h2>Waiting for the next round...</h2>
+                return <h2 className="status-text">Waiting for the next round...</h2>;
             case 'FINISHED':
-                return <h1>Game Over!</h1>;
+                return <h1 className="question-text">Game Over!</h1>;
             default:
-                return <h1>Loading...</h1>;
+                return <h1 className="question-text">Loading...</h1>;
         }
     };
 
     return (
-        <div>
+        <div className="game-view-container">
             {renderContent()}
         </div>
     );

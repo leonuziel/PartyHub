@@ -5,101 +5,78 @@
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    background-color: #f3f4f6;
-    /* gray-100 */
-    padding: 1rem;
+    padding: var(--spacing-md);
 }
 
-/* Card wrapper */
 .homeCard {
-    width: 100%;
-    max-width: 28rem;
-    /* max-w-md ~ 448px */
+    max-width: 450px;
+    text-align: center;
 }
 
-/* Title */
 .title {
-    font-size: 2.25rem;
-    /* text-4xl */
-    font-weight: 700;
-    text-align: center;
-    color: #4f46e5;
-    /* indigo-600 */
-    margin-bottom: 0.5rem;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-sm);
 }
 
-/* Subtitle */
 .subtitle {
-    text-align: center;
-    color: #6b7280;
-    /* gray-500 */
-    margin-bottom: 2rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-xl);
 }
 
-/* Error text */
 .errorMessage {
-    color: #ef4444;
-    /* red-500 */
-    text-align: center;
-    margin-bottom: 1rem;
+    color: var(--error-color);
+    margin-bottom: var(--spacing-md);
+    min-height: 1.2em; /* Prevent layout shift */
 }
 
-/* Spacing container */
 .spacedGroup {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    /* space-y-4 */
+    gap: var(--spacing-md);
 }
 
-/* Input styles */
 .textInput {
     width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #d1d5db;
-    /* gray-300 */
-    border-radius: 0.5rem;
+    padding: var(--spacing-md);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
     font-size: 1rem;
-    outline: none;
-    transition: box-shadow 0.2s ease;
+    background-color: var(--surface-color);
+    color: var(--text-primary);
 }
 
 .textInput:focus {
-    box-shadow: 0 0 0 2px #6366f1;
-    /* focus:ring-indigo-500 */
-    border-color: #6366f1;
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
 }
 
-/* Special input for room code */
 .roomCodeInput {
     text-align: center;
     text-transform: uppercase;
-    letter-spacing: 0.15em;
-    /* tracking-widest */
+    letter-spacing: 0.2em;
     font-weight: 700;
 }
 
-/* OR divider */
 .orDivider {
     display: flex;
     align-items: center;
-    padding: 1.25rem 0;
-    /* py-5 */
-    position: relative;
-    width: 100%;
+    padding: var(--spacing-md) 0;
 }
 
 .orDividerLine {
     flex-grow: 1;
-    border-top: 1px solid #d1d5db;
-    /* gray-300 */
+    height: 1px;
+    background-color: var(--border-color);
 }
 
 .orDividerText {
-    flex-shrink: 0;
-    margin: 0 1rem;
-    color: #9ca3af;
-    /* gray-400 */
+    margin: 0 var(--spacing-md);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
 }
 
 /* Button styles are in your Button component — no need to duplicate here */

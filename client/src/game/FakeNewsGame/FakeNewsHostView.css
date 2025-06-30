@@ -1,0 +1,26 @@
+@import '../GameView.css';
+
+.options-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    width: 100%;
+    max-width: 700px;
+    margin-top: var(--spacing-lg);
+    list-style-type: none;
+    padding: 0;
+}
+
+.option-item {
+    background-color: var(--surface-color);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--border-color);
+    font-size: 1.1rem;
+}
+
+.option-item.correct {
+    background-color: #D1FAE5;
+    border-color: var(--secondary-color);
+    font-weight: 700;
+}

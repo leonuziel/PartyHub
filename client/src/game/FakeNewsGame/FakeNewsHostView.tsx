@@ -1,6 +1,7 @@
 import React from 'react';
 import { useGameStore } from '../../store/gameStore';
 import { FakeNewsGameState } from '../../types/types';
+import './FakeNewsHostView.css';
 
 const FakeNewsHostView: React.FC = () => {
     const { gameState } = useGameStore();
@@ -10,40 +11,40 @@ const FakeNewsHostView: React.FC = () => {
         switch (state.status) {
             case 'WRITING':
                 return (
-                    <div>
-                        <h1>{state.question.replace('________', '...')}</h1>
-                        <h2>Players are writing their lies...</h2>
-                    </div>
+                    <>
+                        <h1 className="question-text">{state.question.replace('________', '...')}</h1>
+                        <h2 className="status-text">Players are writing their lies...</h2>
+                    </>
                 );
             case 'VOTING':
                 return (
-                    <div>
-                        <h1>{state.question.replace('________', '...')}</h1>
-                        <h2>Vote for the real answer!</h2>
-                        <ul>
+                    <>
+                        <h1 className="question-text">{state.question.replace('________', '...')}</h1>
+                        <h2 className="status-text">Vote for the real answer!</h2>
+                        <ul className="options-list">
                             {state.options!.map((option, index) => (
-                                <li key={index}>{option}</li>
+                                <li key={index} className="option-item">{option}</li>
                             ))}
                         </ul>
-                    </div>
+                    </>
                 );
             case 'REVEAL':
                 return (
-                    <div>
-                        <h1>The correct answer was:</h1>
-                        <h2>{state.correctAnswer}</h2>
+                    <>
+                        <h1 className="status-text">The correct answer was:</h1>
+                        <h2 className="question-text">{state.correctAnswer}</h2>
                         {/* Add more reveal info here */}
-                    </div>
+                    </>
                 );
             case 'FINISHED':
-                return <h1>Game Over!</h1>;
+                return <h1 className="question-text">Game Over!</h1>;
             default:
-                return <h1>Loading...</h1>;
+                return <h1 className="question-text">Loading...</h1>;
         }
     };
 
     return (
-        <div>
+        <div className="game-view-container">
             {renderContent()}
         </div>
     );
