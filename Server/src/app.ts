@@ -10,7 +10,7 @@ const app = express();
 const httpServer = http.createServer(app);
 
 // Setup CORS for frontend access
-app.use(cors({ origin: 'https://partyhub.onrender.com:'})); // Adjust for your frontend URL
+app.use(cors({ origin: 'https://partyhub.onrender.com'})); // Adjust for your frontend URL
 app.use(express.json());
 
 import debugRoutes from './routes/debug.js';
