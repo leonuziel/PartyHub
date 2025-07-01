@@ -25,7 +25,7 @@ app.use('/debug', debugRoutes);
 // Setup Socket.IO
 const io = new Server(httpServer, {
   cors: {
-    origin: "https://partyhub.onrender.com",
+    origin: ["https://partyhub.onrender.com", "http://localhost:3000"],
     methods: ["GET", "POST"]
   }
 });

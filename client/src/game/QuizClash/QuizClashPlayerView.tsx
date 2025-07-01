@@ -3,11 +3,19 @@ import { useGameStore } from '../../store/gameStore';
 import { useRoomStore } from '../../store/roomStore';
 import { usePlayerRole } from '../../hooks/usePlayerRole';
 import { socketService } from '../../services/socketService';
-import { QuizClashGameState, QuizClashRevealState, Player } from '../../types/types';
+import { QuizClashGameState, QuizClashRevealState } from '../../types/types';
 import { Spinner } from '../../components/Spinner';
 import './QuizClashPlayerView.css';
 
-const colorClasses = ['btn-red', 'btn-blue', 'btn-yellow', 'btn-green'];
+import { Triangle, Square, Circle, Star } from 'lucide-react';
+
+const answerOptions = [
+  { color: 'btn-red', icon: <Triangle /> },
+  { color: 'btn-blue', icon: <Square /> },
+  { color: 'btn-yellow', icon: <Circle /> },
+  { color: 'btn-green', icon: <Star /> },
+];
+
 const getOrdinal = (n: number) => {
   const s = ['th', 'st', 'nd', 'rd'];
   const v = n % 100;
@@ -112,13 +120,15 @@ export const QuizClashPlayerView: React.FC = () => {
         <div className="player-stat">Rank: {myRank ? getOrdinal(myRank) : 'N/A'}</div>
       </div>
       <div className="player-answer-grid">
-        {colorClasses.map((className, index) => (
+        {answerOptions.map((option, index) => (
           <button
             key={index}
             onClick={() => handleAnswer(index)}
             disabled={answered !== null}
-            className={`player-answer-btn ${className}`}
-          ></button>
+            className={`player-answer-btn ${option.color} ${answered === index ? 'selected' : ''}`}
+          >
+            <div className="icon-container">{option.icon}</div>
+          </button>
         ))}
       </div>
     </div>

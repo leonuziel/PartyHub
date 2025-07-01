@@ -1,0 +1,604 @@
+{
+  "questions": [
+    {
+      "category": "Science & Nature",
+      "questionText": "What is the chemical symbol for gold?",
+      "correctAnswer": "Au",
+      "incorrectAnswers": ["Ag", "Go", "Gd"]
+    },
+    {
+      "category": "Science & Nature",
+      "questionText": "Which planet is known as the Red Planet?",
+      "correctAnswer": "Mars",
+      "incorrectAnswers": ["Jupiter", "Venus", "Saturn"]
+    },
+    {
+      "category": "Science & Nature",
+      "questionText": "What is the most abundant gas in Earth's atmosphere?",
+      "correctAnswer": "Nitrogen",
+      "incorrectAnswers": ["Oxygen", "Carbon Dioxide", "Argon"]
+    },
+    {
+      "category": "Science & Nature",
+      "questionText": "What is the hardest known natural substance?",
+      "correctAnswer": "Diamond",
+      "incorrectAnswers": ["Quartz", "Steel", "Granite"]
+    },
+    {
+      "category": "Science & Nature",
+      "questionText": "What is the powerhouse of the cell?",
+      "correctAnswer": "Mitochondrion",
+      "incorrectAnswers": ["Nucleus", "Ribosome", "Cytoplasm"]
+    },
+    {
+      "category": "Science & Nature",
+      "questionText": "What type of animal is a Komodo dragon?",
+      "correctAnswer": "Lizard",
+      "incorrectAnswers": ["Crocodile", "Snake", "Dinosaur"]
+    },
+    {
+      "category": "Science & Nature",
+      "questionText": "How many hearts does an octopus have?",
+      "correctAnswer": "Three",
+      "incorrectAnswers": ["One", "Two", "Eight"]
+    },
+    {
+      "category": "Science & Nature",
+      "questionText": "What is the fear of spiders called?",
+      "correctAnswer": "Arachnophobia",
+      "incorrectAnswers": ["Ophidiophobia", "Acrophobia", "Claustrophobia"]
+    },
+    {
+      "category": "Science & Nature",
+      "questionText": "Photosynthesis is a process used by plants to convert light energy into what?",
+      "correctAnswer": "Chemical energy",
+      "incorrectAnswers": ["Kinetic energy", "Nuclear energy", "Mechanical energy"]
+    },
+    {
+      "category": "Science & Nature",
+      "questionText": "What is the boiling point of water at sea level in Celsius?",
+      "correctAnswer": "100°C",
+      "incorrectAnswers": ["90°C", "120°C", "212°C"]
+    },
+    {
+      "category": "Science & Nature",
+      "questionText": "Which of the following is NOT a primary color?",
+      "correctAnswer": "Green",
+      "incorrectAnswers": ["Red", "Blue", "Yellow"]
+    },
+    {
+      "category": "Science & Nature",
+      "questionText": "What is the name of the galaxy our Solar System is in?",
+      "correctAnswer": "The Milky Way",
+      "incorrectAnswers": ["Andromeda", "Triangulum", "Whirlpool"]
+    },
+    {
+      "category": "Science & Nature",
+      "questionText": "How many bones are in the adult human body?",
+      "correctAnswer": "206",
+      "incorrectAnswers": ["212", "198", "230"]
+    },
+    {
+      "category": "Science & Nature",
+      "questionText": "What precious metal is a primary component in a computer's CPU?",
+      "correctAnswer": "Gold",
+      "incorrectAnswers": ["Silver", "Platinum", "Copper"]
+    },
+    {
+      "category": "Science & Nature",
+      "questionText": "What is the study of fossils called?",
+      "correctAnswer": "Paleontology",
+      "incorrectAnswers": ["Archaeology", "Geology", "Anthropology"]
+    },
+    {
+      "category": "Geography",
+      "questionText": "What is the capital of Japan?",
+      "correctAnswer": "Tokyo",
+      "incorrectAnswers": ["Kyoto", "Osaka", "Hiroshima"]
+    },
+    {
+      "category": "Geography",
+      "questionText": "Which is the longest river in the world?",
+      "correctAnswer": "The Nile",
+      "incorrectAnswers": ["The Amazon", "The Yangtze", "The Mississippi"]
+    },
+    {
+      "category": "Geography",
+      "questionText": "In which country would you find the ancient city of Petra?",
+      "correctAnswer": "Jordan",
+      "incorrectAnswers": ["Egypt", "Greece", "Iran"]
+    },
+    {
+      "category": "Geography",
+      "questionText": "What is the highest mountain in the world?",
+      "correctAnswer": "Mount Everest",
+      "incorrectAnswers": ["K2", "Kangchenjunga", "Lhotse"]
+    },
+    {
+      "category": "Geography",
+      "questionText": "What is the largest desert in the world?",
+      "correctAnswer": "Antarctic Polar Desert",
+      "incorrectAnswers": ["Sahara Desert", "Arabian Desert", "Gobi Desert"]
+    },
+    {
+      "category": "Geography",
+      "questionText": "Which country is known as the Land of the Rising Sun?",
+      "correctAnswer": "Japan",
+      "incorrectAnswers": ["China", "South Korea", "Thailand"]
+    },
+    {
+      "category": "Geography",
+      "questionText": "What is the capital of Canada?",
+      "correctAnswer": "Ottawa",
+      "incorrectAnswers": ["Toronto", "Vancouver", "Montreal"]
+    },
+    {
+      "category": "Geography",
+      "questionText": "Which U.S. state is the largest by area?",
+      "correctAnswer": "Alaska",
+      "incorrectAnswers": ["Texas", "California", "Montana"]
+    },
+    {
+      "category": "Geography",
+      "questionText": "The ancient city of Rome was built on how many hills?",
+      "correctAnswer": "Seven",
+      "incorrectAnswers": ["Five", "Nine", "Three"]
+    },
+    {
+      "category": "Geography",
+      "questionText": "What is the only country to have a coastline on both the Red Sea and the Persian Gulf?",
+      "correctAnswer": "Saudi Arabia",
+      "incorrectAnswers": ["Egypt", "Yemen", "Iran"]
+    },
+    {
+      "category": "Geography",
+      "questionText": "What is the capital of Australia?",
+      "correctAnswer": "Canberra",
+      "incorrectAnswers": ["Sydney", "Melbourne", "Brisbane"]
+    },
+    {
+      "category": "Geography",
+      "questionText": "Through which three continents does the Prime Meridian pass?",
+      "correctAnswer": "Europe, Africa, Antarctica",
+      "incorrectAnswers": ["Europe, Asia, Africa", "North America, South America, Europe"]
+    },
+    {
+      "category": "Geography",
+      "questionText": "What is the world's most populous country?",
+      "correctAnswer": "India",
+      "incorrectAnswers": ["China", "United States", "Indonesia"]
+    },
+    {
+      "category": "Geography",
+      "questionText": "Which country has the most islands in the world?",
+      "correctAnswer": "Sweden",
+      "incorrectAnswers": ["Indonesia", "Japan", "Philippines"]
+    },
+    {
+      "category": "Geography",
+      "questionText": "What is the capital of Brazil?",
+      "correctAnswer": "Brasília",
+      "incorrectAnswers": ["Rio de Janeiro", "São Paulo", "Salvador"]
+    },
+    {
+      "category": "History",
+      "questionText": "In what year did the Titanic sink?",
+      "correctAnswer": "1912",
+      "incorrectAnswers": ["1905", "1920", "1915"]
+    },
+    {
+      "category": "History",
+      "questionText": "Who was the first person to walk on the moon?",
+      "correctAnswer": "Neil Armstrong",
+      "incorrectAnswers": ["Buzz Aldrin", "Michael Collins", "Yuri Gagarin"]
+    },
+    {
+      "category": "History",
+      "questionText": "What ancient civilization built the Machu Picchu complex in Peru?",
+      "correctAnswer": "The Incas",
+      "incorrectAnswers": ["The Mayans", "The Aztecs", "The Olmecs"]
+    },
+    {
+      "category": "History",
+      "questionText": "The Magna Carta was a foundational document for which country's legal system?",
+      "correctAnswer": "England",
+      "incorrectAnswers": ["France", "Spain", "The United States"]
+    },
+    {
+      "category": "History",
+      "questionText": "Who was the first female Prime Minister of the United Kingdom?",
+      "correctAnswer": "Margaret Thatcher",
+      "incorrectAnswers": ["Theresa May", "Queen Elizabeth II", "Angela Merkel"]
+    },
+    {
+      "category": "History",
+      "questionText": "In which country did the Renaissance begin?",
+      "correctAnswer": "Italy",
+      "incorrectAnswers": ["France", "Greece", "Spain"]
+    },
+    {
+      "category": "History",
+      "questionText": "What was the name of the ship that carried the Pilgrims to America in 1620?",
+      "correctAnswer": "The Mayflower",
+      "incorrectAnswers": ["The Santa Maria", "The Discovery", "The Titanic"]
+    },
+    {
+      "category": "History",
+      "questionText": "Who was the last pharaoh of ancient Egypt?",
+      "correctAnswer": "Cleopatra VII",
+      "incorrectAnswers": ["Tutankhamun", "Ramesses II", "Akhenaten"]
+    },
+    {
+      "category": "History",
+      "questionText": "The Hundred Years' War was fought between which two countries?",
+      "correctAnswer": "England and France",
+      "incorrectAnswers": ["Spain and Portugal", "England and Scotland", "Rome and Carthage"]
+    },
+    {
+      "category": "History",
+      "questionText": "Who is credited with inventing the telephone?",
+      "correctAnswer": "Alexander Graham Bell",
+      "incorrectAnswers": ["Thomas Edison", "Nikola Tesla", "Guglielmo Marconi"]
+    },
+    {
+      "category": "History",
+      "questionText": "In which city was Archduke Franz Ferdinand assassinated, sparking World War I?",
+      "correctAnswer": "Sarajevo",
+      "incorrectAnswers": ["Vienna", "Belgrade", "Prague"]
+    },
+    {
+      "category": "History",
+      "questionText": "What was the primary purpose of the Great Wall of China?",
+      "correctAnswer": "To protect against invasions",
+      "incorrectAnswers": ["To mark a border", "As a tourist attraction", "To keep animals in"]
+    },
+    {
+      "category": "History",
+      "questionText": "Who was the first Emperor of Rome?",
+      "correctAnswer": "Augustus",
+      "incorrectAnswers": ["Julius Caesar", "Nero", "Constantine"]
+    },
+    {
+      "category": "History",
+      "questionText": "Which country gifted the Statue of Liberty to the USA?",
+      "correctAnswer": "France",
+      "incorrectAnswers": ["Spain", "United Kingdom", "Italy"]
+    },
+    {
+      "category": "History",
+      "questionText": "What was the name of the first satellite launched into space by the Soviet Union?",
+      "correctAnswer": "Sputnik 1",
+      "incorrectAnswers": ["Vostok 1", "Explorer 1", "Luna 1"]
+    },
+    {
+      "category": "Pop Culture & Arts",
+      "questionText": "Who wrote the 'Harry Potter' series?",
+      "correctAnswer": "J.K. Rowling",
+      "incorrectAnswers": ["Stephen King", "George R.R. Martin", "J.R.R. Tolkien"]
+    },
+    {
+      "category": "Pop Culture & Arts",
+      "questionText": "What is the name of the lead singer of the band Queen?",
+      "correctAnswer": "Freddie Mercury",
+      "incorrectAnswers": ["Elton John", "David Bowie", "Roger Daltrey"]
+    },
+    {
+      "category": "Pop Culture & Arts",
+      "questionText": "Which artist painted the ceiling of the Sistine Chapel?",
+      "correctAnswer": "Michelangelo",
+      "incorrectAnswers": ["Leonardo da Vinci", "Raphael", "Donatello"]
+    },
+    {
+      "category": "Pop Culture & Arts",
+      "questionText": "In the movie 'The Matrix,' what color pill does Neo take?",
+      "correctAnswer": "Red",
+      "incorrectAnswers": ["Blue", "Green", "Yellow"]
+    },
+    {
+      "category": "Pop Culture & Arts",
+      "questionText": "Who is the creator of the 'Star Wars' universe?",
+      "correctAnswer": "George Lucas",
+      "incorrectAnswers": ["Steven Spielberg", "James Cameron", "J.J. Abrams"]
+    },
+    {
+      "category": "Pop Culture & Arts",
+      "questionText": "What is the highest-grossing film of all time (unadjusted for inflation)?",
+      "correctAnswer": "Avatar",
+      "incorrectAnswers": ["Avengers: Endgame", "Titanic", "Star Wars: The Force Awakens"]
+    },
+    {
+      "category": "Pop Culture & Arts",
+      "questionText": "Which band was NOT part of the 'British Invasion' of the 1960s?",
+      "correctAnswer": "The Beach Boys",
+      "incorrectAnswers": ["The Beatles", "The Rolling Stones", "The Kinks"]
+    },
+    {
+      "category": "Pop Culture & Arts",
+      "questionText": "What is the name of Batman's butler?",
+      "correctAnswer": "Alfred Pennyworth",
+      "incorrectAnswers": ["James Gordon", "Lucius Fox", "Robin"]
+    },
+    {
+      "category": "Pop Culture & Arts",
+      "questionText": "Who wrote the famous novel '1984'?",
+      "correctAnswer": "George Orwell",
+      "incorrectAnswers": ["Aldous Huxley", "Ray Bradbury", "Philip K. Dick"]
+    },
+    {
+      "category": "Pop Culture & Arts",
+      "questionText": "In what year was the first iPhone released?",
+      "correctAnswer": "2007",
+      "incorrectAnswers": ["2005", "2009", "2001"]
+    },
+    {
+      "category": "Pop Culture & Arts",
+      "questionText": "'The Persistence of Memory' is a famous painting by which surrealist artist?",
+      "correctAnswer": "Salvador Dalí",
+      "incorrectAnswers": ["Pablo Picasso", "Vincent van Gogh", "René Magritte"]
+    },
+    {
+      "category": "Pop Culture & Arts",
+      "questionText": "What TV show is set in the fictional city of Westeros?",
+      "correctAnswer": "Game of Thrones",
+      "incorrectAnswers": ["The Witcher", "Lord of the Rings", "Vikings"]
+    },
+    {
+      "category": "Pop Culture & Arts",
+      "questionText": "Who directed the classic 1994 film 'Pulp Fiction'?",
+      "correctAnswer": "Quentin Tarantino",
+      "incorrectAnswers": ["Martin Scorsese", "Spike Lee", "Steven Soderbergh"]
+    },
+    {
+      "category": "Pop Culture & Arts",
+      "questionText": "Which video game character is a blue hedgehog known for his speed?",
+      "correctAnswer": "Sonic",
+      "incorrectAnswers": ["Mario", "Crash Bandicoot", "Spyro"]
+    },
+    {
+      "category": "Pop Culture & Arts",
+      "questionText": "What is the name of the fictional school in the Harry Potter series?",
+      "correctAnswer": "Hogwarts",
+      "incorrectAnswers": ["Durmstrang", "Beauxbatons", "Ilvermorny"]
+    },
+    {
+      "category": "Pop Culture & Arts",
+      "questionText": "Who composed the famous classical piece 'Für Elise'?",
+      "correctAnswer": "Ludwig van Beethoven",
+      "incorrectAnswers": ["Wolfgang Amadeus Mozart", "Johann Sebastian Bach", "Franz Schubert"]
+    },
+    {
+      "category": "Pop Culture & Arts",
+      "questionText": "What instrument did Jimi Hendrix famously play?",
+      "correctAnswer": "Electric Guitar",
+      "incorrectAnswers": ["Drums", "Bass Guitar", "Piano"]
+    },
+    {
+      "category": "Pop Culture & Arts",
+      "questionText": "What is the name of the coffee shop in the TV show 'Friends'?",
+      "correctAnswer": "Central Perk",
+      "incorrectAnswers": ["The Coffee Bean", "Monk's Café", "Starbucks"]
+    },
+    {
+      "category": "Pop Culture & Arts",
+      "questionText": "Who is known as the 'King of Pop'?",
+      "correctAnswer": "Michael Jackson",
+      "incorrectAnswers": ["Elvis Presley", "Prince", "James Brown"]
+    },
+    {
+      "category": "Pop Culture & Arts",
+      "questionText": "Which Disney princess has a tiger named Rajah?",
+      "correctAnswer": "Jasmine",
+      "incorrectAnswers": ["Ariel", "Belle", "Mulan"]
+    },
+    {
+      "category": "Sports",
+      "questionText": "In which sport would you perform a 'slam dunk'?",
+      "correctAnswer": "Basketball",
+      "incorrectAnswers": ["Volleyball", "Tennis", "American Football"]
+    },
+    {
+      "category": "Sports",
+      "questionText": "How many rings are on the Olympic flag?",
+      "correctAnswer": "Five",
+      "incorrectAnswers": ["Six", "Four", "Seven"]
+    },
+    {
+      "category": "Sports",
+      "questionText": "What is the most-watched sporting event in the world?",
+      "correctAnswer": "The FIFA World Cup",
+      "incorrectAnswers": ["The Super Bowl", "The Olympic Games", "The Tour de France"]
+    },
+    {
+      "category": "Sports",
+      "questionText": "Which country won the first-ever FIFA World Cup in 1930?",
+      "correctAnswer": "Uruguay",
+      "incorrectAnswers": ["Brazil", "Argentina", "Italy"]
+    },
+    {
+      "category": "Sports",
+      "questionText": "In tennis, what is the score called when it is 40-40?",
+      "correctAnswer": "Deuce",
+      "incorrectAnswers": ["Tie", "Even", "Match Point"]
+    },
+    {
+      "category": "Sports",
+      "questionText": "Which boxer was known as 'The Greatest' and 'The People's Champion'?",
+      "correctAnswer": "Muhammad Ali",
+      "incorrectAnswers": ["Mike Tyson", "Joe Frazier", "Rocky Marciano"]
+    },
+    {
+      "category": "Sports",
+      "questionText": "How many players are on a standard baseball team on the field?",
+      "correctAnswer": "Nine",
+      "incorrectAnswers": ["Ten", "Eleven", "Eight"]
+    },
+    {
+      "category": "Sports",
+      "questionText": "A 'hat-trick' in soccer or hockey is when a player scores how many goals?",
+      "correctAnswer": "Three",
+      "incorrectAnswers": ["Two", "Four", "Five"]
+    },
+    {
+      "category": "Sports",
+      "questionText": "What is the only sport to have been played on the moon?",
+      "correctAnswer": "Golf",
+      "incorrectAnswers": ["Baseball", "Soccer", "Darts"]
+    },
+    {
+      "category": "Sports",
+      "questionText": "What is the name of the trophy awarded to the winner of the Stanley Cup?",
+      "correctAnswer": "There is no other name",
+      "incorrectAnswers": ["The Lord Stanley Cup", "The Champion's Chalice", "The Silver Stick"]
+    },
+    {
+      "category": "Miscellaneous",
+      "questionText": "What is the main ingredient in guacamole?",
+      "correctAnswer": "Avocado",
+      "incorrectAnswers": ["Tomato", "Onion", "Lime"]
+    },
+    {
+      "category": "Miscellaneous",
+      "questionText": "Which country is credited with inventing paper?",
+      "correctAnswer": "China",
+      "incorrectAnswers": ["Egypt", "Greece", "Japan"]
+    },
+    {
+      "category": "Miscellaneous",
+      "questionText": "What is a group of lions called?",
+      "correctAnswer": "A pride",
+      "incorrectAnswers": ["A pack", "A herd", "A flock"]
+    },
+    {
+      "category": "Miscellaneous",
+      "questionText": "On a standard keyboard, what is the only letter not on the top row?",
+      "correctAnswer": "Z",
+      "incorrectAnswers": ["M", "A", "S"]
+    },
+    {
+      "category": "Miscellaneous",
+      "questionText": "What is the most consumed manufactured drink in the world?",
+      "correctAnswer": "Tea",
+      "incorrectAnswers": ["Coffee", "Coca-Cola", "Beer"]
+    },
+    {
+      "category": "Miscellaneous",
+      "questionText": "What type of food is a 'sushi'?",
+      "correctAnswer": "Vinegared rice",
+      "incorrectAnswers": ["Raw fish", "Seaweed", "Wasabi"]
+    },
+    {
+      "category": "Miscellaneous",
+      "questionText": "What does 'www' stand for in a website browser?",
+      "correctAnswer": "World Wide Web",
+      "incorrectAnswers": ["Wild Wild West", "World Web Window", "Wide World Web"]
+    },
+    {
+      "category": "Miscellaneous",
+      "questionText": "In which country did Lego originate?",
+      "correctAnswer": "Denmark",
+      "incorrectAnswers": ["Germany", "Sweden", "USA"]
+    },
+    {
+      "category": "Miscellaneous",
+      "questionText": "What is the most sold book of all time?",
+      "correctAnswer": "The Bible",
+      "incorrectAnswers": ["The Quran", "Don Quixote", "Harry Potter series"]
+    },
+    {
+      "category": "Miscellaneous",
+      "questionText": "What is the currency of Switzerland?",
+      "correctAnswer": "Swiss Franc",
+      "incorrectAnswers": ["Euro", "Swiss Dollar", "Krona"]
+    },
+    {
+      "category": "Miscellaneous",
+      "questionText": "How many sides does a dodecahedron have?",
+      "correctAnswer": "12",
+      "incorrectAnswers": ["10", "20", "8"]
+    },
+    {
+      "category": "Miscellaneous",
+      "questionText": "What is the capital of fashion, often called 'The Big Four' cities?",
+      "correctAnswer": "Paris, Milan, London, New York",
+      "incorrectAnswers": ["Tokyo, Rome, Berlin, Los Angeles"]
+    },
+    {
+      "category": "Miscellaneous",
+      "questionText": "What is the name for a word that is spelled the same forwards and backwards?",
+      "correctAnswer": "Palindrome",
+      "incorrectAnswers": ["Anagram", "Onomatopoeia", "Antonym"]
+    },
+    {
+      "category": "Miscellaneous",
+      "questionText": "What is the world's most expensive spice by weight?",
+      "correctAnswer": "Saffron",
+      "incorrectAnswers": ["Vanilla", "Cardamom", "Cloves"]
+    },
+    {
+      "category": "Miscellaneous",
+      "questionText": "What is the main ingredient in a traditional hummus?",
+      "correctAnswer": "Chickpeas",
+      "incorrectAnswers": ["Lentils", "Black beans", "Eggplant"]
+    },
+    {
+      "category": "Miscellaneous",
+      "questionText": "According to the proverb, 'a rolling stone gathers no...' what?",
+      "correctAnswer": "Moss",
+      "incorrectAnswers": ["Friends", "Money", "Dust"]
+    },
+    {
+      "category": "Miscellaneous",
+      "questionText": "How many colors are in a standard rainbow?",
+      "correctAnswer": "Seven",
+      "incorrectAnswers": ["Six", "Eight", "Five"]
+    },
+    {
+      "category": "Miscellaneous",
+      "questionText": "What is the name of the world's largest ocean?",
+      "correctAnswer": "Pacific Ocean",
+      "incorrectAnswers": ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean"]
+    },
+    {
+      "category": "Miscellaneous",
+      "questionText": "What is the national animal of Scotland?",
+      "correctAnswer": "Unicorn",
+      "incorrectAnswers": ["Lion", "Eagle", "Stag"]
+    },
+    {
+      "category": "Miscellaneous",
+      "questionText": "Which of the following is NOT a piece in the game of chess?",
+      "correctAnswer": "General",
+      "incorrectAnswers": ["Bishop", "Rook", "Pawn"]
+    },
+    {
+      "category": "Miscellaneous",
+      "questionText": "What is the capital city of Morocco?",
+      "correctAnswer": "Rabat",
+      "incorrectAnswers": ["Casablanca", "Marrakesh", "Fes"]
+    },
+    {
+      "category": "Miscellaneous",
+      "questionText": "What do you call a person who studies maps?",
+      "correctAnswer": "A cartographer",
+      "incorrectAnswers": ["A geographer", "A topographer", "A mapologist"]
+    },
+    {
+      "category": "Miscellaneous",
+      "questionText": "What is the largest organ in the human body?",
+      "correctAnswer": "Skin",
+      "incorrectAnswers": ["Liver", "Brain", "Heart"]
+    },
+    {
+      "category": "Miscellaneous",
+      "questionText": "What is the capital of New Zealand?",
+      "correctAnswer": "Wellington",
+      "incorrectAnswers": ["Auckland", "Christchurch", "Queenstown"]
+    },
+    {
+        "category": "Miscellaneous",
+        "questionText": "Which social media platform was the first to reach 1 billion active users?",
+        "correctAnswer": "Facebook",
+        "incorrectAnswers": ["Twitter", "Instagram", "MySpace"]
+      }
+  ]
+}

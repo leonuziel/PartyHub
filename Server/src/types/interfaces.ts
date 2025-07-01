@@ -37,6 +37,7 @@ export interface QuizClashGameState extends BaseGameState {
   question: Omit<QuizClashQuestion, 'correctAnswerIndex'> | null;
   scores: Record<string, number>; // playerId -> score
   round: number;
+  totalRounds: number;
   timer: number;
 }
 

@@ -1,19 +1,31 @@
 import { BaseGame } from '../BaseGame.js';
 import { Player, QuizClashGameState, QuizClashQuestion } from '../../types/interfaces.js';
+import fs from 'fs';
+import path from 'path';
 
-// A sample question bank
-const questions: QuizClashQuestion[] = [
-    { questionText: 'What is 2 + 2?', answers: ['3', '4', '5', '6'], correctAnswerIndex: 1 },
-    { questionText: 'What is the capital of France?', answers: ['London', 'Berlin', 'Paris', 'Madrid'], correctAnswerIndex: 2 }
-];
+// Load questions from the new JSON file
+const questionsPath = path.resolve(process.cwd(), 'src/game/games/quizclash_questions.json');
+const questionsData = JSON.parse(fs.readFileSync(questionsPath, 'utf-8'));
+const allQuestions = questionsData.questions;
+
+function shuffleArray(array: any[]) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
 
 export class QuizClashGame extends BaseGame<QuizClashGameState> {
     private playerAnswers: Map<string, { answerIndex: number, time: number }> = new Map();
     private currentQuestion: QuizClashQuestion | null = null;
     private timerId: NodeJS.Timeout | null = null;
+    private questions: any[];
+    private readonly totalRounds: number = 10;
 
     constructor(players: Map<string, Player>, hostId: string, broadcast: (event: string, payload: any) => void, onGameEnd: () => void) {
         super(players, hostId, broadcast, onGameEnd);
+        this.questions = shuffleArray([...allQuestions]); // Shuffle questions for this game instance
         const initialScores = Array.from(players.keys()).reduce((acc, id) => {
             if (id !== hostId) {
                 acc[id] = 0;
@@ -27,6 +39,7 @@ export class QuizClashGame extends BaseGame<QuizClashGameState> {
             question: null,
             scores: initialScores,
             round: 0,
+            totalRounds: this.totalRounds,
             timer: 0,
         };
     }
@@ -37,19 +50,32 @@ export class QuizClashGame extends BaseGame<QuizClashGameState> {
 
     private nextQuestion(): void {
         if (this.timerId) clearTimeout(this.timerId);
-        this.currentQuestion = questions[this.gameState.round];
-
-        if (!this.currentQuestion) {
+        
+        if (this.gameState.round >= this.totalRounds) {
             this.endGame();
             return;
         }
 
+        const questionData = this.questions[this.gameState.round];
+        
+        const answers = shuffleArray([...questionData.incorrectAnswers, questionData.correctAnswer]);
+        const correctAnswerIndex = answers.indexOf(questionData.correctAnswer);
+
+        this.currentQuestion = {
+            questionText: questionData.questionText,
+            answers: answers,
+            correctAnswerIndex: correctAnswerIndex,
+        };
+
         this.playerAnswers.clear();
         this.gameState.round++;
         this.gameState.status = 'ASKING_QUESTION';
-        // Sanitize question for players
-        const { correctAnswerIndex, ...questionForPlayers } = this.currentQuestion;
-        this.gameState.question = questionForPlayers;
+        
+        // Sanitize question for players by removing the correct answer index
+        this.gameState.question = {
+            questionText: this.currentQuestion.questionText,
+            answers: this.currentQuestion.answers,
+        };
         this.gameState.timer = 15;
 
         this.broadcastState();
