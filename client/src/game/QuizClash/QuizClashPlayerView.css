@@ -1,63 +1,155 @@
 @import '../GameView.css';
 
-.player-view-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: var(--spacing-md);
-    width: 100%;
-    height: 100%;
-    flex-grow: 1;
+/* Answering View */
+.player-answer-view {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: var(--spacing-md);
 }
 
-.player-button {
-    border: none;
-    border-radius: var(--border-radius-lg);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
+.player-game-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-md);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-secondary);
 }
 
-.player-button:hover:not(:disabled) {
-    transform: scale(1.03);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+.player-answer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: var(--spacing-md);
+  flex-grow: 1;
 }
 
-.player-button:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
+.player-answer-btn {
+  border: none;
+  border-radius: var(--border-radius-lg);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.player-answer-btn:hover:not(:disabled) {
+  transform: scale(1.03);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.player-answer-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .btn-red { background-color: #EF4444; }
 .btn-blue { background-color: #3B82F6; }
 .btn-yellow { background-color: #EAB308; }
-.btn-green { background-color: #10B981; }
+.btn-green { background-color: #22C55E; }
 
-.status-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    text-align: center;
+/* Status/Waiting Container */
+.player-status-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
 }
 
-.status-title {
-    font-size: 2.5rem;
-    font-weight: 700;
+.player-status-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-top: var(--spacing-md);
 }
 
-.status-title.correct {
-    color: var(--secondary-color);
+.player-status-subtitle {
+  color: var(--text-secondary);
 }
 
-.status-title.incorrect {
-    color: var(--error-color);
+.player-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-top: var(--spacing-sm);
 }
 
-.status-subtitle {
-    font-size: 1.2rem;
-    color: var(--text-secondary);
-    margin-top: var(--spacing-sm);
+
+/* Reveal Container */
+.player-reveal-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+}
+
+.reveal-verdict {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: var(--spacing-sm);
+}
+
+.reveal-verdict.correct {
+  color: var(--secondary-color);
+}
+
+.reveal-verdict.incorrect {
+  color: var(--error-color);
+}
+
+.reveal-points-gained {
+  font-size: 1.8rem;
+  color: var(--secondary-color);
+  margin-bottom: var(--spacing-lg);
+}
+
+.player-current-stats {
+  font-size: 1.5rem;
+  color: var(--text-main);
+}
+
+
+/* Finished Container */
+.player-finished-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--spacing-lg);
+}
+
+.player-final-rank {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.player-final-score {
+  font-size: 1.5rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xl);
+}
+
+.player-top-winners {
+  width: 100%;
+  max-width: 350px;
+  background-color: var(--background-light);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-md);
+}
+
+.top-winners-title {
+  font-size: 1.5rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.winner-entry {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid var(--border-color);
 }

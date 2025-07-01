@@ -36,7 +36,7 @@ export class QuizClashGame extends BaseGame<QuizClashGameState> {
     }
 
     private nextQuestion(): void {
-        if(this.timerId) clearTimeout(this.timerId);
+        if (this.timerId) clearTimeout(this.timerId);
         this.currentQuestion = questions[this.gameState.round];
 
         if (!this.currentQuestion) {
@@ -65,7 +65,7 @@ export class QuizClashGame extends BaseGame<QuizClashGameState> {
     }
 
     private revealAnswers(): void {
-        if(this.timerId) clearInterval(this.timerId);
+        if (this.timerId) clearInterval(this.timerId);
         this.gameState.status = 'REVEALING_ANSWERS';
 
         // Calculate scores
@@ -76,7 +76,7 @@ export class QuizClashGame extends BaseGame<QuizClashGameState> {
                 this.gameState.scores[playerId] += points;
             }
         });
-        
+
         // Include correct answer in the broadcast
         const revealState = {
             ...this.getSanitizedGameState(),
@@ -102,7 +102,7 @@ export class QuizClashGame extends BaseGame<QuizClashGameState> {
         if (this.gameState.status !== 'ASKING_QUESTION' || this.playerAnswers.has(playerId) || playerId === this.hostId) {
             return; // Ignore late, duplicate, or host answers
         }
-        
+
         this.playerAnswers.set(playerId, {
             answerIndex: action.answerIndex,
             time: (15 - this.gameState.timer) * 1000 // Time taken in ms

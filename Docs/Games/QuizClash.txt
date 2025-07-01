@@ -1,0 +1,60 @@
+here is a refined UI design for QuizClash that aligns with the specific flow of each game state.
+
+### **1. STARTING State**
+This is a brief "get ready" phase after the game has been initiated by the host.
+
+*   **Host View (Large Screen):**
+    *   A full-screen message like "Get Ready!" or "The game starts in...".
+    *   A large, visual countdown (e.g., 3... 2... 1...) to build anticipation for the first question.
+    *   The game's title, "QuizClash," is still visible but secondary to the countdown.
+
+*   **Player View (Phone):**
+    *   A simple, clean screen with a "Get Ready!" message.
+    *   It might show the player's chosen nickname and avatar to confirm they are locked in.
+    *   The screen prepares them for the imminent first question, perhaps with a subtle animation.
+
+---
+
+### **2. ASKING\_QUESTION State**
+This is the period when players actively answer the question presented.
+
+*   **Host View (Large Screen):**
+    *   **Main Area:** The current question is displayed prominently at the top, with the multiple-choice answers clearly laid out below it, each in a colored and shaped container.
+    *   **Timer:** A visual countdown timer (e.g., a shrinking bar or a numeric clock) indicates the time remaining to answer.
+    *   **Top Players:** A small, persistent leaderboard is shown on the side or bottom, displaying the current top 3 or top 5 players and their scores.
+    *   **Progress Indicator:** A simple counter like "Question 4/10" is visible.
+
+*   **Player View (Phone):**
+    *   **Answer Inputs:** The screen is dominated by four large, colored buttons corresponding to the answer options on the host screen. These buttons should be highly responsive.
+    *   **Player Status:** The player's current score and rank (e.g., "Score: 1250 | Rank: 8th") are displayed at the top or bottom of the screen, providing constant feedback on their performance.
+    *   Once an answer is selected, the chosen button is highlighted, and the others are disabled. A "Waiting for results..." message appears.
+
+---
+
+### **3. REVEALING\_ANSWERS State**
+This state occurs immediately after the time for answering has expired.
+
+*   **Host View (Large Screen):**
+    *   **Answer Reveal:** The screen first shows a bar graph illustrating what percentage of the audience chose each option.
+    *   **Correct Answer:** After a brief pause, the correct answer is highlighted (e.g., turns green and animates), while incorrect options are greyed out.
+    *   **Score Update Animation:** The leaderboard then animates, showing players' scores increasing and their positions changing in real-time. This is a key moment of drama, highlighting players who have climbed or fallen in the ranks.
+
+*   **Player View (Phone):**
+    *   **Immediate Feedback:** The screen instantly indicates if the chosen answer was "Correct" or "Incorrect."
+    *   **Points Gained:** It shows the points awarded for that specific round (e.g., "+150 points").
+    *   **Rank Change:** Crucially, it shows the player their change in position. For example: "You moved up 2 places!" or a visual arrow indicating their movement in the rankings, along with their new score and rank.
+
+---
+
+### **4. FINISHED State**
+This is the final screen displayed when all questions have been asked.
+
+*   **Host View (Large Screen):**
+    *   **Winners' Podium:** The main focus is a celebratory podium graphic for 1st, 2nd, and 3rd place, displaying the nicknames and final scores of the top three players. This is accompanied by confetti animations and victory music.
+    *   **Final Leaderboard:** After the initial celebration, a full, scrollable leaderboard showing the final rankings and scores of all participants is displayed.
+    *   A "Play Again" button is clearly visible for the host to restart the game.
+
+*   **Player View (Phone):**
+    *   **Personal Result:** The screen prominently displays the player's own final placement (e.g., "You finished 5th out of 30!") and their final score.
+    *   **Top Players Context:** Below their personal result, the top 3 winners are shown, so the player can see how they fared against the champions.
+    *   A "Play Again" or "Find a New Game" button encourages re-engagement.

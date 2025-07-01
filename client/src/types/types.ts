@@ -38,6 +38,7 @@ export interface QuizClashGameState extends GameState {
   question: QuizClashQuestion | null;
   scores: Record<string, number>; // playerId -> score
   round: number;
+  totalRounds: number;
   timer: number;
 }
 
@@ -45,7 +46,8 @@ export interface QuizClashGameState extends GameState {
 // This is the state received during the reveal phase
 export interface QuizClashRevealState extends QuizClashGameState {
     correctAnswerIndex: number;
-    playerAnswers: Record<string, { answerIndex: number }>;
+    playerAnswers: Record<string, { answerIndex: number; scoreGained: number }>;
+    answerCounts: Record<number, number>; // answerIndex -> count
 }
 
 // --- FakeNews Interfaces ---
