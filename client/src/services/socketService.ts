@@ -6,6 +6,7 @@ import { RoomData } from '../types/types';
 import { useDebugStore } from '../store/debugStore';
 
 const BACKEND_URL = 'https://partyhubback.onrender.com';
+//const BACKEND_URL = 'http://localhost:4000';
 
 class SocketService {
   private socket: Socket;

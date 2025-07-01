@@ -7,14 +7,7 @@ import { QuizClashGameState, QuizClashRevealState } from '../../types/types';
 import { Spinner } from '../../components/Spinner';
 import './QuizClashPlayerView.css';
 
-import { Triangle, Square, Circle, Star } from 'lucide-react';
-
-const answerOptions = [
-  { color: 'btn-red', icon: <Triangle /> },
-  { color: 'btn-blue', icon: <Square /> },
-  { color: 'btn-yellow', icon: <Circle /> },
-  { color: 'btn-green', icon: <Star /> },
-];
+const colorClasses = ['btn-red', 'btn-blue', 'btn-yellow', 'btn-green'];
 
 const getOrdinal = (n: number) => {
   const s = ['th', 'st', 'nd', 'rd'];
@@ -120,14 +113,13 @@ export const QuizClashPlayerView: React.FC = () => {
         <div className="player-stat">Rank: {myRank ? getOrdinal(myRank) : 'N/A'}</div>
       </div>
       <div className="player-answer-grid">
-        {answerOptions.map((option, index) => (
+        {colorClasses.map((color, index) => (
           <button
             key={index}
             onClick={() => handleAnswer(index)}
             disabled={answered !== null}
-            className={`player-answer-btn ${option.color} ${answered === index ? 'selected' : ''}`}
+            className={`player-answer-btn ${color} ${answered === index ? 'selected' : ''}`}
           >
-            <div className="icon-container">{option.icon}</div>
           </button>
         ))}
       </div>
