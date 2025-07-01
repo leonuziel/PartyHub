@@ -25,7 +25,7 @@ app.use('/debug', debugRoutes);
 // Setup Socket.IO
 const io = new Server(httpServer, {
   cors: {
-    origin: "https://partyhubback.onrender.com:"+port,
+    origin: "https://partyhub.onrender.com",
     methods: ["GET", "POST"]
   }
 });
