@@ -1,115 +1,87 @@
-✅ guide: How To Add a New Game to PartyHub
-🔁 General Metadata
- Choose unique gameId (e.g. fibfinders, emojiwars)
+Of course. Thank you for the excellent feedback. You are correct—the game-specific logic should not concern itself with the pre-game lobby, and the nature of events needs more detail.
 
- Define display name (e.g. FakeNews, Emoji Wars)
+Here is the revised and more precise guide.
 
- Define core phases/states for gameplay
+### A Developer's Guide to Adding a New Game to PartyHub (Revised)
 
- Decide: is this game host-driven or auto-progressing?
+Adding a new game is a multi-stage process that spans from initial design to final implementation. Following these steps will ensure your game integrates smoothly into the PartyHub ecosystem.
 
-🧠 Backend (/Server/)
-🔲 1. Create the Game Logic
- Create new file under Server/src/game/games/<NewGame>.ts
+### Phase 1: Game Design & Planning
 
- Extend BaseGame, implement:
+Before writing a single line of code, a solid plan is essential. This phase is about defining the "what" and "how" of your game from a user's perspective.
 
-constructor(players, broadcast)
+**1. Define the Core Concept & Rules**
+First, clearly document the game's objective, rules, and how players win or lose. What is the core loop? Is it turn-based or real-time? Answering these questions early will guide all subsequent technical decisions.
 
-start()
+**2. Define the In-Game State Machine**
+The state machine is the backbone of your *in-game* logic, activating after the host starts the game from the lobby. It dictates the flow of the game from one phase to another.
 
-handlePlayerAction(playerId, action)
+*   **States:** List all possible states the game can be in *after it has started*. These are managed entirely within your game's specific logic. For example:
+    *   `Instructions`: The host is explaining the rules via the UI.
+    *   `RoundStart`: A new round is beginning, perhaps with setup actions.
+    *   `InProgress`: The main game loop is active where players take actions.
+    *   `RoundEnd`: A single round has concluded; scores might be shown.
+    *   `GameEnd`: The game is over, and a final winner is declared.
 
-state transitions: ASKING, VOTING, REVEAL, etc.
+*   **Events (Transitions):** Define the events that cause the game to move from one state to another. **Note that these events can be bidirectional**—some are sent from the player to the server, while others are pushed from the server to players. The following are just examples:
+    *   `hostProceedsFromInstructions`: An event triggered by the host that moves the state from `Instructions` -> `RoundStart`.
+    *   `playerSubmitsAction`: A player-triggered event that is processed during the `InProgress` state.
+    *   `timerExpires`: A server-side event that moves the state from `InProgress` -> `RoundEnd`.
+    *   `finalScoreReached`: A condition checked on the server that moves the game from `InProgress` -> `GameEnd`.
 
-scoring logic
+**3. Define the Data Models and Events**
+Specify the data your game needs. It's critical to distinguish between what the server knows, what it tells all players, and what information is exchanged in specific events.
 
- Use broadcastState() internally on state changes
+*   **Backend Data (Source of Truth):** The complete game state stored on the server. This includes secrets like hidden roles, the correct answer to a trivia question, or the full deck of cards.
+*   **Sanitized Public Data:** The version of the game state that is regularly broadcast to all players to keep their UIs in sync. This includes only public information like player scores, the current round number, and the active game state (e.g., `InProgress`).
+*   **Event Data (Bidirectional):** This is the payload of data sent for specific, discrete actions.
+    *   **Client-to-Server Events:** Typically initiated by a user action. For example: `{'event': 'submitAnswer', 'payload': {'answer': 'Paris'}}`.
+    *   **Server-to-Client Events:** Pushed from the server to one or more clients. For example, a global `{'event': 'gameStateUpdate', 'payload': {...}}` sent to everyone, or a private `{'event': 'dealCards', 'payload': {'cards': ['K', 'Q']}}` sent to a single player.
 
-🔲 2. Register Game in Factory
- In Server/src/game/GameFactory.ts, import and register:
+**4. Create UI/UX Mockups**
+Before implementation, create simple wireframes for each screen and state. This is crucial for a smooth user experience. You must design two distinct views for each state of your game:
 
-ts
-Copy
-Edit
-import { MyNewGame } from './games/MyNewGame';
-...
-case 'mynewgame': return new MyNewGame(players, broadcast);
-🔲 3. Build + Restart Server
- npm run build
+*   **Host View:** What does the host see and control? They will have buttons to start the game (transitioning out of the lobby), advance rounds, and override game flow if needed.
+*   **Player View:** What does a player see? This view is focused on their own actions and the public game state.
 
- npm run start
+Create a mockup for each state (`Instructions`, `InProgress`, etc.) for both the host and player.
 
-🖥 Frontend (/Client/)
-🔲 4. Define Game State Type
- In Client/src/types/gameTypes.ts, add:
+### Phase 2: Technical Implementation
 
-ts
-Copy
-Edit
-export interface MyNewGameState extends BaseGameState {
-  gameId: 'mynewgame';
-  ...
-}
-🔲 5. Create Host & Player Views
- Create files:
+With a solid plan, you can now begin coding. The following steps are based on the technical checklist found in the PartyHub repository.
 
-Client/src/game/MyNewGame/MyNewGameHostView.tsx
+**1. Create the Game Logic Class (Server-Side)**
+This class is the core of your game's backend.
 
-Client/src/game/MyNewGame/MyNewGamePlayerView.tsx
+*   Create a new file in `/server/games/[MyGame]/[MyGame].js`.
+*   This class will implement your game's state machine, manage player actions, and enforce the rules you defined. It will receive events from the `GameManager` and update its internal state.
 
- Use useGameStore, useRoomStore, usePlayerRole, socketService
+**2. Implement Game Event Handling (Server-Side)**
+The `GameManager` connects players to running game instances.
 
-🔲 6. Add View Switching in GameContainer.tsx
- Add:
+*   Open `/server/games/GameManager.js`.
+*   In the `handleEvent` function, add a `case` for your new game. This will delegate incoming client-to-server events to the appropriate method in your game's logic class.
 
-ts
-Copy
-Edit
-case 'mynewgame':
-  return isHost ? <MyNewGameHostView /> : <MyNewGamePlayerView />;
-🔲 7. Add to Lobby Game Selector
- Update game list in LobbyPage.tsx:
+**3. Define API Routes (Server-Side)**
+Create the endpoints that the frontend will call.
 
-ts
-Copy
-Edit
-const games = [
-  { id: 'trivia', name: 'Trivia Quiz' },
-  { id: 'mynewgame', name: 'My Game Display Name' }
-];
-🎨 Styling & UX
-🔲 8. Create Style File
- Create MyNewGameView.css
+*   Create a new file in `/server/routes/api/[my-game].js`.
+*   Define the routes for game actions. These routes will receive HTTP requests, validate them, and pass them to the `GameManager` to be processed as game events.
 
- Apply CSS classes in JSX
+**4. Register the API Routes (Server-Side)**
+Register your new routes with the Express server.
 
- Style:
+*   Open `/server/server.js`.
+*   Add a `require` statement for your route file and use `app.use()` to link it to a base path (e.g., `app.use('/api/my-game', myGameRoutes)`).
 
-Question/Answer display
+**5. Create React Components (Client-Side)**
+Build the frontend UI based on your mockups.
 
-Input fields or buttons
+*   Create a new folder in `/client/src/components/games/[MyGame]`.
+*   Develop the React components for the host and player views. A primary parent component should render different child components based on the `gameState` received from the server. Your components will also be responsible for sending client-to-server events via the API.
 
-Score/reveal views
+**6. Add Game to the Main Menu (Client-Side)**
+Make your game accessible to players.
 
-🧪 Testing
-🔲 9. Test Full Flow with 2+ Clients
- Test from lobby ➜ play ➜ end
-
- Edge cases:
-
-Player disconnects
-
-Empty answer
-
-Duplicate votes, etc.
-
-🧩 Optional Features
- Add timer/auto-advance
-
- Add multi-round support
-
- Track per-question stats
-
- Animate transitions (reveal, score)
-
+*   Open `/client/src/components/views/Home/Home.js`.
+*   Add a new entry to the game list so that users can select and create a room for your new game.

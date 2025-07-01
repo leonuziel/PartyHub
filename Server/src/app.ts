@@ -11,10 +11,14 @@ const httpServer = http.createServer(app);
 app.use(cors({ origin: 'http://localhost:3000' })); // Adjust for your frontend URL
 app.use(express.json());
 
+import debugRoutes from './routes/debug.js';
+
 // Basic welcome route
 app.get('/', (req, res) => {
   res.send('PartyHub Backend is running!');
 });
+
+app.use('/debug', debugRoutes);
 
 // Setup Socket.IO
 const io = new Server(httpServer, {

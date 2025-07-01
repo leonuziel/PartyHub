@@ -20,4 +20,8 @@ export class GameManager {
   public handlePlayerAction(playerId: string, action: any): void {
     this.currentGame?.handlePlayerAction(playerId, action);
   }
+
+  public getGameState() {
+      return this.currentGame;
+  }
 }

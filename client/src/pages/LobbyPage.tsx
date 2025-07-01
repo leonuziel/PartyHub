@@ -19,6 +19,7 @@ const LobbyPage: React.FC = () => {
   const games = [
     { id: 'quizclash', name: 'QuizClash' },
     { id: 'fakenews', name: 'FakeNews' },
+    { id: 'war', name: 'War' },
   ];
 
   const handleStartGame = () => {

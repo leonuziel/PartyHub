@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
+    "dev": "npm run build && node dist/server.js",
     "clean": "rm -rf dist",
     "type-check": "tsc --noEmit"
   },

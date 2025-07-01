@@ -31,6 +31,10 @@ export class RoomManager {
   public getRoom(roomCode: string): Room | undefined {
     return this.rooms.get(roomCode);
   }
+
+  public getRooms(): Map<string, Room> {
+    return this.rooms;
+    }
   
   public removeRoomIfEmpty(roomCode: string): void {
     const room = this.getRoom(roomCode);

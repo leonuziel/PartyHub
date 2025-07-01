@@ -71,4 +71,20 @@ export class Room {
   public getPlayerCount(): number {
       return this.players.size;
   }
+
+  public getRoomCode(): string {
+      return this.roomCode;
+  }
+
+  public getHostId(): string {
+      return this.hostId;
+  }
+
+  public getPlayers(): Player[] {
+      return Array.from(this.players.values());
+  }
+
+  public getGameState() {
+      return this.gameManager.getGameState();
+  }
 }
