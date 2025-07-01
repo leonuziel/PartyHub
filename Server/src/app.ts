@@ -4,11 +4,13 @@ import { Server } from 'socket.io';
 import cors from 'cors';
 import { SocketManager } from './core/SocketManager.js';
 
+const port = process.env.PORT || 4000 
+
 const app = express();
 const httpServer = http.createServer(app);
 
 // Setup CORS for frontend access
-app.use(cors({ origin: 'https://partyhubback.onrender.com:3000' })); // Adjust for your frontend URL
+app.use(cors({ origin: 'https://partyhubback.onrender.com:'+port })); // Adjust for your frontend URL
 app.use(express.json());
 
 import debugRoutes from './routes/debug.js';
@@ -23,7 +25,7 @@ app.use('/debug', debugRoutes);
 // Setup Socket.IO
 const io = new Server(httpServer, {
   cors: {
-    origin: "https://partyhubback.onrender.com:3000",
+    origin: "https://partyhubback.onrender.com:"+port,
     methods: ["GET", "POST"]
   }
 });
