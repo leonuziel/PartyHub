@@ -70,9 +70,9 @@ export const QuizClashHostView: React.FC = () => {
                 key={index}
                 className={`quiz-answer-result ${index === revealState.correctAnswerIndex ? 'correct' : 'incorrect'}`}
               >
-                <div className="answer-text">{answer}</div>
+                <div className={`answer-text ${index === revealState.correctAnswerIndex ? 'correct-text' : 'incorrect-text'}`}>{answer}</div>
                 <div className="answer-bar" style={{ width: `${percentage}%` }}></div>
-                <div className="answer-percentage">{percentage.toFixed(0)}%</div>
+                <div className={`answer-percentage ${index === revealState.correctAnswerIndex ? 'correct-text' : 'incorrect-text'}`}>{percentage.toFixed(0)}%</div>
               </div>
             );
           })}
