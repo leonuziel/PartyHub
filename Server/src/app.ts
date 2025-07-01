@@ -8,7 +8,7 @@ const app = express();
 const httpServer = http.createServer(app);
 
 // Setup CORS for frontend access
-app.use(cors({ origin: 'http://localhost:3000' })); // Adjust for your frontend URL
+app.use(cors({ origin: 'https://partyhubback.onrender.com:3000' })); // Adjust for your frontend URL
 app.use(express.json());
 
 import debugRoutes from './routes/debug.js';
@@ -23,7 +23,7 @@ app.use('/debug', debugRoutes);
 // Setup Socket.IO
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "https://partyhubback.onrender.com:3000",
     methods: ["GET", "POST"]
   }
 });
