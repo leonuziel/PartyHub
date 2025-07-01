@@ -15,6 +15,13 @@ const HomePage: React.FC = () => {
   const location = useLocation();
 
   useEffect(() => {
+    const savedNickname = localStorage.getItem('partyhub_nickname');
+    if (savedNickname) {
+      setNickname(savedNickname);
+    }
+  }, []);
+
+  useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
     const codeFromUrl = queryParams.get('roomCode');
     if (codeFromUrl) {
@@ -29,6 +36,7 @@ const HomePage: React.FC = () => {
     }
     setPlayerNickname(nickname);
     socketService.createRoom(nickname, (response) => {
+        localStorage.setItem('partyhub_nickname', nickname);
         navigate(`/lobby/${response.roomCode}`);
     });
   };
@@ -42,6 +50,7 @@ const HomePage: React.FC = () => {
     setPlayerNickname(nickname);
     socketService.joinRoom(roomCode.toUpperCase(), nickname, (response) => {
       if (response.success) {
+        localStorage.setItem('partyhub_nickname', nickname);
         navigate(`/lobby/${response.roomCode}`);
       } else {
         setError(response.message || 'Could not join room.');
