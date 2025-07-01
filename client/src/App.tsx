@@ -22,7 +22,7 @@ function App() {
         <Route path="/debug" element={<DebugPage />} />
       </Routes>
 
-      {process.env.NODE_ENV === 'development' && <DebugPanel />}
+      {/*process.env.NODE_ENV === 'development' &&*/ <DebugPanel />}
     </Router>
   );
 }
