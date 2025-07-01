@@ -4,7 +4,7 @@ const DebugPage: React.FC = () => {
     const [rooms, setRooms] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:4000/debug/rooms')
+        fetch('https://partyhubback.onrender.com/debug/rooms')
             .then(res => res.json())
             .then(data => setRooms(data));
     }, []);

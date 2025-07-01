@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDebugStore } from '../store/debugStore';
 import { usePlayerStore } from '../store/playerStore';
 import { useRoomStore } from '../store/roomStore';
 import { useGameStore } from '../store/gameStore';
 
 export function DebugPanel() {
-    const [isVisible, setIsVisible] = useState(true);
+    const [isVisible, setIsVisible] = useState(false);
     const connectionStatus = useDebugStore((s) => s.connectionStatus);
     const lastEvent = useDebugStore((s) => s.lastEvent);
     const socketId = usePlayerStore((s) => s.socketId);
@@ -13,26 +13,28 @@ export function DebugPanel() {
     const room = useRoomStore((s) => s.room);
     const gameState = useGameStore((s) => s.gameState);
 
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.ctrlKey && event.key === 'd') {
+                event.preventDefault(); // Prevent browser's default bookmark action
+                setIsVisible(prev => !prev);
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        // Cleanup the event listener on component unmount
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []); // Empty dependency array means this effect runs once on mount
+
     if (!isVisible) {
-        return (
-            <button 
-                onClick={() => setIsVisible(true)}
-                style={{
-                    position: 'fixed',
-                    bottom: 10,
-                    right: 10,
-                    padding: '8px 12px',
-                    zIndex: 9999,
-                }}
-            >
-                Show Debug
-            </button>
-        );
+        return null; // Don't render anything if it's not visible
     }
 
     return (
         <div 
-            onClick={() => setIsVisible(false)}
             style={{
                 position: 'fixed',
                 bottom: 10,
