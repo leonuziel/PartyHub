@@ -5,8 +5,8 @@ import { useGameStore } from '../store/gameStore';
 import { RoomData } from '../types/types';
 import { useDebugStore } from '../store/debugStore';
 
-const BACKEND_URL = 'https://partyhubback.onrender.com';
-//const BACKEND_URL = 'http://localhost:4000';
+//const BACKEND_URL = 'https://partyhubback.onrender.com';
+const BACKEND_URL = 'http://localhost:4000';
 
 class SocketService {
   private socket: Socket;
@@ -60,16 +60,16 @@ class SocketService {
 
   // --- Emitters ---
 
-  public createRoom(nickname: string, callback: (response: { roomCode:string }) => void) {
-    this.socket.emit('room:create', { nickname }, callback);
+  public createRoom(nickname: string, gameId: string, callback: (response: RoomData) => void) {
+    this.socket.emit('room:create', { nickname, gameId }, callback);
   }
 
-  public joinRoom(roomCode: string, nickname: string, callback: (response: { success: boolean; message?: string, roomCode?: string }) => void) {
-    this.socket.emit('room:join', { roomCode, nickname }, callback);
+  public joinRoom(roomCode: string, nickname: string, avatar: string, callback: (response: { success: boolean; message?: string, roomCode?: string }) => void) {
+    this.socket.emit('room:join', { roomCode, nickname, avatar }, callback);
   }
   
-  public startGame(roomCode: string, gameId: string) {
-    this.socket.emit('game:start', { roomCode, gameId });
+  public startGame(roomCode: string) {
+    this.socket.emit('game:start', { roomCode });
   }
 
   public sendPlayerAction(roomCode: string, action: any) {

@@ -20,9 +20,9 @@ export class RoomManager {
     return RoomManager.instance;
   }
 
-  public createRoom(hostSocket: Socket, nickname: string): Room {
+  public createRoom(hostSocket: Socket, nickname: string, gameId: string): Room {
     const roomCode = generateRoomCode();
-    const room = new Room(roomCode, this.io, hostSocket, nickname);
+    const room = new Room(roomCode, this.io, hostSocket, nickname, gameId);
     this.rooms.set(roomCode, room);
     console.log(`[RoomManager] Room created: ${roomCode}`);
     return room;

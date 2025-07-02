@@ -1,5 +1,3 @@
-here is a refined UI design for QuizClash that aligns with the specific flow of each game state.
-
 ### **1. STARTING State**
 This is a brief "get ready" phase after the game has been initiated by the host.
 

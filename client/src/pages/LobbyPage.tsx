@@ -1,108 +1,120 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useRoomStore } from '../store/roomStore';
 import { usePlayerRole } from '../hooks/usePlayerRole';
 import { socketService } from '../services/socketService';
 import { RoomState } from '../types/types';
 import { Button } from '../components/Button';
-import { Card } from '../components/Card';
 import { Spinner } from '../components/Spinner';
 import { QRCodeCanvas } from 'qrcode.react';
 import './LobbyPage.css';
 
 const LobbyPage: React.FC = () => {
   const room = useRoomStore((state) => state.room);
-  const { isHost } = usePlayerRole();
-  const [selectedGame, setSelectedGame] = useState('quizclash');
-  const [isCopied, setIsCopied] = useState(false);
+  const { isHost, player } = usePlayerRole();
 
-  const games = [
-    { id: 'quizclash', name: 'QuizClash' },
-    { id: 'fakenews', name: 'FakeNews' },
-    { id: 'war', name: 'War' },
-  ];
+  // Effect for host's lobby music
+  useEffect(() => {
+    if (isHost && room?.state === RoomState.LOBBY) {
+      const audio = new Audio('/audio/lobby-music.mp3');
+      audio.loop = true;
+      audio.volume = 0.5;
+      audio.play().catch(e => console.error("Failed to play lobby music:", e));
+
+      return () => {
+        audio.pause();
+      };
+    }
+  }, [isHost, room?.state]);
 
   const handleStartGame = () => {
     if (room && isHost) {
-      socketService.startGame(room.roomCode, selectedGame);
+      // The backend now gets gameId from the room, so we don't need to pass it
+      socketService.startGame(room.roomCode);
     }
-  };
-
-  const handleCopyCode = () => {
-    if (!room) return;
-    navigator.clipboard.writeText(room.roomCode).then(() => {
-      setIsCopied(true);
-      setTimeout(() => setIsCopied(false), 2000); // Reset after 2 seconds
-    });
   };
 
   const getJoinUrl = () => {
     if (!room) return '';
-    return `${window.location.origin}/?roomCode=${room.roomCode}`;
+    // A more user-friendly join URL might be needed
+    return `${window.location.origin}/join/${room.roomCode}`;
   };
 
   if (!room) {
     return (
       <div className="loading-container">
         <Spinner />
-        <p className="loading-text">Loading room...</p>
+        <p className="loading-text">Setting up your party...</p>
       </div>
     );
   }
 
-  // If game starts, navigate to the game page
   if (room.state === RoomState.IN_GAME) {
     return <Navigate to={`/game/${room.roomCode}`} />;
   }
 
-  return (
-    <div className="lobby-container">
-      <Card className="lobby-card">
-        <div className="lobby-header">
-          <div className="code-container">
-            <p className="room-code-label">Room Code</p>
-            <div className="room-code-wrapper">
-              <h1 className="room-code">{room.roomCode}</h1>
-              <Button onClick={handleCopyCode} variant="secondary" className="copy-button">
-                {isCopied ? 'Copied!' : 'Copy'}
-              </Button>
-            </div>
+  // HOST VIEW
+  if (isHost) {
+    return (
+      <div className="lobby-host-container">
+        <div className="lobby-instructions-pane">
+          <h1 className="instructions-title">Get Your Friends In!</h1>
+          <div className="join-steps">
+            <p>1. Open the camera on your phone.</p>
+            <p>2. Scan the QR code to open PartyHub.</p>
+            <p>3. Enter your nickname and join!</p>
           </div>
-          <div className="qr-code-container">
-            <QRCodeCanvas value={getJoinUrl()} size={110} bgColor="#ffffff" fgColor="#000000" />
+          <div className="qr-code-wrapper">
+            <QRCodeCanvas value={getJoinUrl()} size={200} bgColor="#ffffff" fgColor="#1a1a2e" />
           </div>
+          <div className="room-code-display">{room.roomCode}</div>
         </div>
+        <div className="lobby-players-pane">
+          <div className="lobby-game-title">
+            Game: <span>{room.gameId || 'Unknown Game'}</span>
+          </div>
+          <h2 className="players-title">Players ({room.players.length})</h2>
+          <div className="player-list">
+            {room.players.map((p) => (
+              <div key={p.id} className="player-item animate-fade-in">
+                <img src={`/avatars/${p.avatar}`} alt="avatar" className="player-avatar-lobby" />
+                {p.nickname}
+              </div>
+            ))}
+          </div>
+          <Button
+            className="start-game-button"
+            onClick={handleStartGame}
+            disabled={room.players.length < 2} // Example: need at least 2 players
+          >
+            Start Game
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
-        <h2 className="players-heading">Players in Lobby ({room.players.length})</h2>
-        <div className="players-grid">
-          {room.players.map((player) => (
-            <div key={player.id} className="player-card">
-              <span className="player-nickname">{player.nickname}</span>
-              {player.id === room.hostId && <span className="player-host-label">Host</span>}
-            </div>
-          ))}
+  // PLAYER VIEW
+  return (
+    <div className="lobby-player-container">
+      <div className="player-waiting-card">
+        <div className="player-waiting-avatar-wrapper">
+          <img src={`/avatars/${player?.avatar}`} alt="Your Avatar" className="player-waiting-avatar" />
         </div>
-        {isHost ? (
-          <div className="host-controls">
-            <select
-              className="game-selector"
-              value={selectedGame}
-              onChange={(e) => setSelectedGame(e.target.value)}
-            >
-              {games.map((game) => (
-                <option key={game.id} value={game.id}>
-                  {game.name}
-                </option>
-              ))}
-            </select>
-            <Button className="start-button" onClick={handleStartGame} disabled={room.players.length < 1}>
-              Start Game!
-            </Button>
-          </div>
-        ) : (
-          <p className="waiting-message">Waiting for the host to start the game...</p>
-        )}
-      </Card>
+        <h1 className="player-waiting-title">You're in, {player?.nickname}!</h1>
+        <p className="player-waiting-subtitle">Waiting for the host to start the game...</p>
+        <div className="player-list-condensed">
+          <h3>Who's here ({room.players.length}):</h3>
+          <ul>
+            {room.players.map((p) => (
+              <li key={p.id}>
+                <img src={`/avatars/${p.avatar}`} alt="avatar" className="player-avatar-lobby-condensed" />
+                {p.nickname}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
     </div>
   );
 };

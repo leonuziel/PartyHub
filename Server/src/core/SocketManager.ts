@@ -15,25 +15,33 @@ export class SocketManager {
     this.io.on('connection', (socket: Socket) => {
       console.log(`[SocketIO] User connected: ${socket.id}`);
 
-      socket.on('room:create', ({ nickname }, callback) => {
-        const room = roomManager.createRoom(socket, nickname);
-        callback({ roomCode: room.roomCode });
+      socket.on('room:create', ({ nickname, gameId }, callback) => {
+        console.log(`[SocketManager] received room:create with nickname: ${nickname} and gameId: ${gameId}`);
+        const room = roomManager.createRoom(socket, nickname, gameId);
+        // The callback now expects the full RoomData object
+        callback({
+          roomCode: room.roomCode,
+          hostId: room.hostId,
+          players: room.getPlayers(),
+          state: room.state,
+          gameId: room.gameId,
+        });
     });
 
-      socket.on('room:join', ({ roomCode, nickname }, callback) => {
+      socket.on('room:join', ({ roomCode, nickname, avatar }, callback) => {
         const room = roomManager.getRoom(roomCode);
         if (room) {
-          room.addPlayer(socket, nickname);
+          room.addPlayer(socket, nickname, avatar);
           callback({ success: true, roomCode });
         } else {
           callback({ success: false, message: 'Room not found' });
         }
       });
       
-      socket.on('game:start', ({ roomCode, gameId }) => {
+      socket.on('game:start', ({ roomCode }) => {
         const room = roomManager.getRoom(roomCode);
         if(room && room.hostId === socket.id) {
-            room.startGame(gameId);
+            room.startGame();
         }
       });
       

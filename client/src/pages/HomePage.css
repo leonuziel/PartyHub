@@ -1,82 +1,31 @@
-/* Container */
-.homeContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: var(--spacing-md);
+.home-container {
+  padding: 40px;
+  background: #1a1a2e;
+  color: #fff;
+  min-height: 100vh;
 }
 
-.homeCard {
-    max-width: 450px;
-    text-align: center;
+.home-header {
+  text-align: center;
+  margin-bottom: 40px;
 }
 
-.title {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: var(--primary-color);
-    margin-bottom: var(--spacing-sm);
+.home-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #e0e0ff;
+  margin-bottom: 8px;
 }
 
-.subtitle {
-    color: var(--text-secondary);
-    margin-bottom: var(--spacing-xl);
+.home-subtitle {
+  font-size: 1.5rem;
+  color: #9a9ace;
 }
 
-.errorMessage {
-    color: var(--error-color);
-    margin-bottom: var(--spacing-md);
-    min-height: 1.2em; /* Prevent layout shift */
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
-
-.spacedGroup {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-md);
-}
-
-.textInput {
-    width: 100%;
-    padding: var(--spacing-md);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-md);
-    font-size: 1rem;
-    background-color: var(--surface-color);
-    color: var(--text-primary);
-}
-
-.textInput:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-}
-
-.roomCodeInput {
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    font-weight: 700;
-}
-
-.orDivider {
-    display: flex;
-    align-items: center;
-    padding: var(--spacing-md) 0;
-}
-
-.orDividerLine {
-    flex-grow: 1;
-    height: 1px;
-    background-color: var(--border-color);
-}
-
-.orDividerText {
-    margin: 0 var(--spacing-md);
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    font-weight: 500;
-}
-
-/* Button styles are in your Button component — no need to duplicate here */

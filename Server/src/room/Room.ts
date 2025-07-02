@@ -8,21 +8,24 @@ export class Room {
   public state: RoomState = RoomState.LOBBY;
   public players: Map<string, Player> = new Map();
   private gameManager: GameManager;
+  public gameId: string | null = null;
 
   constructor(
     public readonly roomCode: string,
     private io: Server,
     hostSocket: Socket,
     hostNickname: string,
+    gameId: string,
   ) {
     this.hostId = hostSocket.id;
-    this.addPlayer(hostSocket, hostNickname);
+    this.gameId = gameId;
+    this.addPlayer(hostSocket, hostNickname, 'avatar1.png'); // Default avatar for host
     this.gameManager = new GameManager(this.players, this.hostId, this.broadcast.bind(this), this.handleGameEnd.bind(this));
   }
   
-  public addPlayer(socket: Socket, nickname: string): void {
+  public addPlayer(socket: Socket, nickname: string, avatar: string): void {
     socket.join(this.roomCode);
-    const player: Player = { id: socket.id, nickname };
+    const player: Player = { id: socket.id, nickname, avatar };
     this.players.set(socket.id, player);
     this.broadcastState();
   }
@@ -38,10 +41,14 @@ export class Room {
     this.broadcastState();
   }
 
-  public startGame(gameId: string): void {
+  public startGame(): void {
+    if (!this.gameId) {
+      console.error(`[Room ${this.roomCode}] Cannot start game without a gameId.`);
+      return;
+    }
     this.state = RoomState.IN_GAME;
-    this.gameManager.startGame(gameId);
-    this.broadcastState(); // To inform clients the game has started
+    this.gameManager.startGame(this.gameId);
+    this.broadcastState();
   }
 
   public handlePlayerAction(playerId: string, action: any): void {
@@ -54,7 +61,6 @@ export class Room {
   
   private handleGameEnd(): void {
     this.state = RoomState.LOBBY;
-    // Potentially clear game-specific data here in the future
     this.broadcastState();
   }
 
@@ -64,6 +70,7 @@ export class Room {
       hostId: this.hostId,
       players: Array.from(this.players.values()),
       state: this.state,
+      gameId: this.gameId,
     };
     this.io.to(this.roomCode).emit('room:update', roomData);
   }

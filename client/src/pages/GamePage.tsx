@@ -10,18 +10,36 @@ import './GamePage.css';
 const GamePage: React.FC = () => {
   const gameState = useGameStore((state) => state.gameState);
   const room = useRoomStore((state) => state.room);
+  const { roomCode } = useParams<{ roomCode: string }>();
 
-  if (room && room.state === RoomState.LOBBY) {
-    return <Navigate to={`/lobby/${room.roomCode}`} />
+  // If the user lands here directly and there's no room object,
+  // they are not connected or the room doesn't exist. Send them home.
+  if (!room || room.roomCode !== roomCode) {
+    return <Navigate to="/" />;
+  }
+  
+  // If the game is over and we're back in the lobby, go there.
+  if (room.state === RoomState.LOBBY) {
+    return <Navigate to={`/lobby/${room.roomCode}`} />;
   }
 
-  if (!gameState) {
+  // If we are in-game but waiting for the first game state from the server
+  if (room.state === RoomState.IN_GAME && !gameState) {
     return (
       <div className="game-loading-container">
         <Spinner />
-        <p className="loading-message">Waiting for game to start...</p>
+        <p className="loading-message">Loading Game...</p>
       </div>
     );
+  }
+
+  // If for some reason we have no game state, show a generic error.
+  if (!gameState) {
+    return (
+      <div className="game-loading-container">
+        <p className="loading-message">An error occurred. Unable to load game.</p>
+      </div>
+    )
   }
 
   return (

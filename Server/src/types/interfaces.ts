@@ -3,6 +3,7 @@ import { RoomState } from './enums.js';
 export interface Player {
   id: string; // socket.id
   nickname: string;
+  avatar: string;
 }
 
 export interface RoomData {
@@ -10,6 +11,7 @@ export interface RoomData {
   hostId: string;
   players: Player[];
   state: RoomState;
+  gameId: string | null;
 }
 
 // --- Generic Game Interfaces ---

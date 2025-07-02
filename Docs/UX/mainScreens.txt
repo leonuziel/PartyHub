@@ -1,0 +1,68 @@
+Guiding Principles for Pre-Game UI
+- Unified Branding: All pre-game screens (host and player) will share the same PartyHub logo, color palette (e.g., deep blues/purples with vibrant accents), and typography. This establishes that you are in the "PartyHub" world first and foremost.
+- Role-Specific Clarity: The host screen is a public dashboard designed for display and control. The player screen is a personal remote designed for input. Their layouts will reflect this fundamental difference.
+- Build Anticipation: The lobby isn't just a waiting room; it's the "hype" phase. The design should be clean but energetic, using subtle animations and upbeat music to build excitement.
+
+
+Screen 1: Host - Game Selection (The First Step)
+This is the very first screen the host interacts with on the large display (e.g., a laptop connected to a TV).
+Objective: Allow the host to easily choose which game the group will play.
+Layout & Key Elements:
+- Header: A prominent PartyHub logo and a welcoming headline like "Let's Get the Party Started!"
+- Game Grid/Carousel: A visually appealing display of available games. Each game is represented by a "Game Card."
+- Game Card Details:
+    - Game Title: (e.g., "QuizClash," "DoodleDorks").
+    - Artwork: A vibrant and representative image or icon for the game.
+    - Short Description: A one-line pitch (e.g., "The fast-paced trivia showdown!" or "The hilarious bad-drawing game!").
+    - Player Count: A clear icon and text showing the required player range (e.g., "2-8 Players").
+    - Estimated Playtime: (e.g., "~15-20 min").
+User Interaction:
+- The host uses their mouse or trackpad to browse the games.
+- Hovering over a Game Card could trigger a subtle animation (e.g., it scales up slightly) and perhaps reveal a bit more detail.
+- Clicking a Game Card smoothly transitions the host screen to the Lobby Screen.
+
+
+Screen 2: The Lobby (Host & Player Views)
+After the host selects a game, the screen transitions to the Lobby. This is the central pre-game hub where players join.
+
+Host View (The Large Screen)
+Objective: Provide clear instructions for players to join, show who is in the room, and give the host the control to start the game.
+Layout & Key Elements:
+- Left Pane (Join Instructions):
+    - QR Code: Large, scannable, and the primary call-to-action.
+    - Room Code: A human-readable 4-6 character code (e.g., "WXYZ") displayed in a large, clear font. This is a crucial fallback for anyone who can't use the QR code.
+    - Simple Instructions: A "How to Join" section with 3 simple steps:
+        - Open the camera on your phone.
+        - Scan the QR code to open PartyHub.
+        - Enter your nickname and join!
+- Right Pane (Player Area):
+    - Game Title: Reminds everyone which game was selected (e.g., "QuizClash").
+    - Player List: The main focus. As players join, their chosen avatar and nickname animate into a list. This provides immediate, satisfying feedback on the big screen.
+    - Player Count: A running total (e.g., "Players: 4/8").
+    - "Start Game" Button: A large, prominent button. It should be disabled (e.g., greyed out) until the minimum number of players (e.g., 2) have joined. Once the minimum is met, the button becomes active and brightly colored, signaling to the host that they can begin.
+- Ambiance: Upbeat, looping background music and subtle, non-distracting background animations.
+
+Player View (The Phone Screen)
+The player's journey has two simple steps: joining and waiting.
+Step 1: Joining the Room
+Objective: Get the player into the room with minimal friction after scanning the QR code.
+Layout & Key Elements:
+- Header: The PartyHub logo, confirming they are in the right place.
+- Nickname Input: A single, large text field prompting "Enter Your Nickname."
+- Avatar Selection: A fun grid of 8-12 predefined, colorful avatars. Allowing users to choose from a set is faster than uploading a photo and maintains a consistent art style.
+- "Join the Party!" Button: A large, friendly, and brightly colored call-to-action button.
+User Interaction:
+- Player types their name.
+- Player taps to select an avatar (the selected one gets a highlighted border).
+- Player taps "Join the Party!". The screen transitions to the Waiting View.
+
+Step 2: Waiting in the Lobby
+Objective: Confirm to the player that they are successfully in, show them who else is there, and let them know what's next.
+Layout & Key Elements:
+- Confirmation Message: A large, friendly message at the top: "You're in, [Player's Nickname]!"
+- Player Avatar: Their chosen avatar is displayed prominently.
+- Live Player List: Shows the nicknames of the other players currently in the lobby. This builds social connection as players see their friends' names pop up.
+- Status Indicator: A clear message indicating the next step: "Waiting for the host to start the game..."
+User Interaction:
+- This screen is mostly passive. The primary feedback is watching the player list grow.
+- (Optional fun feature): Players could tap their screen to send a simple emoji reaction (e.g., 🎉, 👍) that briefly appears next to their name on the host screen, giving them a small way to interact while they wait.

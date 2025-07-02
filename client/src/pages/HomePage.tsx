@@ -1,104 +1,71 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { GameCard } from '../components/GameCard';
 import { socketService } from '../services/socketService';
 import { usePlayerStore } from '../store/playerStore';
-import { Button } from '../components/Button';
-import { Card } from '../components/Card';
-import './HomePage.css'; // <-- import CSS module
+import './HomePage.css';
+
+const games = [
+  {
+    id: 'quizclash',
+    title: 'QuizClash',
+    description: 'The fast-paced trivia showdown!',
+    playerCount: '2-8 Players',
+    playtime: '~15-20 min',
+    imageUrl: '/game-art/quizclash.png',
+  },
+  {
+    id: 'fakenews',
+    title: 'Fake News',
+    description: 'The hilarious game of lies.',
+    playerCount: '3-8 Players',
+    playtime: '~10-15 min',
+    imageUrl: '/game-art/fakenews.png',
+  },
+    {
+    id: 'war',
+    title: 'War',
+    description: 'The classic card game of chance.',
+    playerCount: '2 Players',
+    playtime: '~5-10 min',
+    imageUrl: '/game-art/wargame.png',
+  },
+];
 
 const HomePage: React.FC = () => {
-  const [nickname, setNickname] = useState('');
-  const [roomCode, setRoomCode] = useState('');
-  const [error, setError] = useState('');
   const navigate = useNavigate();
   const setPlayerNickname = usePlayerStore((state) => state.setNickname);
-  const location = useLocation();
 
-  useEffect(() => {
-    const savedNickname = localStorage.getItem('partyhub_nickname');
-    if (savedNickname) {
-      setNickname(savedNickname);
-    }
-  }, []);
-
-  useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const codeFromUrl = queryParams.get('roomCode');
-    if (codeFromUrl) {
-      setRoomCode(codeFromUrl.toUpperCase());
-    }
-  }, [location.search]);
-
-  const handleCreateRoom = () => {
-    if (!nickname) {
-      setError('Please enter a nickname first.');
-      return;
-    }
-    setPlayerNickname(nickname);
-    socketService.createRoom(nickname, (response) => {
-        localStorage.setItem('partyhub_nickname', nickname);
-        navigate(`/lobby/${response.roomCode}`);
-    });
-  };
-
-  const handleJoinRoom = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!nickname || !roomCode) {
-      setError('Please enter a nickname and a room code.');
-      return;
-    }
-    setPlayerNickname(nickname);
-    socketService.joinRoom(roomCode.toUpperCase(), nickname, (response) => {
-      if (response.success) {
-        localStorage.setItem('partyhub_nickname', nickname);
-        navigate(`/lobby/${response.roomCode}`);
-      } else {
-        setError(response.message || 'Could not join room.');
-      }
+  const handleGameSelect = (gameId: string) => {
+    const hostNickname = "Host";
+    setPlayerNickname(hostNickname);
+    localStorage.setItem('partyhub_nickname', hostNickname);
+    
+    socketService.createRoom(hostNickname, gameId, (newRoom) => {
+        // No need to set room here, the 'room:update' event will do it
+        navigate(`/lobby/${newRoom.roomCode}`);
     });
   };
 
   return (
-    <div className="homeContainer">
-      <Card className="homeCard">
-        <h1 className="title">PartyHub</h1>
-        <p className="subtitle">Let the Games Begin!</p>
-
-        {error && <p className="errorMessage">{error}</p>}
-
-        <div className="spacedGroup">
-          <input
-            type="text"
-            placeholder="Enter your nickname"
-            value={nickname}
-            onChange={(e) => setNickname(e.target.value)}
-            className="textInput"
+    <div className="home-container">
+      <header className="home-header">
+        <h1 className="home-title">PartyHub</h1>
+        <p className="home-subtitle">Let's Get the Party Started!</p>
+      </header>
+      <div className="game-grid">
+        {games.map((game) => (
+          <GameCard
+            key={game.id}
+            title={game.title}
+            description={game.description}
+            playerCount={game.playerCount}
+            playtime={game.playtime}
+            imageUrl={game.imageUrl}
+            onClick={() => handleGameSelect(game.id)}
           />
-          <Button onClick={handleCreateRoom} disabled={!nickname}>
-            Create a New Room
-          </Button>
-
-          <div className="orDivider">
-            <div className="orDividerLine"></div>
-            <span className="orDividerText">OR</span>
-            <div className="orDividerLine"></div>
-          </div>
-
-          <form onSubmit={handleJoinRoom} className="spacedGroup">
-            <input
-              type="text"
-              placeholder="Enter room code"
-              value={roomCode}
-              onChange={(e) => setRoomCode(e.target.value)}
-              maxLength={4}
-              className={`textInput roomCodeInput`}
-            />
-            <Button type="submit" variant="secondary" disabled={!nickname || !roomCode}>
-              Join with Code
-            </Button>
-          </form>
-        </div>
-      </Card>
+        ))}
+      </div>
     </div>
   );
 };

@@ -4,6 +4,7 @@ import HomePage from './pages/HomePage';
 import LobbyPage from './pages/LobbyPage';
 import GamePage from './pages/GamePage';
 import DebugPage from './pages/DebugPage';
+import JoinPage from './pages/JoinPage';
 import { socketService } from './services/socketService';
 import { DebugPanel } from './components/DebugPanel';
 
@@ -17,6 +18,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/join/:roomCode" element={<JoinPage />} />
         <Route path="/lobby/:roomCode" element={<LobbyPage />} />
         <Route path="/game/:roomCode" element={<GamePage />} />
         <Route path="/debug" element={<DebugPage />} />
