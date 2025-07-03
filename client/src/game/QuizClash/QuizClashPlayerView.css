@@ -1,24 +1,23 @@
 @import '../GameView.css';
 
-/* Answering View */
-.player-answer-view {
+/* --- Base Player View --- */
+.player-view, .player-status-container, .player-reveal-container, .player-finished-container, .player-answer-view {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  height: 100vh; /* Full viewport height */
-  padding: var(--spacing-sm);
-  background-color: var(--background-dark);
-  box-sizing: border-box; /* Ensure padding doesn't add to the height */
+  height: 100vh; /* Use full viewport height */
+  padding: var(--spacing-md);
+  box-sizing: border-box;
+  text-align: center;
 }
 
-.player-game-header {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 var(--spacing-md);
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--text-secondary);
-  flex-shrink: 0;
+/* --- Player Answering View --- */
+.player-answer-view {
+  background-color: var(--background-dark);
+  padding: var(--spacing-sm);
+  gap: var(--spacing-sm);
 }
 
 .player-answer-grid {
@@ -26,8 +25,8 @@
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
   gap: var(--spacing-sm);
-  flex-grow: 1;
-  height: calc(100vh - 60px); /* Adjust based on header height, ensures it fills screen */
+  width: 100%;
+  flex-grow: 1; /* Make grid take available space */
 }
 
 .player-answer-btn {
@@ -37,11 +36,19 @@
   transition: all 0.2s ease-in-out;
   width: 100%;
   height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.player-answer-symbol {
+  font-size: 4.5rem; /* Large, but not excessively so */
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
 }
 
 .player-answer-btn:hover:not(:disabled) {
-  transform: scale(1.03);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  transform: scale(1.02);
 }
 
 .player-answer-btn:disabled {
@@ -49,105 +56,78 @@
 }
 
 .player-answer-btn.selected {
-  transform: scale(1.05);
-  box-shadow: 0 0 30px 10px rgba(255, 255, 255, 0.3);
-  z-index: 10;
+  transform: scale(0.95);
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
 }
 
 .player-answer-btn:not(.selected):disabled {
-    opacity: 0.4;
-    filter: grayscale(80%);
+  opacity: 0.3;
+  filter: grayscale(100%);
 }
 
-.btn-red { background-color: #EF4444; }
-.btn-blue { background-color: #3B82F6; }
-.btn-yellow { background-color: #EAB308; }
-.btn-green { background-color: #22C55E; }
-
-/* Status/Waiting Container */
-.player-status-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  height: 100%;
+/* --- Status/Waiting/Starting Container --- */
+.player-avatar-small {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-bottom: var(--spacing-lg);
 }
 
 .player-status-title {
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: 600;
-  margin-top: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
 }
 
 .player-status-subtitle {
+  font-size: 1.1rem;
   color: var(--text-secondary);
 }
 
-.player-name {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--primary-color);
-  margin-top: var(--spacing-sm);
-}
-
-
-/* Reveal Container */
+/* --- Player Reveal Container --- */
 .player-reveal-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  text-align: center;
+  color: white;
 }
+.player-reveal-container.bg-correct { background-color: var(--success-color); }
+.player-reveal-container.bg-incorrect { background-color: var(--error-color); }
 
 .reveal-verdict {
-  font-size: 3.5rem;
+  font-size: 3rem;
   font-weight: 700;
   margin-bottom: var(--spacing-sm);
 }
 
-.reveal-verdict.correct {
-  color: var(--secondary-color);
-}
-
-.reveal-verdict.incorrect {
-  color: var(--error-color);
-}
-
 .reveal-points-gained {
-  font-size: 1.8rem;
-  color: var(--secondary-color);
+  font-size: 1.5rem;
   margin-bottom: var(--spacing-lg);
 }
 
-.player-current-stats {
-  font-size: 1.5rem;
-  color: var(--text-main);
+.player-rank-update {
+  font-size: 1.3rem;
 }
 
+.rank-change {
+  font-weight: bold;
+  margin-top: var(--spacing-sm);
+}
 
-/* Finished Container */
+.rank-change.up { color: #c8e6c9; }
+.rank-change.down { color: #ffcdd2; }
+
+/* --- Finished Container --- */
 .player-finished-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: var(--spacing-lg);
+  justify-content: space-around;
 }
-
 .player-final-rank {
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   font-weight: 700;
   color: var(--primary-color);
 }
 
 .player-final-score {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   color: var(--text-secondary);
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-md);
 }
 
 .player-top-winners {
@@ -159,13 +139,51 @@
 }
 
 .top-winners-title {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   margin-bottom: var(--spacing-md);
+  color: var(--primary-color);
 }
 
 .winner-entry {
   display: flex;
-  justify-content: space-between;
-  padding: var(--spacing-sm) 0;
-  border-bottom: 1px solid var(--border-color);
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs) 0;
 }
+
+.winner-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.player-action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  width: 100%;
+  max-width: 400px;
+}
+
+.player-action-buttons button {
+  padding: var(--spacing-md);
+  font-size: 1.1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  background-color: var(--primary-color);
+  color: white;
+  width: 100%;
+}
+
+.player-action-buttons button:last-child {
+  background-color: var(--background-light);
+  color: var(--text-main);
+}
+
+/* --- Colors --- */
+.btn-red { background-color: #EF4444; }
+.btn-blue { background-color: #3B82F6; }
+.btn-yellow { background-color: #EAB308; }
+.btn-green { background-color: #22C55E; }

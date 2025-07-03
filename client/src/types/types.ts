@@ -10,6 +10,7 @@ export interface Player {
   id: string; // socket.id
   nickname: string;
   avatar?: string;
+  hasAnswered?: boolean;
 }
 
 export interface RoomData {

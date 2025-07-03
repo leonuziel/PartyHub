@@ -93,24 +93,40 @@ export class QuizClashGame extends BaseGame<QuizClashGameState> {
     private revealAnswers(): void {
         if (this.timerId) clearInterval(this.timerId);
         this.gameState.status = 'REVEALING_ANSWERS';
-
-        // Calculate scores
+    
+        const answerCounts: Record<number, number> = {};
+        this.currentQuestion?.answers.forEach((_, index) => {
+            answerCounts[index] = 0;
+        });
+    
+        const playerAnswersWithScores: Record<string, { answerIndex: number; scoreGained: number }> = {};
+    
+        // Calculate scores and tally answers
         this.playerAnswers.forEach((answer, playerId) => {
+            let scoreGained = 0;
             if (answer.answerIndex === this.currentQuestion?.correctAnswerIndex) {
                 // Award points based on speed (e.g., max 1000)
                 const points = Math.round((1 - (answer.time / 15000)) * 500) + 500;
                 this.gameState.scores[playerId] += points;
+                scoreGained = points;
             }
+    
+            answerCounts[answer.answerIndex]++;
+            playerAnswersWithScores[playerId] = {
+                answerIndex: answer.answerIndex,
+                scoreGained: scoreGained,
+            };
         });
-
-        // Include correct answer in the broadcast
+    
+        // Include correct answer and stats in the broadcast
         const revealState = {
             ...this.getSanitizedGameState(),
             correctAnswerIndex: this.currentQuestion?.correctAnswerIndex,
-            playerAnswers: Object.fromEntries(this.playerAnswers)
+            playerAnswers: playerAnswersWithScores,
+            answerCounts: answerCounts,
         };
         this.broadcast('game:state_update', revealState);
-
+    
         // Move to next question after a delay
         setTimeout(() => this.nextQuestion(), 5000);
     }
@@ -128,14 +144,21 @@ export class QuizClashGame extends BaseGame<QuizClashGameState> {
         if (this.gameState.status !== 'ASKING_QUESTION' || this.playerAnswers.has(playerId) || playerId === this.hostId) {
             return; // Ignore late, duplicate, or host answers
         }
-
+    
         this.playerAnswers.set(playerId, {
             answerIndex: action.answerIndex,
             time: (15 - this.gameState.timer) * 1000 // Time taken in ms
         });
-
+    
+        // Add a 'hasAnswered' flag to the player
+        const player = this.players.get(playerId);
+        if(player) {
+            (player as any).hasAnswered = true;
+            this.broadcastState(); // Broadcast the updated player list
+        }
+    
         // If all players (except host) have answered, reveal early
-        if (this.playerAnswers.size === this.players.size - 1) {
+        if (this.playerAnswers.size === this.players.size - (this.players.has(this.hostId) ? 1 : 0)) {
             this.revealAnswers();
         }
     }

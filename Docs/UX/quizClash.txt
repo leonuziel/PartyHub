@@ -1,0 +1,62 @@
+Here is a more detailed design specification for each state of QuizClash.
+1. STARTING State
+Objective: Transition from the lobby to the game, building anticipation and ensuring all players are ready.
+Host View (Large Screen)
+The design here is all about focus and hype.
+Visuals: The screen dims, the lobby music fades, and a new, more energetic "game starting" track begins. A large, full-screen message "Get Ready!" appears.
+Countdown: A dramatic, screen-filling countdown from 3... 2... 1... takes center stage. Each number animates in and out with a satisfying sound effect.
+Branding: The "QuizClash" logo is present but subtly placed, perhaps in a corner, to keep the focus on the countdown.
+
+Player View (Phone)
+This screen confirms the player is locked in and directs their attention to the main screen.
+Visuals: A clean, simple screen that mirrors the host's "Get Ready!" message.
+Player Confirmation: It prominently displays the player's chosen nickname and avatar, assuring them, "You're in, [Nickname]!"
+Call to Action: A clear instruction: "Look at the main screen!" This is crucial for training players where to get the questions from.
+
+2. ASKING_QUESTION State
+Objective: Clearly present the question and answers, create urgency, and provide an effortless way for players to respond.
+Host View (Large Screen)
+This is the informational hub. Visual hierarchy is key.
+Question Area: The top half of the screen is dedicated to the question, written in a large, easy-to-read font.
+Answer Grid: The bottom half displays the four answer choices. Crucially, each answer has both a distinct color and a unique symbol (e.g., Triangle, Circle, Square, Diamond). This makes the game more accessible and easier to play at a glance.
+Timer: A shrinking horizontal bar or a circular timer provides a constant, clear visual representation of the time remaining.
+Persistent Info:
+Question Counter: "Question 4 / 10" in a corner.
+Answer Count: A small counter showing how many players have submitted an answer (e.g., "Answers: 6/8").
+
+Player View (Phone)
+This is the controller. It should be simple and responsive.
+Answer Buttons: The screen is almost entirely filled with four large, tappable buttons. Each button matches the color and symbol from the host screen.
+Feedback on Action:
+When a player taps an answer, that button animates (e.g., presses down and glows), providing instant tactile feedback.
+The other buttons immediately become disabled and greyed out.
+A status message appears: "Answer locked in! Waiting for others..." This prevents players from trying to change their answer and confirms their input was received.
+
+3. REVEALING_ANSWERS State
+Objective: Deliver the results in a dramatic, multi-stage reveal that is both informative and exciting.
+Host View (Large Screen)
+This is the "payoff" moment. The reveal happens in a quick three-step sequence:
+Answer Distribution: First, a bar chart animates next to each answer, showing the percentage of players who chose it. This builds social tension and discussion ("Wow, everyone fell for that one!").
+Correct Answer Reveal: After a brief pause, the correct answer is brilliantly highlighted (e.g., with a green checkmark and a glowing border), while incorrect answers fade to gray. A satisfying "correct" sound effect plays.
+Leaderboard Animation: This is the most exciting part. The leaderboard slides into view and animates. Players' scores tick upwards, and avatars physically move up or down the ranks with little arrows. This "horse race" visual is incredibly engaging.
+
+Player View (Phone)
+This screen provides immediate, personal feedback.
+Instant Result: The screen instantly transforms to show a large, bold message: "Correct!" (on a green background) or "Incorrect!" (on a red background).
+Points Awarded: For correct answers, it shows the points gained for that round (e.g., "+850 Points"). The faster you answer, the higher the points.
+Rank Update: It clearly shows the player's new score and, most importantly, their change in rank with a large arrow (e.g., "You moved up 2 spots! You are now 4th.").
+
+4. FINISHED State
+Objective: Celebrate the winners, give every player their final standing, and encourage re-engagement.
+Host View (Large Screen)
+The Podium: A celebratory "Winners' Podium" takes center stage. The 1st, 2nd, and 3rd place players' avatars and nicknames are displayed on gold, silver, and bronze steps.
+Celebration: Confetti animations and triumphant music create a festive atmosphere.
+Full Leaderboard: After a few seconds of celebrating the top three, the screen transitions to a full, scrollable leaderboard showing the final rank and score for every player in the game.
+Call to Action: A clear "Play Again" button for the host to instantly start another round with the same players.
+
+Player View (Phone)
+Personalized Result: The screen is dedicated to the player's own final result: "You finished 5th out of 12!" accompanied by their final score.
+Context: Below their personal result, a small graphic shows the top 3 winners, giving them context for who won the game.
+Re-engagement Buttons: Clear buttons provide options for what's next:
+"Play Again": Signals to the host they are ready for a rematch.
+"Back to Lobby": Allows them to exit the game and choose a new one.

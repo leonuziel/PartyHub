@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useGameStore } from '../../store/gameStore';
 import { useRoomStore } from '../../store/roomStore';
 import { usePlayerRole } from '../../hooks/usePlayerRole';
@@ -7,7 +7,12 @@ import { QuizClashGameState, QuizClashRevealState } from '../../types/types';
 import { Spinner } from '../../components/Spinner';
 import './QuizClashPlayerView.css';
 
-const colorClasses = ['btn-red', 'btn-blue', 'btn-yellow', 'btn-green'];
+const answerDesigns = [
+  { color: 'red', symbol: '▲' },
+  { color: 'blue', symbol: '●' },
+  { color: 'yellow', symbol: '■' },
+  { color: 'green', symbol: '◆' },
+];
 
 const getOrdinal = (n: number) => {
   const s = ['th', 'st', 'nd', 'rd'];
@@ -20,6 +25,7 @@ export const QuizClashPlayerView: React.FC = () => {
   const room = useRoomStore((state) => state.room);
   const { player, playerId } = usePlayerRole();
   const [answered, setAnswered] = useState<number | null>(null);
+  const [lastRank, setLastRank] = useState<number | null>(null);
 
   const sortedScores = useMemo(() => {
     return Object.entries(gameState.scores).sort(([, a], [, b]) => b - a);
@@ -30,11 +36,12 @@ export const QuizClashPlayerView: React.FC = () => {
     return rank !== -1 ? rank + 1 : null;
   }, [sortedScores, playerId]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (gameState.status === 'ASKING_QUESTION') {
       setAnswered(null);
+      setLastRank(myRank);
     }
-  }, [gameState.status, gameState.round]);
+  }, [gameState.status, gameState.round, myRank]);
 
   const handleAnswer = (answerIndex: number) => {
     if (!room || answered !== null) return;
@@ -47,30 +54,35 @@ export const QuizClashPlayerView: React.FC = () => {
   if (gameState.status === 'STARTING') {
     return (
       <div className="player-status-container">
-        <h1 className="player-status-title">Get Ready!</h1>
-        <p className="player-name">{player?.nickname}</p>
+        <img src={player?.avatar} alt="Your avatar" className="player-avatar-small" />
+        <h1 className="player-status-title">You're in, {player?.nickname}!</h1>
+        <p className="player-status-subtitle">Look at the main screen!</p>
       </div>
     );
   }
 
   if (gameState.status === 'FINISHED') {
     const topThree = sortedScores.slice(0, 3).map(([pId, score]) => {
-      const player = gameState.players.find(p => p.id === pId);
-      return { ...player, score };
+      const p = gameState.players.find(player => player.id === pId);
+      return { ...p, score };
     });
 
     return (
       <div className="player-finished-container">
-        <h1 className="player-final-rank">You finished {myRank ? getOrdinal(myRank) : 'N/A'}!</h1>
+        <h1 className="player-final-rank">You finished {myRank ? getOrdinal(myRank) : 'N/A'} out of {gameState.players.length}!</h1>
         <p className="player-final-score">Final Score: {myScore}</p>
         <div className="player-top-winners">
-          <h2 className="top-winners-title">Top 3</h2>
+          <h2 className="top-winners-title">Podium</h2>
           {topThree.map((p, index) => (
             <div key={p.id} className="winner-entry">
-              <span>{getOrdinal(index + 1)}: {p.nickname}</span>
-              <span>{p.score} pts</span>
+              <img src={p.avatar} alt={p.nickname} className="winner-avatar" />
+              <span>{getOrdinal(index + 1)}: {p.nickname} ({p.score} pts)</span>
             </div>
           ))}
+        </div>
+        <div className="player-action-buttons">
+          <button onClick={() => { /* signal host */ }}>Play Again</button>
+          <button onClick={() => { /* navigate to lobby */ }}>Back to Lobby</button>
         </div>
       </div>
     );
@@ -78,19 +90,22 @@ export const QuizClashPlayerView: React.FC = () => {
 
   if (gameState.status === 'REVEALING_ANSWERS') {
     const revealState = gameState as QuizClashRevealState;
-    const myAnswer = (revealState.playerAnswers as any)[playerId!]?.answerIndex;
-    const wasCorrect = myAnswer === revealState.correctAnswerIndex;
-    const pointsGained = (revealState.playerAnswers as any)[playerId!]?.scoreGained || 0;
+    console.log("Player ID:", playerId);
+    console.log("Player Answers:", revealState.playerAnswers);
+    const myAnswerRecord = (revealState.playerAnswers as any)[playerId!];
+    console.log("My Answer Record:", myAnswerRecord);
+    const wasCorrect = myAnswerRecord?.answerIndex === revealState.correctAnswerIndex;
+    const pointsGained = myAnswerRecord?.scoreGained || 0;
+    const rankChange = lastRank ? lastRank - (myRank || 0) : 0;
 
     return (
-      <div className="player-reveal-container">
-        <h1 className={`reveal-verdict ${wasCorrect ? 'correct' : 'incorrect'}`}>
-          {wasCorrect ? 'Correct!' : 'Incorrect'}
-        </h1>
-        {wasCorrect && <p className="reveal-points-gained">+{pointsGained} points</p>}
-        <div className="player-current-stats">
-          <p>Total Score: {myScore}</p>
-          <p>Rank: {myRank ? getOrdinal(myRank) : 'N/A'}</p>
+      <div className={`player-reveal-container ${wasCorrect ? 'bg-correct' : 'bg-incorrect'}`}>
+        <h1 className="reveal-verdict">{wasCorrect ? 'Correct!' : 'Incorrect!'}</h1>
+        {wasCorrect && <p className="reveal-points-gained">+{pointsGained} Points</p>}
+        <div className="player-rank-update">
+          <p>Your new rank is {myRank ? getOrdinal(myRank) : 'N/A'}</p>
+          {rankChange > 0 && <p className="rank-change up">You moved up {rankChange} spots!</p>}
+          {rankChange < 0 && <p className="rank-change down">You moved down {Math.abs(rankChange)} spots.</p>}
         </div>
       </div>
     );
@@ -98,28 +113,25 @@ export const QuizClashPlayerView: React.FC = () => {
 
   if (answered !== null) {
     return (
-      <div className="player-status-container">
+      <div className="player-status-container waiting">
         <Spinner />
         <h1 className="player-status-title">Answer locked in!</h1>
-        <p className="player-status-subtitle">Waiting for other players...</p>
+        <p className="player-status-subtitle">Waiting for others...</p>
       </div>
     );
   }
 
   return (
     <div className="player-answer-view">
-      <div className="player-game-header">
-        <div className="player-stat">Score: {myScore}</div>
-        <div className="player-stat">Rank: {myRank ? getOrdinal(myRank) : 'N/A'}</div>
-      </div>
       <div className="player-answer-grid">
-        {colorClasses.map((color, index) => (
+        {answerDesigns.map((design, index) => (
           <button
             key={index}
             onClick={() => handleAnswer(index)}
             disabled={answered !== null}
-            className={`player-answer-btn ${color} ${answered === index ? 'selected' : ''}`}
+            className={`player-answer-btn btn-${design.color} ${answered === index ? 'selected' : ''}`}
           >
+            <span className="player-answer-symbol">{design.symbol}</span>
           </button>
         ))}
       </div>
