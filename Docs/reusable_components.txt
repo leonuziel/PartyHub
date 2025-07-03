@@ -1,0 +1,33 @@
+Here is a list of reusable components that can be extracted from the existing games:
+
+### General Components
+
+*   **Button**: a customizable button, with different variants like "primary" and "secondary".
+*   **PlayerStatusContainer**: Displays messages to the player (e.g., "Get Ready!", "Waiting for opponent...").
+*   **ActionButton**: A primary action button for players.
+*   **CountdownTimer**: A component to display a countdown.
+*   **PlayerInfo**: Displays player information like name and score.
+*   **Card**: A versatile card component, with face-up and face-down states.
+*   **PlayArea**: A container for the main game action, like a battlefield or board.
+*   **GameTitle**: A component to display the game's title in a stylized way.
+*   **WinnerDisplay**: A component to announce the winner of a round or game.
+*   **CenteredMessage**: A component to display a centered message to the user.
+*   **TextAreaWithCounter**: A textarea with a character counter.
+*   **VotingOptions**: A component to display a list of voting options.
+*   **RankDisplay**: Displays a player's rank.
+*   **AwardDisplay**: A component to display awards or achievements.
+*   **Podium**: A component to display the top players at the end of a game.
+*   **PlayerStatusGrid**: A grid to show players and their status (e.g., "submitted").
+*   **QuestionDisplay**: Displays a question to the players.
+*   **ResultsList**: A list to show the results of a round, including votes and correctness.
+*   **SpecialAwards**: A component to display special awards, like "Master Liar".
+*   **PlayerAvatar**: A component to display a player's avatar.
+*   **AnswerButtonGrid**: A grid of buttons for answering questions.
+*   **RankUpdate**: A component to show changes in a player's rank.
+*   **PodiumList**: A simplified list-based podium.
+*   **GameBranding**: A component to display the game's logo or branding.
+*   **Leaderboard**: A component to display the full leaderboard.
+*   **AnswerResult**: Shows an answer option with stats like the percentage of players who chose it.
+*   **QuestionHeader**: A header for a question, including a round counter, timer, and answer counter.
+*   **AnswerGrid**: A grid to display answer options to the host and players.
+*   **Spinner**: A loading spinner.

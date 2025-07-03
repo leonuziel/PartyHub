@@ -6,7 +6,7 @@ import { RoomData } from '../types/types';
 import { useDebugStore } from '../store/debugStore';
 
 //const BACKEND_URL = 'http://localhost:4000';
-const BACKEND_URL = 'https://partyhubback.onrender.com';
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL ||'https://partyhubback.onrender.com';
 console.log('Connecting to backend at:'+BACKEND_URL);
 console.log('env variable is :'+process.env.REACT_APP_BACKEND_URL)
 
