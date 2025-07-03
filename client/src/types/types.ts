@@ -50,9 +50,9 @@ export interface QuizClashGameState extends GameState {
 
 // This is the state received during the reveal phase
 export interface QuizClashRevealState extends QuizClashGameState {
-    correctAnswerIndex: number;
-    playerAnswers: Record<string, { answerIndex: number; scoreGained: number }>;
-    answerCounts: Record<number, number>; // answerIndex -> count
+  correctAnswerIndex: number;
+  playerAnswers: Record<string, { answerIndex: number; scoreGained: number }>;
+  answerCounts: Record<number, number>; // answerIndex -> count
 }
 
 // --- FakeNews Interfaces ---
@@ -71,4 +71,20 @@ export interface FakeNewsGameState extends GameState {
     masterLiar?: string;
     truthSeeker?: string;
   }
+}
+
+
+
+// --- CardsWar Interfaces ---
+export interface CardsWarGameState extends GameState {
+  gameId: 'cardswar',
+  status: 'ROUND_IN_PROGRESS' | 'WAR_DECLARED' | 'STARTING' | 'FINISHED';
+  players: Player[];
+  timer: number;
+  winnerId: string | null;
+  player1Card: string | null;
+  player2Card: string | null;
+  player1CardCount: number;
+  player2CardCount: number;
+  round: number;
 }

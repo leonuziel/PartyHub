@@ -1,0 +1,77 @@
+.player-action-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #121212;
+  }
+  
+  .play-card-button {
+    width: 80vw;
+    height: 80vw;
+    max-width: 300px;
+    max-height: 300px;
+    border-radius: 50%;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 1.5em;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(76, 175, 80, 0.7);
+    transition: transform 0.1s ease;
+  }
+  
+  .play-card-button:active {
+    transform: scale(0.95);
+  }
+  
+  .player-status-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #121212;
+    color: white;
+    text-align: center;
+  }
+  
+.player-status-container h1 {
+    font-size: 2.5em;
+  }
+
+.player-war-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #d32f2f;
+    color: white;
+}
+
+.war-alert {
+    font-size: 4em;
+    font-weight: bold;
+    margin-bottom: 40px;
+    animation: pulse 1s infinite;
+}
+
+.play-card-button.war {
+    background-color: #ffc107;
+    color: black;
+    box-shadow: 0 0 20px rgba(255, 193, 7, 0.7);
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+  
