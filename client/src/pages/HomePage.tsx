@@ -23,7 +23,7 @@ const games = [
     imageUrl: '/game-art/fakenews.png',
   },
     {
-    id: 'war',
+    id: 'cardswar',
     title: 'War',
     description: 'The classic card game of chance.',
     playerCount: '2 Players',

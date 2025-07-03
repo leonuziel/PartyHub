@@ -45,10 +45,10 @@ export const CardsWarHostView: React.FC = () => {
         {status === 'ROUND_IN_PROGRESS' && (
           <>
             <div className="card-container">
-              {gameState.player1Card && <div className="card">{gameState.player1Card}</div>}
+              {gameState.player1Card && <div className="card">{gameState.player1Card.name}</div>}
             </div>
             <div className="card-container">
-              {gameState.player2Card && <div className="card">{gameState.player2Card}</div>}
+              {gameState.player2Card && <div className="card">{gameState.player2Card.name}</div>}
             </div>
           </>
         )}

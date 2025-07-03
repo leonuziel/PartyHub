@@ -76,14 +76,21 @@ export interface FakeNewsGameState extends GameState {
 
 
 // --- CardsWar Interfaces ---
-export interface CardsWarGameState extends GameState {
-  gameId: 'cardswar',
+export interface Card {
+  suit: string;
+  rank: number;
+  value: number;
+  name: string;
+}
+
+export interface CardsWarGameState {
+  gameId: 'cardswar';
   status: 'ROUND_IN_PROGRESS' | 'WAR_DECLARED' | 'STARTING' | 'FINISHED';
   players: Player[];
   timer: number;
   winnerId: string | null;
-  player1Card: string | null;
-  player2Card: string | null;
+  player1Card: Card | null;
+  player2Card: Card | null;
   player1CardCount: number;
   player2CardCount: number;
   round: number;
