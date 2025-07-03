@@ -22,5 +22,6 @@
   background-color: #111827;
   /* gray-900 */
   color: white;
-  padding: 1rem;
+  padding: 0rem;
+  overflow-y: hidden;
 }
