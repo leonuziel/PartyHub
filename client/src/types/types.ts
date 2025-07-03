@@ -11,6 +11,8 @@ export interface Player {
   nickname: string;
   avatar?: string;
   hasAnswered?: boolean;
+  score: number;
+
 }
 
 export interface RoomData {
@@ -60,9 +62,13 @@ export interface FakeNewsGameState extends GameState {
   players: Player[];
   question: string;
   options?: string[];
-  submissions: Record<string, string>; // playerId -> submitted lie
-  votes: Record<string, string>; // playerId -> votedForPlayerId
+  lies?: Record<string, string>; // playerId -> submitted lie
+  votes?: Record<string, string>; // playerId -> votedForPlayerId
   correctAnswer?: string;
   scores: Record<string, number>;
   round: number;
+  gameStats?: {
+    masterLiar?: string;
+    truthSeeker?: string;
+  }
 }

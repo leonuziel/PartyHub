@@ -1,25 +1,124 @@
 @import '../GameView.css';
 
-.lie-input {
-    width: 100%;
-    padding: var(--spacing-md);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-md);
-    font-size: 1rem;
-    background-color: var(--surface-color);
-    color: var(--text-primary);
-    margin-bottom: var(--spacing-md);
-}
-
-.lie-input:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-}
-
-.voting-options {
+.fakenews-player-container {
+    background-color: #121212;
+    color: #fff;
+    padding: 20px;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-md);
+    justify-content: center;
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+.fakenews-player-view {
     width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.fakenews-player-view.centered-view {
+    justify-content: center;
+    gap: 20px;
+}
+
+.get-ready-text {
+    font-size: 2.5rem;
+    color: #ffd700;
+}
+
+/* Writing State */
+.prompt-reminder {
+    font-size: 1.3rem;
+    font-style: italic;
+    color: #aaa;
+    margin-bottom: 20px;
+}
+
+.lie-input {
+    width: 100%;
+    background-color: #333;
+    color: #fff;
+    border: 2px solid #6a0dad;
+    border-radius: 10px;
+    padding: 15px;
+    font-size: 1.2rem;
+    box-sizing: border-box;
+    margin-bottom: 5px; /* Reduced margin */
+}
+
+.char-counter {
+    align-self: flex-end;
+    margin-bottom: 15px; /* Added margin */
+    font-size: 0.9rem;
+    color: #888;
+}
+
+/* Voting State */
+.voting-header {
+    margin-bottom: 20px;
+}
+.voting-options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+.vote-option-button {
+    white-space: normal;
+    height: auto;
+    padding: 15px;
+    line-height: 1.4;
+}
+
+.vote-option-button small {
+    display: block;
+    font-size: 0.8rem;
+    color: #ccc;
+    margin-top: 5px;
+}
+
+/* Reveal State */
+.reveal-success {
+    color: #4caf50;
+    font-size: 2rem;
+}
+
+.reveal-fail {
+    color: #f44336;
+    font-size: 2rem;
+}
+
+.fooling-score {
+    margin-top: 20px;
+    font-size: 1.5rem;
+}
+
+.points-gained {
+    color: #ffd700;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+/* Finished State */
+.final-rank {
+    font-size: 2rem;
+    color: #00bcd4;
+}
+
+.personal-awards {
+    margin-top: 20px;
+}
+
+.award {
+    background-color: #6a0dad;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 1.5rem;
+    margin-top: 10px;
 }
