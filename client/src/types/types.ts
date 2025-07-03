@@ -85,7 +85,7 @@ export interface Card {
 
 export interface CardsWarGameState {
   gameId: 'cardswar';
-  status: 'ROUND_IN_PROGRESS' | 'WAR_DECLARED' | 'STARTING' | 'FINISHED';
+  status: 'ROUND_IN_PROGRESS' | 'WAR_DECLARED' | 'STARTING' | 'FINISHED' | 'WAR_TRANSITION';
   players: Player[];
   timer: number;
   winnerId: string | null;
