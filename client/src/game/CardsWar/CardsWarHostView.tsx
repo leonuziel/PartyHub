@@ -1,10 +1,12 @@
 import React from 'react';
 import { useGameStore } from '../../store/gameStore';
+import { useRoomStore } from '../../store/roomStore';
 import { CardsWarGameState } from '../../types/types';
 import './CardsWarHostView.css';
 
 export const CardsWarHostView: React.FC = () => {
     const gameState = useGameStore((state) => state.gameState) as CardsWarGameState;
+    const hostId = useRoomStore((state) => state.room?.hostId);
     
     if (!gameState) {
         return <div>Loading...</div>;
@@ -32,8 +34,10 @@ export const CardsWarHostView: React.FC = () => {
     );
   }
 
-  const player1 = players[0];
-  const player2 = players[1];
+  // Correctly identify the two players by filtering out the host
+  const competingPlayers = players.filter(p => p.id !== hostId);
+  const player1 = competingPlayers[0];
+  const player2 = competingPlayers[1];
 
   return (
     <div className="war-main">
@@ -60,7 +64,15 @@ export const CardsWarHostView: React.FC = () => {
                     <div className="card face-down"></div>
                     <div className="card face-down"></div>
                 </div>
-                <div className="versus">VS</div>
+                <div className="war-showdown">
+                    <div className="card-container">
+                        {gameState.player1Card && <div className="card">{gameState.player1Card.name}</div>}
+                    </div>
+                    <div className="versus">VS</div>
+                    <div className="card-container">
+                        {gameState.player2Card && <div className="card">{gameState.player2Card.name}</div>}
+                    </div>
+                </div>
                 <div className="war-pot">
                     <div className="card face-down"></div>
                     <div className="card face-down"></div>

@@ -31,6 +31,15 @@ export const CardsWarPlayerView: React.FC = () => {
     );
   }
 
+  if (gameState.status === 'WAR_TRANSITION') {
+    return (
+      <div className="player-status-container">
+        <h1>WAR!</h1>
+        <p>Prepare for the showdown...</p>
+      </div>
+    );
+  }
+
   if (gameState.status === 'WAR_DECLARED') {
     return (
         <div className="player-war-container">

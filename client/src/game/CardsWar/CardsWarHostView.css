@@ -80,6 +80,14 @@
     font-size: 3em;
     font-weight: bold;
 }
+
+.war-showdown {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px 0;
+}
   
   @keyframes flash {
     0%, 100% { opacity: 1; }

@@ -1,20 +1,6 @@
 import { BaseGame } from '../../BaseGame.js';
-import { Player } from '../../../types/interfaces.js';
-import { Card, createDeck } from './cards.js';
-
-export interface CardsWarGameState {
-    gameId: 'cardswar';
-    status: 'STARTING' | 'ROUND_IN_PROGRESS' | 'WAR_DECLARED' | 'FINISHED';
-    players: Player[]; // Will always be 2
-    player1Card: Card | null;
-    player2Card: Card | null;
-    player1CardCount: number;
-    player2CardCount: number;
-    winnerId: string | null;
-    round: number;
-    timer: number;
-}
-
+import { Player, CardsWarGameState, Card } from '../../../types/interfaces.js';
+import { createDeck } from './cards.js';
 
 export class CardsWarGame extends BaseGame<CardsWarGameState> {
     private playerDecks = new Map<string, Card[]>();
@@ -108,7 +94,9 @@ export class CardsWarGame extends BaseGame<CardsWarGameState> {
         this.broadcastState();
 
         if (this.cardsInPlay.size === 2) {
-            setTimeout(() => this.resolveRound(), 1000);
+            // Add a longer delay during war to allow players to see the cards
+            const resolutionDelay = this.gameState.status === 'WAR_DECLARED' ? 3000 : 1000;
+            setTimeout(() => this.resolveRound(), resolutionDelay);
         }
     }
 
@@ -130,27 +118,29 @@ export class CardsWarGame extends BaseGame<CardsWarGameState> {
     }
 
     private declareWar() {
-        this.gameState.status = 'WAR_DECLARED';
+        // Step 1: Enter transition state, disable player buttons
+        this.gameState.status = 'WAR_TRANSITION'; 
         this.broadcastState();
 
-        // After a brief pause, automatically handle the face-down cards and wait for player action
+        // Step 2: After a pause for animations, handle the pot and then enable buttons
         setTimeout(() => {
             const player1Deck = this.playerDecks.get(this.player1Id)!;
             const player2Deck = this.playerDecks.get(this.player2Id)!;
 
-            // Each player puts 3 cards face down
+            // Each player puts 3 cards face down into the pot
             for (let i = 0; i < 3; i++) {
                 if (player1Deck.length > 0) this.pot.push(player1Deck.shift()!);
                 if (player2Deck.length > 0) this.pot.push(player2Deck.shift()!);
             }
             this.updateCardCounts();
-            this.cardsInPlay.clear(); // Ready for the war card
+            this.cardsInPlay.clear(); // Ready for the face-up war card
             
-            // Update state to show pot and wait for the next card play
+            // Step 3: Now change status to re-enable player buttons
+            this.gameState.status = 'WAR_DECLARED';
             this.gameState.player1Card = null;
             this.gameState.player2Card = null;
             this.broadcastState();
-        }, 2000);
+        }, 2000); // This 2s is the time the players are "locked out"
     }
 
     private givePotToWinner(winnerId: string) {
