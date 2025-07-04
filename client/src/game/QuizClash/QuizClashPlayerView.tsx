@@ -5,11 +5,11 @@ import { usePlayerRole } from '../../hooks/usePlayerRole';
 import { socketService } from '../../services/socketService';
 import { QuizClashGameState, QuizClashRevealState } from '../../types/types';
 import { Spinner } from '../../components/Spinner';
-import { PlayerStatusContainer } from '../../components/PlayerStatusContainer';
 import { PlayerStartingView } from './views/PlayerStartingView';
 import { PlayerFinishedView } from './views/PlayerFinishedView';
 import { PlayerAnsweringView } from './views/PlayerAnsweringView';
 import { PlayerRevealingAnswerView } from './views/PlayerRevealingAnswerView';
+import { PlayerAnsweredView } from './views/PlayerAnsweredView';
 import './QuizClashPlayerView.css';
 
 
@@ -81,7 +81,7 @@ export const QuizClashPlayerView: React.FC = () => {
   }
 
   if (answered !== null) {
-    return <PlayerStatusContainer title="Answer locked in!" subtitle="Waiting for others..." />;
+    return <PlayerAnsweredView />;
   }
 
   if (!gameState.question) {
@@ -91,7 +91,7 @@ export const QuizClashPlayerView: React.FC = () => {
   if (gameState.status === 'ASKING_QUESTION') {
     return (
         <PlayerAnsweringView
-          answers={gameState.question.answers.map(() => '')}
+          answers={gameState.question.answers}
           onAnswer={handleAnswer}
           disabled={answered !== null}
           selectedAnswer={answered}

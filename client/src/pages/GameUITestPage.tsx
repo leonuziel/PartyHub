@@ -8,6 +8,7 @@ import { HostAskingQuestionView as QuizClashHostAskingQuestionView } from '../ga
 import { HostFinishedView as QuizClashHostFinishedView } from '../game/QuizClash/views/HostFinishedView';
 import { HostRevealView as QuizClashHostRevealView } from '../game/QuizClash/views/HostRevealView';
 import { PlayerAnsweringView as QuizClashPlayerAnsweringView } from '../game/QuizClash/views/PlayerAnsweringView';
+import { PlayerAnsweredView as QuizClashPlayerAnsweredView } from '../game/QuizClash/views/PlayerAnsweredView';
 import { PlayerFinishedView as QuizClashPlayerFinishedView } from '../game/QuizClash/views/PlayerFinishedView';
 import { PlayerRevealingAnswerView as QuizClashPlayerRevealingAnswerView } from '../game/QuizClash/views/PlayerRevealingAnswerView';
 import { PlayerStartingView as QuizClashPlayerStartingView } from '../game/QuizClash/views/PlayerStartingView';
@@ -16,13 +17,24 @@ import { PlayerStartingView as QuizClashPlayerStartingView } from '../game/QuizC
 import { HostStartingView as FakeNewsHostStartingView } from '../game/FakeNewsGame/views/HostStartingView';
 import { HostWritingView as FakeNewsHostWritingView } from '../game/FakeNewsGame/views/HostWritingView';
 import { HostVotingView as FakeNewsHostVotingView } from '../game/FakeNewsGame/views/HostVotingView';
+import { HostRevealView as FakeNewsHostRevealView } from '../game/FakeNewsGame/views/HostRevealView';
+import { HostFinishedView as FakeNewsHostFinishedView } from '../game/FakeNewsGame/views/HostFinishedView';
 import { PlayerStartingView as FakeNewsPlayerStartingView } from '../game/FakeNewsGame/views/PlayerStartingView';
 import { PlayerWritingView as FakeNewsPlayerWritingView } from '../game/FakeNewsGame/views/PlayerWritingView';
+import { PlayerVotingView as FakeNewsPlayerVotingView } from '../game/FakeNewsGame/views/PlayerVotingView';
+import { PlayerRevealView as FakeNewsPlayerRevealView } from '../game/FakeNewsGame/views/PlayerRevealView';
+import { PlayerFinishedView as FakeNewsPlayerFinishedView } from '../game/FakeNewsGame/views/PlayerFinishedView';
 
 // CardsWar Views
 import { HostStartingView as CardsWarHostStartingView } from '../game/CardsWar/views/HostStartingView';
 import { HostFinishedView as CardsWarHostFinishedView } from '../game/CardsWar/views/HostFinishedView';
 import { HostRoundInProgressView as CardsWarHostRoundInProgressView } from '../game/CardsWar/views/HostRoundInProgressView';
+import { HostWarDeclaredView as CardsWarHostWarDeclaredView } from '../game/CardsWar/views/HostWarDeclaredView';
+import { PlayerStartingView as CardsWarPlayerStartingView } from '../game/CardsWar/views/PlayerStartingView';
+import { PlayerPlayingView as CardsWarPlayerPlayingView } from '../game/CardsWar/views/PlayerPlayingView';
+import { PlayerWarDeclaredView as CardsWarPlayerWarDeclaredView } from '../game/CardsWar/views/PlayerWarDeclaredView';
+import { PlayerFinishedView as CardsWarPlayerFinishedView } from '../game/CardsWar/views/PlayerFinishedView';
+import { PlayerWarTransitionView as CardsWarPlayerWarTransitionView } from '../game/CardsWar/views/PlayerWarTransitionView';
 
 
 const dummyPlayer: Player = {
@@ -48,7 +60,11 @@ const quizClashViews = {
     },
     'Asking Question': {
         host: <QuizClashHostAskingQuestionView round={1} totalRounds={10} timer={10} answeredCount={2} totalPlayers={5} question="What is the capital of France?" answers={['Paris', 'London', 'Berlin', 'Madrid']} />,
-        player: <QuizClashPlayerAnsweringView answers={['', '', '', '']} onAnswer={() => {}} disabled={false} selectedAnswer={null} />
+        player: <QuizClashPlayerAnsweringView answers={['Paris', 'London', 'Berlin', 'Madrid']} onAnswer={() => {}} disabled={false} selectedAnswer={null} />
+    },
+    'Answered': {
+        host: null,
+        player: <QuizClashPlayerAnsweredView />
     },
     'Reveal': {
         host: <QuizClashHostRevealView question="What is the capital of France?" answers={['Paris', 'London', 'Berlin', 'Madrid']} answerCounts={{0: 3, 1: 1, 2: 1}} correctAnswerIndex={0} players={dummyPlayers} />,
@@ -71,22 +87,38 @@ const fakeNewsViews = {
     },
     'Voting': {
         host: <FakeNewsHostVotingView question="The best thing about pineapple on pizza is ________." options={['its sweetness', 'its juiciness', 'the texture', 'absolutely nothing']} />,
-        player: null
+        player: <FakeNewsPlayerVotingView options={['its sweetness', 'its juiciness', 'the texture', 'absolutely nothing']} onVote={() => {}} />
+    },
+    'Reveal': {
+        host: <FakeNewsHostRevealView options={['a', 'b']} votes={{}} correctAnswer="a" players={dummyPlayers} />,
+        player: <FakeNewsPlayerRevealView wasCorrect={true} playerLie="My Lie" foolingCount={2} />
+    },
+    'Finished': {
+        host: <FakeNewsHostFinishedView players={dummyPlayers} awards={[]} />,
+        player: <FakeNewsPlayerFinishedView myFinalRank={1} iAmMasterLiar={true} iAmTruthSeeker={false} />
     }
 };
 
 const cardsWarViews = {
     'Starting': {
         host: <CardsWarHostStartingView timer={10} />,
-        player: null
+        player: <CardsWarPlayerStartingView />
     },
-    'Round in Progress': {
+    'Playing': {
         host: <CardsWarHostRoundInProgressView player1={dummyPlayers[0]} player2={dummyPlayers[1]} player1Card={{ suit: 'hearts', rank: 10, value: 10, name: '10' }} player2Card={{ suit: 'spades', rank: 5, value: 5, name: '5' }} />,
-        player: null
+        player: <CardsWarPlayerPlayingView onPlayCard={() => {}} />
+    },
+    'War Transition': {
+        host: null,
+        player: <CardsWarPlayerWarTransitionView />
+    },
+    'War Declared': {
+        host: <CardsWarHostWarDeclaredView player1Card={{ suit: 'hearts', rank: 10, value: 10, name: '10' }} player2Card={{ suit: 'spades', rank: 5, value: 5, name: '5' }} />,
+        player: <CardsWarPlayerWarDeclaredView onPlayCard={() => {}} />
     },
     'Finished': {
         host: <CardsWarHostFinishedView winner={dummyPlayer} />,
-        player: null
+        player: <CardsWarPlayerFinishedView isWinner={true} />
     }
 };
 

@@ -5,13 +5,17 @@ import { usePlayerStore } from '../../store/playerStore';
 import { socketService } from '../../services/socketService';
 import { CardsWarGameState } from '../../types/types';
 import { PlayerStatusContainer } from '../../components/PlayerStatusContainer';
-import { ActionButton } from '../../components/ActionButton';
-import { PlayerViewContainer } from '../../components/PlayerViewContainer';
+import { PlayerStartingView } from './views/PlayerStartingView';
+import { PlayerPlayingView } from './views/PlayerPlayingView';
+import { PlayerWarTransitionView } from './views/PlayerWarTransitionView';
+import { PlayerWarDeclaredView } from './views/PlayerWarDeclaredView';
+import { PlayerFinishedView } from './views/PlayerFinishedView';
 import './CardsWarPlayerView.css';
 
 export const CardsWarPlayerView: React.FC = () => {
   const gameState = useGameStore((state) => state.gameState) as CardsWarGameState;
   const room = useRoomStore((state) => state.room);
+  const socketId = usePlayerStore((state) => state.socketId);
   const [hasPlayed, setHasPlayed] = useState(false);
 
   useEffect(() => {
@@ -27,39 +31,26 @@ export const CardsWarPlayerView: React.FC = () => {
   };
 
   if (gameState.status === 'STARTING') {
-    return <PlayerStatusContainer title="Get Ready!" />;
+    return <PlayerStartingView />;
   }
 
   if (gameState.status === 'WAR_TRANSITION') {
-    return <PlayerStatusContainer title="WAR!" subtitle="Prepare for the showdown..." />;
+    return <PlayerWarTransitionView />;
   }
 
   if (gameState.status === 'WAR_DECLARED') {
-    return (
-        <PlayerViewContainer>
-            <h1 className="war-alert">WAR!</h1>
-            <ActionButton onClick={handlePlayCard} className="play-card-button war">
-                Tap to Play Your War Card!
-            </ActionButton>
-        </PlayerViewContainer>
-    );
+    return <PlayerWarDeclaredView onPlayCard={handlePlayCard} />;
   }
 
   if (gameState.status === 'FINISHED') {
-    const socketId = usePlayerStore.getState().socketId;
     const isWinner = gameState.winnerId === socketId;
-    return <PlayerStatusContainer title={isWinner ? 'You Win!' : 'You Lose!'} />;
+    return <PlayerFinishedView isWinner={isWinner} />;
   }
 
   if (hasPlayed) {
     return <PlayerStatusContainer title="Waiting for opponent..." />;
   }
 
-  return (
-    <PlayerViewContainer>
-      <ActionButton onClick={handlePlayCard}>
-        Tap to Play Your Card
-      </ActionButton>
-    </PlayerViewContainer>
-  );
+  // Default view is for ROUND_IN_PROGRESS
+  return <PlayerPlayingView onPlayCard={handlePlayCard} />;
 };

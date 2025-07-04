@@ -8,6 +8,7 @@ import { HostViewContainer } from '../../components/HostViewContainer';
 import { HostStartingView } from './views/HostStartingView';
 import { HostFinishedView } from './views/HostFinishedView';
 import { HostRoundInProgressView } from './views/HostRoundInProgressView';
+import { HostWarDeclaredView } from './views/HostWarDeclaredView';
 import './CardsWarHostView.css';
 
 export const CardsWarHostView: React.FC = () => {
@@ -44,20 +45,10 @@ export const CardsWarHostView: React.FC = () => {
         />
       )}
       {status === 'WAR_DECLARED' && (
-        <div className="war-declaration">
-          <div className="war-banner">WAR!</div>
-          <div className="war-pot">
-            <Card /><Card /><Card />
-          </div>
-          <div className="war-showdown">
-            {gameState.player1Card && <Card faceUp={true} content={gameState.player1Card.name} />}
-            <div className="versus">VS</div>
-            {gameState.player2Card && <Card faceUp={true} content={gameState.player2Card.name} />}
-          </div>
-          <div className="war-pot">
-            <Card /><Card /><Card />
-          </div>
-        </div>
+        <HostWarDeclaredView
+          player1Card={gameState.player1Card}
+          player2Card={gameState.player2Card}
+        />
       )}
     </HostViewContainer>
   );

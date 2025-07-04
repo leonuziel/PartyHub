@@ -2,15 +2,14 @@ import React from 'react';
 import { useGameStore } from '../../store/gameStore';
 import { useRoomStore } from '../../store/roomStore';
 import { FakeNewsGameState } from '../../types/types';
-import { Podium } from '../../components/Podium';
-import { GameTitle } from '../../components/GameTitle';
-import { ResultsList } from '../../components/ResultsList';
-import { SpecialAwards } from '../../components/SpecialAwards';
+
 import { Spinner } from '../../components/Spinner';
 import { HostViewContainer } from '../../components/HostViewContainer';
 import { HostStartingView } from './views/HostStartingView';
 import { HostWritingView } from './views/HostWritingView';
 import { HostVotingView } from './views/HostVotingView';
+import { HostRevealView } from './views/HostRevealView';
+import { HostFinishedView } from './views/HostFinishedView';
 import './FakeNewsHostView.css';
 
 const FakeNewsHostView: React.FC = () => {
@@ -38,15 +37,12 @@ const FakeNewsHostView: React.FC = () => {
                 return <HostVotingView question={state.question} options={state.options || []} />;
             case 'REVEAL':
                 return (
-                    <div className="fakenews-host-reveal">
-                        <h1 className='reveal-header'>The results are in!</h1>
-                        <ResultsList
-                            options={state.options || []}
-                            votes={state.votes || {}}
-                            correctAnswer={state.correctAnswer || ''}
-                            players={players}
-                        />
-                    </div>
+                    <HostRevealView
+                        options={state.options || []}
+                        votes={state.votes || {}}
+                        correctAnswer={state.correctAnswer || ''}
+                        players={players}
+                    />
                 );
             case 'FINISHED':
                 const masterLiar = state.gameStats?.masterLiar ? players.find(p => p.id === state.gameStats!.masterLiar) : null;
@@ -56,11 +52,7 @@ const FakeNewsHostView: React.FC = () => {
                 if (truthSeeker) awards.push({ awardName: 'Truth Seeker', player: truthSeeker });
 
                 return (
-                    <div className='fakenews-host-finished'>
-                        <GameTitle title="Game Over!" />
-                        <Podium players={players} />
-                        <SpecialAwards awards={awards} />
-                    </div>
+                    <HostFinishedView players={players} awards={awards} />
                 );
             default:
                 return <Spinner />;
