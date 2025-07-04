@@ -29,12 +29,13 @@ export function DebugPanel() {
         };
     }, []); // Empty dependency array means this effect runs once on mount
 
+
     if (!isVisible) {
         return null; // Don't render anything if it's not visible
     }
 
     return (
-        <div 
+        <div
             style={{
                 position: 'fixed',
                 bottom: 10,
@@ -47,7 +48,7 @@ export function DebugPanel() {
                 maxWidth: '400px',
                 zIndex: 9999,
                 cursor: 'pointer',
-        }}>
+            }}>
             <div><strong>Status:</strong> {connectionStatus}</div>
             <div><strong>Socket ID:</strong> {socketId}</div>
             <div><strong>Room:</strong> {room?.roomCode ?? 'None'}</div>

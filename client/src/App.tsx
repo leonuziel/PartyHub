@@ -6,6 +6,7 @@ import GamePage from './pages/GamePage';
 import DebugPage from './pages/DebugPage';
 import JoinPage from './pages/JoinPage';
 import TestComponentsPage from './pages/TestComponentsPage';
+import GameUITestPage from './pages/GameUITestPage';
 import { socketService } from './services/socketService';
 import { DebugPanel } from './components/DebugPanel';
 
@@ -23,7 +24,8 @@ function App() {
         <Route path="/lobby/:roomCode" element={<LobbyPage />} />
         <Route path="/game/:roomCode" element={<GamePage />} />
         <Route path="/debug" element={<DebugPage />} />
-        <Route path="/test-components" element={<TestComponentsPage />} />
+        <Route path="/test/components" element={<TestComponentsPage />} />
+        <Route path="/test/ui" element={<GameUITestPage />} />
       </Routes>
 
       {/*process.env.NODE_ENV === 'development' &&*/ <DebugPanel />}

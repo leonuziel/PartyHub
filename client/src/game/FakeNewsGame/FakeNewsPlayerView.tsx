@@ -4,14 +4,14 @@ import { useRoomStore } from '../../store/roomStore';
 import { usePlayerStore } from '../../store/playerStore';
 import { socketService } from '../../services/socketService';
 import { FakeNewsGameState } from '../../types/types';
-import { Button } from '../../components/Button';
 import { PlayerStatusContainer } from '../../components/PlayerStatusContainer';
-import { TextAreaWithCounter } from '../../components/TextAreaWithCounter';
 import { VotingOptions } from '../../components/VotingOptions';
 import { RankDisplay } from '../../components/RankDisplay';
 import { AwardDisplay } from '../../components/AwardDisplay';
 import { Spinner } from '../../components/Spinner';
 import { PlayerViewContainer } from '../../components/PlayerViewContainer';
+import { PlayerStartingView } from './views/PlayerStartingView';
+import { PlayerWritingView } from './views/PlayerWritingView';
 import './FakeNewsPlayerView.css';
 
 const FakeNewsPlayerView: React.FC = () => {
@@ -50,24 +50,12 @@ const FakeNewsPlayerView: React.FC = () => {
     const renderContent = () => {
         switch (state.status) {
             case 'STARTING':
-                return <PlayerStatusContainer title="Get Ready!" subtitle="Look at the main screen for the prompt!" />;
+                return <PlayerStartingView />;
             case 'WRITING':
                 if (submitted) {
                     return <PlayerStatusContainer title="Lie submitted!" subtitle="Now, look innocent..." />;
                 }
-                return (
-                    <div className="fakenews-player-view">
-                        <h3 className="prompt-reminder">{state.question}</h3>
-                        <TextAreaWithCounter
-                            maxLength={80}
-                            onChange={setLie}
-                            placeholder="Enter your most believable lie..."
-                        />
-                        <Button onClick={handleSubmitLie} disabled={!lie.trim()}>
-                            Submit Your Fake
-                        </Button>
-                    </div>
-                );
+                return <PlayerWritingView question={state.question} onLieChange={setLie} onSubmit={handleSubmitLie} lie={lie} />;
             case 'VOTING':
                 if (voted) {
                     return <PlayerStatusContainer title="Vote locked in!" subtitle="Let's see who you fooled..." />;
