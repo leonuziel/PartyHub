@@ -3,13 +3,16 @@
   flex-direction: column;
   align-items: center;
   padding: 1rem;
-  background-color: var(--background-light);
-  border-radius: 0.5rem;
+  background-color: var(--background-light); /* Good contrast against dark page */
+  border-radius: 0.5rem; /* Consistent rounding */
+  border: 1px solid var(--border-color);
+  width: 150px; /* Give it a defined width */
 }
 
 .player-name {
   font-size: 1.2rem;
   font-weight: 600;
+  color: var(--text-main);
 }
 
 .player-score {

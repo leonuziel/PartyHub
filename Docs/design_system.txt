@@ -1,0 +1,44 @@
+# PartyHub Design System - v1.0
+
+This document defines the core visual elements of the PartyHub application, ensuring a consistent and high-quality user experience across all screens and components.
+
+## 1. Color Palette
+
+The color palette is designed to be modern, energetic, and suitable for a gaming environment. It uses a dark base with vibrant, eye-catching accents for interactive elements.
+
+### Primary Palette
+- **`--background-dark`**: `#1a1a2e` (A very deep, dark navy blue. The main app background.)
+- **`--background-medium`**: `#16213e` (A slightly lighter navy, used for alternating rows or subtle containers.)
+- **`--background-light`**: `#0f3460` (A more saturated blue, used for cards, modals, and primary containers that need to stand out.)
+- **`--border-color`**: `#e94560` (A vibrant, reddish-pink accent for borders and highlights.)
+- **`--border-color-light`**: `rgba(233, 69, 96, 0.4)` (A more subtle version of the border color.)
+
+### Accent Palette (for CTAs, highlights, and branding)
+- **`--accent-color`**: `#e94560` (The same vibrant reddish-pink for primary actions.)
+- **`--accent-color-medium`**: `#d43d51` (A slightly darker shade for hover states.)
+- **`--accent-color-dark`**: `#a23242` (A deep shade for pressed states or secondary accents.)
+- **`--accent-gradient`**: `linear-gradient(135deg, #e94560, #a23242)` (A gradient for primary buttons to give them more pop.)
+- **`--accent-color-faded`**: `rgba(233, 69, 96, 0.15)` (Used for glows and focus rings.)
+
+### Text Palette
+- **`--text-main`**: `#ffffff` (Primary text color for high contrast on dark backgrounds.)
+- **`--text-secondary`**: `#b4b4b4` (A light gray for subtitles, descriptions, and less important text.)
+- **`--text-on-primary`**: `#ffffff` (Text used on top of accent-colored backgrounds.)
+
+### Feedback Colors
+- **`--success-color`**: `#16c79a` (A vibrant green for success states, correct answers, etc.)
+- **`--success-color-faded`**: `rgba(22, 199, 154, 0.15)`
+- **`--error-color`**: `#ff5959` (A clear red for errors and incorrect answers.)
+- **`--error-color-faded`**: `rgba(255, 89, 89, 0.15)`
+
+## 2. Typography
+- **Font Family**: System UI fonts (e.g., Segoe UI, San Francisco, Roboto) for broad compatibility and performance.
+- **Base Font Size**: 16px.
+- **Headings**: Use a clear scale (e.g., 3.5rem, 2.5rem, 1.8rem) with a bold font-weight (700).
+
+## 3. Spacing & Sizing
+- **Base Unit**: 1rem (16px).
+- **Consistent Gaps**: Use multiples of the base unit (0.5rem, 1rem, 1.5rem, 2rem) for all margins, padding, and gaps.
+- **Border Radius**: Use a consistent radius for all components (e.g., `0.5rem`) to create a unified look.
+
+This system should be implemented via CSS Custom Properties in the global stylesheet (`index.css`) to ensure easy maintenance and app-wide consistency.

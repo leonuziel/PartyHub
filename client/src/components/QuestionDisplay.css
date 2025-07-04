@@ -1,11 +1,14 @@
 .question-display {
-  padding: 2rem;
-  background: var(--background-light);
-  border-radius: 0.5rem;
+  padding: 2.5rem 2rem; /* More vertical padding */
+  background: var(--background-dark); /* Deeper background for contrast */
+  border-radius: 0.5rem; /* Consistent rounding */
   text-align: center;
+  border: 1px solid var(--border-color);
+  box-shadow: inset 0 0 15px rgba(0,0,0,0.2);
 }
 
 .question-text {
   font-size: 2.5rem;
   font-weight: 600;
+  color: var(--text-main); /* Ensure readability */
 }

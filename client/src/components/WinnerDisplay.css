@@ -3,7 +3,15 @@
 }
 
 .winner-text {
-  font-size: 3rem;
-  color: var(--success-color);
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+  font-size: 3.5rem; /* Make it bigger */
+  font-weight: 700;
+  color: var(--accent-color); /* Use the main vibrant color */
+  text-shadow: 0 0 15px var(--accent-color-faded); /* Add a glow effect */
+  animation: winner-pulse 1.5s infinite;
+}
+
+@keyframes winner-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
 }

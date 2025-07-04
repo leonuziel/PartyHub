@@ -12,17 +12,19 @@
   width: 150px;
   padding: 1rem;
   border-radius: 0.5rem 0.5rem 0 0;
-  color: var(--text-on-primary);
+  color: white; /* Text should be light against the vibrant background */
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
-  transition: height 0.5s ease-out;
+  transition: height 0.5s ease-out, background-color 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.place-1 { height: 100%; background-color: #FFD700; } /* Gold */
-.place-2 { height: 80%; background-color: #C0C0C0; } /* Silver */
-.place-3 { height: 60%; background-color: #CD7F32; } /* Bronze */
+/* Using vibrant accent colors instead of metallics */
+.place-1 { height: 100%; background-color: var(--accent-color); }
+.place-2 { height: 80%; background-color: var(--accent-color-medium); } /* Assumes a medium shade exists */
+.place-3 { height: 60%; background-color: var(--accent-color-dark); } /* Assumes a dark shade exists */
 
 .podium-rank { 
   font-size: 2rem; 

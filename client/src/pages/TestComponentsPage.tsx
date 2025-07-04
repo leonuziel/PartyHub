@@ -51,7 +51,14 @@ const TestComponentsPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-      <div style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+    <div style={{ 
+        padding: '2rem', 
+        display: 'flex', 
+        flexDirection: 'column', 
+        gap: '3rem', /* Increased gap for better separation */
+        background: 'var(--background-dark)', 
+        color: 'var(--text-main)' 
+    }}>
         <GameTitle title="Component Test Page" />
 
         <section>

@@ -2,42 +2,26 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
-}
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    -color: var(--background-light);
 
-.player-avatar {
-    border-radius: 50%;
-    border: 2px solid #fff;
 }
 
 .player-name {
-    font-weight: bold;
-    color: #fff;
+    font-weight: 600;
+    color: var(--text-main);
 }
 
-.player-card-small .player-avatar {
-    width: 40px;
-    height: 40px;
-}
-
+/* Let the PlayerAvatar component's size styles handle the image size */
 .player-card-small .player-name {
-    font-size: 0.8rem;
-}
-
-.player-card-medium .player-avatar {
-    width: 80px;
-    height: 80px;
+    font-size: 0.9rem;
 }
 
 .player-card-medium .player-name {
-    font-size: 1rem;
-}
-
-.player-card-large .player-avatar {
-    width: 120px;
-    height: 120px;
+    font-size: 1.1rem;
 }
 
 .player-card-large .player-name {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
 }
