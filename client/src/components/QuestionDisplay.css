@@ -1,0 +1,11 @@
+.question-display {
+  padding: 2rem;
+  background: var(--background-light);
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+.question-text {
+  font-size: 2.5rem;
+  font-weight: 600;
+}

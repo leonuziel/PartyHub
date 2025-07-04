@@ -1,0 +1,19 @@
+.game-branding {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+.game-logo {
+  height: 60px;
+  width: auto;
+}
+
+.game-branding-title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+}

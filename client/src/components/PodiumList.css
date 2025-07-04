@@ -1,0 +1,46 @@
+.podium-list {
+  width: 100%;
+  max-width: 400px;
+  background-color: var(--background-light);
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+}
+
+.podium-list-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.podium-list-entry {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--background-medium);
+}
+
+.podium-list-entry:last-child {
+  border-bottom: none;
+}
+
+.podium-list-rank {
+  font-size: 1.2rem;
+  font-weight: 700;
+  width: 40px;
+  text-align: right;
+  color: var(--text-secondary);
+}
+
+.podium-list-name {
+  flex-grow: 1;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.podium-list-score {
+  font-size: 1.1rem;
+  font-weight: 700;
+}

@@ -1,0 +1,19 @@
+.player-status-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.player-status-title {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.player-status-subtitle {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+}

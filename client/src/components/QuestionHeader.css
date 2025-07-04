@@ -1,0 +1,32 @@
+.question-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background-color: var(--background-dark);
+  border-radius: 0.5rem;
+  width: 100%;
+}
+
+.question-counter, .answer-counter {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  background: var(--background-light);
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+}
+
+.timer-container {
+  flex-grow: 1;
+  height: 10px;
+  background-color: var(--background-light);
+  border-radius: 0.25rem;
+  margin: 0 1rem;
+  overflow: hidden;
+}
+
+.timer-bar {
+  height: 100%;
+  background-color: var(--primary-color);
+  transition: width 0.2s linear;
+}

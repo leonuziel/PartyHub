@@ -1,0 +1,23 @@
+.textarea-with-counter {
+  position: relative;
+  width: 100%;
+}
+
+.textarea-with-counter textarea {
+  width: 100%;
+  height: 100px;
+  padding: 0.5rem;
+  padding-bottom: 1.5rem; /* Make space for the counter */
+  border: 1px solid var(--text-secondary);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  resize: none;
+}
+
+.char-counter {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}

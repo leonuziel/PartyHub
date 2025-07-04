@@ -1,0 +1,9 @@
+.special-awards-container {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  padding: 2rem;
+  background-color: var(--background-dark);
+  border-radius: 1rem;
+}

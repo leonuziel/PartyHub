@@ -1,0 +1,22 @@
+.rank-update {
+  font-size: 1.3rem;
+  font-weight: bold;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+.rank-update.up {
+  color: var(--success-color);
+  background-color: var(--success-color-faded);
+}
+
+.rank-update.down {
+  color: var(--error-color);
+  background-color: var(--error-color-faded);
+}
+
+.rank-update.same {
+  color: var(--text-secondary);
+  background-color: var(--background-light);
+}

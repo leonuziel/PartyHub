@@ -1,0 +1,23 @@
+.player-avatar {
+  border-radius: 50%;
+  background-color: var(--background-light);
+  object-fit: cover;
+}
+
+.player-avatar.small {
+  width: 40px;
+  height: 40px;
+  border: 2px solid white;
+}
+
+.player-avatar.medium {
+  width: 80px;
+  height: 80px;
+  border: 4px solid white;
+}
+
+.player-avatar.large {
+  width: 120px;
+  height: 120px;
+  border: 6px solid white;
+}

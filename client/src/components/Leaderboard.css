@@ -1,0 +1,30 @@
+.leaderboard {
+  width: 100%;
+  max-width: 500px;
+  background-color: var(--background-light);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.leaderboard-title {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.leaderboard-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  border-radius: 0.25rem;
+  transition: background-color 0.3s;
+}
+
+.leaderboard-entry:nth-child(odd) {
+  background-color: var(--background-medium);
+}
