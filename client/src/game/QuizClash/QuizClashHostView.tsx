@@ -1,70 +1,48 @@
 import React from 'react';
 import { useGameStore } from '../../store/gameStore';
 import { QuizClashGameState, QuizClashRevealState } from '../../types/types';
+import { GameTitle } from '../../components/GameTitle';
+import { CountdownTimer } from '../../components/CountdownTimer';
+import { Podium } from '../../components/Podium';
+import { Leaderboard } from '../../components/Leaderboard';
+import { QuestionHeader } from '../../components/QuestionHeader';
+import { QuestionDisplay } from '../../components/QuestionDisplay';
+import { AnswerGrid } from '../../components/AnswerGrid';
+import { AnswerResult } from '../../components/AnswerResult';
+import { CenteredMessage } from '../../components/CenteredMessage';
+import { Spinner } from '../../components/Spinner';
+import { Button } from '../../components/Button';
+import { HostViewContainer } from '../../components/HostViewContainer';
 import './QuizClashHostView.css';
-
-const answerDesigns = [
-  { color: 'red', symbol: '▲' },
-  { color: 'blue', symbol: '●' },
-  { color: 'yellow', symbol: '■' },
-  { color: 'green', symbol: '◆' },
-];
-
-const getOrdinal = (n: number) => {
-  const s = ['th', 'st', 'nd', 'rd'];
-  const v = n % 100;
-  return n + (s[(v - 20) % 10] || s[v] || s[0]);
-};
 
 export const QuizClashHostView: React.FC = () => {
   const gameState = useGameStore((state) => state.gameState) as QuizClashGameState | QuizClashRevealState;
 
+  if (!gameState) {
+    return <Spinner />;
+  }
+
   if (gameState.status === 'STARTING') {
     return (
-      <div className="quiz-starting">
-        <div className="quiz-branding">QuizClash</div>
-        <h1 className="quiz-title">Get Ready!</h1>
-        <div className="quiz-countdown-container">
-          <p className="quiz-countdown">{gameState.timer}</p>
-        </div>
-      </div>
+      <CenteredMessage>
+        <GameTitle title="QuizClash" />
+        <h2>Get Ready!</h2>
+        <CountdownTimer initialValue={gameState.timer} />
+      </CenteredMessage>
     );
   }
   if (gameState.status === 'FINISHED') {
-    const sortedScores = Object.entries(gameState.scores).sort(([, a], [, b]) => b - a);
-    const topThree = sortedScores.slice(0, 3);
+    const playersWithScores = gameState.players.map(p => ({
+        ...p,
+        score: gameState.scores[p.id] || 0
+    }));
 
     return (
       <div className="quiz-finished">
-        <div className="confetti"></div>
-        <h1 className="quiz-title">Game Over!</h1>
-        <div className="quiz-podium">
-          {topThree.map(([playerId, score], index) => {
-            const player = gameState.players.find(p => p.id === playerId);
-            return (
-              <div key={playerId} className={`podium-place place-${index + 1}`}>
-                <h2 className="podium-rank">{getOrdinal(index + 1)}</h2>
-                <img src={player?.avatar} alt={player?.nickname} className="podium-avatar" />
-                <p className="podium-name">{player?.nickname}</p>
-                <p className="podium-score">{score} pts</p>
-              </div>
-            );
-          })}
-        </div>
-        <div className="quiz-full-leaderboard">
-          <h3 className="quiz-subtitle">Final Scores</h3>
-          {sortedScores.map(([playerId, score], index) => {
-            const player = gameState.players.find(p => p.id === playerId);
-            return (
-              <div key={playerId} className="leaderboard-entry">
-                <span>{index + 1}. {player?.nickname}</span>
-                <span>{score}</span>
-              </div>
-            );
-          })}
-        </div>
-        {/* The 'Play Again' button would trigger an action handled by the host, e.g., via socketService */}
-        <button className="quiz-play-again-btn">Play Again</button>
+        <GameTitle title="Game Over!" />
+        <Podium players={playersWithScores} />
+        <Leaderboard players={playersWithScores} />
+        <Button onClick={() => { /* Handle Play Again */ }}>Play Again</Button>
       </div>
     );
   }
@@ -73,73 +51,51 @@ export const QuizClashHostView: React.FC = () => {
     const revealState = gameState as QuizClashRevealState;
     const answerCounts = revealState.answerCounts || {};
     const totalVotes = Object.values(answerCounts).reduce((sum, count) => sum + count, 0);
+    const playersWithScores = revealState.players.map(p => ({
+        ...p,
+        score: revealState.scores[p.id] || 0
+    }));
 
     if (!revealState.question) {
-      return <div>Loading question...</div>;
+      return <Spinner />;
     }
 
     return (
       <div className="quiz-reveal">
-        <h1 className="quiz-question">{revealState.question.questionText}</h1>
+        <QuestionDisplay question={revealState.question.questionText} />
         <div className="quiz-answers-grid reveal-grid">
           {revealState.question.answers.map((answer, index) => {
             const count = answerCounts[index] || 0;
             const percentage = totalVotes > 0 ? (count / totalVotes) * 100 : 0;
             const isCorrect = index === revealState.correctAnswerIndex;
             return (
-              <div key={index} className={`quiz-answer-result ${isCorrect ? 'correct' : 'incorrect'}`}>
-                <div className="answer-text">{answer}</div>
-                <div className="answer-bar-container">
-                  <div className="answer-bar" style={{ width: `${percentage}%` }}></div>
-                  <span className="answer-percentage">{percentage.toFixed(0)}%</span>
-                </div>
-              </div>
+              <AnswerResult key={index} answer={answer} percentage={percentage} isCorrect={isCorrect} />
             );
           })}
         </div>
-        {/* Leaderboard would slide in and animate based on CSS */}
-        <div className="quiz-leaderboard animated">
-          <h3 className="leaderboard-title">Leaderboard</h3>
-          {Object.entries(revealState.scores).sort(([, a], [, b]) => b - a).map(([playerId, score]) => {
-            const player = revealState.players.find(p => p.id === playerId);
-            // Here you could show rank change arrows, etc.
-            return (
-              <div key={playerId} className="leaderboard-entry">
-                <span>{player?.nickname}</span>
-                <span>{score}</span>
-              </div>
-            );
-          })}
-        </div>
+        <Leaderboard players={playersWithScores} />
       </div>
     );
+  }
+
+  if (!gameState.question) {
+    return <Spinner />;
   }
 
   const answeredCount = gameState.players.filter(p => p.hasAnswered).length;
   const totalPlayers = gameState.players.length;
 
-  if (!gameState.question) {
-    return <div>Loading question...</div>;
-  }
-
   return (
-    <div className="quiz-main">
-      <div className="quiz-header">
-        <div className="quiz-question-counter">Question {gameState.round}/{gameState.totalRounds}</div>
-        <div className="quiz-timer-container">
-          <div className="quiz-timer-bar" style={{ width: `${(gameState.timer / 10) * 100}%` }}></div>
-        </div>
-        <div className="quiz-answer-counter">Answers: {answeredCount}/{totalPlayers}</div>
-      </div>
-      <h1 className="quiz-question-host">{gameState.question.questionText}</h1>
-      <div className="quiz-grid-host">
-        {gameState.question.answers.map((answer, index) => (
-          <div key={index} className={`quiz-answer-option color-${answerDesigns[index].color}`}>
-            <span className="answer-symbol">{answerDesigns[index].symbol}</span>
-            <span className="answer-text">{answer}</span>
-          </div>
-        ))}
-      </div>
-    </div>
+    <HostViewContainer>
+        <QuestionHeader
+            round={gameState.round}
+            totalRounds={gameState.totalRounds}
+            timer={gameState.timer}
+            answeredCount={answeredCount}
+            totalPlayers={totalPlayers}
+        />
+        <QuestionDisplay question={gameState.question.questionText} />
+        <AnswerGrid answers={gameState.question.answers} onAnswer={() => {}} disabled={true} />
+    </HostViewContainer>
   );
 };

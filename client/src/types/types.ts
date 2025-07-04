@@ -67,6 +67,7 @@ export interface FakeNewsGameState extends GameState {
   correctAnswer?: string;
   scores: Record<string, number>;
   round: number;
+  timer: number;
   gameStats?: {
     masterLiar?: string;
     truthSeeker?: string;

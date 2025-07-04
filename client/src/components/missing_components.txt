@@ -1,0 +1,10 @@
+### Missing Components
+
+Based on the refactoring of the existing games, here is a list of potential reusable components that could be created to further improve the codebase:
+
+*   **HostViewContainer**: A container component for the host's view of the game, providing a consistent layout for all games.
+*   **PlayerViewContainer**: A container component for the player's view of the game, providing a consistent layout for all games.
+*   **Game-specific Components**: Some components are still too specific to be reusable. For example, the "war declaration" in CardsWar could be a more generic "SpecialEvent" component.
+*   **Animated Components**: Many animations are still handled with CSS. Creating more reusable animated components could improve the user experience and reduce code duplication. For example, an animated `Leaderboard` or `Podium` component could be created.
+*   **Error Component**: A generic error component to display error messages to the user.
+*   **Instructions Component**: A component to display instructions to the players at the beginning of each game.
