@@ -1,9 +1,9 @@
 @import '../GameView.css';
 
 .fakenews-player-container {
-    background-color: #121212;
-    color: #fff;
-    padding: 20px;
+    background-color: var(--background-dark);
+    color: var(--text-main);
+    padding: var(--spacing-large);
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -23,84 +23,85 @@
 
 .fakenews-player-view.centered-view {
     justify-content: center;
-    gap: 20px;
+    gap: var(--spacing-large);
 }
 
 .get-ready-text {
     font-size: 2.5rem;
-    color: #ffd700;
+    color: var(--accent-color);
 }
 
 /* Writing State */
 .prompt-reminder {
     font-size: 1.3rem;
     font-style: italic;
-    color: #aaa;
-    margin-bottom: 20px;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-large);
 }
 
 .lie-input {
     width: 100%;
-    background-color: #333;
-    color: #fff;
-    border: 2px solid #6a0dad;
-    border-radius: 10px;
-    padding: 15px;
+    background-color: var(--background-light);
+    color: var(--text-main);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-medium);
     font-size: 1.2rem;
     box-sizing: border-box;
-    margin-bottom: 5px; /* Reduced margin */
+    margin-bottom: var(--spacing-small);
 }
 
 .char-counter {
     align-self: flex-end;
-    margin-bottom: 15px; /* Added margin */
+    margin-bottom: var(--spacing-medium);
     font-size: 0.9rem;
-    color: #888;
+    color: var(--text-secondary);
 }
 
 /* Voting State */
 .voting-header {
-    margin-bottom: 20px;
+    margin-bottom: var(--spacing-large);
 }
+
 .voting-options-list {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: var(--spacing-medium);
     width: 100%;
 }
 
 .vote-option-button {
     white-space: normal;
     height: auto;
-    padding: 15px;
+    padding: var(--spacing-medium);
     line-height: 1.4;
 }
 
 .vote-option-button small {
     display: block;
     font-size: 0.8rem;
-    color: #ccc;
-    margin-top: 5px;
+    color: var(--text-secondary);
+    margin-top: var(--spacing-small);
 }
 
 /* Reveal State */
 .reveal-success {
-    color: #4caf50;
+    color: var(--success-color);
     font-size: 2rem;
 }
 
 .reveal-fail {
-    color: #f44336;
+    color: var(--error-color);
     font-size: 2rem;
 }
 
 .fooling-score {
-    margin-top: 20px;
+    margin-top: var(--spacing-large);
     font-size: 1.5rem;
 }
 
 .points-gained {
-    color: #ffd700;
+    color: var(--accent-color);
     font-size: 1.3rem;
     font-weight: bold;
 }
@@ -108,17 +109,17 @@
 /* Finished State */
 .final-rank {
     font-size: 2rem;
-    color: #00bcd4;
+    color: var(--accent-color-medium);
 }
 
 .personal-awards {
-    margin-top: 20px;
+    margin-top: var(--spacing-large);
 }
 
 .award {
-    background-color: #6a0dad;
-    padding: 10px 20px;
-    border-radius: 20px;
+    background: var(--accent-gradient);
+    padding: var(--spacing-small) var(--spacing-large);
+    border-radius: 50px;
     font-size: 1.5rem;
-    margin-top: 10px;
+    margin-top: var(--spacing-small);
 }

@@ -91,7 +91,7 @@ export const QuizClashPlayerView: React.FC = () => {
 
   return (
     <PlayerViewContainer>
-      <AnswerGrid answers={gameState.question.answers.map(() => '')} onAnswer={handleAnswer} disabled={answered !== null} selectedAnswer={answered}/>
+      <AnswerGrid answers={gameState.question.answers.map(() => '')} onAnswer={handleAnswer} disabled={answered !== null} selectedAnswer={answered} fillParent={true}/>
     </PlayerViewContainer>
   );
 };

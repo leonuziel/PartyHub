@@ -13,11 +13,13 @@ interface AnswerGridProps {
   onAnswer: (answerIndex: number) => void;
   disabled?: boolean;
   selectedAnswer?: number | null;
+  fillParent?: boolean;
 }
 
-export const AnswerGrid: React.FC<AnswerGridProps> = ({ answers, onAnswer, disabled, selectedAnswer }) => {
+export const AnswerGrid: React.FC<AnswerGridProps> = ({ answers, onAnswer, disabled, selectedAnswer, fillParent = false }) => {
+  const gridClasses = `answer-grid ${fillParent ? 'fill-parent' : ''}`;
   return (
-    <div className="answer-grid">
+    <div className={gridClasses}>
       {answers.map((answer, index) => (
         <button
           key={index}

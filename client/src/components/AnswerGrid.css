@@ -51,6 +51,12 @@
   .answer-text {
     font-size: 1.2rem;
   }
+
+  .answer-grid.fill-parent {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+  }
   
   .btn-red { background-color: #EF4444; }
   .btn-blue { background-color: #3B82F6; }

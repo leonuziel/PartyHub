@@ -278,6 +278,17 @@ const TestComponentsPage: React.FC = () => {
             disabled={true}
         />
       </section>
+
+      <section>
+        <h2>Answer Grid (fillParent)</h2>
+        <div style={{ width: '300px', height: '300px', border: '2px solid red', padding: '1rem' }}>
+          <AnswerGrid
+              answers={['','','','']}
+              onAnswer={(index) => alert(`You chose answer ${index + 1}`)}
+              fillParent={true}
+          />
+        </div>
+      </section>
     </div>
   );
 };
