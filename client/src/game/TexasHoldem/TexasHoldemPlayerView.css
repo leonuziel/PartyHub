@@ -1,0 +1,38 @@
+/* TexasHoldemPlayerView.css */
+
+.player-view-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.player-hand-area {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.bet-slider-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 80%;
+    margin-top: 1rem;
+}
+
+.bet-amount-display {
+    font-size: 1.5rem;
+    font-weight: bold;
+}

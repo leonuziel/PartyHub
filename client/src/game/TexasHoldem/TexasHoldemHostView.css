@@ -1,0 +1,60 @@
+/* TexasHoldemHostView.css */
+
+.poker-table-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    background-color: #0a3d24; /* Dark green poker table color */
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+.poker-table {
+    position: relative;
+    width: 80vw;
+    height: 40vw;
+    max-width: 1200px;
+    max-height: 600px;
+    border: 10px solid #5d4037; /* Wood grain border */
+    border-radius: 100px;
+    background-color: #1a5e3a; /* Felt color */
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.community-cards-area {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.pot-display {
+    color: white;
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+}
+
+.card-slot-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.player-positions {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.player-seat {
+    position: absolute;
+    transform: translate(-50%, -50%); /* Center the seat on its coordinates */
+}

@@ -4,25 +4,6 @@
 
 PartyHub is a real-time, interactive social gaming platform. The architecture is designed to support a host (on a large screen) and multiple players (on mobile phones) interacting in a shared game room.
 
-## 1. Core Goal
-
-[Clearly state the user-facing goal. What should the user be able to do after this work is complete? Use the format: "As a [user type], I can [action] so that [benefit]."]
-
-## 2. Feature Description
-
-[Provide a clear and concise description of the feature. Detail the user flow and any new UI elements. Be specific.]
-
-## 3. Technical Requirements
-
-[Outline the specific technical changes needed. This can include API changes, new components, state management updates, etc.]
-
-## 4. Acceptance Criteria
-
-[Provide a checklist of conditions that must be met for the feature to be considered complete. Each item should be a verifiable user-facing outcome.]
-- [ ] Criterion 1
-- [ ] Criterion 2
-- [ ] Criterion 3
-
 ---
 
 ## **Appendix: Project Context**

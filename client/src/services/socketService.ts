@@ -2,6 +2,7 @@ import { io, Socket } from 'socket.io-client';
 import { usePlayerStore } from '../store/playerStore';
 import { useRoomStore } from '../store/roomStore';
 import { useGameStore } from '../store/gameStore';
+import { usePlayerHandStore } from '../store/playerHandStore';
 import { RoomData } from '../types/types';
 import { useDebugStore } from '../store/debugStore';
 
@@ -58,24 +59,46 @@ class SocketService {
       console.log('Game state update received:', data);
       useGameStore.getState().setGameState(data);
     });
+
+    this.socket.onAny((event, ...args) => {
+      // Log every incoming event
+      useDebugStore.getState().logReceivedMessage(event, args);
+
+      // This is where specific event listeners are. 
+      // The onAny handler runs *before* the specific listeners.
+      if (event.startsWith('player:')) {
+          const playerId = event.split(':')[1];
+          const localPlayerId = usePlayerStore.getState().socketId;
+          if (playerId === localPlayerId) {
+              if(event.endsWith(':state_update')) {
+                  usePlayerHandStore.getState().setHand(args[0].hand);
+              }
+          }
+      }
+    });
   }
 
   // --- Emitters ---
 
+  private emit(event: string, payload: any, callback?: (...args: any[]) => void) {
+    useDebugStore.getState().logSentMessage(event, payload);
+    this.socket.emit(event, payload, callback);
+  }
+
   public createRoom(nickname: string, gameId: string, callback: (response: RoomData) => void) {
-    this.socket.emit('room:create', { nickname, gameId }, callback);
+    this.emit('room:create', { nickname, gameId }, callback);
   }
 
   public joinRoom(roomCode: string, nickname: string, avatar: string, callback: (response: { success: boolean; message?: string, roomCode?: string }) => void) {
-    this.socket.emit('room:join', { roomCode, nickname, avatar }, callback);
+    this.emit('room:join', { roomCode, nickname, avatar }, callback);
   }
   
   public startGame(roomCode: string) {
-    this.socket.emit('game:start', { roomCode });
+    this.emit('game:start', { roomCode });
   }
 
   public sendPlayerAction(roomCode: string, action: any) {
-    this.socket.emit('player:action', { roomCode, action });
+    this.emit('player:action', { roomCode, action });
   }
 }
 

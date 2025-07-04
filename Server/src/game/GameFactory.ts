@@ -2,6 +2,7 @@ import { BaseGame } from './BaseGame.js';
 import { QuizClashGame } from './games/QuizClashGame.js';
 import { FakeNewsGame } from './games/FakeNewsGame.js';
 import { CardsWarGame } from './games/cardGames/CardsWarGame.js';
+import { TexasHoldemGame } from './games/cardGames/TexasHoldemGame.js';
 import { BaseGameState, Player } from '../types/interfaces.js';
 
 export class GameFactory {
@@ -19,6 +20,8 @@ export class GameFactory {
         return new FakeNewsGame(players, hostId, broadcast, onGameEnd);
       case 'cardswar':
         return new CardsWarGame(players, hostId, broadcast, onGameEnd);
+      case 'texas-holdem-poker':
+        return new TexasHoldemGame(players, hostId, broadcast, onGameEnd);
       default:
         throw new Error(`Game with id ${gameId} not found.`);
     }

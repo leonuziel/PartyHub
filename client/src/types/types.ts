@@ -17,6 +17,7 @@ export interface Player {
 
 export interface RoomData {
   roomCode: string;
+  host: Player | null;
   hostId: string;
   players: Player[];
   state: RoomState;
@@ -95,4 +96,33 @@ export interface CardsWarGameState {
   player1CardCount: number;
   player2CardCount: number;
   round: number;
+}
+
+// --- Texas Hold'em Interfaces ---
+export interface TexasHoldemPlayer extends Player {
+    hand: Card[];
+    chips: number;
+    currentBet: number;
+    hasActed: boolean;
+    isAllIn: boolean;
+    isFolded: boolean;
+}
+
+export interface TexasHoldemGameState {
+    gameId: 'texas-holdem-poker';
+    status: 'STARTING' | 'PRE-FLOP' | 'FLOP' | 'TURN' | 'RIVER' | 'SHOWDOWN' | 'ROUND_ENDED' | 'FINISHED';
+    players: TexasHoldemPlayer[];
+    communityCards: Card[];
+    pot: number;
+    currentPlayerId: string | null;
+    dealerId: string | null;
+    smallBlindId: string | null;
+    bigBlindId: string | null;
+    currentBet: number;
+    minRaise: number;
+}
+
+export interface TexasHoldemAction {
+    type: 'FOLD' | 'CHECK' | 'CALL' | 'BET' | 'RAISE';
+    amount?: number;
 }

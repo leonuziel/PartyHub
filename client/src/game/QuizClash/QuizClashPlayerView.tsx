@@ -48,7 +48,7 @@ export const QuizClashPlayerView: React.FC = () => {
   const myScore = player ? player.score : 0;
 
   if (gameState.status === 'STARTING') {
-    return <PlayerStartingView player={player} />;
+    return <PlayerStartingView player={player || undefined} />;
   }
 
   if (gameState.status === 'FINISHED') {

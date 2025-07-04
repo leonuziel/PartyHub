@@ -8,7 +8,8 @@ export interface Player {
 
 export interface RoomData {
   roomCode: string;
-  hostId: string;
+  host: Player | null; // The host is not in the players array
+  hostId: string; // Keep this for quick lookups
   players: Player[];
   state: RoomState;
   gameId: string | null;
@@ -73,4 +74,34 @@ export interface CardsWarGameState extends BaseGameState {
     winnerId: string | null;
     round: number;
     timer: number;
+}
+
+// --- Texas Hold'em Specific Interfaces ---
+
+export interface TexasHoldemPlayer extends Player {
+    hand: Card[];
+    chips: number;
+    currentBet: number;
+    hasActed: boolean;
+    isAllIn: boolean;
+    isFolded: boolean;
+}
+
+export interface TexasHoldemGameState extends BaseGameState {
+    gameId: 'texas-holdem-poker';
+    status: 'STARTING' | 'PRE-FLOP' | 'FLOP' | 'TURN' | 'RIVER' | 'SHOWDOWN' | 'ROUND_ENDED' | 'FINISHED';
+    players: TexasHoldemPlayer[]; // Override BaseGameState players
+    communityCards: Card[];
+    pot: number;
+    currentPlayerId: string | null;
+    dealerId: string | null;
+    smallBlindId: string | null;
+    bigBlindId: string | null;
+    currentBet: number; // The amount to call
+    minRaise: number;
+}
+
+export interface TexasHoldemAction {
+    type: 'FOLD' | 'CHECK' | 'CALL' | 'BET' | 'RAISE';
+    amount?: number;
 }

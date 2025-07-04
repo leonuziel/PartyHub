@@ -19,3 +19,39 @@
   font-size: 1rem;
   color: var(--text-secondary);
 }
+
+.player-info.is-current {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px var(--accent-color);
+}
+
+.player-info.is-folded {
+    opacity: 0.5;
+    filter: grayscale(80%);
+}
+
+.player-chips, .player-bet {
+    font-size: 1rem;
+    color: var(--text-main);
+    margin-top: 0.5rem;
+}
+
+.player-status-icons {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.dealer-chip {
+    background-color: #fff;
+    color: #000;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
+}

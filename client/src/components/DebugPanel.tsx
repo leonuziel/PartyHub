@@ -3,36 +3,45 @@ import { useDebugStore } from '../store/debugStore';
 import { usePlayerStore } from '../store/playerStore';
 import { useRoomStore } from '../store/roomStore';
 import { useGameStore } from '../store/gameStore';
+import { usePlayerHandStore } from '../store/playerHandStore';
 
 export function DebugPanel() {
     const [isVisible, setIsVisible] = useState(false);
-    const connectionStatus = useDebugStore((s) => s.connectionStatus);
-    const lastEvent = useDebugStore((s) => s.lastEvent);
-    const socketId = usePlayerStore((s) => s.socketId);
-    const player = usePlayerStore((s) => s);
-    const room = useRoomStore((s) => s.room);
+    const { connectionStatus, lastEvent } = useDebugStore((s) => s);
+    const playerState = usePlayerStore((s) => s);
+    const roomState = useRoomStore((s) => s);
     const gameState = useGameStore((s) => s.gameState);
+    const playerHandState = usePlayerHandStore((s) => s);
+    const messageLog = useDebugStore((s) => s.messageLog);
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.ctrlKey && event.key === 'd') {
-                event.preventDefault(); // Prevent browser's default bookmark action
+                event.preventDefault();
                 setIsVisible(prev => !prev);
             }
         };
 
         window.addEventListener('keydown', handleKeyDown);
 
-        // Cleanup the event listener on component unmount
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
-    }, []); // Empty dependency array means this effect runs once on mount
-
+    }, []);
 
     if (!isVisible) {
-        return null; // Don't render anything if it's not visible
+        return null;
     }
+
+    const preStyle: React.CSSProperties = {
+        maxHeight: '200px',
+        overflowY: 'auto',
+        backgroundColor: '#111',
+        padding: '5px',
+        borderRadius: '4px',
+        whiteSpace: 'pre-wrap',
+        wordBreak: 'break-all',
+    };
 
     return (
         <div
@@ -45,24 +54,57 @@ export function DebugPanel() {
                 padding: '12px',
                 borderRadius: '10px',
                 fontSize: '12px',
-                maxWidth: '400px',
+                width: '450px',
+                maxWidth: '90vw',
+                maxHeight: '90vh',
+                overflowY: 'auto',
                 zIndex: 9999,
-                cursor: 'pointer',
             }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}>
+                <strong>PartyHub Debug Panel</strong>
+                <span onClick={() => setIsVisible(false)} style={{ cursor: 'pointer', padding: '0 5px' }}>✖</span>
+            </div>
+            <hr style={{ borderColor: 'rgba(255,255,255,0.3)' }} />
+            
             <div><strong>Status:</strong> {connectionStatus}</div>
-            <div><strong>Socket ID:</strong> {socketId}</div>
-            <div><strong>Room:</strong> {room?.roomCode ?? 'None'}</div>
-            <div><strong>Player:</strong> {player?.nickname ?? 'None'}</div>
-            <div><strong>Role:</strong> {/*player?.isAdmin*/false ? 'Admin' : 'Player'}</div>
             <div><strong>Last Event:</strong> {lastEvent}</div>
-            {gameState && (
-                <div>
-                    <strong>Game State:</strong>
-                    <pre style={{ maxHeight: '500px', overflowY: 'auto' }}>
-                        {JSON.stringify(gameState, null, 2)}
-                    </pre>
+            
+            <details>
+                <summary><strong>Player Store</strong></summary>
+                <pre style={preStyle}>{JSON.stringify(playerState, null, 2)}</pre>
+            </details>
+
+            <details>
+                <summary><strong>Room Store</strong></summary>
+                <pre style={preStyle}>{JSON.stringify(roomState, null, 2)}</pre>
+            </details>
+
+            <details open>
+                <summary><strong>Game Store</strong></summary>
+                <pre style={preStyle}>{JSON.stringify({ gameState }, null, 2)}</pre>
+            </details>
+
+            <details>
+                <summary><strong>Player Hand Store</strong></summary>
+                <pre style={preStyle}>{JSON.stringify(playerHandState, null, 2)}</pre>
+            </details>
+
+            <details>
+                <summary><strong>Socket.IO Log ({messageLog.length})</strong></summary>
+                <div style={preStyle}>
+                    {messageLog.slice().reverse().map((msg, index) => (
+                        <div key={index} style={{ marginBottom: '10px' }}>
+                            <strong style={{ color: msg.direction === 'SENT' ? '#81c784' : '#64b5f6' }}>
+                                [{msg.direction}] {msg.event}
+                            </strong>
+                            <span style={{color: '#aaa', marginLeft: '10px'}}>{new Date(msg.timestamp).toLocaleTimeString()}</span>
+                            <pre style={{ ...preStyle, margin: '4px 0 0', backgroundColor: '#222' }}>
+                                {JSON.stringify(msg.payload, null, 2)}
+                            </pre>
+                        </div>
+                    ))}
                 </div>
-            )}
+            </details>
         </div>
     );
 }

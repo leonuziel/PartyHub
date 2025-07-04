@@ -8,6 +8,8 @@ import FakeNewsPlayerView from './FakeNewsGame/FakeNewsPlayerView';
 import { CardsWarHostView } from './CardsWar/CardsWarHostView';
 import { CardsWarPlayerView } from './CardsWar/CardsWarPlayerView';
 import HostFrame from '../components/HostFrame';
+import TexasHoldemHostView from './TexasHoldem/TexasHoldemHostView';
+import TexasHoldemPlayerView from './TexasHoldem/TexasHoldemPlayerView';
 
 export const GameContainer: React.FC = () => {
   const gameState = useGameStore((state) => state.gameState);
@@ -17,39 +19,30 @@ export const GameContainer: React.FC = () => {
     return <p>Loading game...</p>;
   }
 
-  const hostView = () => {
+  const renderGameView = () => {
     switch (gameState.gameId) {
       case 'quizclash':
-        return <QuizClashHostView />;
+        return isHost ? <QuizClashHostView /> : <QuizClashPlayerView />;
       case 'fakenews':
-        return <FakeNewsHostView />;
+        return isHost ? <FakeNewsHostView /> : <FakeNewsPlayerView />;
       case 'cardswar':
-        return <CardsWarHostView />;
+        return isHost ? <CardsWarHostView /> : <CardsWarPlayerView />;
+      case 'texas-holdem-poker':
+        return isHost ? <TexasHoldemHostView /> : <TexasHoldemPlayerView />;
       default:
         return <p>Error: Unknown game type '{gameState.gameId}'!</p>;
     }
   };
 
-  const playerView = () => {
-    switch (gameState.gameId) {
-      case 'quizclash':
-        return <QuizClashPlayerView />;
-      case 'fakenews':
-        return <FakeNewsPlayerView />;
-      case 'cardswar':
-        return <CardsWarPlayerView />;
-      default:
-        return <p>Error: Unknown game type '{gameState.gameId}'!</p>;
-    }
-  };
+  const gameView = renderGameView();
 
   if (isHost) {
     return (
       <HostFrame>
-        {hostView()}
+        {gameView}
       </HostFrame>
     );
   }
 
-  return playerView();
+  return gameView;
 };

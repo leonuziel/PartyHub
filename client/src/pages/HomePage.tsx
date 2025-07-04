@@ -30,6 +30,14 @@ const games = [
     playtime: '~5-10 min',
     imageUrl: '/game-art/wargame.png',
   },
+  {
+    id: 'texas-holdem-poker',
+    title: 'Texas Hold\'em',
+    description: 'The classic poker game of skill and luck.',
+    playerCount: '2-8 Players',
+    playtime: '~30-60 min',
+    imageUrl: '/game-art/texasholdem.png',
+  },
 ];
 
 const HomePage: React.FC = () => {

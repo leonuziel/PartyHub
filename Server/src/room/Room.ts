@@ -5,6 +5,7 @@ import { GameManager } from '../game/GameManager.js';
 
 export class Room {
   public hostId: string;
+  private host: Player; // Store the host's player object
   public state: RoomState = RoomState.LOBBY;
   public players: Map<string, Player> = new Map();
   private gameManager: GameManager;
@@ -18,9 +19,13 @@ export class Room {
     gameId: string,
   ) {
     this.hostId = hostSocket.id;
+    this.host = { id: this.hostId, nickname: hostNickname, avatar: 'avatar1.png' };
     this.gameId = gameId;
-    this.addPlayer(hostSocket, hostNickname, 'avatar1.png'); // Default avatar for host
+    // The host is an observer, not a player in the game.
+    // We still need to add them to the socket.io room for communication.
+    hostSocket.join(this.roomCode); 
     this.gameManager = new GameManager(this.players, this.hostId, this.broadcast.bind(this), this.handleGameEnd.bind(this));
+    this.broadcastState();
   }
   
   public addPlayer(socket: Socket, nickname: string, avatar: string): void {
@@ -31,11 +36,15 @@ export class Room {
   }
   
   public removePlayer(socketId: string): void {
-    this.players.delete(socketId);
+    if (this.players.has(socketId)) {
+        this.players.delete(socketId);
+    }
     
-    if (socketId === this.hostId && this.players.size > 0) {
-      // Assign a new host
-      this.hostId = this.players.keys().next().value!;
+    // If the host disconnects, the room is effectively over.
+    // A more robust implementation might handle host migration.
+    if (socketId === this.hostId) {
+        // For now, we can just log this. The room will be cleaned up by the manager.
+        console.log(`Host ${socketId} disconnected from room ${this.roomCode}`);
     }
     
     this.broadcastState();
@@ -67,6 +76,7 @@ export class Room {
   private broadcastState(): void {
     const roomData: RoomData = {
       roomCode: this.roomCode,
+      host: this.host,
       hostId: this.hostId,
       players: Array.from(this.players.values()),
       state: this.state,
