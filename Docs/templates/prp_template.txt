@@ -1,0 +1,173 @@
+# Product Requirements Prompt (PRP) for PartyHub
+
+## Project Overview
+
+PartyHub is a real-time, interactive social gaming platform. The architecture is designed to support a host (on a large screen) and multiple players (on mobile phones) interacting in a shared game room.
+
+## 1. Core Goal
+
+[Clearly state the user-facing goal. What should the user be able to do after this work is complete? Use the format: "As a [user type], I can [action] so that [benefit]."]
+
+## 2. Feature Description
+
+[Provide a clear and concise description of the feature. Detail the user flow and any new UI elements. Be specific.]
+
+## 3. Technical Requirements
+
+[Outline the specific technical changes needed. This can include API changes, new components, state management updates, etc.]
+
+## 4. Acceptance Criteria
+
+[Provide a checklist of conditions that must be met for the feature to be considered complete. Each item should be a verifiable user-facing outcome.]
+- [ ] Criterion 1
+- [ ] Criterion 2
+- [ ] Criterion 3
+
+---
+
+## **Appendix: Project Context**
+
+### Project Structure
+
+#### Backend (`/Server`)
+```
+/Server
+|
+├── src/
+│   ├── app.ts
+│   ├── core/
+│   │   └── SocketManager.ts
+│   ├── game/
+│   │   ├── BaseGame.ts
+│   │   ├── GameFactory.ts
+│   │   ├── GameManager.ts
+│   │   └── games/
+│   │       ├── cardGames/
+│   │       │   ├── cards.ts
+│   │       │   └── CardsWarGame.ts
+│   │       ├── FakeNewsGame.ts
+│   │       ├── QuizClashGame.ts
+│   │       └── quizclash_questions.json
+│   ├── room/
+│   │   ├── Room.ts
+│   │   └── RoomManager.ts
+│   ├── routes/
+│   │   └── debug.ts
+│   ├── server.ts
+│   ├── types/
+│   │   ├── enums.ts
+│   │   └── interfaces.ts
+│   └── utils/
+│       └── codeGenerator.ts
+```
+
+#### Frontend (`/client`)
+```
+/client
+|
+├── src/
+│   ├── App.tsx
+│   ├── components/
+│   ├── game/
+│   │   ├── CardsWar/
+│   │   ├── FakeNewsGame/
+│   │   ├── QuizClash/
+│   │   └── GameContainer.tsx
+│   ├── hooks/
+│   │   └── usePlayerRole.ts
+│   ├── pages/
+│   ├── services/
+│   │   └── socketService.ts
+│   ├── store/
+│   └── types/
+```
+
+### Design & Architecture Summaries
+
+#### 1. Overall Architecture Summary
+
+The system uses a client-server model with a Node.js/Express/Socket.IO backend and a React/TypeScript frontend. The backend manages game rooms, player state, and real-time communication. The frontend is a single-page application that renders different views for the host and players. State synchronization is achieved through `game:state_update` events broadcast from the server.
+
+#### 2. Backend Design Summary
+
+- **Room Management**: `RoomManager` manages all `Room` instances. A `Room` contains players, state (lobby, in-game, finished), and a `GameManager`.
+- **Game Logic**: `GameManager` manages the lifecycle of a game within a room. It uses a `GameFactory` to create specific game instances (e.g., `QuizClashGame`, `FakeNewsGame`, `CardsWarGame`) that extend an abstract `BaseGame` class. This makes adding new games modular.
+- **Communication**: A REST API is exposed via Express for debugging purposes under `/routes/debug.ts`. All other real-time communication happens via a Socket.IO `SocketManager`. The primary event is `game:state_update`, which sends the complete, sanitized game state to all clients.
+
+#### 3. Frontend Design Summary
+
+- **State Management**: Zustand is used for global state, split into multiple stores within the `/store` directory.
+- **Component Structure**: The UI is divided into pages (`/pages`). The `GamePage` contains a `GameContainer` that dynamically renders the correct game view (e.g., `QuizClashHostView`, `FakeNewsPlayerView`) based on the `gameId` from the `gameStore` and the user's role (host or player). Reusable components are located in `/components`.
+- **Communication**: `services/socketService.ts` encapsulates all Socket.IO logic. It listens for server events and updates the Zustand stores. UI components do not interact with the socket directly; they read from the stores and call methods on the `socketService` to send actions to the server.
+
+#### 4. Design System Summary
+
+- **Color Palette**: Dark mode base with deep navy blues (`#1a1a2e`, `#16213e`) and a vibrant reddish-pink accent (`#e94560`) for interactive elements and borders.
+- **Typography**: System UI fonts with a base size of 16px and a bold, scaled heading structure.
+- **Spacing**: Uses a base unit of 1rem (16px) for consistent margins, padding, and gaps.
+- **Implementation**: All design tokens are defined as CSS Custom Properties in `index.css` for global consistency.
+
+### Frontend Component Summary (`client/src/components/`)
+
+#### General Components
+- `ActionButton.tsx`: A primary button for main user actions.
+- `Button.tsx`: A standard, reusable button component.
+- `Card.tsx`: A styled container for content, with a distinct border and background.
+- `CenteredMessage.tsx`: A component to display a message centered on the screen.
+- `CountdownTimer.tsx`: A visual timer that counts down from a specified time.
+- `DebugPanel.tsx`: A panel for displaying debug information.
+- `GameBranding.tsx`: A component to display the branding of the current game.
+- `GameCard.tsx`: A card used to display a game in a list.
+- `GameTitle.tsx`: A component for displaying the title of the game.
+- `Modal.tsx`: A modal dialog that can be displayed over the main content.
+- `Spinner.tsx`: A loading spinner to indicate that content is being loaded.
+- `TextAreaWithCounter.tsx`: A text area with a character counter.
+
+#### Layout Components
+- `HostFrame.tsx`: A container for the host's view.
+- `HostViewContainer.tsx`: A container for the main content of the host's view.
+- `PlayArea.tsx`: The main area where the game is played.
+- `PlayerViewContainer.tsx`: A container for the player's view.
+
+#### Player & Status Components
+- `PlayerAvatar.tsx`: Displays a player's avatar.
+- `PlayerCard.tsx`: A card displaying a player's information.
+- `PlayerInfo.tsx`: A component to display information about a player.
+- `PlayerStatusContainer.tsx`: A container for the status of all players.
+- `PlayerStatusGrid.tsx`: A grid displaying the status of all players.
+- `Leaderboard.tsx`: Displays the game's leaderboard.
+- `Podium.tsx`: A component to display the top players at the end of a game.
+- `PodiumList.tsx`: A list of players on the podium.
+- `RankDisplay.tsx`: Displays a player's rank.
+- `RankUpdate.tsx`: Displays an update to a player's rank.
+- `WinnerDisplay.tsx`: Displays the winner of the game.
+
+#### Game-Specific Components
+- `AnswerGrid.tsx`: A grid of possible answers for a question.
+- `AnswerResult.tsx`: Displays the result of an answer.
+- `AwardDisplay.tsx`: Displays any awards a player has received.
+- `QuestionDisplay.tsx`: Displays a question.
+- `QuestionHeader.tsx`: The header for a question.
+- `ResultsList.tsx`: A list of results.
+- `SpecialAwards.tsx`: Displays any special awards.
+- `VotingOptions.tsx`: Displays options for voting.
+
+#### Card Game Components (`client/src/components/cards/`)
+- `BiddingPopup.tsx`: A popup for bidding.
+- `CardFan.tsx`: A fan of cards.
+- `CardSlot.tsx`: A slot for a card.
+- `Deck.tsx`: A deck of cards.
+- `DiscardPile.tsx`: A pile of discarded cards.
+- `Hand.tsx`: A player's hand of cards.
+- `LastPlayedCard.tsx`: The last card that was played.
+- `Meld.tsx`: A meld of cards.
+- `PlayerHandDisplay.tsx`: Displays a player's hand.
+- `Scoreboard.tsx`: A scoreboard for a card game.
+- `Trick.tsx`: A trick of cards.
+- `TrumpIndicator.tsx`: Indicates the trump suit.
+
+### Available Games (`client/src/game/`)
+
+- **CardsWar**: A simple card game where players compare cards, and the higher card wins. Ties result in a "war". Contains views for both host and player.
+- **FakeNewsGame**: A trivia game where players submit fake answers to a question, and then vote on what they believe is the real answer. Contains views for writing, voting, and revealing answers for both host and player.
+- **QuizClash**: A multiple-choice trivia game where players answer questions as quickly as possible. Contains views for asking questions and revealing answers for both host and player.
