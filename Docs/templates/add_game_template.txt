@@ -1,0 +1,113 @@
+# How to Add a New Game to PartyHub
+
+This document provides a step-by-step guide for developers on how to add a new game to the PartyHub application. The system is designed to be modular, making it straightforward to plug in new games.
+
+---
+
+## Phase 1: Backend Implementation
+
+The backend is responsible for the core game logic, state management, and communication with clients.
+
+### Step 1: Create the Core Game Logic File
+1.  **Location**: Navigate to `Server/src/game/games/`.
+2.  **Action**: Create a new file named `[YourGameName]Game.ts`. For card games, place it in the `cardGames/` subdirectory.
+3.  **Implementation**:
+    *   Your new class must extend the abstract `BaseGame` class (`import BaseGame from '../BaseGame';`).
+    *   Implement all the required abstract methods: `startGame()`, `handleAction()`, `isGameOver()`, `getScores()`, `getState()`, and `getPlayerState()`.
+    *   `getState()` should return the public state visible to all players and the host.
+    *   `getPlayerState(playerId)` should return the state specific to a single player (e.g., their hand of cards).
+
+### Step 2: Register the New Game
+1.  **Location**: Open `Server/src/game/GameFactory.ts`.
+2.  **Action**:
+    *   Import your new game class: `import { [YourGameName]Game } from './games/[YourGameName]Game';`.
+    *   Add a new `case` to the `switch` statement within the `createGame` method. Use a unique, kebab-case `gameId` (e.g., `'your-game-name'`).
+    *   This `gameId` is the key that links the backend logic to the frontend components.
+
+    ```typescript
+    // Example from GameFactory.ts
+    switch (gameId) {
+      // ... other games
+      case 'your-game-name':
+        return new [YourGameName]Game(players, hostId);
+      default:
+        throw new Error(`Game not found: ${gameId}`);
+    }
+    ```
+
+### Step 3: (Optional) Define Custom Types
+1.  **Location**: `Server/src/types/interfaces.ts`.
+2.  **Action**: If your game requires complex data structures for its state, actions, or payloads, define the necessary interfaces here to ensure type safety across the application.
+
+---
+
+## Phase 2: Frontend Implementation
+
+The frontend is responsible for rendering the game state for the host and players and for sending user actions to the server.
+
+### Step 1: Create the Game View Components
+1.  **Location**: Navigate to `client/src/game/`.
+2.  **Action**: Create a new directory named `[YourGameName]/`.
+3.  **Implementation**: Inside this new directory, create the two main view components:
+    *   `[YourGameName]HostView.tsx`: Renders what the host sees on the main screen (e.g., the game board, all player statuses, community cards).
+    *   `[YourGameName]PlayerView.tsx`: Renders what each player sees on their mobile device (e.g., their private cards, action buttons).
+
+### Step 2: Implement State-Based Views
+-   Your game will likely have different phases or statuses (e.g., `starting`, `playing`, `voting`, `finished`).
+-   **Best Practice**: Create a `views/` subdirectory (`client/src/game/[YourGameName]/views/`) to hold components for each state.
+-   Your `HostView` and `PlayerView` will then act as routers, conditionally rendering the correct sub-view based on the `game.status` received from the `gameStore`.
+
+### Step 3: Connect Views to the Game Container
+1.  **Location**: Open `client/src/game/GameContainer.tsx`.
+2.  **Action**:
+    *   Import your new host and player views.
+    *   Add a new `case` to the `switch` statement for your `gameId` (the same one used in the `GameFactory`).
+    *   The container will automatically render the correct view based on the user's role (host or player).
+
+    ```typescript
+    // Example from GameContainer.tsx
+    switch (gameId) {
+      // ... other games
+      case 'your-game-name':
+        return isHost ? <[YourGameName]HostView /> : <[YourGameName]PlayerView />;
+      default:
+        return <p>Game not found</p>;
+    }
+    ```
+
+### Step 4: Utilize Existing Components
+-   Before creating new components, review the inventory in `client/src/components/`.
+-   There are many reusable components for displaying players, scores, timers, and cards. Using them will ensure visual consistency and speed up development.
+
+---
+
+## Phase 3: Final Integration
+
+### Step 1: Add the Game to the Lobby
+1.  **Location**: This will likely be in `client/src/pages/LobbyPage.tsx` or a component it uses.
+2.  **Action**: Find the game selection list and add a new entry for your game. This will allow the host to select and start it.
+
+### Step 2: Add Game Assets
+1.  **Location**: `client/public/game-art/`.
+2.  **Action**: Add a branding image or icon for your game (e.g., `your-game-name.png`). This will be used in the game selection list.
+
+### Step 3: Test Thoroughly
+-   Use the `/debug` page to inspect the raw game state.
+-   Play through the game as both a host and a player to ensure the user flow is correct and all state changes are reflected properly in the UI.
+
+---
+
+## Quick Checklist
+
+**Backend:**
+- [ ] Created `[YourGameName]Game.ts` extending `BaseGame`.
+- [ ] Implemented all abstract methods in your new game class.
+- [ ] Registered the game in `GameFactory.ts` with a unique `gameId`.
+
+**Frontend:**
+- [ ] Created `[YourGameName]HostView.tsx` and `[YourGameName]PlayerView.tsx`.
+- [ ] Connected the new views in `GameContainer.tsx` using the `gameId`.
+- [ ] Added the game to the lobby selection UI.
+
+**Assets:**
+- [ ] Added a game art image to `client/public/game-art/`.

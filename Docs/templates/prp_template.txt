@@ -82,6 +82,27 @@ PartyHub is a real-time, interactive social gaming platform. The architecture is
 │   └── types/
 ```
 
+#### Docs (`/Docs`)
+```
+/Docs
+|
+├── adding a game checklist.txt
+├── Architecture.txt
+├── design_system.txt
+├── game ideas.txt
+├── Games/
+│   └── QuizClash.txt
+├── PRD.txt
+├── Requirements.txt
+├── templates/
+│   └── prp_template.txt
+└── UX/
+    ├── CardsWar.txt
+    ├── fakeNews.txt
+    ├── mainScreens.txt
+    └── quizClash.txt
+```
+
 ### Design & Architecture Summaries
 
 #### 1. Overall Architecture Summary
