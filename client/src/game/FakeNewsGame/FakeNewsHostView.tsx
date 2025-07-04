@@ -4,14 +4,13 @@ import { useRoomStore } from '../../store/roomStore';
 import { FakeNewsGameState } from '../../types/types';
 import { Podium } from '../../components/Podium';
 import { GameTitle } from '../../components/GameTitle';
-import { CountdownTimer } from '../../components/CountdownTimer';
-import { PlayerStatusGrid } from '../../components/PlayerStatusGrid';
 import { ResultsList } from '../../components/ResultsList';
 import { SpecialAwards } from '../../components/SpecialAwards';
-import { CenteredMessage } from '../../components/CenteredMessage';
 import { Spinner } from '../../components/Spinner';
-import { QuestionDisplay } from '../../components/QuestionDisplay';
 import { HostViewContainer } from '../../components/HostViewContainer';
+import { HostStartingView } from './views/HostStartingView';
+import { HostWritingView } from './views/HostWritingView';
+import { HostVotingView } from './views/HostVotingView';
 import './FakeNewsHostView.css';
 
 const FakeNewsHostView: React.FC = () => {
@@ -32,31 +31,11 @@ const FakeNewsHostView: React.FC = () => {
     const renderContent = () => {
         switch (state.status) {
             case 'STARTING':
-                return (
-                    <CenteredMessage>
-                        <GameTitle title="FakeNews" />
-                        <CountdownTimer initialValue={state.timer} />
-                    </CenteredMessage>
-                )
+                return <HostStartingView timer={state.timer} />;
             case 'WRITING':
-                return (
-                    <div className="fakenews-host-writing">
-                        <QuestionDisplay question={state.question.replace('________', '...')} />
-                        <PlayerStatusGrid players={players} />
-                    </div>
-                );
+                return <HostWritingView question={state.question} players={players} />;
             case 'VOTING':
-                return (
-                    <div className="fakenews-host-voting">
-                        <QuestionDisplay question={state.question.replace('________', '...')} />
-                        <h2 className="sub-header">One of these is TRUE. The rest are FAKE NEWS.</h2>
-                        <ul>
-                            {state.options!.map((option, index) => (
-                                <li key={index} className="option-item"><span>{index + 1}.</span> {option}</li>
-                            ))}
-                        </ul>
-                    </div>
-                );
+                return <HostVotingView question={state.question} options={state.options || []} />;
             case 'REVEAL':
                 return (
                     <div className="fakenews-host-reveal">

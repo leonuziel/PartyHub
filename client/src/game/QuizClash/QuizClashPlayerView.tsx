@@ -6,12 +6,10 @@ import { socketService } from '../../services/socketService';
 import { QuizClashGameState, QuizClashRevealState } from '../../types/types';
 import { Spinner } from '../../components/Spinner';
 import { PlayerStatusContainer } from '../../components/PlayerStatusContainer';
-import { AnswerGrid } from '../../components/AnswerGrid';
-import { RankUpdate } from '../../components/RankUpdate';
-import { PodiumList } from '../../components/PodiumList';
-import { Button } from '../../components/Button';
-import { RankDisplay } from '../../components/RankDisplay';
-import { PlayerViewContainer } from '../../components/PlayerViewContainer';
+import { PlayerStartingView } from './views/PlayerStartingView';
+import { PlayerFinishedView } from './views/PlayerFinishedView';
+import { PlayerAnsweringView } from './views/PlayerAnsweringView';
+import { PlayerRevealingAnswerView } from './views/PlayerRevealingAnswerView';
 import './QuizClashPlayerView.css';
 
 
@@ -50,20 +48,19 @@ export const QuizClashPlayerView: React.FC = () => {
   const myScore = player ? player.score : 0;
 
   if (gameState.status === 'STARTING') {
-    return <PlayerStatusContainer title={`You're in, ${player?.nickname}!`} subtitle="Look at the main screen!" />;
+    return <PlayerStartingView player={player} />;
   }
 
   if (gameState.status === 'FINISHED') {
     return (
-      <div className="player-finished-container">
-        {myRank && <RankDisplay rank={myRank} />}
-        <p className="player-final-score">Final Score: {myScore}</p>
-        <PodiumList players={playersWithScores} />
-        <div className="player-action-buttons">
-          <Button onClick={() => { /* signal host */ }}>Play Again</Button>
-          <Button onClick={() => { /* navigate to lobby */ }} variant="secondary">Back to Lobby</Button>
-        </div>
-      </div>
+      <PlayerFinishedView
+        rank={myRank}
+        playerCount={gameState.players.length}
+        score={myScore}
+        topPlayers={playersWithScores}
+        onPlayAgain={() => { /* signal host */ }}
+        onBackToLobby={() => { /* navigate to lobby */ }}
+      />
     );
   }
 
@@ -74,10 +71,12 @@ export const QuizClashPlayerView: React.FC = () => {
     const pointsGained = myAnswerRecord?.scoreGained || 0;
 
     return (
-      <div className={`player-reveal-container ${wasCorrect ? 'bg-correct' : 'bg-incorrect'}`}>
-        <PlayerStatusContainer title={wasCorrect ? 'Correct!' : 'Incorrect!'} subtitle={wasCorrect ? `+${pointsGained} Points` : ''} />
-        {lastRank && myRank && <RankUpdate oldRank={lastRank} newRank={myRank} />}
-      </div>
+      <PlayerRevealingAnswerView
+        wasCorrect={wasCorrect}
+        pointsGained={pointsGained}
+        lastRank={lastRank}
+        newRank={myRank}
+      />
     );
   }
 
@@ -88,10 +87,16 @@ export const QuizClashPlayerView: React.FC = () => {
   if (!gameState.question) {
     return <Spinner />;
   }
-
-  return (
-    <PlayerViewContainer>
-      <AnswerGrid answers={gameState.question.answers.map(() => '')} onAnswer={handleAnswer} disabled={answered !== null} selectedAnswer={answered} fillParent={true}/>
-    </PlayerViewContainer>
-  );
+  
+  if (gameState.status === 'ASKING_QUESTION') {
+    return (
+        <PlayerAnsweringView
+          answers={gameState.question.answers.map(() => '')}
+          onAnswer={handleAnswer}
+          disabled={answered !== null}
+          selectedAnswer={answered}
+        />
+    );
+  }
+  return <Spinner />
 };
