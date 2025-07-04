@@ -91,14 +91,14 @@ export function DebugPanel() {
 
             <details>
                 <summary><strong>Socket.IO Log ({messageLog.length})</strong></summary>
-                <div style={preStyle}>
+                <div style={{ ...preStyle, maxHeight: '500px', }}>
                     {messageLog.slice().reverse().map((msg, index) => (
                         <div key={index} style={{ marginBottom: '10px' }}>
                             <strong style={{ color: msg.direction === 'SENT' ? '#81c784' : '#64b5f6' }}>
                                 [{msg.direction}] {msg.event}
                             </strong>
                             <span style={{color: '#aaa', marginLeft: '10px'}}>{new Date(msg.timestamp).toLocaleTimeString()}</span>
-                            <pre style={{ ...preStyle, margin: '4px 0 0', backgroundColor: '#222' }}>
+                            <pre style={{ ...preStyle,maxHeight:300, margin: '4px 0 0', backgroundColor: '#222' }}>
                                 {JSON.stringify(msg.payload, null, 2)}
                             </pre>
                         </div>
