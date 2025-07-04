@@ -1,0 +1,11 @@
+.card-slot {
+  width: 100px; /* Or size of a card */
+  height: 150px; /* Or size of a card */
+}
+
+.empty-slot {
+  width: 100px;
+  height: 150px;
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+}

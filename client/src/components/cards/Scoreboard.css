@@ -1,0 +1,14 @@
+.scoreboard {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.scoreboard h2 {
+  margin-top: 0;
+}
+
+.scoreboard ul {
+  list-style-type: none;
+  padding: 0;
+}

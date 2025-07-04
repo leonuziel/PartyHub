@@ -1,0 +1,24 @@
+.deck-container {
+  position: relative;
+  width: 100px; /* Or size of a card */
+  height: 150px; /* Or size of a card */
+  cursor: pointer;
+}
+
+.empty-deck {
+  width: 100px;
+  height: 150px;
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+}
+
+.deck-count {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-size: 12px;
+}

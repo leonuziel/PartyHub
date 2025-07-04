@@ -1,0 +1,16 @@
+.hand-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.hand-card {
+  margin: 0 5px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.hand-card:hover {
+  transform: translateY(-10px);
+}

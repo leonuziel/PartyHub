@@ -1,0 +1,88 @@
+Component Name: Hand
+Priority: High
+Use Cases:
+  - Rummy: Displaying the player's current set of cards.
+  - Poker: Showing the player's private cards.
+  - Bridge: Organizing and displaying the player's hand.
+Description: A container for displaying a player's cards. Should handle layout (fanned, stacked, etc.), selection, and organization of cards.
+
+Component Name: Deck
+Priority: High
+Use Cases:
+  - Solitaire: The main draw pile.
+  - Uno: The draw pile for players to take new cards.
+  - Any card game with a draw pile.
+Description: Represents a deck of cards, showing the back of the top card. Should handle interactions like drawing a card.
+
+Component Name: DiscardPile
+Priority: High
+Use Cases:
+  - Rummy: The pile where players discard cards.
+  - Uno: The pile where players play their cards.
+  - Most card games with a discard mechanic.
+Description: Shows the top card of the discard pile. Players can interact with it to play or sometimes draw cards.
+
+Component Name: CardSlot
+Priority: Medium
+Use Cases:
+  - Solitaire: The foundation piles where suits are built.
+  - Rummy: Areas for players to lay down melds.
+  - Poker: Community card areas (the flop, turn, river).
+Description: A designated area on the play surface where a card can be placed. Can be empty or hold a card, and might have rules for what can be placed there.
+
+Component Name: PlayerHandDisplay
+Priority: High
+Use Cases:
+  - Poker: Showing other players' hands (or just the number of cards they have).
+  - Rummy: A compact view of opponent hands.
+Description: A component to display other players' hands, often in a simplified form (e.g., just the card backs and count).
+
+Component Name: Trick
+Priority: Medium
+Use Cases:
+  - Bridge: Displaying the cards played in the current trick.
+  - Hearts: Showing the cards for the current round.
+  - Spades: The central area where cards for a trick are played.
+Description: Displays the set of cards played in a single round of a trick-taking game.
+
+Component Name: BiddingPopup
+Priority: Low
+Use Cases:
+  - Bridge: For players to make bids.
+  - Poker: For handling bets, raises, and folds.
+Description: A modal or popup for games that involve bidding or betting, allowing players to choose their action and amount.
+
+Component Name: Scoreboard
+Priority: High
+Use Cases:
+  - Rummy: Tracking points from melds and remaining cards.
+  - Bridge: Keeping track of contract scores, overtricks, and undertricks.
+  - Hearts: Displaying the accumulated points for each player.
+Description: A more detailed scoreboard than the general leaderboard, tailored to the specific scoring rules of a card game.
+
+Component Name: Meld
+Priority: Medium
+Use Cases:
+  - Rummy: To display a set or run of cards laid down by a player.
+  - Canasta: For showing merged sets of cards.
+Description: A component to group and display a specific combination of cards (a meld), separate from the player's hand.
+
+Component Name: CardFan
+Priority: Medium
+Use Cases:
+  - Any game where players have a hand of cards that needs to be displayed in a compact, overlapping way.
+Description: A layout component that arranges cards in a fanned-out style, so they overlap but are still individually identifiable and selectable.
+
+Component Name: TrumpIndicator
+Priority: Low
+Use Cases:
+  - Bridge: To show the trump suit for the current hand.
+  - Spades: To indicate that spades are the trump suit.
+Description: A small UI element that displays the current trump suit.
+
+Component Name: LastPlayedCard
+Priority: Medium
+Use Cases:
+  - Uno: Highlighting the last card played to guide the next player.
+  - Most card games: To give context for the last action taken.
+Description: A special display for the last card played, perhaps with an animation or highlight, to make it clear what the previous move was.

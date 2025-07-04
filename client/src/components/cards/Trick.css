@@ -1,0 +1,11 @@
+.trick-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.trick-card {
+  margin: 0 10px;
+  text-align: center;
+}
