@@ -41,32 +41,71 @@ const dummyPlayers: Player[] = [
     { id: '5', nickname: 'Fifth Place', avatar: '/avatars/avatar5.png', score: 300, hasAnswered: false },
   ];
 
-const quizClashViews = [
-    { name: 'Host Starting', component: <QuizClashHostStartingView timer={10} /> },
-    { name: 'Host Asking Question', component: <QuizClashHostAskingQuestionView round={1} totalRounds={10} timer={10} answeredCount={2} totalPlayers={5} question="What is the capital of France?" answers={['Paris', 'London', 'Berlin', 'Madrid']} /> },
-    { name: 'Host Reveal', component: <QuizClashHostRevealView question="What is the capital of France?" answers={['Paris', 'London', 'Berlin', 'Madrid']} answerCounts={{0: 3, 1: 1, 2: 1}} correctAnswerIndex={0} players={dummyPlayers} /> },
-    { name: 'Host Finished', component: <QuizClashHostFinishedView players={dummyPlayers} onPlayAgain={() => {}} /> },
-    { name: 'Player Starting', component: <QuizClashPlayerStartingView player={dummyPlayer} /> },
-    { name: 'Player Answering', component: <QuizClashPlayerAnsweringView answers={['', '', '', '']} onAnswer={() => {}} disabled={false} selectedAnswer={null} /> },
-    { name: 'Player Reveal (Correct)', component: <QuizClashPlayerRevealingAnswerView wasCorrect={true} pointsGained={100} lastRank={3} newRank={2} /> },
-    { name: 'Player Reveal (Incorrect)', component: <QuizClashPlayerRevealingAnswerView wasCorrect={false} pointsGained={0} lastRank={2} newRank={3} /> },
-    { name: 'Player Finished', component: <QuizClashPlayerFinishedView rank={2} playerCount={5} score={1200} topPlayers={dummyPlayers} onPlayAgain={() => {}} onBackToLobby={() => {}} /> },
-];
+const quizClashViews = {
+    'Starting': {
+        host: <QuizClashHostStartingView timer={10} />,
+        player: <QuizClashPlayerStartingView player={dummyPlayer} />
+    },
+    'Asking Question': {
+        host: <QuizClashHostAskingQuestionView round={1} totalRounds={10} timer={10} answeredCount={2} totalPlayers={5} question="What is the capital of France?" answers={['Paris', 'London', 'Berlin', 'Madrid']} />,
+        player: <QuizClashPlayerAnsweringView answers={['', '', '', '']} onAnswer={() => {}} disabled={false} selectedAnswer={null} />
+    },
+    'Reveal': {
+        host: <QuizClashHostRevealView question="What is the capital of France?" answers={['Paris', 'London', 'Berlin', 'Madrid']} answerCounts={{0: 3, 1: 1, 2: 1}} correctAnswerIndex={0} players={dummyPlayers} />,
+        player: <QuizClashPlayerRevealingAnswerView wasCorrect={true} pointsGained={100} lastRank={3} newRank={2} />
+    },
+    'Finished': {
+        host: <QuizClashHostFinishedView players={dummyPlayers} onPlayAgain={() => {}} />,
+        player: <QuizClashPlayerFinishedView rank={2} playerCount={5} score={1200} topPlayers={dummyPlayers} onPlayAgain={() => {}} onBackToLobby={() => {}} />
+    }
+};
 
-const fakeNewsViews = [
-    { name: 'Host Starting', component: <FakeNewsHostStartingView timer={10} /> },
-    { name: 'Host Writing', component: <FakeNewsHostWritingView question="The best thing about pineapple on pizza is ________." players={dummyPlayers} /> },
-    { name: 'Host Voting', component: <FakeNewsHostVotingView question="The best thing about pineapple on pizza is ________." options={['its sweetness', 'its juiciness', 'the texture', 'absolutely nothing']} /> },
-    { name: 'Player Starting', component: <FakeNewsPlayerStartingView /> },
-    { name: 'Player Writing', component: <FakeNewsPlayerWritingView question="The best thing about pineapple on pizza is ________." onLieChange={() => {}} onSubmit={() => {}} lie="" /> },
-];
+const fakeNewsViews = {
+    'Starting': {
+        host: <FakeNewsHostStartingView timer={10} />,
+        player: <FakeNewsPlayerStartingView />
+    },
+    'Writing': {
+        host: <FakeNewsHostWritingView question="The best thing about pineapple on pizza is ________." players={dummyPlayers} />,
+        player: <FakeNewsPlayerWritingView question="The best thing about pineapple on pizza is ________." onLieChange={() => {}} onSubmit={() => {}} lie="" />
+    },
+    'Voting': {
+        host: <FakeNewsHostVotingView question="The best thing about pineapple on pizza is ________." options={['its sweetness', 'its juiciness', 'the texture', 'absolutely nothing']} />,
+        player: null
+    }
+};
 
-const cardsWarViews = [
-    { name: 'Host Starting', component: <CardsWarHostStartingView timer={10} /> },
-    { name: 'Host Round in Progress', component: <CardsWarHostRoundInProgressView player1={dummyPlayers[0]} player2={dummyPlayers[1]} player1Card={{ suit: 'hearts', rank: 10, value: 10, name: '10' }} player2Card={{ suit: 'spades', rank: 5, value: 5, name: '5' }} /> },
-    { name: 'Host Finished', component: <CardsWarHostFinishedView winner={dummyPlayer} /> },
-];
+const cardsWarViews = {
+    'Starting': {
+        host: <CardsWarHostStartingView timer={10} />,
+        player: null
+    },
+    'Round in Progress': {
+        host: <CardsWarHostRoundInProgressView player1={dummyPlayers[0]} player2={dummyPlayers[1]} player1Card={{ suit: 'hearts', rank: 10, value: 10, name: '10' }} player2Card={{ suit: 'spades', rank: 5, value: 5, name: '5' }} />,
+        player: null
+    },
+    'Finished': {
+        host: <CardsWarHostFinishedView winner={dummyPlayer} />,
+        player: null
+    }
+};
 
+
+const HostResolutions = {
+    'Desktop (Default)': { width: '100%', height: '100%' },
+    'iPad Air': { height: '820px', width: '1180px' },
+    'iPad Pro 12.9"': { height: '1024px', width: '1366px' },
+};
+const playerResolutions={
+    'iPhone 12/13 Pro': { width: '390px', height: '844px' },
+    'Samsung Galaxy S21': { width: '360px', height: '800px' },
+    'Google Pixel 5': { width: '393px', height: '851px' },
+    'iPhone 14 Pro Max': { width: '430px', height: '932px' },
+    'Samsung Galaxy S23 Ultra': { width: '412px', height: '892px' },
+    'Google Pixel 7 Pro': { width: '412px', height: '892px' },
+    'iPad Air': { width: '820px', height: '1180px' },
+    'iPad Pro 12.9"': { width: '1024px', height: '1366px' },
+};
 
 const allViews = {
     'QuizClash': quizClashViews,
@@ -76,53 +115,84 @@ const allViews = {
 
 
 const GameUITestPage: React.FC = () => {
-  const [currentGame, setCurrentGame] = useState('QuizClash');
-  const [currentViewIndex, setCurrentViewIndex] = useState(0);
-  const [viewType, setViewType] = useState('host'); // 'host' or 'player'
+  const [currentGame, setCurrentGame] = useState<keyof typeof allViews>('QuizClash');
+  const [currentStateName, setCurrentStateName] = useState(Object.keys(allViews['QuizClash'])[0]);
+  const [viewType, setViewType] = useState<'host' | 'player'>('host');
+  const [resolutions, setResolutions] = useState({
+    host: 'Desktop (Default)',
+    player: 'iPhone 14 Pro Max',
+  });
 
   const handleGameChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setCurrentGame(event.target.value);
-    setCurrentViewIndex(0);
+    const newGame = event.target.value as keyof typeof allViews;
+    setCurrentGame(newGame);
+    setCurrentStateName(Object.keys(allViews[newGame])[0]);
   };
 
-  const filteredViews = allViews[currentGame as keyof typeof allViews].filter(view =>
-    view.name.toLowerCase().includes(viewType)
-  );
+  const gameViews = allViews[currentGame];
+  const gameStates = Object.keys(gameViews);
+  const currentStateIndex = gameStates.indexOf(currentStateName);
 
   const handleNextView = () => {
-    setCurrentViewIndex((prevIndex) => (prevIndex + 1) % filteredViews.length);
+    const nextIndex = (currentStateIndex + 1) % gameStates.length;
+    setCurrentStateName(gameStates[nextIndex]);
   };
 
   const handlePrevView = () => {
-    setCurrentViewIndex((prevIndex) => (prevIndex - 1 + filteredViews.length) % filteredViews.length);
+    const prevIndex = (currentStateIndex - 1 + gameStates.length) % gameStates.length;
+    setCurrentStateName(gameStates[prevIndex]);
   };
 
-  const currentView = filteredViews[currentViewIndex];
+  const currentView = gameViews[currentStateName as keyof typeof gameViews]?.[viewType];
+
+  const currentResolutionSet = viewType === 'host' ? HostResolutions : playerResolutions;
+  const currentResolutionName = resolutions[viewType];
+
+  const containerStyle = {
+    border: '2px solid var(--border-color)',
+    borderRadius: 'var(--border-radius)',
+    padding: '2rem',
+    background: `var(--background-light)`,
+    minHeight: '60vh',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: currentResolutionSet[currentResolutionName as keyof typeof currentResolutionSet]?.width ?? '100%',
+    height: currentResolutionSet[currentResolutionName as keyof typeof currentResolutionSet]?.height ?? '100%',
+    margin: 'auto',
+    overflow: 'auto',
+    transition: 'width 0.3s, height 0.3s'
+  };
 
   return (
     <div style={{ padding: '2rem', background: 'var(--background-dark)', color: 'var(--text-main)', minHeight: '100vh' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-        <Button onClick={handlePrevView} disabled={filteredViews.length < 2}>Previous View</Button>
+        <Button onClick={handlePrevView} disabled={gameStates.length < 2}>Previous State</Button>
         <div style={{ textAlign: 'center' }}>
-          <div>
+          <div style={{ marginBottom: '1rem' }}>
             <select value={currentGame} onChange={handleGameChange} style={{ marginRight: '1rem' }}>
               <option value="QuizClash">QuizClash</option>
               <option value="FakeNews">FakeNews</option>
               <option value="CardsWar">CardsWar</option>
             </select>
             <label style={{ marginRight: '1rem' }}>
-              <input type="radio" name="viewType" value="host" checked={viewType === 'host'} onChange={() => { setViewType('host'); setCurrentViewIndex(0); }} /> Host
+              <input type="radio" name="viewType" value="host" checked={viewType === 'host'} onChange={() => setViewType('host')} /> Host
             </label>
             <label>
-              <input type="radio" name="viewType" value="player" checked={viewType === 'player'} onChange={() => { setViewType('player'); setCurrentViewIndex(0); }} /> Player
+              <input type="radio" name="viewType" value="player" checked={viewType === 'player'} onChange={() => setViewType('player')} /> Player
             </label>
           </div>
-          <h2 style={{ marginTop: '1rem' }}>{currentView?.name || 'No views available'}</h2>
+          <div>
+            <select value={currentResolutionName} onChange={(e) => setResolutions(prev => ({ ...prev, [viewType]: e.target.value }))}>
+                {Object.keys(currentResolutionSet).map(res => <option key={res} value={res}>{res}</option>)}
+            </select>
+          </div>
+          <h2 style={{ marginTop: '1rem' }}>{currentStateName}</h2>
         </div>
-        <Button onClick={handleNextView} disabled={filteredViews.length < 2}>Next View</Button>
+        <Button onClick={handleNextView} disabled={gameStates.length < 2}>Next State</Button>
       </div>
-      <div style={{ border: '2px solid var(--border-color)', borderRadius: 'var(--border-radius)', padding: '2rem', background: 'var(--background-light)', minHeight: '60vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        {currentView ? currentView.component : <p>No {viewType} views defined for this game.</p>}
+      <div style={containerStyle}>
+        {currentView ? currentView : <p>No {viewType} view defined for this state.</p>}
       </div>
     </div>
   );
