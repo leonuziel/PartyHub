@@ -22,21 +22,25 @@ PartyHub is a real-time, interactive social gaming platform. The architecture is
 │   │   ├── BaseGame.ts
 │   │   ├── GameFactory.ts
 │   │   ├── GameManager.ts
+│   │   ├── configurations/
+│   │   │   └── quizclash.json
 │   │   └── games/
 │   │       ├── cardGames/
 │   │       │   ├── cards.ts
 │   │       │   └── CardsWarGame.ts
+│   │       ├── ConfigurableGame.ts
 │   │       ├── FakeNewsGame.ts
-│   │       ├── QuizClashGame.ts
-│   │       └── quizclash_questions.json
+│   │       └── QuizClashGame.ts
 │   ├── room/
 │   │   ├── Room.ts
 │   │   └── RoomManager.ts
 │   ├── routes/
-│   │   └── debug.ts
+│   │   ├── debug.ts
+│   │   └── gameConfig.ts
 │   ├── server.ts
-│   ├── types/
+│   │   ├── types/
 │   │   ├── enums.ts
+│   │   ├── GameConfiguration.ts
 │   │   └── interfaces.ts
 │   └── utils/
 │       └── codeGenerator.ts
@@ -51,18 +55,21 @@ PartyHub is a real-time, interactive social gaming platform. The architecture is
 │   ├── components/
 │   │   ├── cards/
 │   │   ├── common/
+│   │   ├── ComponentRegistry.ts
 │   │   ├── controls/
 │   │   ├── display/
 │   │   ├── gameplay/
 │   │   └── layout/
 │   ├── game/
 │   │   ├── CardsWar/
+│   │   ├── DynamicViewRenderer.tsx
 │   │   ├── FakeNewsGame/
 │   │   ├── QuizClash/
 │   │   └── GameContainer.tsx
 │   ├── hooks/
 │   │   └── usePlayerRole.ts
 │   ├── pages/
+│   │   └── GameCreatorPage.tsx
 │   ├── services/
 │   │   └── socketService.ts
 │   ├── store/
@@ -99,14 +106,23 @@ The system uses a client-server model with a Node.js/Express/Socket.IO backend a
 #### 2. Backend Design Summary
 
 - **Room Management**: `RoomManager` manages all `Room` instances. A `Room` contains players, state (lobby, in-game, finished), and a `GameManager`.
-- **Game Logic**: `GameManager` manages the lifecycle of a game within a room. It uses a `GameFactory` to create specific game instances (e.g., `QuizClashGame`, `FakeNewsGame`, `CardsWarGame`) that extend an abstract `BaseGame` class. This makes adding new games modular.
-- **Communication**: A REST API is exposed via Express for debugging purposes under `/routes/debug.ts`. All other real-time communication happens via a Socket.IO `SocketManager`. The primary event is `game:state_update`, which sends the complete, sanitized game state to all clients.
+- **Game Logic**: `GameManager` manages the lifecycle of a game using a `GameFactory`. The factory now implements a **dual-system approach**:
+    1. It first checks for a `[gameId].json` file in `/src/game/configurations/`.
+    2. If a configuration file is found, it instantiates the generic `ConfigurableGame` engine, which runs the game based on the rules and states defined in the JSON.
+    3. If no configuration is found, it falls back to the legacy system, creating a specific hardcoded game instance (e.g., `QuizClashGame`) that extends `BaseGame`.
+- **Communication**: The backend uses Socket.IO for real-time communication, managed by `SocketManager`. The primary event is `game:state_update`, which sends the complete game state to all clients. A REST API is also exposed via Express for two purposes:
+    - `/debug`: Endpoints for server debugging.
+    - `/api/game-configs`: A full CRUD API for creating, reading, updating, and deleting game configuration JSON files.
 
 #### 3. Frontend Design Summary
 
-- **State Management**: Zustand is used for global state, split into multiple stores within the `/store` directory.
-- **Component Structure**: The UI is divided into pages (`/pages`). The `GamePage` contains a `GameContainer` that dynamically renders the correct game view (e.g., `QuizClashHostView`, `FakeNewsPlayerView`) based on the `gameId` from the `gameStore` and the user's role (host or player). Reusable components are located in `/components`.
-- **Communication**: `services/socketService.ts` encapsulates all Socket.IO logic. It listens for server events and updates the Zustand stores. UI components do not interact with the socket directly; they read from the stores and call methods on the `socketService` to send actions to the server.
+- **State Management**: Zustand is used for global state, split into multiple stores within the `/store` directory. `gameStore` now holds an `isConfigurable` flag to inform the UI which rendering system to use.
+- **Component Structure**: The UI is divided into pages (`/pages`). The `HomePage` now fetches a list of all games (both hardcoded and from the `/api/game-configs` endpoint) to populate the game selection screen.
+- **Dynamic Rendering**: The `GamePage` contains a `GameContainer` that acts as a router.
+    - If `isConfigurable` is `false`, it renders the specific, hardcoded game view (e.g., `QuizClashHostView`).
+    - If `isConfigurable` is `true`, it renders the `DynamicViewRenderer`. This component reads the UI definition from the game state, looks up components in the `ComponentRegistry`, and renders them with the specified props. This allows for fully dynamic UI generation from the game configuration file.
+- **Game Creation**: A new `GameCreatorPage` has been added, providing a user interface that communicates with the `/api/game-configs` endpoint to allow users to create and save their own game configuration files.
+- **Communication**: `services/socketService.ts` encapsulates all Socket.IO logic. It listens for `game:state_update` events and updates the Zustand stores, including the `isConfigurable` flag based on the incoming data structure. UI components do not interact with the socket directly.
 
 #### 4. Design System Summary
 
@@ -188,3 +204,4 @@ The system uses a client-server model with a Node.js/Express/Socket.IO backend a
 - **CardsWar**: A simple card game where players compare cards, and the higher card wins. Ties result in a "war". Contains views for both host and player.
 - **FakeNewsGame**: A trivia game where players submit fake answers to a question, and then vote on what they believe is the real answer. Contains views for writing, voting, and revealing answers for both host and player.
 - **QuizClash**: A multiple-choice trivia game where players answer questions as quickly as possible. Contains views for asking questions and revealing answers for both host and player.
+- **(Dynamically Created Games)**: The new system allows for an unlimited number of games to be created via JSON configuration. These games are powered by the `ConfigurableGame` engine and the `DynamicViewRenderer` on the frontend.

@@ -47,6 +47,41 @@
         "action": "timerExpires"
       }
     ],
-    "ui": {}
+    "ui": {
+      "STARTING": {
+        "host": {
+          "components": [
+            {
+              "component": "GameTitle",
+              "props": {
+                "title": "QuizClash"
+              }
+            },
+            {
+                "component": "CenteredMessage",
+                "props": {
+                    "children": "Getting ready to start..."
+                }
+            },
+            {
+              "component": "CountdownTimer",
+              "props": {
+                "duration": 5
+              }
+            }
+          ]
+        },
+        "player": {
+          "components": [
+            {
+                "component": "CenteredMessage",
+                "props": {
+                    "children": "The game is about to begin!"
+                }
+            }
+          ]
+        }
+      }
+    }
   }
   

@@ -32,8 +32,9 @@ export interface QuizClashQuestion {
 
 
 export interface GameState {
+  isConfigurable: boolean;
   gameState: any | null; // Can be any game's state
-  setGameState: (state: any) => void;
+  setGameState: (state: any, isConfigurable?: boolean) => void;
   clearGameState: () => void;
 }
 
