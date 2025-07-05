@@ -1,0 +1,52 @@
+{
+    "metadata": {
+      "gameId": "quizclash",
+      "title": "QuizClash (Config)",
+      "description": "A dynamically configured trivia game.",
+      "minPlayers": 1,
+      "maxPlayers": 8
+    },
+    "playerAttributes": {
+      "score": 0,
+      "currentAnswer": null
+    },
+    "initialState": "STARTING",
+    "states": {
+      "STARTING": {
+        "onEnter": "startTimer(3)"
+      },
+      "ASKING_QUESTION": {},
+      "REVEAL_ANSWER": {},
+      "FINISHED": {}
+    },
+    "actions": {
+      "startGame": {
+        "permission": ["host"]
+      },
+      "submitAnswer": {
+        "permission": ["player"]
+      },
+      "timerExpires": {
+        "permission": ["server"]
+      }
+    },
+    "transitions": [
+      {
+        "from": "STARTING",
+        "to": "ASKING_QUESTION",
+        "action": "timerExpires"
+      },
+      {
+        "from": "ASKING_QUESTION",
+        "to": "REVEAL_ANSWER",
+        "action": "timerExpires"
+      },
+      {
+        "from": "REVEAL_ANSWER",
+        "to": "ASKING_QUESTION",
+        "action": "timerExpires"
+      }
+    ],
+    "ui": {}
+  }
+  
