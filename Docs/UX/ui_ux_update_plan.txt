@@ -1,0 +1,219 @@
+# UI/UX Update Plan based on "Game Design Strategy"
+
+This document outlines the specific changes required to implement the new UI/UX design strategy across the PartyHub application. It translates the concepts from "Game design strategy.txt" into actionable tasks for developers, with expanded details for clarity.
+
+**Reference:** See `Docs/UX/Game design strategy.txt` for the full design philosophy.
+
+---
+
+## 1. Global Changes & Foundation
+
+These changes must be implemented first as they provide the foundation for the platform and game layers.
+
+**Target File:** `client/src/index.css`
+
+*   **Action:** Define the entire Platform Layer color palette and primary typography as CSS Custom Properties.
+    *   **Details:** This replaces the existing color scheme with the new dual-personality system. This is the foundational step for all other theme-related changes.
+    *   **CSS to Add:**
+        ```css
+        :root {
+          /* Platform Layer: The "Hub" */
+          --ph-color-bg-primary: #12101F; /* Void */
+          --ph-color-bg-secondary: #1C192B; /* Deep Hive */
+          --ph-color-text-primary: #EAE8FF; /* Ghost White */
+          --ph-color-text-secondary: #A09CC9; /* Lunar */
+          --ph-color-accent: #8A2BE2; /* Electric Orchid */
+          --ph-color-border-subtle: #33304D;
+
+          /* Typography */
+          --ph-font-family-platform: 'Inter', sans-serif;
+          /* Game-specific fonts to be defined in their respective CSS files 
+          --ph-font-family-game-heading: 'Bangers', cursive; (Example)
+          --ph-font-family-game-body: 'Luckiest Guy', cursive; (Example) */
+
+        }
+        ```
+
+*   **Action:** Update the base `body` styles to use the new platform variables.
+    *   **CSS to Update:**
+        ```css
+        body {
+          margin: 0;
+          font-family: var(--ph-font-family-platform);
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+          background-color: var(--ph-color-bg-primary);
+          color: var(--ph-color-text-primary);
+        }
+        ```
+
+*   **Action:** Import new fonts into the project.
+    *   **Details:** Add `<link>` tags to `client/public/index.html` to fetch the required font weights from a service like Google Fonts.
+        ```html
+        <!-- client/public/index.html -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Bangers&family=Luckiest+Guy&family=Special+Elite&family=Exo+2:wght@400;700&display=swap" rel="stylesheet">
+        ```
+
+---
+
+## 2. Platform Layer ("Hub") Updates
+
+These changes apply to the core application shell and UI outside of active gameplay. Goal: a clean, professional, and reliable feel.
+
+*   **Pages:** `HomePage.tsx`, `JoinPage.tsx`, `LobbyPage.tsx`
+    *   **Task:** Refactor all styles (inline and CSS classes) to use the new platform CSS variables. Create a unified stylesheet (`/pages/PageLayouts.css`) for common page container styles to ensure consistency and DRY principles.
+    *   **Typography:** All headings should use `Inter Semibold` (or `font-weight: 600`). All other text should use `Inter Regular`.
+
+*   **Components:**
+    *   `components/Button.tsx`, `components/ActionButton.tsx`:
+        *   **Task:** Style primary buttons with `background: var(--ph-color-accent); color: var(--ph-color-text-primary); border: none;`. On hover, slightly lighten the background color. Secondary buttons should have `background: transparent; color: var(--ph-color-accent); border: 1px solid var(--ph-color-accent);`.
+    *   `components/Card.tsx`, `components/GameCard.tsx`:
+        *   **Task:** Update styles to serve as the base for platform cards.
+        *   **Style:** `background: var(--ph-color-bg-secondary); border: 1px solid var(--ph-color-border-subtle); border-radius: 8px;`.
+        *   **Hover State:** `border-color: var(--ph-color-accent); box-shadow: 0 0 10px 0 var(--ph-color-accent);`.
+    *   `components/PlayerCard.tsx` (Lobby Version):
+        *   **Task:** Ensure this component uses the minimalist "Platform Version" styles in the lobby.
+        *   **Style:** Small avatar (`40px`), `font-family: var(--ph-font-family-platform)`, `font-weight: 400`. Flexbox layout for clean alignment.
+    *   `components/Modal.tsx`:
+        *   **Task:** Confirm this component exclusively uses platform styles (`--ph-color-bg-secondary`, etc.). This is crucial for the "pause" menu in-game.
+
+---
+
+## 3. Game Layer ("Party") Updates
+
+Goal: Energy, fun, and thematic immersion.
+
+*   **Game: QuizClash**
+    *   **Files:** `game/QuizClash/QuizClashHostView.css`, `game/QuizClash/QuizClashPlayerView.css`
+    *   **Task:** Define game-specific CSS variables in the root of the game's CSS file.
+        ```css
+        /* game/QuizClash/QuizClashHostView.css */
+        .quizclash-host-container {
+            --game-bg-gradient: linear-gradient(to right, #4A00E0, #8E2DE2);
+            --game-font-heading: 'Bangers', cursive;
+            --game-font-body: 'Luckiest Guy', cursive;
+            background: var(--game-bg-gradient);
+        }
+        ```
+    *   `components/QuestionDisplay.tsx`: When used in QuizClash, it should use `var(--game-font-heading)`. Add a text-shadow for pop.
+    *   `components/AnswerGrid.tsx`: Buttons should use the specified game colors (`#FF3B30`, etc.). The correct answer reveal should apply a class that sets the background to `var(--ph-color-accent)`.
+
+*   **Game: FakeNewsGame (Expanded Details)**
+    *   **Theme:** "Classified documents & conspiracy boards."
+    *   **Files:** `game/FakeNewsGame/*` and its own CSS file.
+    *   **Palette & Fonts:**
+        ```css
+        /* game/FakeNewsGame/FakeNews.css */
+        .fakenews-container {
+            --game-bg-color: #FBF0D9; /* Sepia */
+            --game-text-color: #4A4033; /* Dark Brown */
+            --game-accent-color: #D94A4A; /* 'Top Secret' Red */
+            --game-font-heading: 'Oswald', sans-serif;
+            --game-font-body: 'Special Elite', monospace;
+            background-color: var(--game-bg-color);
+            color: var(--game-text-color);
+        }
+        ```
+    *   **Component Styling:**
+        *   `views/PlayerWritingView.tsx`: The `TextAreaWithCounter` should be styled to look like a manila folder or memo pad, with a border of `1px dashed var(--game-text-color)`.
+        *   `views/PlayerVotingView.tsx`: Voting option buttons should be styled like case file tabs. On selection, the button gets a red "stamped" effect using `::after` pseudo-element with `content: 'VOTED';`.
+        *   `views/HostRevealView.tsx`: The correct answer card should animate in with a "DECLASSIFIED" stamp graphic, using `var(--ph-color-accent)` as the stamp color to tie it to the platform.
+
+*   **Game: CardsWar (Expanded Details)**
+    *   **Theme:** "High-stakes neon casino."
+    *   **Files:** `game/CardsWar/*` and its own CSS file.
+    *   **Palette & Fonts:**
+        ```css
+        /* game/CardsWar/CardsWar.css */
+        .cardswar-container {
+            --game-bg-image: url('/path/to/green-felt-texture.png');
+            --game-accent-neon-1: #FF00FF; /* Pink */
+            --game-accent-neon-2: #00FFFF; /* Cyan */
+            --game-font-heading: 'Exo 2', sans-serif;
+            background-color: #004d00;
+            background-image: var(--game-bg-image);
+        }
+        ```
+    *   **Component Styling:**
+        *   `components/cards/Card.tsx`: When in CardsWar, the card should have a `box-shadow` that uses one of the neon accents. On hover, the glow intensifies.
+        *   `views/HostWarDeclaredView.tsx`: Maximum drama. The entire view should have a red overlay (`background: rgba(255, 0, 0, 0.5)`). A huge "WAR" text object, styled with `var(--ph-color-accent)`, should animate onto the screen, shaking slightly.
+        *   `Trick.tsx`: The winning card should pulse with a bright white glow.
+
+*   **Game Components (General):**
+    *   `components/PlayerCard.tsx` (Game Version):
+        *   **Task:** Create a `.player-card--game-view` variant class.
+        *   **Style:** Increase size, use a bolder font (`Inter Semibold`), and add a prominent score display area. The player's avatar should have a colored ring (`border: 2px solid var(--ph-color-accent)`) if they are the current leader.
+    *   `components/cards/Card.tsx`:
+        *   **Task:** Refactor to accept a `variant` prop (e.g., `variant="war"` or `variant="poker"`). This prop will apply a game-specific CSS class (`.card--war`) that overrides base styles.
+
+---
+
+## 4. Visual Bridge & Transition Updates
+
+*   **File:** `game/GameContainer.tsx`
+    *   **Task:** Implement the "Launch Transition" animation.
+    *   **Implementation Details:**
+        1.  Add a `transitionState` to `gameStore`: `null | 'entering' | 'active'`.
+        2.  When the game starts, set `transitionState` to `'entering'`.
+        3.  In `GameContainer.tsx`, render a fullscreen overlay when `transitionState === 'entering'`.
+        4.  Use CSS keyframe animations on this overlay to:
+            *   `0%`: `opacity: 0`
+            *   `10%`: `opacity: 1; background-color: var(--ph-color-accent);` (The flash)
+            *   `20%-70%`: Show PartyHub logo, which then transforms/fades into the `GameBranding.tsx` component's logo.
+            *   `100%`: `opacity: 0;`
+        5.  Use a `setTimeout` or `onAnimationEnd` event to set `transitionState` to `'active'` and hide the overlay.
+
+*   **Iconography Audit:**
+    *   **Task:** Ensure platform-level icons are consistent.
+    *   **Implementation:** Use a library like `react-icons` for easy access to icon sets.
+    *   **Checklist:** In all game views, find and replace icons for:
+        *   Settings (`<FaCog />` from FontAwesome)
+        *   Audio (`<FaVolumeUp />` / `<FaVolumeMute />`)
+        *   Player List (`<FaUsers />`)
+    *   All these icons must be styled to use `color: var(--ph-color-text-primary)`.
+
+---
+
+## 5. Voice & Tone Updates (Expanded Examples)
+
+*   **Platform Voice (Concierge):**
+    *   **Files:** `HomePage.tsx`, `JoinPage.tsx`, `LobbyPage.tsx`, error messages.
+    *   **Examples:**
+        *   **JoinPage.tsx, Placeholder:** Change from "Enter code" to "Enter 4-digit Room Code".
+        *   **Error Message:** Change "Invalid code" to "Room not found. Please check the code and try again."
+        *   **LobbyPage.tsx, Start Button:** If not enough players, disable it and show a tooltip: "Waiting for at least 2 players to join."
+
+*   **Game Voice (Host):**
+    *   **Files:** All `*HostView.tsx`, `QuestionHeader.tsx`, `WinnerDisplay.tsx`, etc.
+    *   **Examples:**
+        *   **QuizClash, `HostAskingQuestionView.tsx`:** "Get those brains buzzing! This one's a doozy..."
+        *   **FakeNews, `HostVotingView.tsx`:** "The lies are in! Sniff out the truth like a bloodhound on the scent. Or, you know, just guess."
+        *   **CardsWar, `HostWarDeclaredView.tsx`:** "IT'S A TIE! That means WAR! Prepare for battle!"
+        *   **WinnerDisplay.tsx:** "And the winner, after a grueling battle of wits, is **[PlayerName]**! Shower them with praise (or jealousy)!"
+
+---
+
+## 6. Sonic System Updates (Expanded Details)
+
+*   **Implementation:** Create a `services/audioService.ts`. This service will encapsulate all `new Audio()` logic, manage a list of sounds, and include methods like `play('ui-click')`, `stop('game-music')`, and `duckAll(true/false)`.
+*   **Platform Sounds:**
+    *   `ui-click.mp3`: Call `audioService.play('ui-click')` in the `onClick` handler of `Button.tsx`.
+    *   `notification.mp3`: Call `audioService.play('notification')` within `socketService.ts` when a relevant event (e.g., `friend_request_received`) is handled.
+*   **Game Sounds:**
+    *   **Background Music:** In each game's main `*HostView.tsx`, use a `useEffect` hook:
+        ```javascript
+        useEffect(() => {
+          audioService.play('quiz-music', { loop: true });
+          return () => audioService.stop('quiz-music');
+        }, []);
+        ```
+    *   **Timer Tick:** In `CountdownTimer.tsx`, when `timeRemaining <= 5`, start a looping `timer-tick.mp3`.
+    *   **Event Stingers:**
+        *   `correct-answer.mp3` / `wrong-answer.mp3`: Call from `AnswerResult.tsx` based on props.
+        *   `war-declaration.mp3`: An epic, loud sound. Call from `CardsWarHostView.tsx` when the state changes to `war_declared`.
+    *   **Universal Sounds:**
+        *   `PartyHub-jingle.mp3`: Call from `Podium.tsx` when it first becomes visible.
+        *   `achievement-unlocked.mp3`: Call from `AwardDisplay.tsx` or `SpecialAwards.tsx`.
+*   **Bridge:** The `audioService.duckAll(true)` method should lower the volume of all sounds tagged as 'platform'. Call it from `GameContainer.tsx` when the game state becomes active. Call `audioService.duckAll(false)` when returning to the lobby.
