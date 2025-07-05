@@ -1,40 +1,26 @@
-.join-page-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 20px;
-  background: #1a1a2e;
-}
-
 .join-card {
   width: 100%;
   max-width: 450px;
-  background: #2a2a3e;
-  padding: 40px;
-  border-radius: 16px;
-  color: #fff;
+  background: var(--ph-color-bg-secondary);
+  padding: var(--spacing-xl);
+  border-radius: var(--border-radius-lg);
+  color: var(--ph-color-text-primary);
   text-align: center;
+  border: 1px solid var(--ph-color-border-subtle);
 }
 
 .join-logo {
   height: 60px;
-  margin-bottom: 20px;
-}
-
-.join-title {
-  font-size: 2.5rem;
-  font-weight: 800;
-  margin-bottom: 20px;
+  margin-bottom: var(--spacing-md);
 }
 
 .error-message {
-  color: #ff4d4d;
-  margin-bottom: 20px;
+  color: var(--error-color);
+  margin-bottom: var(--spacing-md);
 }
 
 .form-group {
-  margin-bottom: 25px;
+  margin-bottom: var(--spacing-lg);
   text-align: left;
 }
 
@@ -42,30 +28,34 @@
   display: block;
   font-size: 1.1rem;
   font-weight: 600;
-  margin-bottom: 10px;
-  color: #e0e0ff;
+  margin-bottom: var(--spacing-sm);
+  color: var(--ph-color-text-secondary);
 }
 
 .text-input {
   width: 100%;
-  padding: 12px;
-  border-radius: 8px;
-  border: 2px solid #3a3a5e;
-  background-color: #1a1a2e;
-  color: #fff;
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--ph-color-border-subtle);
+  background-color: var(--ph-color-bg-primary);
+  color: var(--ph-color-text-primary);
   font-size: 1rem;
-  transition: border-color 0.2s;
+}
+
+.text-input::placeholder {
+    color: var(--ph-color-text-secondary);
 }
 
 .text-input:focus {
   outline: none;
-  border-color: #7b7dff;
+  border-color: var(--ph-color-accent);
+  box-shadow: 0 0 5px var(--ph-color-accent);
 }
 
 .avatar-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
+  gap: var(--spacing-md);
 }
 
 .avatar-option {
@@ -73,15 +63,16 @@
   border-radius: 50%;
   overflow: hidden;
   border: 4px solid transparent;
-  transition: border-color 0.2s;
+  padding: 2px;
 }
 
 .avatar-option.selected {
-  border-color: #7b7dff;
+  border-color: var(--ph-color-accent);
 }
 
 .avatar-option img {
   width: 100%;
   height: 100%;
   display: block;
+  border-radius: 50%;
 }

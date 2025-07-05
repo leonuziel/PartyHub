@@ -1,0 +1,60 @@
+.button {
+    width: 100%;
+    font-family: var(--ph-font-family-platform);
+    font-weight: 600;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border: 1px solid transparent;
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.2s ease;
+}
+
+.button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--ph-color-accent);
+}
+
+.button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.button:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: var(--ph-color-border-subtle);
+    color: var(--ph-color-text-secondary);
+    transform: none;
+    box-shadow: none;
+}
+
+/* Primary Action Button */
+.primary {
+    background: var(--ph-color-accent);
+    color: var(--ph-color-text-primary);
+    border: none;
+}
+
+.primary:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--ph-color-accent) 90%, white);
+}
+
+/* Secondary Button */
+.secondary {
+    background: transparent;
+    color: var(--ph-color-accent);
+    border: 1px solid var(--ph-color-accent);
+}
+
+.secondary:hover:not(:disabled) {
+    background-color: var(--ph-color-accent);
+    color: var(--ph-color-text-primary);
+}

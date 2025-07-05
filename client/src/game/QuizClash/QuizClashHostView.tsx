@@ -1,7 +1,7 @@
 import React from 'react';
 import { useGameStore } from '../../store/gameStore';
 import { QuizClashGameState, QuizClashRevealState } from '../../types/types';
-import { Spinner } from '../../components/Spinner';
+import { Spinner } from '../../components/common/Spinner';
 import { HostStartingView } from './views/HostStartingView';
 import { HostFinishedView } from './views/HostFinishedView';
 import { HostRevealView } from './views/HostRevealView';

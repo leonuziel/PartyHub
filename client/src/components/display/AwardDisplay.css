@@ -1,20 +1,20 @@
 .award-display {
-  padding: 1.5rem;
-  background: var(--accent-gradient, var(--accent-color));
-  color: var(--text-on-primary);
+  padding: var(--spacing-lg);
+  background: var(--ph-color-accent);
+  color: var(--ph-color-text-primary);
   border-radius: var(--border-radius-md);
   text-align: center;
-  border: 2px solid var(--border-color);
+  border: 1px solid var(--ph-color-border-subtle);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .award-name {
   font-size: 1.8rem;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .award-description {
   font-size: 1rem;
-  margin-top: 0.5rem;
+  margin-top: var(--spacing-sm);
   opacity: 0.9;
 }

@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { useDebugStore } from '../store/debugStore';
-import { usePlayerStore } from '../store/playerStore';
-import { useRoomStore } from '../store/roomStore';
-import { useGameStore } from '../store/gameStore';
-import { usePlayerHandStore } from '../store/playerHandStore';
+import { useDebugStore } from '../../store/debugStore';
+import { usePlayerStore } from '../../store/playerStore';
+import { useRoomStore } from '../../store/roomStore';
+import { useGameStore } from '../../store/gameStore';
+import { usePlayerHandStore } from '../../store/playerHandStore';
 
 export function DebugPanel() {
     const [isVisible, setIsVisible] = useState(false);
-    const { connectionStatus, lastEvent } = useDebugStore((s) => s);
-    const playerState = usePlayerStore((s) => s);
-    const roomState = useRoomStore((s) => s);
-    const gameState = useGameStore((s) => s.gameState);
-    const playerHandState = usePlayerHandStore((s) => s);
-    const messageLog = useDebugStore((s) => s.messageLog);
+    const { connectionStatus, lastEvent } = useDebugStore((s: any) => s);
+    const playerState = usePlayerStore((s: any) => s);
+    const roomState = useRoomStore((s: any) => s);
+    const gameState = useGameStore((s: any) => s.gameState);
+    const playerHandState = usePlayerHandStore((s: any) => s);
+    const messageLog = useDebugStore((s: any) => s.messageLog);
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
@@ -92,7 +92,7 @@ export function DebugPanel() {
             <details>
                 <summary><strong>Socket.IO Log ({messageLog.length})</strong></summary>
                 <div style={{ ...preStyle, maxHeight: '500px', }}>
-                    {messageLog.slice().reverse().map((msg, index) => (
+                    {messageLog.slice().reverse().map((msg: any, index: number) => (
                         <div key={index} style={{ marginBottom: '10px' }}>
                             <strong style={{ color: msg.direction === 'SENT' ? '#81c784' : '#64b5f6' }}>
                                 [{msg.direction}] {msg.event}

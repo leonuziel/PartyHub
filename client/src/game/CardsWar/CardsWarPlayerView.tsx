@@ -4,7 +4,7 @@ import { useRoomStore } from '../../store/roomStore';
 import { usePlayerStore } from '../../store/playerStore';
 import { socketService } from '../../services/socketService';
 import { CardsWarGameState } from '../../types/types';
-import { PlayerStatusContainer } from '../../components/PlayerStatusContainer';
+import { PlayerStatusContainer } from '../../components/display/PlayerStatusContainer';
 import { PlayerStartingView } from './views/PlayerStartingView';
 import { PlayerPlayingView } from './views/PlayerPlayingView';
 import { PlayerWarTransitionView } from './views/PlayerWarTransitionView';

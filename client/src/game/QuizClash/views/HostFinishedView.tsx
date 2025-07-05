@@ -1,8 +1,8 @@
 import React from 'react';
-import { GameTitle } from '../../../components/GameTitle';
-import { Podium } from '../../../components/Podium';
-import { Leaderboard } from '../../../components/Leaderboard';
-import { Button } from '../../../components/Button';
+import { GameTitle } from '../../../components/display/GameTitle';
+import { Podium } from '../../../components/display/Podium';
+import { Leaderboard } from '../../../components/display/Leaderboard';
+import { Button } from '../../../components/controls/Button';
 import { Player } from '../../../types/types';
 
 interface HostFinishedViewProps {

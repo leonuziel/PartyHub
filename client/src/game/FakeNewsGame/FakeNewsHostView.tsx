@@ -3,14 +3,14 @@ import { useGameStore } from '../../store/gameStore';
 import { useRoomStore } from '../../store/roomStore';
 import { FakeNewsGameState } from '../../types/types';
 
-import { Spinner } from '../../components/Spinner';
-import { HostViewContainer } from '../../components/HostViewContainer';
+import { Spinner } from '../../components/common/Spinner';
+import { HostViewContainer } from '../../components/layout/HostViewContainer';
 import { HostStartingView } from './views/HostStartingView';
 import { HostWritingView } from './views/HostWritingView';
 import { HostVotingView } from './views/HostVotingView';
 import { HostRevealView } from './views/HostRevealView';
 import { HostFinishedView } from './views/HostFinishedView';
-import './FakeNewsHostView.css';
+import './FakeNews.css';
 
 const FakeNewsHostView: React.FC = () => {
     const { gameState } = useGameStore();

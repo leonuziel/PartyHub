@@ -1,7 +1,7 @@
 import React from 'react';
 import { useGameStore } from '../../../store/gameStore';
 import { usePlayerStore } from '../../../store/playerStore';
-import { CenteredMessage } from '../../../components/CenteredMessage';
+import { CenteredMessage } from '../../../components/layout/CenteredMessage';
 import { TexasHoldemGameState } from '../../../types/types';
 
 export const PlayerFinishedView: React.FC = () => {

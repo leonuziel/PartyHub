@@ -1,0 +1,57 @@
+.answer-result {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  background-color: var(--ph-color-bg-secondary);
+  border: 1px solid var(--ph-color-border-subtle);
+  transition: all 0.3s ease-in-out;
+}
+
+.answer-result .answer-text {
+  flex-basis: 50%;
+  text-align: left;
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--ph-color-text-primary);
+}
+
+.answer-bar-container {
+  flex-grow: 1;
+  background-color: var(--ph-color-bg-primary); /* Darker background for the track */
+  border-radius: var(--border-radius-sm);
+  height: 30px;
+  overflow: hidden; /* Ensure the bar stays within the rounded corners */
+}
+
+.answer-bar {
+  height: 100%;
+  background-color: var(--ph-color-text-secondary); /* Default color for incorrect bars */
+  border-radius: var(--border-radius-sm);
+  transition: width 0.5s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* Push text to the end of the bar */
+  position: relative;
+  color: var(--ph-color-text-primary);
+}
+
+.answer-percentage {
+  padding: 0 var(--spacing-sm);
+  font-weight: bold;
+  mix-blend-mode: difference; /* Helps text remain visible on changing backgrounds */
+  filter: invert(1) grayscale(1) contrast(100);
+}
+
+.answer-result.incorrect {
+  opacity: 0.6;
+}
+
+.answer-result.correct {
+  transform: scale(1.02);
+  border-color: var(--ph-color-accent);
+}
+
+.answer-result.correct .answer-bar {
+  background-color: var(--ph-color-accent);
+}

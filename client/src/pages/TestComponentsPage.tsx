@@ -1,39 +1,47 @@
 import React, { useState } from 'react';
-// General Components
-import { Button } from '../components/Button';
-import { Card } from '../components/Card';
-import { CountdownTimer } from '../components/CountdownTimer';
-import { GameTitle } from '../components/GameTitle';
-import { Spinner } from '../components/Spinner';
-import Modal from '../components/Modal';
-import { TextAreaWithCounter } from '../components/TextAreaWithCounter';
-import { ActionButton } from '../components/ActionButton';
-import { PlayArea } from '../components/PlayArea';
-import { CenteredMessage } from '../components/CenteredMessage';
+// --- Controls ---
+import { Button } from '../components/controls/Button';
+import { ActionButton } from '../components/controls/ActionButton';
+import { TextAreaWithCounter } from '../components/controls/TextAreaWithCounter';
+import { VotingOptions } from '../components/controls/VotingOptions';
+import { AnswerGrid } from '../components/controls/AnswerGrid';
+import { GameCard } from '../components/controls/GameCard';
 
-// Player & Status Components
-import { Leaderboard } from '../components/Leaderboard';
-import { PlayerAvatar } from '../components/PlayerAvatar';
-import { Podium } from '../components/Podium';
-import { PlayerStatusContainer } from '../components/PlayerStatusContainer';
-import { WinnerDisplay } from '../components/WinnerDisplay';
-import { PlayerCard } from '../components/PlayerCard';
-import { PlayerInfo } from '../components/PlayerInfo';
-import { RankDisplay } from '../components/RankDisplay';
-import { PlayerStatusGrid } from '../components/PlayerStatusGrid';
-import { RankUpdate } from '../components/RankUpdate';
-import { PodiumList } from '../components/PodiumList';
+// --- Display ---
+import { GameTitle } from '../components/display/GameTitle';
+import { Leaderboard } from '../components/display/Leaderboard';
+import { PlayerAvatar } from '../components/display/PlayerAvatar';
+import { Podium } from '../components/display/Podium';
+import { PlayerStatusContainer } from '../components/display/PlayerStatusContainer';
+import { WinnerDisplay } from '../components/display/WinnerDisplay';
+import { PlayerCard } from '../components/display/PlayerCard';
+import { PlayerInfo } from '../components/display/PlayerInfo';
+import { RankDisplay } from '../components/display/RankDisplay';
+import { PlayerStatusGrid } from '../components/display/PlayerStatusGrid';
+import { RankUpdate } from '../components/display/RankUpdate';
+import { PodiumList } from '../components/display/PodiumList';
+import { QuestionDisplay } from '../components/display/QuestionDisplay';
+import { AnswerResult } from '../components/display/AnswerResult';
+import { AwardDisplay } from '../components/display/AwardDisplay';
+import { ResultsList } from '../components/display/ResultsList';
+import { SpecialAwards } from '../components/display/SpecialAwards';
+import { GameBranding } from '../components/display/GameBranding';
+import { QuestionHeader } from '../components/display/QuestionHeader';
 
-// Game Specific Components
-import { QuestionDisplay } from '../components/QuestionDisplay';
-import { AnswerResult } from '../components/AnswerResult';
-import { VotingOptions } from '../components/VotingOptions';
-import { AwardDisplay } from '../components/AwardDisplay';
-import { ResultsList } from '../components/ResultsList';
-import { SpecialAwards } from '../components/SpecialAwards';
-import { GameBranding } from '../components/GameBranding';
-import { QuestionHeader } from '../components/QuestionHeader';
-import { AnswerGrid } from '../components/AnswerGrid';
+// --- Gameplay ---
+import { CountdownTimer } from '../components/gameplay/CountdownTimer';
+
+// --- Layout ---
+import { PlayArea } from '../components/layout/PlayArea';
+import { CenteredMessage } from '../components/layout/CenteredMessage';
+
+// --- Common ---
+import { Spinner } from '../components/common/Spinner';
+import Modal from '../components/common/Modal';
+import { DebugPanel } from '../components/common/DebugPanel';
+
+// --- Cards ---
+import { Card } from '../components/cards/Card';
 
 // Card Game Components
 import { BiddingPopup } from '../components/cards/BiddingPopup';

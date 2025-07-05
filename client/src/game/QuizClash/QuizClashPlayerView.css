@@ -1,5 +1,20 @@
 @import '../GameView.css';
 
+.quizclash-player-container {
+    --game-bg-gradient: linear-gradient(to right, #4A00E0, #8E2DE2);
+    --game-font-heading: 'Bangers', cursive;
+    --game-font-body: 'Luckiest Guy', cursive;
+    
+    /* Specific Colors for QuizClash UI Elements */
+    --game-color-red: #FF3B30;
+    --game-color-blue: #007AFF;
+    --game-color-yellow: #FFCC00;
+    --game-color-green: #34C759;
+
+    background: var(--game-bg-gradient);
+    font-family: var(--game-font-body);
+}
+
 /* --- Base Player View --- */
 .player-view, .player-status-container, .player-reveal-container, .player-finished-container, .player-answer-view {
   display: flex;
@@ -15,7 +30,7 @@
 
 /* --- Player Answering View --- */
 .player-answer-view {
-  background-color: var(--background-dark);
+  background-color: transparent; /* Background is set on the container */
   padding: var(--spacing-sm);
   gap: var(--spacing-sm);
 }
@@ -87,14 +102,17 @@
 /* --- Player Reveal Container --- */
 .player-reveal-container {
   color: white;
+  transition: background-color 0.5s ease;
 }
-.player-reveal-container.bg-correct { background-color: var(--success-color); }
-.player-reveal-container.bg-incorrect { background-color: var(--error-color); }
+.player-reveal-container.bg-correct { background-color: var(--game-color-green); }
+.player-reveal-container.bg-incorrect { background-color: var(--game-color-red); }
 
 .reveal-verdict {
-  font-size: 3rem;
-  font-weight: 700;
+  font-family: var(--game-font-heading);
+  font-size: 4rem;
+  font-weight: normal;
   margin-bottom: var(--spacing-sm);
+  text-shadow: 3px 3px 0 rgba(0,0,0,0.2);
 }
 
 .reveal-points-gained {
@@ -181,9 +199,3 @@
   background-color: var(--background-light);
   color: var(--text-main);
 }
-
-/* --- Colors --- */
-.btn-red { background-color: #EF4444; }
-.btn-blue { background-color: #3B82F6; }
-.btn-yellow { background-color: #EAB308; }
-.btn-green { background-color: #22C55E; }

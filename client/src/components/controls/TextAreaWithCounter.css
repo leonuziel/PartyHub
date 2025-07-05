@@ -1,0 +1,26 @@
+.textarea-with-counter {
+  position: relative;
+  width: 100%;
+}
+
+.textarea-with-counter textarea {
+  width: 100%;
+  height: 100px;
+  padding: var(--spacing-md);
+  padding-bottom: 1.5rem; /* Make space for the counter */
+  border: 1px solid var(--ph-color-border-subtle);
+  border-radius: var(--border-radius-md);
+  background-color: var(--ph-color-bg-primary);
+  color: var(--ph-color-text-primary);
+  font-family: var(--ph-font-family-platform);
+  font-size: 1rem;
+  resize: none;
+}
+
+.char-counter {
+  position: absolute;
+  bottom: var(--spacing-sm);
+  right: var(--spacing-sm);
+  font-size: 0.8rem;
+  color: var(--ph-color-text-secondary);
+}

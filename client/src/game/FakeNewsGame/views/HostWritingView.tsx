@@ -1,6 +1,6 @@
 import React from 'react';
-import { QuestionDisplay } from '../../../components/QuestionDisplay';
-import { PlayerStatusGrid } from '../../../components/PlayerStatusGrid';
+import { QuestionDisplay } from '../../../components/display/QuestionDisplay';
+import { PlayerStatusGrid } from '../../../components/display/PlayerStatusGrid';
 import { Player } from '../../../types/types';
 
 interface HostWritingViewProps {

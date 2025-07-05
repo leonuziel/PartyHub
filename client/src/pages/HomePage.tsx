@@ -1,9 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GameCard } from '../components/GameCard';
+import { GameCard } from '../components/controls/GameCard';
 import { socketService } from '../services/socketService';
 import { usePlayerStore } from '../store/playerStore';
+import './PageLayouts.css'; // Using the new shared layout
 import './HomePage.css';
+
 
 const games = [
   {
@@ -56,9 +58,9 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <div className="home-container">
+    <div className="page-container home-container">
       <header className="home-header">
-        <h1 className="home-title">PartyHub</h1>
+        <h1 className="page-title">PartyHub</h1>
         <p className="home-subtitle">Let's Get the Party Started!</p>
       </header>
       <div className="game-grid">

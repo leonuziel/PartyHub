@@ -4,13 +4,16 @@
     align-items: center;
     gap: var(--spacing-sm);
     padding: var(--spacing-md);
-    -color: var(--background-light);
-
+    background-color: transparent; /* Minimalist style for lobby */
+    border-radius: var(--border-radius-md);
+    color: var(--ph-color-text-primary);
+    text-align: center;
 }
 
 .player-name {
-    font-weight: 600;
-    color: var(--text-main);
+    font-family: var(--ph-font-family-platform);
+    font-weight: 400; /* Regular weight */
+    color: var(--ph-color-text-primary);
 }
 
 /* Let the PlayerAvatar component's size styles handle the image size */

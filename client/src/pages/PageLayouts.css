@@ -1,0 +1,28 @@
+.page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--spacing-lg);
+  background-color: var(--ph-color-bg-primary);
+  color: var(--ph-color-text-primary);
+}
+
+.page-title {
+  font-family: var(--ph-font-family-platform);
+  font-weight: 600; /* Inter Semibold */
+  font-size: 2.5rem;
+  color: var(--ph-color-text-primary);
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+}
+
+.page-content {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+}

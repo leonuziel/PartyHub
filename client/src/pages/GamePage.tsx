@@ -1,6 +1,6 @@
 import React from 'react';
 import { useGameStore } from '../store/gameStore';
-import { Spinner } from '../components/Spinner';
+import { Spinner } from '../components/common/Spinner';
 import { GameContainer } from '../game/GameContainer';
 import { Navigate, useParams } from 'react-router-dom';
 import { useRoomStore } from '../store/roomStore';

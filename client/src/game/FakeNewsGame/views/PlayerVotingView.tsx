@@ -1,5 +1,5 @@
 import React from 'react';
-import { VotingOptions } from '../../../components/VotingOptions';
+import { VotingOptions } from '../../../components/controls/VotingOptions';
 
 interface PlayerVotingViewProps {
   options: string[];

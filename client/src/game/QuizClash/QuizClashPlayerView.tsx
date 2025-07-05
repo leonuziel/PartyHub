@@ -4,7 +4,7 @@ import { useRoomStore } from '../../store/roomStore';
 import { usePlayerRole } from '../../hooks/usePlayerRole';
 import { socketService } from '../../services/socketService';
 import { QuizClashGameState, QuizClashRevealState } from '../../types/types';
-import { Spinner } from '../../components/Spinner';
+import { Spinner } from '../../components/common/Spinner';
 import { PlayerStartingView } from './views/PlayerStartingView';
 import { PlayerFinishedView } from './views/PlayerFinishedView';
 import { PlayerAnsweringView } from './views/PlayerAnsweringView';

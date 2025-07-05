@@ -4,7 +4,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(18, 16, 31, 0.8); /* Use a semi-transparent version of the primary background */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -13,30 +13,31 @@
   }
   
   .modal-content {
-    background: var(--background-light);
-    padding: 2rem;
+    background: var(--ph-color-bg-secondary);
+    padding: var(--spacing-xl);
     border-radius: var(--border-radius-lg);
     width: 90%;
     max-width: 500px;
     position: relative;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    border: 1px solid var(--border-color-light);
+    border: 1px solid var(--ph-color-border-subtle);
     animation: slideInUp 0.4s ease;
   }
   
   .modal-close {
     position: absolute;
-    top: 1rem;
-    right: 1rem;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
     background: none;
     border: none;
     font-size: 1.5rem;
-    color: var(--text-secondary);
+    color: var(--ph-color-text-secondary);
     cursor: pointer;
+    line-height: 1;
   }
   
   .modal-close:hover {
-    color: var(--text-main);
+    color: var(--ph-color-text-primary);
   }
   
   @keyframes fadeIn {

@@ -1,7 +1,7 @@
 import React from 'react';
-import { Podium } from '../../../components/Podium';
-import { GameTitle } from '../../../components/GameTitle';
-import { SpecialAwards } from '../../../components/SpecialAwards';
+import { Podium } from '../../../components/display/Podium';
+import { GameTitle } from '../../../components/display/GameTitle';
+import { SpecialAwards } from '../../../components/display/SpecialAwards';
 import { Player } from '../../../types/types';
 
 export interface Award {

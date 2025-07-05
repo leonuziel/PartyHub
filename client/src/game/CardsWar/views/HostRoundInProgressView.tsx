@@ -1,7 +1,7 @@
 import React from 'react';
-import { Card as CardComponent } from '../../../components/Card';
-import { PlayerInfo } from '../../../components/PlayerInfo';
-import { PlayArea } from '../../../components/PlayArea';
+import { Card as CardComponent } from '../../../components/cards/Card';
+import { PlayerInfo } from '../../../components/display/PlayerInfo';
+import { PlayArea } from '../../../components/layout/PlayArea';
 import { Player, Card } from '../../../types/types';
 
 interface HostRoundInProgressViewProps {

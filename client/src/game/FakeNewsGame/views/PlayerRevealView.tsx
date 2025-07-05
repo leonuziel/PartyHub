@@ -1,5 +1,5 @@
 import React from 'react';
-import { PlayerStatusContainer } from '../../../components/PlayerStatusContainer';
+import { PlayerStatusContainer } from '../../../components/display/PlayerStatusContainer';
 
 interface PlayerRevealViewProps {
   wasCorrect: boolean;

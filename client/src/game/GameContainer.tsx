@@ -7,7 +7,7 @@ import FakeNewsHostView from './FakeNewsGame/FakeNewsHostView';
 import FakeNewsPlayerView from './FakeNewsGame/FakeNewsPlayerView';
 import { CardsWarHostView } from './CardsWar/CardsWarHostView';
 import { CardsWarPlayerView } from './CardsWar/CardsWarPlayerView';
-import HostFrame from '../components/HostFrame';
+import HostFrame from '../components/layout/HostFrame';
 import TexasHoldemHostView from './TexasHoldem/TexasHoldemHostView';
 import TexasHoldemPlayerView from './TexasHoldem/TexasHoldemPlayerView';
 

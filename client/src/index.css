@@ -1,30 +1,17 @@
 :root {
-  /* --- PartyHub Design System v1.0 --- */
+  /* Platform Layer: The "Hub" */
+  --ph-color-bg-primary: #12101F; /* Void */
+  --ph-color-bg-secondary: #1C192B; /* Deep Hive */
+  --ph-color-text-primary: #EAE8FF; /* Ghost White */
+  --ph-color-text-secondary: #A09CC9; /* Lunar */
+  --ph-color-accent: #8A2BE2; /* Electric Orchid */
+  --ph-color-border-subtle: #33304D;
 
-  /* Primary Palette */
-  --background-dark: #1a1a2e;
-  --background-medium: #16213e;
-  --background-light: #0f3460;
-  --border-color: #e94560;
-  --border-color-light: rgba(233, 69, 96, 0.4);
-
-  /* Accent Palette */
-  --accent-color: #e94560;
-  --accent-color-medium: #d43d51;
-  --accent-color-dark: #a23242;
-  --accent-gradient: linear-gradient(135deg, #e94560, #a23242);
-  --accent-color-faded: rgba(233, 69, 96, 0.15);
-
-  /* Text Palette */
-  --text-main: #ffffff;
-  --text-secondary: #b4b4b4;
-  --text-on-primary: #ffffff;
-
-  /* Feedback Colors */
-  --success-color: #16c79a;
-  --success-color-faded: rgba(22, 199, 154, 0.15);
-  --error-color: #ff5959;
-  --error-color-faded: rgba(255, 89, 89, 0.15);
+  /* Typography */
+  --ph-font-family-platform: 'Inter', sans-serif;
+  /* Game-specific fonts to be defined in their respective CSS files 
+  --ph-font-family-game-heading: 'Bangers', cursive; (Example)
+  --ph-font-family-game-body: 'Luckiest Guy', cursive; (Example) */
 
   /* Spacing & Sizing */
   --spacing-xs: 0.25rem; /* 4px */
@@ -41,13 +28,11 @@
 
 body {
   margin: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: var(--ph-font-family-platform);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--background-dark); /* Set the global background */
-  color: var(--text-main); /* Set the global text color */
+  background-color: var(--ph-color-bg-primary);
+  color: var(--ph-color-text-primary);
 }
 
 img {

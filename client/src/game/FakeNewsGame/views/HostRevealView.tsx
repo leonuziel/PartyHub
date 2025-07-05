@@ -1,5 +1,5 @@
 import React from 'react';
-import { ResultsList } from '../../../components/ResultsList';
+import { ResultsList } from '../../../components/display/ResultsList';
 import { Player } from '../../../types/types';
 
 interface HostRevealViewProps {

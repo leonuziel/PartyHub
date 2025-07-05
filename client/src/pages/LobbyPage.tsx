@@ -4,9 +4,10 @@ import { useRoomStore } from '../store/roomStore';
 import { usePlayerRole } from '../hooks/usePlayerRole';
 import { socketService } from '../services/socketService';
 import { RoomState } from '../types/types';
-import { Button } from '../components/Button';
-import { Spinner } from '../components/Spinner';
+import { Button } from '../components/controls/Button';
+import { Spinner } from '../components/common/Spinner';
 import { QRCodeCanvas } from 'qrcode.react';
+import './PageLayouts.css';
 import './LobbyPage.css';
 
 const LobbyPage: React.FC = () => {
@@ -42,9 +43,9 @@ const LobbyPage: React.FC = () => {
 
   if (!room) {
     return (
-      <div className="loading-container">
+      <div className="page-container">
         <Spinner />
-        <p className="loading-text">Setting up your party...</p>
+        <p className="page-title">Setting up your party...</p>
       </div>
     );
   }
@@ -58,14 +59,14 @@ const LobbyPage: React.FC = () => {
     return (
       <div className="lobby-host-container">
         <div className="lobby-instructions-pane">
-          <h1 className="instructions-title">Get Your Friends In!</h1>
+          <h1 className="page-title">Get Your Friends In!</h1>
           <div className="join-steps">
             <p>1. Open the camera on your phone.</p>
             <p>2. Scan the QR code to open PartyHub.</p>
             <p>3. Enter your nickname and join!</p>
           </div>
           <div className="qr-code-wrapper">
-            <QRCodeCanvas value={getJoinUrl()} size={200} bgColor="#ffffff" fgColor="#1a1a2e" />
+            <QRCodeCanvas value={getJoinUrl()} size={200} bgColor="#ffffff" fgColor="#12101F" />
           </div>
           <div className="room-code-display">{room.roomCode}</div>
         </div>
@@ -96,23 +97,25 @@ const LobbyPage: React.FC = () => {
 
   // PLAYER VIEW
   return (
-    <div className="lobby-player-container">
-      <div className="player-waiting-card">
-        <div className="player-waiting-avatar-wrapper">
-          <img src={`/avatars/${player?.avatar}`} alt="Your Avatar" className="player-waiting-avatar" />
-        </div>
-        <h1 className="player-waiting-title">You're in, {player?.nickname}!</h1>
-        <p className="player-waiting-subtitle">Waiting for the host to start the game...</p>
-        <div className="player-list-condensed">
-          <h3>Who's here ({room.players.length}):</h3>
-          <ul>
-            {room.players.map((p) => (
-              <li key={p.id}>
-                <img src={`/avatars/${p.avatar}`} alt="avatar" className="player-avatar-lobby-condensed" />
-                {p.nickname}
-              </li>
-            ))}
-          </ul>
+    <div className="page-container">
+      <div className="page-content">
+        <div className="player-waiting-card">
+          <div className="player-waiting-avatar-wrapper">
+            <img src={`/avatars/${player?.avatar}`} alt="Your Avatar" className="player-waiting-avatar" />
+          </div>
+          <h1 className="page-title">You're in, {player?.nickname}!</h1>
+          <p className="player-waiting-subtitle">Waiting for the host to start the game...</p>
+          <div className="player-list-condensed">
+            <h3>Who's here ({room.players.length}):</h3>
+            <ul>
+              {room.players.map((p) => (
+                <li key={p.id}>
+                  <img src={`/avatars/${p.avatar}`} alt="avatar" className="player-avatar-lobby-condensed" />
+                  {p.nickname}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </div>

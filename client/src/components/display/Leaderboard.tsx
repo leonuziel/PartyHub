@@ -1,5 +1,5 @@
 import React from 'react';
-import { Player } from '../types/types';
+import { Player } from '../../types/types';
 import './Leaderboard.css';
 
 interface LeaderboardProps {

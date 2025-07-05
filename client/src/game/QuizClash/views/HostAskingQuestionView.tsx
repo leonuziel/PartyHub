@@ -1,8 +1,8 @@
 import React from 'react';
-import { QuestionHeader } from '../../../components/QuestionHeader';
-import { QuestionDisplay } from '../../../components/QuestionDisplay';
-import { AnswerGrid } from '../../../components/AnswerGrid';
-import { HostViewContainer } from '../../../components/HostViewContainer';
+import { QuestionHeader } from '../../../components/display/QuestionHeader';
+import { QuestionDisplay } from '../../../components/display/QuestionDisplay';
+import { AnswerGrid } from '../../../components/controls/AnswerGrid';
+import { HostViewContainer } from '../../../components/layout/HostViewContainer';
 
 interface HostAskingQuestionViewProps {
   round: number;

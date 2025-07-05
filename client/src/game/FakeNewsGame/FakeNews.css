@@ -1,0 +1,11 @@
+.fakenews-container {
+    --game-bg-color: #FBF0D9; /* Sepia */
+    --game-text-color: #4A4033; /* Dark Brown */
+    --game-accent-color: #D94A4A; /* 'Top Secret' Red */
+    --game-font-heading: 'Oswald', sans-serif;
+    --game-font-body: 'Special Elite', monospace;
+    
+    background-color: var(--game-bg-color);
+    color: var(--game-text-color);
+    font-family: var(--game-font-body);
+}

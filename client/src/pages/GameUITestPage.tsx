@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from '../components/Button';
+import { Button } from '../components/controls/Button';
 import { Player } from '../types/types';
 
 // QuizClash Views

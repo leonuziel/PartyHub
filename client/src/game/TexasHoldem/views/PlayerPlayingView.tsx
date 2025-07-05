@@ -6,8 +6,8 @@ import { useRoomStore } from '../../../store/roomStore';
 import { socketService } from '../../../services/socketService';
 import { TexasHoldemGameState, TexasHoldemAction } from '../../../types/types';
 import { CardSlot } from '../../../components/cards/CardSlot';
-import { Button } from '../../../components/Button';
-import { CenteredMessage } from '../../../components/CenteredMessage';
+import { Button } from '../../../components/controls/Button';
+import { CenteredMessage } from '../../../components/layout/CenteredMessage';
 import '../TexasHoldemPlayerView.css';
 
 const SMALL_BLIND = 10; // This should ideally come from a shared config

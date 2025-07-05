@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { usePlayerStore } from '../store/playerStore';
 import { socketService } from '../services/socketService';
-import { Button } from '../components/Button';
+import { Button } from '../components/controls/Button';
+import './PageLayouts.css';
 import './JoinPage.css';
 
 // Placeholder for avatars
@@ -54,39 +55,41 @@ const JoinPage: React.FC = () => {
   };
 
   return (
-    <div className="join-page-container">
-      <div className="join-card">
-        <img src="/logo.svg" alt="PartyHub Logo" className="join-logo" />
-        <h1 className="join-title">Join the Party!</h1>
-        {error && <p className="error-message">{error}</p>}
-        <div className="form-group">
-          <label htmlFor="nickname" className="form-label">Enter Your Nickname</label>
-          <input
-            id="nickname"
-            type="text"
-            placeholder="Your cool name"
-            value={nickname}
-            onChange={(e) => setNickname(e.target.value)}
-            className="text-input"
-          />
-        </div>
-        <div className="form-group">
-          <label className="form-label">Choose Your Avatar</label>
-          <div className="avatar-grid">
-            {avatars.map((avatar, index) => (
-              <div
-                key={index}
-                className={`avatar-option ${selectedAvatar === avatar ? 'selected' : ''}`}
-                onClick={() => setSelectedAvatar(avatar)}
-              >
-                <img src={`/avatars/${avatar}`} alt={`Avatar ${index + 1}`} />
-              </div>
-            ))}
+    <div className="page-container">
+      <div className="page-content">
+        <div className="join-card">
+          <img src="/logo.svg" alt="PartyHub Logo" className="join-logo" />
+          <h1 className="page-title">Join the Party!</h1>
+          {error && <p className="error-message">{error}</p>}
+          <div className="form-group">
+            <label htmlFor="nickname" className="form-label">Enter Your Nickname</label>
+            <input
+              id="nickname"
+              type="text"
+              placeholder="Enter 4-digit Room Code"
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
+              className="text-input"
+            />
           </div>
+          <div className="form-group">
+            <label className="form-label">Choose Your Avatar</label>
+            <div className="avatar-grid">
+              {avatars.map((avatar, index) => (
+                <div
+                  key={index}
+                  className={`avatar-option ${selectedAvatar === avatar ? 'selected' : ''}`}
+                  onClick={() => setSelectedAvatar(avatar)}
+                >
+                  <img src={`/avatars/${avatar}`} alt={`Avatar ${index + 1}`} />
+                </div>
+              ))}
+            </div>
+          </div>
+          <Button onClick={handleJoin} disabled={!nickname}>
+            Join the Party!
+          </Button>
         </div>
-        <Button onClick={handleJoin} disabled={!nickname}>
-          Join the Party!
-        </Button>
       </div>
     </div>
   );
