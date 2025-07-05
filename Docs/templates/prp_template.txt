@@ -49,6 +49,12 @@ PartyHub is a real-time, interactive social gaming platform. The architecture is
 ├── src/
 │   ├── App.tsx
 │   ├── components/
+│   │   ├── cards/
+│   │   ├── common/
+│   │   ├── controls/
+│   │   ├── display/
+│   │   ├── gameplay/
+│   │   └── layout/
 │   ├── game/
 │   │   ├── CardsWar/
 │   │   ├── FakeNewsGame/
@@ -104,55 +110,64 @@ The system uses a client-server model with a Node.js/Express/Socket.IO backend a
 
 #### 4. Design System Summary
 
-- **Color Palette**: Dark mode base with deep navy blues (`#1a1a2e`, `#16213e`) and a vibrant reddish-pink accent (`#e94560`) for interactive elements and borders.
-- **Typography**: System UI fonts with a base size of 16px and a bold, scaled heading structure.
+- **Color Palette**: A dual-layer system. The "Platform" layer uses a modern dark theme with deep purples/blues (`#12101F`, `#1C192B`) and a vibrant purple accent (`#8A2BE2`). Each "Game" layer has its own unique, energetic palette.
+- **Typography**: The platform uses 'Inter' for clean, modern UI text. Games use more expressive, thematic fonts like 'Bangers' and 'Luckiest Guy'.
 - **Spacing**: Uses a base unit of 1rem (16px) for consistent margins, padding, and gaps.
 - **Implementation**: All design tokens are defined as CSS Custom Properties in `index.css` for global consistency.
 
+#### 5. Sonic System Summary
+- **Platform Sounds**: Subtle, clean, and functional UI sounds (clicks, notifications) to provide feedback without being intrusive.
+- **Game Sounds**: Each game has a unique, energetic soundtrack and memorable sound effects (stingers for correct/wrong answers, timers, etc.) to enhance the "party" feel. The platform has a main audio jingle and a universal "achievement unlocked" sound.
+
+#### 6. Voice & Tone Summary
+- **Platform Voice**: Clear, concise, and helpful (like a "Concierge"). Used for system messages, settings, and menus.
+- **Game Voice**: Witty, energetic, and playful (like a "Host"). Used for in-game instructions, questions, and results to entertain players.
+
 ### Frontend Component Summary (`client/src/components/`)
 
-#### General Components
-- `ActionButton.tsx`: A primary button for main user actions.
-- `Button.tsx`: A standard, reusable button component.
-- `Card.tsx`: A styled container for content, with a distinct border and background.
-- `CenteredMessage.tsx`: A component to display a message centered on the screen.
-- `CountdownTimer.tsx`: A visual timer that counts down from a specified time.
+#### Common (`/common`)
 - `DebugPanel.tsx`: A panel for displaying debug information.
-- `GameBranding.tsx`: A component to display the branding of the current game.
-- `GameCard.tsx`: A card used to display a game in a list.
-- `GameTitle.tsx`: A component for displaying the title of the game.
 - `Modal.tsx`: A modal dialog that can be displayed over the main content.
 - `Spinner.tsx`: A loading spinner to indicate that content is being loaded.
+
+#### Controls (`/controls`)
+- `ActionButton.tsx`: A primary button for main user actions.
+- `AnswerGrid.tsx`: A grid of possible answers for a question.
+- `Button.tsx`: A standard, reusable button component.
+- `GameCard.tsx`: A card used to display a game in a list.
 - `TextAreaWithCounter.tsx`: A text area with a character counter.
+- `VotingOptions.tsx`: Displays options for voting.
 
-#### Layout Components
-- `HostFrame.tsx`: A container for the host's view.
-- `HostViewContainer.tsx`: A container for the main content of the host's view.
-- `PlayArea.tsx`: The main area where the game is played.
-- `PlayerViewContainer.tsx`: A container for the player's view.
-
-#### Player & Status Components
+#### Display (`/display`)
+- `AnswerResult.tsx`: Displays the result of an answer.
+- `AwardDisplay.tsx`: Displays any awards a player has received.
+- `GameBranding.tsx`: A component to display the branding of the current game.
+- `GameTitle.tsx`: A component for displaying the title of the game.
+- `Leaderboard.tsx`: Displays the game's leaderboard.
 - `PlayerAvatar.tsx`: Displays a player's avatar.
 - `PlayerCard.tsx`: A card displaying a player's information.
 - `PlayerInfo.tsx`: A component to display information about a player.
 - `PlayerStatusContainer.tsx`: A container for the status of all players.
 - `PlayerStatusGrid.tsx`: A grid displaying the status of all players.
-- `Leaderboard.tsx`: Displays the game's leaderboard.
 - `Podium.tsx`: A component to display the top players at the end of a game.
 - `PodiumList.tsx`: A list of players on the podium.
-- `RankDisplay.tsx`: Displays a player's rank.
-- `RankUpdate.tsx`: Displays an update to a player's rank.
-- `WinnerDisplay.tsx`: Displays the winner of the game.
-
-#### Game-Specific Components
-- `AnswerGrid.tsx`: A grid of possible answers for a question.
-- `AnswerResult.tsx`: Displays the result of an answer.
-- `AwardDisplay.tsx`: Displays any awards a player has received.
 - `QuestionDisplay.tsx`: Displays a question.
 - `QuestionHeader.tsx`: The header for a question.
+- `RankDisplay.tsx`: Displays a player's rank.
+- `RankUpdate.tsx`: Displays an update to a player's rank.
 - `ResultsList.tsx`: A list of results.
 - `SpecialAwards.tsx`: Displays any special awards.
-- `VotingOptions.tsx`: Displays options for voting.
+- `WinnerDisplay.tsx`: Displays the winner of the game.
+
+#### Gameplay (`/gameplay`)
+- `CountdownTimer.tsx`: A visual timer that counts down from a specified time.
+
+#### Layout (`/layout`)
+- `CenteredMessage.tsx`: A component to display a message centered on the screen.
+- `HostFrame.tsx`: A container for the host's view.
+- `HostViewContainer.tsx`: A container for the main content of the host's view.
+- `PlayArea.tsx`: The main area where the game is played.
+- `PlayerViewContainer.tsx`: A container for the player's view.
 
 #### Card Game Components (`client/src/components/cards/`)
 - `BiddingPopup.tsx`: A popup for bidding.
