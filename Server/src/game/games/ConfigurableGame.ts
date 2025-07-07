@@ -3,7 +3,6 @@ import { Player, BaseGameState } from '../../types/interfaces.js';
 import { GameConfiguration } from '../../types/GameConfiguration.js';
 
 interface ConfigurableGameState extends BaseGameState {
-  currentState: string;
   playerAttributes: Record<string, Record<string, any>>;
 }
 
@@ -17,7 +16,7 @@ export class ConfigurableGame extends BaseGame<ConfigurableGameState> {
   ) {
     super(players, hostId, broadcast, onGameEnd);
     this.gameState.gameId = config.metadata.gameId;
-    this.gameState.currentState = config.initialState;
+    this.gameState.status = config.initialState;
     this.gameState.playerAttributes = {};
     this.players.forEach(player => {
       this.gameState.playerAttributes[player.id] = { ...this.config.playerAttributes };
@@ -25,7 +24,6 @@ export class ConfigurableGame extends BaseGame<ConfigurableGameState> {
   }
 
   public start(): void {
-    this.gameState.status = 'IN_PROGRESS';
     this.transitionTo(this.config.initialState);
   }
 
@@ -54,7 +52,7 @@ export class ConfigurableGame extends BaseGame<ConfigurableGameState> {
 
     // Find transition
     const transition = this.config.transitions.find(
-      (t) => t.from === this.gameState.currentState && t.action === type
+      (t) => t.from === this.gameState.status && t.action === type
     );
 
     if (transition) {
@@ -65,12 +63,12 @@ export class ConfigurableGame extends BaseGame<ConfigurableGameState> {
         }
         this.transitionTo(transition.to);
     } else {
-        console.warn(`No transition found from ${this.gameState.currentState} with action ${type}`);
+        console.warn(`No transition found from ${this.gameState.status} with action ${type}`);
     }
   }
 
   private transitionTo(newState: string): void {
-    const oldState = this.gameState.currentState;
+    const oldState = this.gameState.status;
     const oldStateConfig = this.config.states[oldState];
     const newStateConfig = this.config.states[newState];
 
@@ -84,7 +82,7 @@ export class ConfigurableGame extends BaseGame<ConfigurableGameState> {
         oldStateConfig.onExit(this.gameState, {});
     }
 
-    this.gameState.currentState = newState;
+    this.gameState.status = newState;
     
     // onEnter action for new state
     if (newStateConfig?.onEnter) {
@@ -93,7 +91,7 @@ export class ConfigurableGame extends BaseGame<ConfigurableGameState> {
 
     this.broadcast('game:state_update', this.getSanitizedGameState());
 
-    if (this.gameState.currentState === 'FINISHED') {
+    if (this.gameState.status === 'FINISHED') {
         this.gameState.status = 'FINISHED';
         this.onGameEnd();
     }
