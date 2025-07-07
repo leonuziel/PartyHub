@@ -32,12 +32,12 @@ const StateNode = ({ stateName, position, config }: { stateName: string; positio
     };
 
     const getDynamicEvents = (view: 'host' | 'player') => {
-        const componentNames = config.ui?.[stateName]?.[view]?.components || [];
+        const components = config.ui?.[stateName]?.[view]?.components || [];
         const events = new Set<string>();
-        componentNames.forEach((compName: string) => {
-            const componentEvents = COMPONENT_EVENT_MAP[compName];
+        components.forEach((comp: { id: string, component: string }) => {
+            const componentEvents = COMPONENT_EVENT_MAP[comp.component];
             if (componentEvents) {
-                componentEvents.forEach(event => events.add(`${compName}_${event}`));
+                componentEvents.forEach(event => events.add(`${comp.component} (${comp.id}) - ${event}`));
             }
         });
         return Array.from(events);

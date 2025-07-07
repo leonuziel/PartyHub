@@ -44,7 +44,7 @@ const DraggableItem = ({ id, isOverlay }: { id: string, isOverlay?: boolean }) =
 };
 
 // --- Sortable Item in Dropzone ---
-const SortableItem = ({ id }: { id: string }) => {
+const SortableItem = ({ id, componentName }: { id: string, componentName: string }) => {
     const {
         attributes,
         listeners,
@@ -66,21 +66,22 @@ const SortableItem = ({ id }: { id: string }) => {
 
     return (
         <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-            {id}
+            {componentName}
         </div>
     );
 };
 
 
 // --- Dropzone ---
-const Dropzone = ({ id, items }: { id: string, items: string[] }) => {
+const Dropzone = ({ id, items }: { id: string, items: { id: string, component: string }[] }) => {
     const { setNodeRef } = useDroppable({ id });
+    const itemIds = items.map(i => i.id);
 
     return (
-        <SortableContext id={id} items={items} strategy={verticalListSortingStrategy}>
+        <SortableContext id={id} items={itemIds} strategy={verticalListSortingStrategy}>
             <div ref={setNodeRef} className="dropzone">
                 {items.length > 0 ? (
-                    items.map(item => <SortableItem key={item} id={item} />)
+                    items.map(item => <SortableItem key={item.id} id={item.id} componentName={item.component} />)
                 ) : (
                     <p>Drop components here</p>
                 )}
@@ -119,24 +120,41 @@ export const ScreensStage = ({ config, setConfig }: any) => {
         // For this wireframe, we'll just log the action.
         console.log(`Component ${active.id} was dropped over ${over.id}`);
 
-        // Example of how to add a component to a view
         if (ALL_COMPONENTS.includes(active.id) && (over.id === 'host-view' || over.id === 'player-view')) {
             const view = over.id === 'host-view' ? 'host' : 'player';
-            const currentItems = getItems(view);
-            if (!currentItems.includes(active.id)) { // Prevent duplicates
-                 setConfig((prev: any) => ({
-                    ...prev,
-                    ui: {
-                        ...prev.ui,
-                        [selectedState]: {
-                            ...prev.ui?.[selectedState],
-                            [view]: {
-                                components: [...currentItems, active.id]
-                            }
+            
+            // Ensure the state and view structures exist
+            const newUi = { ...config.ui };
+            if (!newUi[selectedState]) {
+                newUi[selectedState] = { host: { components: [] }, player: { components: [] } };
+            }
+            if (!newUi[selectedState][view]) {
+                newUi[selectedState][view] = { components: [] };
+            }
+            
+            const currentComponents = newUi[selectedState][view].components;
+
+            // Create a unique ID for the new component instance
+            const instanceId = `${active.id.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`;
+            
+            const newComponent = {
+                id: instanceId,
+                component: active.id,
+                props: {} // Default empty props
+            };
+
+            setConfig((prev: any) => ({
+                ...prev,
+                ui: {
+                    ...prev.ui,
+                    [selectedState]: {
+                        ...prev.ui[selectedState],
+                        [view]: {
+                            components: [...currentComponents, newComponent]
                         }
                     }
-                }));
-            }
+                }
+            }));
         }
     };
 

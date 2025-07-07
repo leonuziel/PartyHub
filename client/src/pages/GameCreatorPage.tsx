@@ -2,34 +2,49 @@ import React, { useState } from 'react';
 import { Button } from '../components/controls/Button';
 import './PageLayouts.css';
 import './GameCreatorPage.css';
+import './wizards/ReviewStage.css';
 import { MetadataStage } from './wizards/MetadataStage';
 import { StatesStage } from './wizards/StatesStage';
 import { ScreensStage } from './wizards/ScreensStage';
 import { GameFlowStage } from './wizards/GameFlowStage';
-
-const PlaceholderStage = ({ stage }: { stage: number }) => (
-    <div className="form-section animate-fade-in">
-        <h2>Stage {stage}: Coming Soon</h2>
-        <p>This section is under construction. Future stages will include defining player attributes, actions, and more detailed transitions.</p>
-    </div>
-);
+import { ReviewStage } from './wizards/ReviewStage';
 
 const GameCreatorPage: React.FC = () => {
     const [stage, setStage] = useState(1);
     const [config, setConfig] = useState({
-        metadata: { gameId: '', title: '', description: '', minPlayers: 2, maxPlayers: 8 },
+        metadata: {
+            gameId: '',
+            title: '',
+            description: '',
+            minPlayers: 2,
+            maxPlayers: 8,
+        },
         initialState: 'STARTING',
         states: {
-            'STARTING': {},
-            'VOTING': {},
-            'REVEAL': {},
-            'SCORE_SUMMARY': {},
-            'FINISHED': {}
+            STARTING: {},
+            VOTING: {},
+            REVEAL: {},
+            SCORE_SUMMARY: {},
+            FINISHED: {},
         },
         playerAttributes: {},
         actions: {},
         transitions: [],
-        ui: {},
+        ui: {
+            STARTING: {
+                host: {
+                    components: [
+                        { id: 'gt-1', component: 'GameTitle', props: { text: 'My Awesome Game' } },
+                        { id: 'psg-1', component: 'PlayerStatusGrid', props: {} },
+                    ],
+                },
+                player: {
+                    components: [
+                        { id: 'cm-1', component: 'CenteredMessage', props: { message: 'Waiting for the game to start...' } },
+                    ],
+                },
+            },
+        },
     });
 
     const handleSave = async () => {
@@ -70,7 +85,7 @@ const GameCreatorPage: React.FC = () => {
             case 4:
                 return <GameFlowStage config={config} setConfig={setConfig} />;
             case 5:
-                return <PlaceholderStage stage={5} />;
+                return <ReviewStage config={config} />;
             default:
                 return <MetadataStage config={config} setConfig={setConfig} />;
         }
