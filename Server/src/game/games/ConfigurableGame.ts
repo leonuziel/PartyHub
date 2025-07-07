@@ -102,6 +102,7 @@ export class ConfigurableGame extends BaseGame<ConfigurableGameState> {
     return {
       ...restOfState,
       currentState: status,
+      ui: this.config.ui[status],
     };
   }
 }
