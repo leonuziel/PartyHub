@@ -48,7 +48,7 @@ export class GameFactory {
       case 'texas-holdem-poker':
         return new TexasHoldemGame(players, hostId, broadcast, onGameEnd);
       default:
-        throw new Error(`Game with id ${gameId} not found.`);
+        throw new Error(`Game with id '${gameId}' not found. No hardcoded game or configuration file (e.g., '${gameId}.json') exists.`);
     }
   }
 }

@@ -98,7 +98,10 @@ export class ConfigurableGame extends BaseGame<ConfigurableGameState> {
   }
 
   private getSanitizedGameState(): any {
-    // We can add more sanitization here later if needed
-    return this.gameState;
+    const { status, ...restOfState } = this.gameState;
+    return {
+      ...restOfState,
+      currentState: status,
+    };
   }
 }
