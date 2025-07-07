@@ -174,36 +174,93 @@ textarea {
 }
 
 .component-palette {
-    width: 200px;
+    flex-basis: 150px;
+    /* Use flex-basis instead of width */
+    flex-shrink: 0;
+    flex-grow: 0;
+    /* Prevent growing by default */
     border: 1px solid #444;
     border-radius: 6px;
     padding: 1rem;
     background-color: #12101F;
+    transition: flex-basis 0.4s ease-in-out;
+    /* Smooth transition */
+    overflow: hidden;
+    /* Prevents content from spilling during transition */
 }
 
-.component-palette h3, .component-palette h4 {
+.component-palette.is-expanded {
+    flex-basis: 650px;
+    /* Expanded width */
+}
+
+.component-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 0.5rem;
+    padding-top: 0.75rem;
+}
+
+.draggable-component {
+    padding: 0.5rem;
+    /* Reduced padding for smaller grid items */
+    font-size: 0.85rem;
+    /* Smaller font size */
+    background-color: #333;
+    border-radius: 4px;
+    cursor: grab;
+    text-align: center;
+    font-weight: bold;
+    user-select: none;
+    /* Prevent text selection while dragging */
+}
+
+.component-palette h3 {
     margin-top: 0;
     font-size: 1.1rem;
     color: #8A2BE2;
 }
 
-.component-palette h4 {
-    font-size: 1rem;
-    margin-top: 1rem;
-    border-top: 1px solid #444;
-    padding-top: 1rem;
+.component-category-details {
+    margin-bottom: 0.5rem;
 }
 
-.draggable-component {
-    padding: 0.75rem;
+.component-category-details .component-grid {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.component-category-details[open] .component-grid {
+    max-height: 500px;
+    /* Adjust as needed, large enough for content */
+    transition: max-height 0.5s ease-in;
+}
+
+.component-category-summary {
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0.5rem;
     background-color: #333;
     border-radius: 4px;
-    margin-bottom: 0.5rem;
-    cursor: grab;
-    text-align: center;
-    font-weight: bold;
-    user-select: none; /* Prevent text selection while dragging */
+    outline: none;
+    transition: background-color 0.2s;
 }
+
+.component-category-summary:hover {
+    background-color: #444;
+}
+
+.component-category-details[open] > .component-category-summary {
+    background-color: #8A2BE2;
+    color: white;
+}
+
+.component-category-details[open] {
+    padding-bottom: 0.5rem;
+}
+
+/* This style block is now combined with the .draggable-component block above */
 
 .draggable-component.is-overlay {
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
@@ -331,13 +388,15 @@ textarea {
 }
 .state-canvas-wrapper {
     width: 100%;
-    height: 280px; /* Drastically reduced height for a compact default view */
-    background-color: rgba(0,0,0,0.2);
+    height: 280px;
+    /* Drastically reduced height for a compact default view */
+    background-color: rgba(0, 0, 0, 0.2);
     border: 1px solid #444;
     border-radius: 6px;
     overflow: hidden;
     position: relative;
 }
+
 
 .zoom-indicator {
     position: absolute;
@@ -478,7 +537,7 @@ textarea {
     flex-direction: column;
 }
 
-.canvas-fullscreen .state-canvas {
+.canvas-fullscreen .state-canvas-wrapper {
     flex-grow: 1; /* Make canvas fill remaining space */
     height: auto;
 }

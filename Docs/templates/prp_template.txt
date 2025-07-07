@@ -27,10 +27,13 @@ PartyHub is a real-time, interactive social gaming platform. The architecture is
 │   │   └── games/
 │   │       ├── cardGames/
 │   │       │   ├── cards.ts
-│   │       │   └── CardsWarGame.ts
+│   │       │   ├── CardsWarGame.ts
+│   │       │   ├── handEvaluator.ts
+│   │       │   └── TexasHoldemGame.ts
 │   │       ├── ConfigurableGame.ts
 │   │       ├── FakeNewsGame.ts
-│   │       └── QuizClashGame.ts
+│   │       ├── QuizClashGame.ts
+│   │       └── quizclash_questions.json
 │   ├── room/
 │   │   ├── Room.ts
 │   │   └── RoomManager.ts
@@ -38,7 +41,7 @@ PartyHub is a real-time, interactive social gaming platform. The architecture is
 │   │   ├── debug.ts
 │   │   └── gameConfig.ts
 │   ├── server.ts
-│   │   ├── types/
+│   ├── types/
 │   │   ├── enums.ts
 │   │   ├── GameConfiguration.ts
 │   │   └── interfaces.ts
@@ -51,29 +54,68 @@ PartyHub is a real-time, interactive social gaming platform. The architecture is
 /client
 |
 ├── src/
+│   ├── App.css
+│   ├── App.test.tsx
 │   ├── App.tsx
 │   ├── components/
 │   │   ├── cards/
+│   │   ├── card_game_components.txt
 │   │   ├── common/
 │   │   ├── ComponentRegistry.ts
 │   │   ├── controls/
 │   │   ├── display/
 │   │   ├── gameplay/
-│   │   └── layout/
+│   │   ├── layout/
+│   │   ├── missing_components.txt
+│   │   ├── player/
+│   │   └── reusable_components.txt
 │   ├── game/
 │   │   ├── CardsWar/
 │   │   ├── DynamicViewRenderer.tsx
 │   │   ├── FakeNewsGame/
+│   │   ├── GameContainer.tsx
+│   │   ├── GameView.css
 │   │   ├── QuizClash/
-│   │   └── GameContainer.tsx
+│   │   └── TexasHoldem/
 │   ├── hooks/
 │   │   └── usePlayerRole.ts
+│   ├── index.css
+│   ├── index.tsx
+│   ├── logo.svg
 │   ├── pages/
-│   │   └── GameCreatorPage.tsx
+│   │   ├── DebugPage.css
+│   │   ├── DebugPage.tsx
+│   │   ├── GameCreatorPage.css
+│   │   ├── GameCreatorPage.tsx
+│   │   ├── GamePage.css
+│   │   ├── GamePage.tsx
+│   │   ├── GameUITestPage.tsx
+│   │   ├── HomePage.css
+│   │   ├── HomePage.tsx
+│   │   ├── JoinPage.css
+│   │   ├── JoinPage.tsx
+│   │   ├── LobbyPage.css
+│   │   ├── LobbyPage.tsx
+│   │   ├── PageLayouts.css
+│   │   ├── TestComponentsPage.tsx
+│   │   └── wizards/
+│   │       ├── GameFlowStage.tsx
+│   │       ├── MetadataStage.tsx
+│   │       ├── ScreensStage.tsx
+│   │       └── StatesStage.tsx
+│   ├── react-app-env.d.ts
+│   ├── reportWebVitals.ts
 │   ├── services/
 │   │   └── socketService.ts
+│   ├── setupTests.ts
 │   ├── store/
+│   │   ├── debugStore.ts
+│   │   ├── gameStore.ts
+│   │   ├── playerHandStore.ts
+│   │   ├── playerStore.ts
+│   │   └── roomStore.ts
 │   └── types/
+│       └── types.ts
 ```
 
 #### Docs (`/Docs`)
@@ -82,19 +124,25 @@ PartyHub is a real-time, interactive social gaming platform. The architecture is
 |
 ├── adding a game checklist.txt
 ├── Architecture.txt
+├── automatic_game_creation_checklist.txt
 ├── design_system.txt
 ├── game ideas.txt
 ├── Games/
 │   └── QuizClash.txt
 ├── PRD.txt
+├── PRPs/
+│   └── TexasHoldemPoker.txt
 ├── Requirements.txt
 ├── templates/
+│   ├── add_game_template.txt
 │   └── prp_template.txt
 └── UX/
     ├── CardsWar.txt
     ├── fakeNews.txt
+    ├── Game design strategy.txt
     ├── mainScreens.txt
-    └── quizClash.txt
+    ├── quizClash.txt
+    └── ui_ux_update_plan.txt
 ```
 
 ### Design & Architecture Summaries
@@ -187,6 +235,7 @@ The system uses a client-server model with a Node.js/Express/Socket.IO backend a
 
 #### Card Game Components (`client/src/components/cards/`)
 - `BiddingPopup.tsx`: A popup for bidding.
+- `Card.tsx`: A single card component.
 - `CardFan.tsx`: A fan of cards.
 - `CardSlot.tsx`: A slot for a card.
 - `Deck.tsx`: A deck of cards.
@@ -204,4 +253,5 @@ The system uses a client-server model with a Node.js/Express/Socket.IO backend a
 - **CardsWar**: A simple card game where players compare cards, and the higher card wins. Ties result in a "war". Contains views for both host and player.
 - **FakeNewsGame**: A trivia game where players submit fake answers to a question, and then vote on what they believe is the real answer. Contains views for writing, voting, and revealing answers for both host and player.
 - **QuizClash**: A multiple-choice trivia game where players answer questions as quickly as possible. Contains views for asking questions and revealing answers for both host and player.
+- **TexasHoldem**: A poker game where players are dealt two private cards and share five community cards, betting on the strength of their hand.
 - **(Dynamically Created Games)**: The new system allows for an unlimited number of games to be created via JSON configuration. These games are powered by the `ConfigurableGame` engine and the `DynamicViewRenderer` on the frontend.

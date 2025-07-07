@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
     DndContext,
     closestCenter,
@@ -93,6 +93,8 @@ const Dropzone = ({ id, items }: { id: string, items: string[] }) => {
 export const ScreensStage = ({ config, setConfig }: any) => {
     const [selectedState, setSelectedState] = useState('STARTING');
     const [activeId, setActiveId] = useState<string | null>(null);
+    const [isPaletteExpanded, setIsPaletteExpanded] = useState(false);
+    const paletteRef = useRef<HTMLDivElement>(null);
 
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -100,7 +102,7 @@ export const ScreensStage = ({ config, setConfig }: any) => {
             coordinateGetter: sortableKeyboardCoordinates,
         })
     );
-    
+
     // Helper to get items for a view, ensuring it's always an array
     const getItems = (view: 'host' | 'player') => {
         return config.ui?.[selectedState]?.[view]?.components || [];
@@ -112,11 +114,11 @@ export const ScreensStage = ({ config, setConfig }: any) => {
         const { active, over } = event;
         setActiveId(null);
         if (!over) return;
-        
+
         // This is a simplified logic. A real implementation would need to handle adding, removing, and reordering.
         // For this wireframe, we'll just log the action.
         console.log(`Component ${active.id} was dropped over ${over.id}`);
-        
+
         // Example of how to add a component to a view
         if (ALL_COMPONENTS.includes(active.id) && (over.id === 'host-view' || over.id === 'player-view')) {
             const view = over.id === 'host-view' ? 'host' : 'player';
@@ -137,6 +139,19 @@ export const ScreensStage = ({ config, setConfig }: any) => {
             }
         }
     };
+
+    const handlePaletteToggle = (event: React.MouseEvent) => {
+        // Check if the click was on a summary element
+        if ((event.target as HTMLElement).tagName === 'SUMMARY') {
+            // Use a timeout to allow the 'open' attribute to update in the DOM
+            setTimeout(() => {
+                if (paletteRef.current) {
+                    const anyDetailsOpen = !!paletteRef.current.querySelector('details[open]');
+                    setIsPaletteExpanded(anyDetailsOpen);
+                }
+            }, 0);
+        }
+    };
     
     return (
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
@@ -152,13 +167,19 @@ export const ScreensStage = ({ config, setConfig }: any) => {
                 </select>
 
                 <div className="screen-builder-container">
-                    <div className="component-palette">
+                    <div 
+                        ref={paletteRef} 
+                        className={`component-palette ${isPaletteExpanded ? 'is-expanded' : ''}`}
+                        onClick={handlePaletteToggle}
+                    >
                         <h3>Component Library</h3>
                         {Object.entries(COMPONENT_CATEGORIES).map(([category, components]) => (
-                            <div key={category}>
-                                <h4>{category}</h4>
-                                {components.map(compName => <DraggableItem key={compName} id={compName} />)}
-                            </div>
+                            <details key={category} className="component-category-details">
+                                <summary className="component-category-summary">{category}</summary>
+                                <div className="component-grid">
+                                    {components.map(compName => <DraggableItem key={compName} id={compName} />)}
+                                </div>
+                            </details>
                         ))}
                     </div>
 
