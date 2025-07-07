@@ -149,10 +149,17 @@ textarea {
     background-color: #12101F;
 }
 
-.component-palette h3 {
+.component-palette h3, .component-palette h4 {
     margin-top: 0;
     font-size: 1.1rem;
     color: #8A2BE2;
+}
+
+.component-palette h4 {
+    font-size: 1rem;
+    margin-top: 1rem;
+    border-top: 1px solid #444;
+    padding-top: 1rem;
 }
 
 .draggable-component {
@@ -163,6 +170,13 @@ textarea {
     cursor: grab;
     text-align: center;
     font-weight: bold;
+    user-select: none; /* Prevent text selection while dragging */
+}
+
+.draggable-component.is-overlay {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    transform: scale(1.05);
+    z-index: 1000; /* Ensure it's on top */
 }
 
 .component-palette small {
@@ -196,6 +210,13 @@ textarea {
     border: 2px dashed #333;
     border-radius: 4px;
     padding: 1rem;
+    transition: border-color 0.2s;
+}
+
+.dropzone p {
+    color: #888;
+    text-align: center;
+    margin-top: 50px;
 }
 
 .dropped-component-placeholder {

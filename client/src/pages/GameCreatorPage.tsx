@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button } from '../components/controls/Button';
 import './PageLayouts.css';
 import './GameCreatorPage.css'; // Create a new CSS file for specific styles
+import { ScreensStage } from './wizards/ScreensStage';
 
 // --- Helper Components for Wizard Stages ---
 
@@ -117,55 +118,6 @@ const StatesStage = ({ config, setConfig }: any) => {
     );
 };
 
-const ScreensStage = ({ config, setConfig }: any) => {
-    const [selectedState, setSelectedState] = useState('STARTING');
-    const availableComponents = ['GameTitle', 'CenteredMessage', 'PlayerStatusGrid', 'CountdownTimer', 'Button'];
-
-    return (
-        <div className="form-section animate-fade-in">
-            <h2>Stage 3: Screen Builder</h2>
-            <p>Design the host and player screens for each game state by dragging components.</p>
-            
-            <label>Select a game state to design:</label>
-            <select value={selectedState} onChange={(e) => setSelectedState(e.target.value)} className="state-selector">
-                {Object.keys(config.states).map(stateName => (
-                    <option key={stateName} value={stateName}>{stateName}</option>
-                ))}
-            </select>
-
-            <div className="screen-builder-container">
-                {/* Component Palette */}
-                <div className="component-palette">
-                    <h3>Component Library</h3>
-                    {availableComponents.map(compName => (
-                        <div key={compName} className="draggable-component">
-                            {compName}
-                        </div>
-                    ))}
-                    <small>Drag-and-drop is disabled due to library incompatibility with React 19.</small>
-                </div>
-
-                {/* Host and Player Dropzones */}
-                <div className="view-editors">
-                    <div className="view-editor">
-                        <h4>Host View for: <strong>{selectedState}</strong></h4>
-                        <div className="dropzone">
-                            {/* Placeholder for dropped components */}
-                            <div className="dropped-component-placeholder">GameTitle</div>
-                            <div className="dropped-component-placeholder">CenteredMessage</div>
-                        </div>
-                    </div>
-                    <div className="view-editor">
-                        <h4>Player View for: <strong>{selectedState}</strong></h4>
-                        <div className="dropzone">
-                             <div className="dropped-component-placeholder">CenteredMessage</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-};
 
 const GameFlowStage = ({ config, setConfig }: any) => {
     // A real implementation would have more complex state management
