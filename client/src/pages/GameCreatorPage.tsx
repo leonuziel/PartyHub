@@ -209,14 +209,15 @@ const BackgroundDragHandle = () => {
 
 const GameFlowStage = ({ config, setConfig }: any) => {
     const [isFullscreen, setIsFullscreen] = useState(false);
+    const [zoom, setZoom] = useState(1);
     const [viewport, setViewport] = useState({ x: 0, y: 0 });
     const [dragStartViewport, setDragStartViewport] = useState({ x: 0, y: 0 });
     const [positions, setPositions] = useState<Record<string, { x: number, y: number }>>({
-        'STARTING': { x: 50, y: 50 },
-        'VOTING': { x: 250, y: 200 },
-        'REVEAL': { x: 450, y: 50 },
-        'SCORE_SUMMARY': { x: 650, y: 200 },
-        'FINISHED': { x: 850, y: 50 }
+        'STARTING': { x: 50, y: 20 },
+        'VOTING': { x: 250, y: 150 },
+        'REVEAL': { x: 450, y: 20 },
+        'SCORE_SUMMARY': { x: 650, y: 150 },
+        'FINISHED': { x: 850, y: 20 }
     });
 
     const sensors = useSensors(useSensor(PointerSensor, {
@@ -256,26 +257,35 @@ const GameFlowStage = ({ config, setConfig }: any) => {
         }
     };
 
+    const handleWheel = (event: React.WheelEvent) => {
+        event.preventDefault();
+        const zoomSpeed = 0.0005; // Significantly reduced the multiplier for finer control
+        const newZoom = zoom - event.deltaY * zoomSpeed;
+        // Clamp zoom level between a min and max
+        setZoom(Math.max(0.2, Math.min(2.5, newZoom)));
+    };
+
     return (
         <div className={`form-section animate-fade-in ${isFullscreen ? 'canvas-fullscreen' : ''}`}>
             <div className="canvas-header">
-                <div>
-                    <h2>Stage 4: Game Flow (State Machine)</h2>
-                    <p>Drag state nodes to organize logic. Define events in each node to control transitions.</p>
-                </div>
+                <h2>Stage 4: Game Flow</h2>
                 <Button onClick={() => setIsFullscreen(!isFullscreen)}>
-                    {isFullscreen ? 'Exit Fullscreen' : 'Go Fullscreen'}
+                    {isFullscreen ? 'Expand' : 'Go Fullscreen'}
                 </Button>
             </div>
+            {isFullscreen && <p className="canvas-description">Drag state nodes to organize logic. Define events in each node to control transitions.</p>}
              <DndContext 
                 sensors={sensors} 
                 onDragStart={handleDragStart}
                 onDragMove={handleDragMove}
                 onDragEnd={handleDragEnd}
             >
-                <div className="state-canvas-wrapper">
+                <div 
+                    className="state-canvas-wrapper" 
+                    onWheel={handleWheel}
+                >
                     <BackgroundDragHandle />
-                    <div className="nodes-container" style={{ transform: `translate(${viewport.x}px, ${viewport.y}px)` }}>
+                    <div className="nodes-container" style={{ transform: `translate(${viewport.x}px, ${viewport.y}px) scale(${zoom})` }}>
                         {Object.keys(config.states).map(stateName => (
                             <StateNode 
                                 key={stateName} 
@@ -285,6 +295,7 @@ const GameFlowStage = ({ config, setConfig }: any) => {
                             />
                         ))}
                     </div>
+                    <div className="zoom-indicator">{(zoom * 100).toFixed(0)}%</div>
                 </div>
             </DndContext>
         </div>
@@ -347,7 +358,7 @@ const GameCreatorPage: React.FC = () => {
 
     return (
         <div className="page-container">
-            <h1 className="page-title">Game Creator Wizard</h1>
+            <h1 className="page-title wizard-page-title">Game Creator Wizard</h1>
             <div className={`page-content ${isWideStage ? 'is-wide' : ''}`}>
                 <div className="wizard-progress-bar">
                     <div className="wizard-progress" style={{ width: `${(stage / totalStages) * 100}%` }}></div>
