@@ -199,43 +199,92 @@ const StateNode = ({ stateName, position, config }: { stateName: string; positio
     );
 };
 
+const BackgroundDragHandle = () => {
+    const { attributes, listeners, setNodeRef } = useDraggable({
+        id: 'canvas-background',
+    });
+    return <div ref={setNodeRef} {...attributes} {...listeners} className="background-drag-handle" />;
+};
+
 
 const GameFlowStage = ({ config, setConfig }: any) => {
+    const [isFullscreen, setIsFullscreen] = useState(false);
+    const [viewport, setViewport] = useState({ x: 0, y: 0 });
+    const [dragStartViewport, setDragStartViewport] = useState({ x: 0, y: 0 });
     const [positions, setPositions] = useState<Record<string, { x: number, y: number }>>({
         'STARTING': { x: 50, y: 50 },
-        'FINISHED': { x: 550, y: 50 }
+        'VOTING': { x: 250, y: 200 },
+        'REVEAL': { x: 450, y: 50 },
+        'SCORE_SUMMARY': { x: 650, y: 200 },
+        'FINISHED': { x: 850, y: 50 }
     });
 
-    const sensors = useSensors(useSensor(PointerSensor));
+    const sensors = useSensors(useSensor(PointerSensor, {
+        // Require the mouse to move by 10 pixels before activating a drag
+        activationConstraint: {
+            distance: 10,
+        },
+    }));
+
+     const handleDragStart = (event: any) => {
+        if (event.active.id === 'canvas-background') {
+            setDragStartViewport(viewport);
+        }
+    };
+
+    const handleDragMove = (event: any) => {
+        if (event.active.id === 'canvas-background') {
+            setViewport({
+                x: dragStartViewport.x + event.delta.x,
+                y: dragStartViewport.y + event.delta.y,
+            });
+        }
+    };
 
     const handleDragEnd = (event: any) => {
         const { active, delta } = event;
-        setPositions(pos => {
-            const currentPos = pos[active.id] || { x: 0, y: 0 };
-            return {
-                ...pos,
-                [active.id]: {
-                    x: currentPos.x + delta.x,
-                    y: currentPos.y + delta.y,
-                },
-            };
-        });
+        if (active.id === 'canvas-background') {
+            setViewport({
+                x: dragStartViewport.x + delta.x,
+                y: dragStartViewport.y + delta.y,
+            });
+        } else { // It's a node
+            setPositions(pos => {
+                const currentPos = pos[active.id] || { x: 0, y: 0 };
+                return { ...pos, [active.id]: { x: currentPos.x + delta.x, y: currentPos.y + delta.y } };
+            });
+        }
     };
 
     return (
-        <div className="form-section animate-fade-in">
-            <h2>Stage 4: Game Flow (State Machine)</h2>
-            <p>Drag the state nodes to organize your game's logic. Define events within each node to control transitions.</p>
-            <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-                <div className="state-canvas">
-                    {Object.keys(config.states).map(stateName => (
-                         <StateNode 
-                            key={stateName} 
-                            stateName={stateName} 
-                            position={positions[stateName] || { x: 200, y: 150 }}
-                            config={config}
-                         />
-                    ))}
+        <div className={`form-section animate-fade-in ${isFullscreen ? 'canvas-fullscreen' : ''}`}>
+            <div className="canvas-header">
+                <div>
+                    <h2>Stage 4: Game Flow (State Machine)</h2>
+                    <p>Drag state nodes to organize logic. Define events in each node to control transitions.</p>
+                </div>
+                <Button onClick={() => setIsFullscreen(!isFullscreen)}>
+                    {isFullscreen ? 'Exit Fullscreen' : 'Go Fullscreen'}
+                </Button>
+            </div>
+             <DndContext 
+                sensors={sensors} 
+                onDragStart={handleDragStart}
+                onDragMove={handleDragMove}
+                onDragEnd={handleDragEnd}
+            >
+                <div className="state-canvas-wrapper">
+                    <BackgroundDragHandle />
+                    <div className="nodes-container" style={{ transform: `translate(${viewport.x}px, ${viewport.y}px)` }}>
+                        {Object.keys(config.states).map(stateName => (
+                            <StateNode 
+                                key={stateName} 
+                                stateName={stateName} 
+                                position={positions[stateName] || { x: 200, y: 150 }}
+                                config={config}
+                            />
+                        ))}
+                    </div>
                 </div>
             </DndContext>
         </div>
@@ -257,6 +306,9 @@ const GameCreatorPage: React.FC = () => {
         initialState: 'STARTING',
         states: {
             'STARTING': {},
+            'VOTING': {},
+            'REVEAL': {},
+            'SCORE_SUMMARY': {},
             'FINISHED': {}
         },
         playerAttributes: {},
