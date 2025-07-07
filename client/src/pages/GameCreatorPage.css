@@ -4,6 +4,11 @@
     background-color: #1c192b;
     padding: 2rem;
     border-radius: 8px;
+    transition: max-width 0.4s ease-in-out;
+}
+
+.page-content.is-wide {
+    max-width: 1200px;
 }
 
 .wizard-progress-bar {
@@ -75,6 +80,33 @@ textarea {
 }
 
 /* State management specific styles */
+.states-stage-layout {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+}
+.states-add-column {
+    flex: 1;
+    background-color: #12101F;
+    padding: 1rem;
+    border-radius: 6px;
+}
+.states-list-column {
+    flex: 1.5;
+    background-color: #12101F;
+    padding: 1rem;
+    border-radius: 6px;
+}
+.states-add-column h3, .states-list-column h3 {
+    margin-top: 0;
+    color: #8A2BE2;
+}
+.initial-state-instruction {
+    font-size: 0.9rem;
+    color: #aaa;
+    margin: 0 0 1rem 0;
+}
+
 .state-input-group {
     display: flex;
     gap: 1rem;
@@ -190,8 +222,14 @@ textarea {
 .view-editors {
     flex-grow: 1;
     display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+    gap: 1.5rem; /* Change direction to row for side-by-side layout */
+}
+
+.view-editor {
+    flex: 1; /* Make each editor take up equal space */
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 1rem;
 }
 
 .view-editor {
@@ -279,6 +317,84 @@ textarea {
     background-color: #333;
     border-radius: 4px;
     margin-bottom: 0.5rem;
+}
+
+/* --- State Canvas Styles --- */
+
+.state-canvas {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    background-color: rgba(0,0,0,0.2);
+    border: 1px solid #444;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.state-node {
+    position: absolute;
+    width: 220px;
+    background-color: #1C192B;
+    border: 1px solid #8A2BE2;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    user-select: none;
+}
+
+.state-node-header {
+    background-color: #8A2BE2;
+    color: white;
+    padding: 0.5rem 0.75rem;
+    font-weight: bold;
+    cursor: grab;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.state-node-body {
+    padding: 0.75rem;
+}
+
+.event-section {
+    background-color: #12101F;
+    padding: 0.5rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.event-section strong {
+    font-size: 0.9rem;
+}
+
+.add-event-btn {
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 1.2rem;
+    line-height: 24px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.event-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.event-list li {
+    padding: 0.3rem 0.5rem;
+    background-color: #333;
+    border-radius: 3px;
+    margin-bottom: 0.25rem;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 .animate-fade-in {
