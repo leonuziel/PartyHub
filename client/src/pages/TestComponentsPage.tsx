@@ -37,8 +37,7 @@ import { CenteredMessage } from '../components/layout/CenteredMessage';
 
 // --- Common ---
 import { Spinner } from '../components/common/Spinner';
-import Modal from '../components/common/Modal';
-import { DebugPanel } from '../components/common/DebugPanel';
+import { Modal } from '../components/common/Modal';
 
 // --- Cards ---
 import { Card } from '../components/cards/Card';

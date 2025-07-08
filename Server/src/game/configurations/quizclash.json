@@ -1,87 +1,283 @@
 {
-    "metadata": {
-      "gameId": "quizclash",
-      "title": "QuizClash (Config)",
-      "description": "A dynamically configured trivia game.",
-      "minPlayers": 1,
-      "maxPlayers": 8
-    },
-    "playerAttributes": {
-      "score": 0,
-      "currentAnswer": null
-    },
-    "initialState": "STARTING",
-    "states": {
-      "STARTING": {
-        "onEnter": "startTimer(3)"
+  "metadata": {
+    "gameId": "quizclash",
+    "title": "QuizClash (Config)",
+    "description": "A dynamically configured trivia game.",
+    "minPlayers": 1,
+    "maxPlayers": 8
+  },
+  "gameData": {
+    "questions": [
+      {
+        "questionText": "What is the chemical symbol for gold?",
+        "correctAnswer": "Au",
+        "options": [
+          "Au",
+          "Ag",
+          "Go",
+          "Gd"
+        ]
       },
-      "ASKING_QUESTION": {},
-      "REVEAL_ANSWER": {},
-      "FINISHED": {}
-    },
-    "actions": {
-      "startGame": {
-        "permission": ["host"]
-      },
-      "submitAnswer": {
-        "permission": ["player"]
-      },
-      "timerExpires": {
-        "permission": ["server"]
+      {
+        "questionText": "Which planet is known as the Red Planet?",
+        "correctAnswer": "Mars",
+        "options": [
+          "Mars",
+          "Jupiter",
+          "Venus",
+          "Saturn"
+        ]
+      }
+    ]
+  },
+  "initialGameState": {
+    "currentQuestionIndex": -1,
+    "currentQuestion": null
+  },
+  "playerAttributes": {
+    "score": 0,
+    "currentAnswer": null
+  },
+  "initialState": "STARTING",
+  "states": {
+    "STARTING": {
+      "onEnter": {
+        "function": "startTimer",
+        "args": [
+          3
+        ]
       }
     },
-    "transitions": [
-      {
-        "from": "STARTING",
-        "to": "ASKING_QUESTION",
-        "action": "timerExpires"
-      },
-      {
-        "from": "ASKING_QUESTION",
-        "to": "REVEAL_ANSWER",
-        "action": "timerExpires"
-      },
-      {
-        "from": "REVEAL_ANSWER",
-        "to": "ASKING_QUESTION",
-        "action": "timerExpires"
-      }
-    ],
-    "ui": {
-      "STARTING": {
-        "host": {
-          "components": [
-            {
-              "component": "GameTitle",
-              "props": {
-                "title": "QuizClash"
-              }
-            },
-            {
-                "component": "CenteredMessage",
-                "props": {
-                    "children": "Getting ready to start..."
-                }
-            },
-            {
-              "component": "CountdownTimer",
-              "props": {
-                "duration": 5
-              }
-            }
+    "ASKING_QUESTION": {
+      "onEnter": [
+        {
+          "function": "incrementProperty",
+          "args": [
+            "currentQuestionIndex"
           ]
         },
-        "player": {
-          "components": [
-            {
-                "component": "CenteredMessage",
-                "props": {
-                    "children": "The game is about to begin!"
-                }
-            }
+        {
+          "function": "setProperty",
+          "args": [
+            "currentQuestion",
+            "{{gameData.questions[gameState.currentQuestionIndex]}}"
+          ]
+        },
+        {
+          "function": "startTimer",
+          "args": [
+            10
           ]
         }
+      ]
+    },
+    "REVEAL_ANSWER": {
+      "onEnter": {
+        "function": "startTimer",
+        "args": [
+          5
+        ]
+      }
+    },
+    "FINISHED": {}
+  },
+  "actions": {
+    "startGame": {
+      "permissions": [
+        "host"
+      ]
+    },
+    "submitAnswer": {
+      "permissions": [
+        "player"
+      ],
+      "effects": [
+        {
+          "function": "setProperty",
+          "args": [
+            "playerAttributes.{{actorId}}.currentAnswer",
+            "{{payload}}"
+          ]
+        }
+      ]
+    },
+    "timerExpires": {
+      "permissions": [
+        "server"
+      ]
+    }
+  },
+  "transitions": [
+    {
+      "from": "STARTING",
+      "to": "ASKING_QUESTION",
+      "action": "timerExpires"
+    },
+    {
+      "from": "ASKING_QUESTION",
+      "to": "REVEAL_ANSWER",
+      "action": "timerExpires"
+    },
+    {
+      "from": "REVEAL_ANSWER",
+      "to": "ASKING_QUESTION",
+      "action": "timerExpires"
+    },
+    {
+      "from": "REVEAL_ANSWER",
+      "to": "FINISHED",
+      "action": "timerExpires",
+      "condition": "{{gameState.currentQuestionIndex >= gameData.questions.length - 1}}"
+    }
+  ],
+  "ui": {
+    "STARTING": {
+      "host": {
+        "components": [
+          {
+            "component": "GameTitle",
+            "props": {
+              "title": "QuizClash"
+            }
+          },
+          {
+            "component": "CenteredMessage",
+            "props": {
+              "children": "Getting ready to start..."
+            }
+          },
+          {
+            "component": "CountdownTimer",
+            "props": {
+              "duration": 3
+            }
+          }
+        ]
+      },
+      "player": {
+        "components": [
+          {
+            "component": "CenteredMessage",
+            "props": {
+              "children": "The game is about to begin!"
+            }
+          }
+        ]
+      }
+    },
+    "ASKING_QUESTION": {
+      "host": {
+        "components": [
+          {
+            "component": "QuestionHeader",
+            "props": {
+              "text": "Question {{gameState.currentQuestionIndex + 1}}"
+            }
+          },
+          {
+            "component": "QuestionDisplay",
+            "props": {
+              "text": "{{gameState.currentQuestion.questionText}}"
+            }
+          },
+          {
+            "component": "PlayerStatusGrid",
+            "props": {
+              "players": "{{players}}"
+            }
+          }
+        ]
+      },
+      "player": {
+        "components": [
+          {
+            "component": "QuestionDisplay",
+            "props": {
+              "text": "{{gameState.currentQuestion.questionText}}"
+            }
+          },
+          {
+            "component": "AnswerGrid",
+            "props": {
+              "answers": "{{gameState.currentQuestion.options}}",
+              "onAnswer": "submitAnswer"
+            }
+          }
+        ]
+      }
+    },
+    "REVEAL_ANSWER": {
+      "host": {
+        "components": [
+          {
+            "component": "QuestionDisplay",
+            "props": {
+              "text": "{{gameState.currentQuestion.questionText}}"
+            }
+          },
+          {
+            "component": "AnswerResult",
+            "props": {
+              "answer": "{{gameState.currentQuestion.correctAnswer}}",
+              "percentage": 0,
+              "isCorrect": true
+            }
+          },
+          {
+            "component": "Leaderboard",
+            "props": {
+              "players": "{{players}}"
+            }
+          }
+        ]
+      },
+      "player": {
+        "components": [
+          {
+            "component": "AnswerResult",
+            "props": {
+              "answer": "{{gameState.currentQuestion.correctAnswer}}",
+              "percentage": 0,
+              "isCorrect": true
+            }
+          },
+          {
+            "component": "RankUpdate",
+            "props": {
+              "newRank": "{{player.rank}}",
+              "rankChange": "{{player.rankChange}}"
+            }
+          }
+        ]
+      }
+    },
+    "FINISHED": {
+      "host": {
+        "components": [
+          {
+            "component": "WinnerDisplay",
+            "props": {
+              "winner": "{{winner}}"
+            }
+          },
+          {
+            "component": "Podium",
+            "props": {
+              "players": "{{topThreePlayers}}"
+            }
+          }
+        ]
+      },
+      "player": {
+        "components": [
+          {
+            "component": "RankDisplay",
+            "props": {
+              "rank": "{{player.rank}}"
+            }
+          }
+        ]
       }
     }
   }
-  
+}

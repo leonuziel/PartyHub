@@ -1,5 +1,6 @@
 import React from 'react';
 import { useGameStore } from '../store/gameStore';
+import { usePlayerStore } from '../store/playerStore';
 import { usePlayerRole } from '../hooks/usePlayerRole';
 import { ComponentRegistry } from '../components/ComponentRegistry';
 import { CenteredMessage } from '../components/layout/CenteredMessage';
@@ -19,7 +20,14 @@ export const DynamicViewRenderer: React.FC = () => {
     }
 
     const role = isHost ? 'host' : 'player';
-    const viewConfig: ComponentConfig[] = gameState.ui[gameState.currentState]?.[role]?.components;
+    let viewConfig: ComponentConfig[];
+
+    if (isHost) {
+        viewConfig = gameState.ui?.host?.components;
+    } else {
+        const playerId = usePlayerStore.getState().socketId;
+        viewConfig = gameState.ui?.players?.[playerId!]?.components;
+    }
 
     if (!viewConfig || !Array.isArray(viewConfig)) {
         return (
@@ -34,7 +42,7 @@ export const DynamicViewRenderer: React.FC = () => {
         if (!Component) {
             return <div key={index}>Error: Component '{config.component}' not found in registry.</div>;
         }
-        // Here we could add logic to resolve props from game state, e.g. props={...config.props, gameState}
+        // The server now sends fully resolved props, so we just pass them through.
         return <Component key={index} {...config.props} />;
     });
 

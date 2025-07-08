@@ -1,5 +1,7 @@
 export interface GameConfiguration {
     metadata: GameMetadata;
+    gameData?: Record<string, any>;
+    initialGameState?: Record<string, any>;
     states: Record<string, GameState>;
     initialState: string;
     playerAttributes: Record<string, any>;
@@ -17,23 +19,25 @@ export interface GameConfiguration {
     artworkUrl?: string;
   }
   
+interface ActionObject {
+    function: string;
+    args: any[];
+  }
+  
   export interface GameState {
-    // Defines what happens when entering a state, e.g., starting a timer.
-    onEnter?: (gameState: any, services: any) => void; 
-    // Defines what happens when exiting a state.
-    onExit?: (gameState: any, services: any) => void;
+    onEnter?: ((gameState: any, services: any) => void) | ActionObject | string;
+    onExit?: ((gameState: any, services: any) => void) | ActionObject | string;
   }
   
   export interface GameAction {
-    // Defines who can perform the action.
     permissions: ('host' | 'player' | 'server')[]; 
-    // The logic to execute when the action is triggered.
-    execute: (gameState: any, payload: any, services: any) => void; 
+    effects?: any;
   }
   
   export interface GameTransition {
-    from: string; // The source state.
-    to: string; // The target state.
-    action: string; // The action that triggers the transition.
+    from: string;
+    to: string;
+    action: string;
+    condition?: string;
   }
   

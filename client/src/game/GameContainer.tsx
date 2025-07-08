@@ -41,7 +41,7 @@ export const GameContainer: React.FC = () => {
 
   const gameView = renderGameView();
 
-  if (isHost && !isConfigurable) { // The HostFrame is part of the dynamic layout system
+  if (isHost && !isConfigurable && gameState.gameId !== 'quizclash') { // The HostFrame is part of the dynamic layout system
     return (
       <HostFrame>
         {gameView}

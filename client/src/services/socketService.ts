@@ -57,8 +57,9 @@ class SocketService {
     this.socket.on('game:state_update', (data: any) => {
       debugStore.setLastEvent('game:state_update');
       console.log('Game state update received:', data);
-      const isConfigurable = data.hasOwnProperty('currentState');
-      useGameStore.getState().setGameState(data, isConfigurable);
+      const gameState = Array.isArray(data) ? data[0] : data;
+      const isConfigurable = gameState.hasOwnProperty('ui');
+      useGameStore.getState().setGameState(gameState, isConfigurable);
     });
 
     this.socket.onAny((event, ...args) => {
