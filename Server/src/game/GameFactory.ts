@@ -5,7 +5,7 @@ import { CardsWarGame } from './games/cardGames/CardsWarGame.js';
 import { TexasHoldemGame } from './games/cardGames/TexasHoldemGame.js';
 import { BaseGameState, Player } from '../types/interfaces.js';
 import { ConfigurableGame } from './games/ConfigurableGame.js';
-import { GameConfiguration } from '../types/GameConfiguration.js';
+import { GameConfiguration } from '../utils/validators/GameConfigValidator.js';
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
@@ -32,8 +32,8 @@ export class GameFactory {
         console.log(`Creating configurable game for ${gameId}`);
         return new ConfigurableGame(players, hostId, broadcast, onGameEnd, config);
       } catch (error) {
-        console.error(`Error loading or parsing game configuration for ${gameId}:`, error);
-        // Fallback to hardcoded games if config loading fails
+        console.error(`Error loading, parsing, or validating game configuration for ${gameId}:`, error);
+        throw error; // Re-throw the error to prevent fallback
       }
     }
 

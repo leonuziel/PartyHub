@@ -1,6 +1,7 @@
 import { BaseGame } from '../BaseGame.js';
 import { Player, BaseGameState } from '../../types/interfaces.js';
-import { GameConfiguration } from '../../types/GameConfiguration.js';
+import { GameConfiguration } from '../../utils/validators/GameConfigValidator.js';
+import { validateGameConfiguration } from '../../utils/validators/GameConfigValidator.js';
 import _ from 'lodash';
 
 interface ConfigurableGameState extends BaseGameState {
@@ -14,19 +15,33 @@ export class ConfigurableGame extends BaseGame<ConfigurableGameState> {
     protected players: Map<string, Player>,
     protected hostId: string,
     protected broadcast: (event: string, payload: any) => void,
-    protected onGameEnd: () => void,
+    protected onGameEnd: () => void=()=>{},
     private config: GameConfiguration
   ) {
-    super(players, hostId, broadcast, onGameEnd);
-    this.gameState.gameId = config.metadata.gameId;
-    this.gameState.status = config.initialState;
+    super(players, hostId, broadcast,onGameEnd);
+
+    const validationResult = validateGameConfiguration(config);
+    if (!validationResult.success) {
+      // A more robust error handling strategy would be better here.
+      // For now, we'll just log the errors.
+      console.error("Game configuration validation failed:", validationResult.error.errors);
+      // You might want to throw an error to prevent the game from starting
+      // with an invalid configuration.
+      throw new Error("Invalid game configuration.");
+    }
+
+    this.config = validationResult.data;
+
+    this.gameState.gameId = this.config.metadata.gameId;
+    this.gameState.status = this.config.initialState;
     
     // Initialize game state with values from the config
-    if (config.initialGameState) {
-        for (const key in config.initialGameState) {
-            this.gameState[key] = config.initialGameState[key];
+    if (this.config.initialGameState) {
+        for (const key in this.config.initialGameState) {
+            this.gameState[key] = this.config.initialGameState[key];
         }
     }
+    console.log(this.gameState);
   }
 
   public start(): void {
@@ -34,9 +49,16 @@ export class ConfigurableGame extends BaseGame<ConfigurableGameState> {
   }
 
   public handlePlayerAction(playerId: string, action: { type: string; payload?: any }): void {
+    console.log('Received action:', action);
     this.executeAction(action.type, playerId, action.payload);
+    this.logState('Updated game state:');
   }
   
+  private logState(message:string='') {
+    console.log(message);
+    console.log(this.gameState);
+  }
+
   private handleInternalAction(actionType: string, payload?: any) {
     this.executeAction(actionType, 'server', payload);
   }
@@ -92,6 +114,7 @@ export class ConfigurableGame extends BaseGame<ConfigurableGameState> {
   }
 
   private transitionTo(newState: string) {
+    this.logState("Transitioning to state " + newState + ":");
     if (this.gameState.status === 'FINISHED') return;
 
     this.gameState.status = newState;
