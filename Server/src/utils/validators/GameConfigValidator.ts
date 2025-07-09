@@ -3,8 +3,16 @@ import { z } from 'zod';
 // Prop schemas for each component, based on components.md and existing configs.
 // Props that receive dynamic data from game state (e.g., arrays of players, question text)
 // are typed as `z.string()` because they will be template strings like "{{players}}".
-// Props that are functions (e.g., onAnswer) are typed as `z.string()` because they
-// will hold the name of a game action.
+
+// Defines the new structured format for UI actions, allowing for an optional payload.
+const uiActionObjectSchema = z.object({
+  action: z.string(),
+  payload: z.any().optional(),
+});
+
+// An action can be either the new structured object or the legacy string format.
+const uiActionSchema = z.union([uiActionObjectSchema, z.string()]);
+
 
 const DebugPanelProps = z.object({}).passthrough();
 const ButtonProps = z.object({
@@ -14,7 +22,7 @@ const ButtonProps = z.object({
 const ActionButtonProps = ButtonProps;
 const AnswerGridProps = z.object({
   answers: z.string(),
-  onAnswer: z.string(),
+  onAnswer: uiActionSchema,
   disabled: z.boolean().optional(),
   selectedAnswer: z.any().optional(),
   fillParent: z.boolean().optional(),
@@ -25,16 +33,16 @@ const GameCardProps = z.object({
   playerCount: z.string(),
   playtime: z.string(),
   imageUrl: z.string(),
-  onClick: z.string(),
+  onClick: uiActionSchema,
 }).passthrough();
 const TextAreaWithCounterProps = z.object({
   maxLength: z.number(),
   placeholder: z.string().optional(),
-  onChange: z.string(),
+  onChange: uiActionSchema,
 }).passthrough();
 const VotingOptionsProps = z.object({
   options: z.string(),
-  onVote: z.string().optional(),
+  onVote: uiActionSchema.optional(),
   disabled: z.boolean().optional(),
 }).passthrough();
 const AnswerResultProps = z.object({
@@ -120,8 +128,7 @@ const WinnerDisplayProps = z.object({
 }).passthrough();
 const CountdownTimerProps = z.object({
   initialValue: z.number().optional(),
-  duration: z.number().optional(), // `duration` is used in quizclash.json
-  onComplete: z.string().optional(),
+  onComplete: uiActionSchema.optional(),
 }).passthrough();
 const CenteredMessageProps = z.object({
   children: z.string().optional(),
@@ -131,13 +138,13 @@ const HostFrameProps = z.object({}).passthrough();
 const HostViewContainerProps = z.object({}).passthrough();
 const PlayAreaProps = z.object({}).passthrough();
 const PlayerViewContainerProps = z.object({}).passthrough();
-const BiddingPopupProps = z.object({ onBid: z.string(), onPass: z.string() }).passthrough();
+const BiddingPopupProps = z.object({ onBid: uiActionSchema, onPass: uiActionSchema }).passthrough();
 const CardProps = z.object({ faceUp: z.boolean().optional(), content: z.any().optional(), className: z.string().optional() }).passthrough();
 const CardFanProps = z.object({ cards: z.string() }).passthrough();
-const CardSlotProps = z.object({ card: z.string().optional(), onClick: z.string().optional(), isFaceUp: z.boolean().optional() }).passthrough();
-const DeckProps = z.object({ count: z.any(), onDraw: z.string().optional() }).passthrough();
+const CardSlotProps = z.object({ card: z.string().optional(), onClick: uiActionSchema.optional(), isFaceUp: z.boolean().optional() }).passthrough();
+const DeckProps = z.object({ count: z.any(), onDraw: uiActionSchema.optional() }).passthrough();
 const DiscardPileProps = z.object({ topCard: z.string().optional() }).passthrough();
-const HandProps = z.object({ cards: z.string(), onCardClick: z.string().optional() }).passthrough();
+const HandProps = z.object({ cards: z.string(), onCardClick: uiActionSchema.optional() }).passthrough();
 const LastPlayedCardProps = z.object({ card: z.string() }).passthrough();
 const MeldProps = z.object({ cards: z.string() }).passthrough();
 const PlayerHandDisplayProps = z.object({ cardCount: z.any(), playerName: z.string() }).passthrough();

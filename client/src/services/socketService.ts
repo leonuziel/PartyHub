@@ -102,6 +102,17 @@ class SocketService {
   public sendPlayerAction(roomCode: string, action: any) {
     this.emit('player:action', { roomCode, action });
   }
+  
+  public sendGameAction(actionType: string, payload: any) {
+    const roomCode = useRoomStore.getState().room?.roomCode;
+    if (!roomCode) {
+      console.error("Cannot send game action, no room code found.");
+      return;
+    }
+    const action = { type: actionType, payload };
+    console.log(`[SocketService] Emitting game:action:`, action);
+    this.emit('game:action', { roomCode, action });
+  }
 }
 
 export const socketService = new SocketService();

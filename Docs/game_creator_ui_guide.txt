@@ -19,53 +19,7 @@ The wizard consists of the following stages:
 The wizard is designed to produce a JSON object that represents the complete game configuration. This object has the following structure:
 
 ```json
-{
-  "metadata": {
-    "gameId": "my-awesome-game",
-    "title": "My Awesome Game",
-    "description": "A game of awesomeness.",
-    "minPlayers": 2,
-    "maxPlayers": 8
-  },
-  "initialState": "STARTING",
-  "states": {
-    "STARTING": {},
-    "VOTING": {},
-    "REVEAL": {},
-    "SCORE_SUMMARY": {},
-    "FINISHED": {}
-  },
-  "playerAttributes": {},
-  "actions": {},
-  "transitions": [],
-"ui": {
-    "STARTING": {
-      "host": {
-        "components": [
-          { 
-            "id": "gt-1",
-            "component": "GameTitle", 
-            "props": { "text": "My Awesome Game" } 
-          },
-          { 
-            "id": "psg-1",
-            "component": "PlayerStatusGrid", 
-            "props": {} 
-          }
-        ]
-      },
-      "player": {
-        "components": [
-          { 
-            "id": "cm-1",
-            "component": "CenteredMessage", 
-            "props": { "message": "Waiting for the game to start..." } 
-          }
-        ]
-      }
-    }
-  }
-}
+// TODO add an Example here
 ```
 
 ## 3. Current Progress

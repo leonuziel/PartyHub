@@ -45,9 +45,13 @@ export class SocketManager {
         }
       });
       
-      socket.on('player:action', ({ roomCode, action }) => {
+      socket.on('game:action', ({ roomCode, action }) => {
         const room = roomManager.getRoom(roomCode);
-        room?.handlePlayerAction(socket.id, action);
+        if (room) {
+          room.handlePlayerAction(socket.id, action);
+        } else {
+          console.warn(`[SocketManager] Room not found for code: ${roomCode}`);
+        }
       });
       
       socket.on('disconnecting', () => {

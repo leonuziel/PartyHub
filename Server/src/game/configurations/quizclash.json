@@ -72,12 +72,15 @@
       ]
     },
     "REVEAL_ANSWER": {
-      "onEnter": {
+      "onEnter": [{
         "function": "startTimer",
         "args": [
           5
         ]
-      }
+      },{
+        // TODO add a per player action support
+        // add here such action that evaluates new score based on answer
+      }]
     },
     "FINISHED": {}
   },
@@ -94,7 +97,7 @@
       "effects": [
         {
           "function": "setProperty",
-          "args": [
+"args": [
             "playerAttributes.{{actorId}}.currentAnswer",
             "{{payload}}"
           ]
@@ -196,7 +199,7 @@
           }
         ]
       },
-      "player": {
+          "player": {
         "components": [
           {
             "component": "QuestionDisplay",
@@ -208,7 +211,10 @@
             "component": "AnswerGrid",
             "props": {
               "answers": "{{gameState.currentQuestion.options}}",
-              "onAnswer": "submitAnswer"
+              "onAnswer": { 
+                "action": "submitAnswer",
+                 "payload": "{{player.currentAnswer}}"
+                }
             }
           }
         ]

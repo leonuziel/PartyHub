@@ -41,6 +41,14 @@ export class ConfigurableGame extends BaseGame<ConfigurableGameState> {
             this.gameState[key] = this.config.initialGameState[key];
         }
     }
+    
+    // Initialize attributes for each player
+    if (this.config.playerAttributes) {
+        this.gameState.playerAttributes = {};
+        this.players.forEach(player => {
+            this.gameState.playerAttributes[player.id] = { ...this.config.playerAttributes };
+        });
+    }
 
     console.log("Game configuration:");
     console.log(this.config);
@@ -222,7 +230,11 @@ export class ConfigurableGame extends BaseGame<ConfigurableGameState> {
     // Create a deeply interpolated version of the UI for each player
     const playerUIs: { [playerId: string]: any } = {};
     this.players.forEach(player => {
-        playerUIs[player.id] = this.interpolate(uiConfig.player, { ...context, player });
+        const playerState = {
+            ...player,
+            ...(this.gameState.playerAttributes?.[player.id] || {})
+        };
+        playerUIs[player.id] = this.interpolate(uiConfig.player, { ...context, player: playerState });
     });
 
     return {
