@@ -41,7 +41,10 @@ export class ConfigurableGame extends BaseGame<ConfigurableGameState> {
             this.gameState[key] = this.config.initialGameState[key];
         }
     }
-    console.log(this.gameState);
+
+    console.log("Game configuration:");
+    console.log(this.config);
+    this.logState('Initial game state:');
   }
 
   public start(): void {
@@ -60,10 +63,13 @@ export class ConfigurableGame extends BaseGame<ConfigurableGameState> {
   }
 
   private handleInternalAction(actionType: string, payload?: any) {
+    console.log('Received internal action:', actionType);
     this.executeAction(actionType, 'server', payload);
+    this.logState('Updated game state:');
   }
 
   private executeAction(type: string, actorId: string, payload?: any) {
+    console.log('Executing action:', type);
     const actionConfig = this.config.actions[type];
     if (!actionConfig) {
       console.error(`Action ${type} not found.`);
@@ -89,10 +95,12 @@ export class ConfigurableGame extends BaseGame<ConfigurableGameState> {
                 const conditionValue = this.resolveValue(transition.condition, { actorId, payload });
                 if (conditionValue) {
                     this.transitionTo(transition.to);
+                    this.logState('Updated game state:');
                     return;
                 }
             } else {
                 this.transitionTo(transition.to);
+                this.logState('Updated game state:');
                 return;
             }
         }
@@ -133,7 +141,7 @@ export class ConfigurableGame extends BaseGame<ConfigurableGameState> {
 
   private executeStateEffect(effectOrEffects: any, context: any = {}) {
     const effects = Array.isArray(effectOrEffects) ? effectOrEffects : [effectOrEffects];
-
+    console.log('Executing state effects:', effects);
     for (const effect of effects) {
         if (typeof effect.function !== 'string') {
             console.warn('Unsupported action format in effects:', effect);
@@ -150,16 +158,21 @@ export class ConfigurableGame extends BaseGame<ConfigurableGameState> {
                 setTimeout(() => this.handleInternalAction('timerExpires'), resolvedArgs[0] * 1000);
                 break;
             case 'setProperty':
+              console.log('Setting property:', resolvedArgs[0], 'to', resolvedArgs[1]);
                 _.set(this.gameState, resolvedArgs[0], resolvedArgs[1]);
                 break;
             case 'incrementProperty':
                 const currentValue = _.get(this.gameState, resolvedArgs[0], 0);
                 _.set(this.gameState, resolvedArgs[0], currentValue + 1);
+                console.log('Incremented property:', resolvedArgs[0]);
+                console.log('Old value:', currentValue);
+                console.log('New value:', _.get(this.gameState, resolvedArgs[0]));
                 break;
             default:
                 console.warn(`Unknown effect function: ${funcName}`);
         }
     }
+    this.logState('Updated game state:');
   }
 
   private resolveValue(value: any, context: any = {}): any {

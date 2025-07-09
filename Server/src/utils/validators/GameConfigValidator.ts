@@ -34,7 +34,7 @@ const TextAreaWithCounterProps = z.object({
 }).passthrough();
 const VotingOptionsProps = z.object({
   options: z.string(),
-  onVote: z.string(),
+  onVote: z.string().optional(),
   disabled: z.boolean().optional(),
 }).passthrough();
 const AnswerResultProps = z.object({

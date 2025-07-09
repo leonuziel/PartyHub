@@ -121,7 +121,8 @@
     {
       "from": "REVEAL_ANSWER",
       "to": "ASKING_QUESTION",
-      "action": "timerExpires"
+      "action": "timerExpires",
+      "condition": "{{gameState.currentQuestionIndex < gameData.questions.length - 1}}"
     },
     {
       "from": "REVEAL_ANSWER",
@@ -177,7 +178,14 @@
           {
             "component": "QuestionDisplay",
             "props": {
-              "text": "{{gameState.currentQuestion.questionText}}"
+              "question": "{{gameState.currentQuestion.questionText}}"
+            }
+          },
+          {
+            "component":"AnswerGrid",
+            "props":{
+              "answers":"{{gameState.currentQuestion.options}}",
+              "onAnswer":"submitAnswer"
             }
           },
           {
@@ -193,7 +201,7 @@
           {
             "component": "QuestionDisplay",
             "props": {
-              "text": "{{gameState.currentQuestion.questionText}}"
+              "question": "{{gameState.currentQuestion.questionText}}"
             }
           },
           {
@@ -212,7 +220,7 @@
           {
             "component": "QuestionDisplay",
             "props": {
-              "text": "{{gameState.currentQuestion.questionText}}"
+              "question": "{{gameState.currentQuestion.questionText}}"
             }
           },
           {

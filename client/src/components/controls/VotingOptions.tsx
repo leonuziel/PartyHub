@@ -8,7 +8,7 @@ interface VotingOptionsProps {
   disabled?: boolean;
 }
 
-export const VotingOptions: React.FC<VotingOptionsProps> = ({ options, onVote, disabled }) => {
+export const VotingOptions: React.FC<VotingOptionsProps> = ({ options, onVote=()=>{}, disabled=false }) => {
   return (
     <div className="voting-options">
       {options.map((option, index) => (
