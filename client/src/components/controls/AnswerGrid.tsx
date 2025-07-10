@@ -23,7 +23,10 @@ export const AnswerGrid: React.FC<AnswerGridProps> = ({ answers, onAnswer, disab
       {answers.map((answer, index) => (
         <button
           key={index}
-          onClick={() => onAnswer(index)}
+          onClick={() => {
+            console.log("trying to answer with - "+ onAnswer);
+            onAnswer(index);
+          }}
           disabled={disabled}
           className={`answer-btn btn-${answerDesigns[index].color} ${selectedAnswer === index ? 'selected' : ''}`}
         >

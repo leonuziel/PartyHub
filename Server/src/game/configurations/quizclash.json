@@ -32,36 +32,78 @@
   },
   "initialGameState": {
     "currentQuestionIndex": -1,
-    "currentQuestion": null
+    "currentQuestion": null,
+    "winner": null,
+    "topThreePlayers": []
   },
   "playerAttributes": {
     "score": 0,
     "currentAnswer": null
   },
+  "actions": {
+    "goToNextQuestion": [
+      {
+        "function": "incrementProperty",
+        "args": [
+          "currentQuestionIndex"
+        ]
+      },
+      {
+        "function": "setProperty",
+        "args": [
+          "currentQuestion",
+          "{{gameData.questions[gameState.currentQuestionIndex]}}"
+        ]
+      }
+    ],
+    "recordPlayerAnswer": [
+      {
+        "function": "setProperty",
+        "args": [
+          "playerAttributes.{{actorId}}.currentAnswer",
+          "{{gameState.currentQuestion.options[payload]}}"
+        ]
+      }
+    ],
+    "awardPointsAndResetAnswer": [
+      {
+        "condition": "{{player.currentAnswer === gameState.currentQuestion.correctAnswer}}",
+        "function": "incrementProperty",
+        "args": [
+          "playerAttributes.{{player.id}}.score",
+          10
+        ]
+      },
+      {
+        "function": "setProperty",
+        "args": [
+          "playerAttributes.{{player.id}}.currentAnswer",
+          null
+        ]
+      }
+    ],
+    "calculateWinner": [
+      {
+        "function": "calculateWinner"
+      }
+    ]
+  },
   "initialState": "STARTING",
   "states": {
     "STARTING": {
-      "onEnter": {
-        "function": "startTimer",
-        "args": [
-          3
-        ]
-      }
+      "onEnter": [
+        {
+          "function": "startTimer",
+          "args": [
+            3
+          ]
+        }
+      ]
     },
     "ASKING_QUESTION": {
       "onEnter": [
         {
-          "function": "incrementProperty",
-          "args": [
-            "currentQuestionIndex"
-          ]
-        },
-        {
-          "function": "setProperty",
-          "args": [
-            "currentQuestion",
-            "{{gameData.questions[gameState.currentQuestionIndex]}}"
-          ]
+          "runAction": "goToNextQuestion"
         },
         {
           "function": "startTimer",
@@ -72,19 +114,33 @@
       ]
     },
     "REVEAL_ANSWER": {
-      "onEnter": [{
-        "function": "startTimer",
-        "args": [
-          5
-        ]
-      },{
-        // TODO add a per player action support
-        // add here such action that evaluates new score based on answer
-      }]
+      "onEnter": [
+        {
+          "function": "startTimer",
+          "args": [
+            5
+          ]
+        },
+        {
+          "forEachPlayer": {
+            "effects": [
+              {
+                "runAction": "awardPointsAndResetAnswer"
+              }
+            ]
+          }
+        }
+      ]
     },
-    "FINISHED": {}
+    "FINISHED": {
+      "onEnter": [
+        {
+          "runAction": "calculateWinner"
+        }
+      ]
+    }
   },
-  "actions": {
+  "events": {
     "startGame": {
       "permissions": [
         "host"
@@ -96,11 +152,7 @@
       ],
       "effects": [
         {
-          "function": "setProperty",
-"args": [
-            "playerAttributes.{{actorId}}.currentAnswer",
-            "{{payload}}"
-          ]
+          "runAction": "recordPlayerAnswer"
         }
       ]
     },
@@ -114,23 +166,23 @@
     {
       "from": "STARTING",
       "to": "ASKING_QUESTION",
-      "action": "timerExpires"
+      "event": "timerExpires"
     },
     {
       "from": "ASKING_QUESTION",
       "to": "REVEAL_ANSWER",
-      "action": "timerExpires"
+      "event": "timerExpires"
     },
     {
       "from": "REVEAL_ANSWER",
       "to": "ASKING_QUESTION",
-      "action": "timerExpires",
+      "event": "timerExpires",
       "condition": "{{gameState.currentQuestionIndex < gameData.questions.length - 1}}"
     },
     {
       "from": "REVEAL_ANSWER",
       "to": "FINISHED",
-      "action": "timerExpires",
+      "event": "timerExpires",
       "condition": "{{gameState.currentQuestionIndex >= gameData.questions.length - 1}}"
     }
   ],
@@ -153,7 +205,7 @@
           {
             "component": "CountdownTimer",
             "props": {
-              "duration": 3
+              "initialValue": 3
             }
           }
         ]
@@ -185,13 +237,6 @@
             }
           },
           {
-            "component":"AnswerGrid",
-            "props":{
-              "answers":"{{gameState.currentQuestion.options}}",
-              "onAnswer":"submitAnswer"
-            }
-          },
-          {
             "component": "PlayerStatusGrid",
             "props": {
               "players": "{{players}}"
@@ -199,26 +244,38 @@
           }
         ]
       },
-          "player": {
-        "components": [
-          {
-            "component": "QuestionDisplay",
-            "props": {
-              "question": "{{gameState.currentQuestion.questionText}}"
+      "player": [
+        {
+          "condition": "{{player.currentAnswer !== null}}",
+          "components": [
+            {
+              "component": "CenteredMessage",
+              "props": {
+                "children": "You have answered. Waiting for other players..."
+              }
             }
-          },
-          {
-            "component": "AnswerGrid",
-            "props": {
-              "answers": "{{gameState.currentQuestion.options}}",
-              "onAnswer": { 
-                "action": "submitAnswer",
-                 "payload": "{{player.currentAnswer}}"
+          ]
+        },
+        {
+          "components": [
+            {
+              "component": "QuestionDisplay",
+              "props": {
+                "question": "{{gameState.currentQuestion.questionText}}"
+              }
+            },
+            {
+              "component": "AnswerGrid",
+              "props": {
+                "answers": "{{gameState.currentQuestion.options}}",
+                "onAnswer": {
+                  "action": "submitAnswer"
                 }
+              }
             }
-          }
-        ]
-      }
+          ]
+        }
+      ]
     },
     "REVEAL_ANSWER": {
       "host": {
@@ -233,7 +290,7 @@
             "component": "AnswerResult",
             "props": {
               "answer": "{{gameState.currentQuestion.correctAnswer}}",
-              "percentage": 0,
+              "percentage": 100,
               "isCorrect": true
             }
           },
@@ -250,16 +307,15 @@
           {
             "component": "AnswerResult",
             "props": {
-              "answer": "{{gameState.currentQuestion.correctAnswer}}",
+              "answer": "{{player.currentAnswer}}",
               "percentage": 0,
-              "isCorrect": true
+              "isCorrect": "{{player.currentAnswer === gameState.currentQuestion.correctAnswer}}"
             }
           },
           {
             "component": "RankUpdate",
             "props": {
-              "newRank": "{{player.rank}}",
-              "rankChange": "{{player.rankChange}}"
+              "newRank": "{{player.rank}}"
             }
           }
         ]
@@ -271,13 +327,13 @@
           {
             "component": "WinnerDisplay",
             "props": {
-              "winner": "{{winner}}"
+              "winnerName": "{{gameState.winner.nickname}}"
             }
           },
           {
             "component": "Podium",
             "props": {
-              "players": "{{topThreePlayers}}"
+              "players": "{{gameState.topThreePlayers}}"
             }
           }
         ]

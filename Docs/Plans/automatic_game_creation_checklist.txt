@@ -21,7 +21,7 @@ This is the most critical part of the transition. We need a standardized structu
     -   `playerAttributes`: Define data fields stored per player (e.g., `score`, `currentAnswer`, `isReady`).
     -   `actions`: A list of all possible actions players or the host can take (e.g., `submitAnswer`, `startGame`, `nextRound`). Each action should specify who can trigger it (host, player, or server-timer).
     -   `transitions`: The state machine logic. Defines how the game moves from one state to another, triggered by `actions`. E.g., On `VOTING` state, the `timerExpires` action transitions the game to the `REVEAL` state.
-    -   `ui`: Defines the user interface for each state for both the host and the players. This is the "drag and drop" part.
+    -   `ui`: Defines the user interface for each state. For the host, this is a list of components. For players, this can be a single list of components or an array of *conditional views*. Each conditional view has a condition based on the player's own state (e.g., `{{player.hasAnswered}}`), allowing the server to send different UIs to different players within the same game state.
 
 ---
 

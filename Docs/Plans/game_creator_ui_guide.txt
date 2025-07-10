@@ -19,7 +19,31 @@ The wizard consists of the following stages:
 The wizard is designed to produce a JSON object that represents the complete game configuration. This object has the following structure:
 
 ```json
-// TODO add an Example here
+{
+  // ... metadata, states, etc.
+  "ui": {
+    "ASKING_QUESTION": {
+      "host": {
+        "components": [
+          { "component": "QuestionDisplay", "props": { "question": "{{gameState.currentQuestion.text}}" } }
+        ]
+      },
+      "player": [
+        {
+          "condition": "{{player.currentAnswer !== null}}",
+          "components": [
+            { "component": "CenteredMessage", "props": { "children": "Waiting for other players..." } }
+          ]
+        },
+        {
+          "components": [
+            { "component": "AnswerGrid", "props": { "onAnswer": { "action": "submitAnswer" } } }
+          ]
+        }
+      ]
+    }
+  }
+}
 ```
 
 ## 3. Current Progress
