@@ -69,6 +69,28 @@ Resets a property to its initial value as defined in `initialGameState` or `play
       }
     }
     ```
+-   **Aliasing**: You can use the `as` property to alias the loop variable, which is useful for nested loops.
+    ```json
+    {
+      "forEachPlayer": {
+        "as": "voter",
+        "effects": [
+          {
+            "forEachPlayer": {
+              "as": "submitter",
+              "effects": [
+                {
+                  "condition": "{{voter.currentVote === submitter.currentSubmission}}",
+                  "function": "incrementProperty",
+                  "args": ["playerAttributes.{{submitter.id}}.score", 500]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+    ```
 
 ---
 
@@ -131,7 +153,7 @@ Sets a numeric property to the minimum of its current value and a new value.
 For manipulating arrays within the game state.
 
 ### `arrayPush`
-Adds one or more elements to the end of an array.
+Adds an element to the end of an array.
 
 -   **`args`**:
     1.  `target` (string): The path to the array.
@@ -153,7 +175,7 @@ Removes all elements from an array.
     { "function": "arrayClear", "args": ["submissions"] }
     ```
 
-### `arrayShuffle`
+### `shuffleArray`
 Randomly shuffles the elements of an array in place.
 
 -   **`args`**:
@@ -161,7 +183,7 @@ Randomly shuffles the elements of an array in place.
 
 -   **Example**: Shuffle the order of questions at the start of the game.
     ```json
-    { "function": "arrayShuffle", "args": ["gameData.questions"] }
+    { "function": "shuffleArray", "args": ["gameData.questions"] }
     ```
 
 ### `arraySortBy`
@@ -184,15 +206,50 @@ Sorts an array of objects based on a specified property.
 Functions that control the timing and high-level state of the game.
 
 ### `startTimer`
-Starts a server-side timer. When it completes, it fires a `timerExpires` event.
+Starts a server-side timer. When it completes, it executes a specified action or effect.
 
 -   **`args`**:
     1.  `duration` (number): The timer duration in seconds.
-    2.  `eventName` (string, optional): The name of the event to fire. Defaults to `"timerExpires"`.
+    2.  `onExpire` (object): An effect or action to execute when the timer expires. This can be a `runAction` command, a `dispatchEvent` call, or any other valid effect.
 
--   **Example**: Start a 10-second timer for the question round.
+-   **Example**: Start a 10-second timer. When it expires, dispatch the `timerExpires` event.
     ```json
-    { "function": "startTimer", "args": [10] }
+    {
+      "function": "startTimer",
+      "args": [
+        10,
+        {
+          "function": "dispatchEvent",
+          "args": ["timerExpires"]
+        }
+      ]
+    }
+    ```
+-   **Example**: After 3 seconds, run the `goToNextRound` action.
+    ```json
+    {
+      "function": "startTimer",
+      "args": [
+        3,
+        {
+          "runAction": "goToNextRound"
+        }
+      ]
+    }
+    ```
+
+### `cancelTimer`
+Stops the currently active timer. This is useful in scenarios where a game should proceed immediately after a certain condition is met, without waiting for the timer to expire.
+
+-   **`args`**: None.
+
+-   **Example**: Cancel the timer if all players have answered.
+    ```json
+    {
+      "condition": "{{gameState.playersAnswered === players.length}}",
+      "function": "cancelTimer",
+      "args": []
+    }
     ```
 
 ### `calculateWinner`
@@ -217,6 +274,20 @@ Immediately stops the game and triggers the `onGameEnd` callback.
       "condition": "{{gameState.players.length < 2}}",
       "function": "endGame",
       "args": []
+    }
+    ```
+
+### `dispatchEvent`
+Dispatches an event that can be caught by a transition.
+
+-   **`args`**:
+    1.  `eventName` (string): The name of the event to dispatch.
+
+-   **Example**: Dispatch a `playerAnswered` event.
+    ```json
+    {
+      "function": "dispatchEvent",
+      "args": ["playerAnswered"]
     }
     ```
 

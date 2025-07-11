@@ -12,33 +12,1016 @@
         "questionText": "What is the chemical symbol for gold?",
         "correctAnswer": "Au",
         "options": [
-          "Au",
           "Ag",
           "Go",
-          "Gd"
+          "Gd",
+          "Au"
         ]
       },
       {
         "questionText": "Which planet is known as the Red Planet?",
         "correctAnswer": "Mars",
         "options": [
-          "Mars",
           "Jupiter",
           "Venus",
-          "Saturn"
+          "Saturn",
+          "Mars"
+        ]
+      },
+      {
+        "questionText": "What is the most abundant gas in Earth's atmosphere?",
+        "correctAnswer": "Nitrogen",
+        "options": [
+          "Oxygen",
+          "Carbon Dioxide",
+          "Argon",
+          "Nitrogen"
+        ]
+      },
+      {
+        "questionText": "What is the hardest known natural substance?",
+        "correctAnswer": "Diamond",
+        "options": [
+          "Quartz",
+          "Steel",
+          "Granite",
+          "Diamond"
+        ]
+      },
+      {
+        "questionText": "What is the powerhouse of the cell?",
+        "correctAnswer": "Mitochondrion",
+        "options": [
+          "Nucleus",
+          "Ribosome",
+          "Cytoplasm",
+          "Mitochondrion"
+        ]
+      },
+      {
+        "questionText": "What type of animal is a Komodo dragon?",
+        "correctAnswer": "Lizard",
+        "options": [
+          "Crocodile",
+          "Snake",
+          "Dinosaur",
+          "Lizard"
+        ]
+      },
+      {
+        "questionText": "How many hearts does an octopus have?",
+        "correctAnswer": "Three",
+        "options": [
+          "One",
+          "Two",
+          "Eight",
+          "Three"
+        ]
+      },
+      {
+        "questionText": "What is the fear of spiders called?",
+        "correctAnswer": "Arachnophobia",
+        "options": [
+          "Ophidiophobia",
+          "Acrophobia",
+          "Claustrophobia",
+          "Arachnophobia"
+        ]
+      },
+      {
+        "questionText": "Photosynthesis is a process used by plants to convert light energy into what?",
+        "correctAnswer": "Chemical energy",
+        "options": [
+          "Kinetic energy",
+          "Nuclear energy",
+          "Mechanical energy",
+          "Chemical energy"
+        ]
+      },
+      {
+        "questionText": "What is the boiling point of water at sea level in Celsius?",
+        "correctAnswer": "100°C",
+        "options": [
+          "90°C",
+          "120°C",
+          "212°C",
+          "100°C"
+        ]
+      },
+      {
+        "questionText": "Which of the following is NOT a primary color?",
+        "correctAnswer": "Green",
+        "options": [
+          "Red",
+          "Blue",
+          "Yellow",
+          "Green"
+        ]
+      },
+      {
+        "questionText": "What is the name of the galaxy our Solar System is in?",
+        "correctAnswer": "The Milky Way",
+        "options": [
+          "Andromeda",
+          "Triangulum",
+          "Whirlpool",
+          "The Milky Way"
+        ]
+      },
+      {
+        "questionText": "How many bones are in the adult human body?",
+        "correctAnswer": "206",
+        "options": [
+          "212",
+          "198",
+          "230",
+          "206"
+        ]
+      },
+      {
+        "questionText": "What precious metal is a primary component in a computer's CPU?",
+        "correctAnswer": "Gold",
+        "options": [
+          "Silver",
+          "Platinum",
+          "Copper",
+          "Gold"
+        ]
+      },
+      {
+        "questionText": "What is the study of fossils called?",
+        "correctAnswer": "Paleontology",
+        "options": [
+          "Archaeology",
+          "Geology",
+          "Anthropology",
+          "Paleontology"
+        ]
+      },
+      {
+        "questionText": "What is the capital of Japan?",
+        "correctAnswer": "Tokyo",
+        "options": [
+          "Kyoto",
+          "Osaka",
+          "Hiroshima",
+          "Tokyo"
+        ]
+      },
+      {
+        "questionText": "Which is the longest river in the world?",
+        "correctAnswer": "The Nile",
+        "options": [
+          "The Amazon",
+          "The Yangtze",
+          "The Mississippi",
+          "The Nile"
+        ]
+      },
+      {
+        "questionText": "In which country would you find the ancient city of Petra?",
+        "correctAnswer": "Jordan",
+        "options": [
+          "Egypt",
+          "Greece",
+          "Iran",
+          "Jordan"
+        ]
+      },
+      {
+        "questionText": "What is the highest mountain in the world?",
+        "correctAnswer": "Mount Everest",
+        "options": [
+          "K2",
+          "Kangchenjunga",
+          "Lhotse",
+          "Mount Everest"
+        ]
+      },
+      {
+        "questionText": "What is the largest desert in the world?",
+        "correctAnswer": "Antarctic Polar Desert",
+        "options": [
+          "Sahara Desert",
+          "Arabian Desert",
+          "Gobi Desert",
+          "Antarctic Polar Desert"
+        ]
+      },
+      {
+        "questionText": "Which country is known as the Land of the Rising Sun?",
+        "correctAnswer": "Japan",
+        "options": [
+          "China",
+          "South Korea",
+          "Thailand",
+          "Japan"
+        ]
+      },
+      {
+        "questionText": "What is the capital of Canada?",
+        "correctAnswer": "Ottawa",
+        "options": [
+          "Toronto",
+          "Vancouver",
+          "Montreal",
+          "Ottawa"
+        ]
+      },
+      {
+        "questionText": "Which U.S. state is the largest by area?",
+        "correctAnswer": "Alaska",
+        "options": [
+          "Texas",
+          "California",
+          "Montana",
+          "Alaska"
+        ]
+      },
+      {
+        "questionText": "The ancient city of Rome was built on how many hills?",
+        "correctAnswer": "Seven",
+        "options": [
+          "Five",
+          "Nine",
+          "Three",
+          "Seven"
+        ]
+      },
+      {
+        "questionText": "What is the only country to have a coastline on both the Red Sea and the Persian Gulf?",
+        "correctAnswer": "Saudi Arabia",
+        "options": [
+          "Egypt",
+          "Yemen",
+          "Iran",
+          "Saudi Arabia"
+        ]
+      },
+      {
+        "questionText": "What is the capital of Australia?",
+        "correctAnswer": "Canberra",
+        "options": [
+          "Sydney",
+          "Melbourne",
+          "Brisbane",
+          "Canberra"
+        ]
+      },
+      {
+        "questionText": "Through which three continents does the Prime Meridian pass?",
+        "correctAnswer": "Europe, Africa, Antarctica",
+        "options": [
+          "Europe, Asia, Africa",
+          "North America, South America, Europe",
+          "Europe, Africa, Antarctica"
+        ]
+      },
+      {
+        "questionText": "What is the world's most populous country?",
+        "correctAnswer": "India",
+        "options": [
+          "China",
+          "United States",
+          "Indonesia",
+          "India"
+        ]
+      },
+      {
+        "questionText": "Which country has the most islands in the world?",
+        "correctAnswer": "Sweden",
+        "options": [
+          "Indonesia",
+          "Japan",
+          "Philippines",
+          "Sweden"
+        ]
+      },
+      {
+        "questionText": "What is the capital of Brazil?",
+        "correctAnswer": "Brasília",
+        "options": [
+          "Rio de Janeiro",
+          "São Paulo",
+          "Salvador",
+          "Brasília"
+        ]
+      },
+      {
+        "questionText": "In what year did the Titanic sink?",
+        "correctAnswer": "1912",
+        "options": [
+          "1905",
+          "1920",
+          "1915",
+          "1912"
+        ]
+      },
+      {
+        "questionText": "Who was the first person to walk on the moon?",
+        "correctAnswer": "Neil Armstrong",
+        "options": [
+          "Buzz Aldrin",
+          "Michael Collins",
+          "Yuri Gagarin",
+          "Neil Armstrong"
+        ]
+      },
+      {
+        "questionText": "What ancient civilization built the Machu Picchu complex in Peru?",
+        "correctAnswer": "The Incas",
+        "options": [
+          "The Mayans",
+          "The Aztecs",
+          "The Olmecs",
+          "The Incas"
+        ]
+      },
+      {
+        "questionText": "The Magna Carta was a foundational document for which country's legal system?",
+        "correctAnswer": "England",
+        "options": [
+          "France",
+          "Spain",
+          "The United States",
+          "England"
+        ]
+      },
+      {
+        "questionText": "Who was the first female Prime Minister of the United Kingdom?",
+        "correctAnswer": "Margaret Thatcher",
+        "options": [
+          "Theresa May",
+          "Queen Elizabeth II",
+          "Angela Merkel",
+          "Margaret Thatcher"
+        ]
+      },
+      {
+        "questionText": "In which country did the Renaissance begin?",
+        "correctAnswer": "Italy",
+        "options": [
+          "France",
+          "Greece",
+          "Spain",
+          "Italy"
+        ]
+      },
+      {
+        "questionText": "What was the name of the ship that carried the Pilgrims to America in 1620?",
+        "correctAnswer": "The Mayflower",
+        "options": [
+          "The Santa Maria",
+          "The Discovery",
+          "The Titanic",
+          "The Mayflower"
+        ]
+      },
+      {
+        "questionText": "Who was the last pharaoh of ancient Egypt?",
+        "correctAnswer": "Cleopatra VII",
+        "options": [
+          "Tutankhamun",
+          "Ramesses II",
+          "Akhenaten",
+          "Cleopatra VII"
+        ]
+      },
+      {
+        "questionText": "The Hundred Years' War was fought between which two countries?",
+        "correctAnswer": "England and France",
+        "options": [
+          "Spain and Portugal",
+          "England and Scotland",
+          "Rome and Carthage",
+          "England and France"
+        ]
+      },
+      {
+        "questionText": "Who is credited with inventing the telephone?",
+        "correctAnswer": "Alexander Graham Bell",
+        "options": [
+          "Thomas Edison",
+          "Nikola Tesla",
+          "Guglielmo Marconi",
+          "Alexander Graham Bell"
+        ]
+      },
+      {
+        "questionText": "In which city was Archduke Franz Ferdinand assassinated, sparking World War I?",
+        "correctAnswer": "Sarajevo",
+        "options": [
+          "Vienna",
+          "Belgrade",
+          "Prague",
+          "Sarajevo"
+        ]
+      },
+      {
+        "questionText": "What was the primary purpose of the Great Wall of China?",
+        "correctAnswer": "To protect against invasions",
+        "options": [
+          "To mark a border",
+          "As a tourist attraction",
+          "To keep animals in",
+          "To protect against invasions"
+        ]
+      },
+      {
+        "questionText": "Who was the first Emperor of Rome?",
+        "correctAnswer": "Augustus",
+        "options": [
+          "Julius Caesar",
+          "Nero",
+          "Constantine",
+          "Augustus"
+        ]
+      },
+      {
+        "questionText": "Which country gifted the Statue of Liberty to the USA?",
+        "correctAnswer": "France",
+        "options": [
+          "Spain",
+          "United Kingdom",
+          "Italy",
+          "France"
+        ]
+      },
+      {
+        "questionText": "What was the name of the first satellite launched into space by the Soviet Union?",
+        "correctAnswer": "Sputnik 1",
+        "options": [
+          "Vostok 1",
+          "Explorer 1",
+          "Luna 1",
+          "Sputnik 1"
+        ]
+      },
+      {
+        "questionText": "Who wrote the 'Harry Potter' series?",
+        "correctAnswer": "J.K. Rowling",
+        "options": [
+          "Stephen King",
+          "George R.R. Martin",
+          "J.R.R. Tolkien",
+          "J.K. Rowling"
+        ]
+      },
+      {
+        "questionText": "What is the name of the lead singer of the band Queen?",
+        "correctAnswer": "Freddie Mercury",
+        "options": [
+          "Elton John",
+          "David Bowie",
+          "Roger Daltrey",
+          "Freddie Mercury"
+        ]
+      },
+      {
+        "questionText": "Which artist painted the ceiling of the Sistine Chapel?",
+        "correctAnswer": "Michelangelo",
+        "options": [
+          "Leonardo da Vinci",
+          "Raphael",
+          "Donatello",
+          "Michelangelo"
+        ]
+      },
+      {
+        "questionText": "In the movie 'The Matrix,' what color pill does Neo take?",
+        "correctAnswer": "Red",
+        "options": [
+          "Blue",
+          "Green",
+          "Yellow",
+          "Red"
+        ]
+      },
+      {
+        "questionText": "Who is the creator of the 'Star Wars' universe?",
+        "correctAnswer": "George Lucas",
+        "options": [
+          "Steven Spielberg",
+          "James Cameron",
+          "J.J. Abrams",
+          "George Lucas"
+        ]
+      },
+      {
+        "questionText": "What is the highest-grossing film of all time (unadjusted for inflation)?",
+        "correctAnswer": "Avatar",
+        "options": [
+          "Avengers: Endgame",
+          "Titanic",
+          "Star Wars: The Force Awakens",
+          "Avatar"
+        ]
+      },
+      {
+        "questionText": "Which band was NOT part of the 'British Invasion' of the 1960s?",
+        "correctAnswer": "The Beach Boys",
+        "options": [
+          "The Beatles",
+          "The Rolling Stones",
+          "The Kinks",
+          "The Beach Boys"
+        ]
+      },
+      {
+        "questionText": "What is the name of Batman's butler?",
+        "correctAnswer": "Alfred Pennyworth",
+        "options": [
+          "James Gordon",
+          "Lucius Fox",
+          "Robin",
+          "Alfred Pennyworth"
+        ]
+      },
+      {
+        "questionText": "Who wrote the famous novel '1984'?",
+        "correctAnswer": "George Orwell",
+        "options": [
+          "Aldous Huxley",
+          "Ray Bradbury",
+          "Philip K. Dick",
+          "George Orwell"
+        ]
+      },
+      {
+        "questionText": "In what year was the first iPhone released?",
+        "correctAnswer": "2007",
+        "options": [
+          "2005",
+          "2009",
+          "2001",
+          "2007"
+        ]
+      },
+      {
+        "questionText": "'The Persistence of Memory' is a famous painting by which surrealist artist?",
+        "correctAnswer": "Salvador Dalí",
+        "options": [
+          "Pablo Picasso",
+          "Vincent van Gogh",
+          "René Magritte",
+          "Salvador Dalí"
+        ]
+      },
+      {
+        "questionText": "What TV show is set in the fictional city of Westeros?",
+        "correctAnswer": "Game of Thrones",
+        "options": [
+          "The Witcher",
+          "Lord of the Rings",
+          "Vikings",
+          "Game of Thrones"
+        ]
+      },
+      {
+        "questionText": "Who directed the classic 1994 film 'Pulp Fiction'?",
+        "correctAnswer": "Quentin Tarantino",
+        "options": [
+          "Martin Scorsese",
+          "Spike Lee",
+          "Steven Soderbergh",
+          "Quentin Tarantino"
+        ]
+      },
+      {
+        "questionText": "Which video game character is a blue hedgehog known for his speed?",
+        "correctAnswer": "Sonic",
+        "options": [
+          "Mario",
+          "Crash Bandicoot",
+          "Spyro",
+          "Sonic"
+        ]
+      },
+      {
+        "questionText": "What is the name of the fictional school in the Harry Potter series?",
+        "correctAnswer": "Hogwarts",
+        "options": [
+          "Durmstrang",
+          "Beauxbatons",
+          "Ilvermorny",
+          "Hogwarts"
+        ]
+      },
+      {
+        "questionText": "Who composed the famous classical piece 'Für Elise'?",
+        "correctAnswer": "Ludwig van Beethoven",
+        "options": [
+          "Wolfgang Amadeus Mozart",
+          "Johann Sebastian Bach",
+          "Franz Schubert",
+          "Ludwig van Beethoven"
+        ]
+      },
+      {
+        "questionText": "What instrument did Jimi Hendrix famously play?",
+        "correctAnswer": "Electric Guitar",
+        "options": [
+          "Drums",
+          "Bass Guitar",
+          "Piano",
+          "Electric Guitar"
+        ]
+      },
+      {
+        "questionText": "What is the name of the coffee shop in the TV show 'Friends'?",
+        "correctAnswer": "Central Perk",
+        "options": [
+          "The Coffee Bean",
+          "Monk's Café",
+          "Starbucks",
+          "Central Perk"
+        ]
+      },
+      {
+        "questionText": "Who is known as the 'King of Pop'?",
+        "correctAnswer": "Michael Jackson",
+        "options": [
+          "Elvis Presley",
+          "Prince",
+          "James Brown",
+          "Michael Jackson"
+        ]
+      },
+      {
+        "questionText": "Which Disney princess has a tiger named Rajah?",
+        "correctAnswer": "Jasmine",
+        "options": [
+          "Ariel",
+          "Belle",
+          "Mulan",
+          "Jasmine"
+        ]
+      },
+      {
+        "questionText": "In which sport would you perform a 'slam dunk'?",
+        "correctAnswer": "Basketball",
+        "options": [
+          "Volleyball",
+          "Tennis",
+          "American Football",
+          "Basketball"
+        ]
+      },
+      {
+        "questionText": "How many rings are on the Olympic flag?",
+        "correctAnswer": "Five",
+        "options": [
+          "Six",
+          "Four",
+          "Seven",
+          "Five"
+        ]
+      },
+      {
+        "questionText": "What is the most-watched sporting event in the world?",
+        "correctAnswer": "The FIFA World Cup",
+        "options": [
+          "The Super Bowl",
+          "The Olympic Games",
+          "The Tour de France",
+          "The FIFA World Cup"
+        ]
+      },
+      {
+        "questionText": "Which country won the first-ever FIFA World Cup in 1930?",
+        "correctAnswer": "Uruguay",
+        "options": [
+          "Brazil",
+          "Argentina",
+          "Italy",
+          "Uruguay"
+        ]
+      },
+      {
+        "questionText": "In tennis, what is the score called when it is 40-40?",
+        "correctAnswer": "Deuce",
+        "options": [
+          "Tie",
+          "Even",
+          "Match Point",
+          "Deuce"
+        ]
+      },
+      {
+        "questionText": "Which boxer was known as 'The Greatest' and 'The People's Champion'?",
+        "correctAnswer": "Muhammad Ali",
+        "options": [
+          "Mike Tyson",
+          "Joe Frazier",
+          "Rocky Marciano",
+          "Muhammad Ali"
+        ]
+      },
+      {
+        "questionText": "How many players are on a standard baseball team on the field?",
+        "correctAnswer": "Nine",
+        "options": [
+          "Ten",
+          "Eleven",
+  
+          "Eight",
+          "Nine"
+        ]
+      },
+      {
+        "questionText": "A 'hat-trick' in soccer or hockey is when a player scores how many goals?",
+        "correctAnswer": "Three",
+        "options": [
+          "Two",
+          "Four",
+          "Five",
+          "Three"
+        ]
+      },
+      {
+        "questionText": "What is the only sport to have been played on the moon?",
+        "correctAnswer": "Golf",
+        "options": [
+          "Baseball",
+          "Soccer",
+          "Darts",
+          "Golf"
+        ]
+      },
+      {
+        "questionText": "What is the name of the trophy awarded to the winner of the Stanley Cup?",
+        "correctAnswer": "There is no other name",
+        "options": [
+          "The Lord Stanley Cup",
+          "The Champion's Chalice",
+          "The Silver Stick",
+          "There is no other name"
+        ]
+      },
+      {
+        "questionText": "What is the main ingredient in guacamole?",
+        "correctAnswer": "Avocado",
+        "options": [
+          "Tomato",
+          "Onion",
+          "Lime",
+          "Avocado"
+        ]
+      },
+      {
+        "questionText": "Which country is credited with inventing paper?",
+        "correctAnswer": "China",
+        "options": [
+          "Egypt",
+          "Greece",
+          "Japan",
+          "China"
+        ]
+      },
+      {
+        "questionText": "What is a group of lions called?",
+        "correctAnswer": "A pride",
+        "options": [
+          "A pack",
+          "A herd",
+          "A flock",
+          "A pride"
+        ]
+      },
+      {
+        "questionText": "On a standard keyboard, what is the only letter not on the top row?",
+        "correctAnswer": "Z",
+        "options": [
+          "M",
+          "A",
+          "S",
+          "Z"
+        ]
+      },
+      {
+        "questionText": "What is the most consumed manufactured drink in the world?",
+        "correctAnswer": "Tea",
+        "options": [
+          "Coffee",
+          "Coca-Cola",
+          "Beer",
+          "Tea"
+        ]
+      },
+      {
+        "questionText": "What type of food is a 'sushi'?",
+        "correctAnswer": "Vinegared rice",
+        "options": [
+          "Raw fish",
+          "Seaweed",
+          "Wasabi",
+          "Vinegared rice"
+        ]
+      },
+      {
+        "questionText": "What does 'www' stand for in a website browser?",
+        "correctAnswer": "World Wide Web",
+        "options": [
+          "Wild Wild West",
+          "World Web Window",
+          "Wide World Web",
+          "World Wide Web"
+        ]
+      },
+      {
+        "questionText": "In which country did Lego originate?",
+        "correctAnswer": "Denmark",
+        "options": [
+          "Germany",
+          "Sweden",
+          "USA",
+          "Denmark"
+        ]
+      },
+      {
+        "questionText": "What is the most sold book of all time?",
+        "correctAnswer": "The Bible",
+        "options": [
+          "The Quran",
+          "Don Quixote",
+          "Harry Potter series",
+          "The Bible"
+        ]
+      },
+      {
+        "questionText": "What is the currency of Switzerland?",
+        "correctAnswer": "Swiss Franc",
+        "options": [
+          "Euro",
+          "Swiss Dollar",
+          "Krona",
+          "Swiss Franc"
+        ]
+      },
+      {
+        "questionText": "How many sides does a dodecahedron have?",
+        "correctAnswer": "12",
+        "options": [
+          "10",
+          "20",
+          "8",
+          "12"
+        ]
+      },
+      {
+        "questionText": "What is the capital of fashion, often called 'The Big Four' cities?",
+        "correctAnswer": "Paris, Milan, London, New York",
+        "options": [
+          "Tokyo, Rome, Berlin, Los Angeles",
+          "Paris, Milan, London, New York"
+        ]
+      },
+      {
+        "questionText": "What is the name for a word that is spelled the same forwards and backwards?",
+        "correctAnswer": "Palindrome",
+        "options": [
+          "Anagram",
+          "Onomatopoeia",
+          "Antonym",
+          "Palindrome"
+        ]
+      },
+      {
+        "questionText": "What is the world's most expensive spice by weight?",
+        "correctAnswer": "Saffron",
+        "options": [
+          "Vanilla",
+          "Cardamom",
+          "Cloves",
+          "Saffron"
+        ]
+      },
+      {
+        "questionText": "What is the main ingredient in a traditional hummus?",
+        "correctAnswer": "Chickpeas",
+        "options": [
+          "Lentils",
+          "Black beans",
+          "Eggplant",
+          "Chickpeas"
+        ]
+      },
+      {
+        "questionText": "According to the proverb, 'a rolling stone gathers no...' what?",
+        "correctAnswer": "Moss",
+        "options": [
+          "Friends",
+          "Money",
+          "Dust",
+          "Moss"
+        ]
+      },
+      {
+        "questionText": "How many colors are in a standard rainbow?",
+        "correctAnswer": "Seven",
+        "options": [
+          "Six",
+          "Eight",
+          "Five",
+          "Seven"
+        ]
+      },
+      {
+        "questionText": "What is the name of the world's largest ocean?",
+        "correctAnswer": "Pacific Ocean",
+        "options": [
+          "Atlantic Ocean",
+          "Indian Ocean",
+          "Arctic Ocean",
+          "Pacific Ocean"
+        ]
+      },
+      {
+        "questionText": "What is the national animal of Scotland?",
+        "correctAnswer": "Unicorn",
+        "options": [
+          "Lion",
+          "Eagle",
+          "Stag",
+          "Unicorn"
+        ]
+      },
+      {
+        "questionText": "Which of the following is NOT a piece in the game of chess?",
+        "correctAnswer": "General",
+        "options": [
+          "Bishop",
+          "Rook",
+          "Pawn",
+          "General"
+        ]
+      },
+      {
+        "questionText": "What is the capital city of Morocco?",
+        "correctAnswer": "Rabat",
+        "options": [
+          "Casablanca",
+          "Marrakesh",
+          "Fes",
+          "Rabat"
+        ]
+      },
+      {
+        "questionText": "What do you call a person who studies maps?",
+        "correctAnswer": "A cartographer",
+        "options": [
+          "A geographer",
+          "A topographer",
+          "A mapologist",
+          "A cartographer"
+        ]
+      },
+      {
+        "questionText": "What is the largest organ in the human body?",
+        "correctAnswer": "Skin",
+        "options": [
+          "Liver",
+          "Brain",
+          "Heart",
+          "Skin"
+        ]
+      },
+      {
+        "questionText": "What is the capital of New Zealand?",
+        "correctAnswer": "Wellington",
+        "options": [
+          "Auckland",
+          "Christchurch",
+          "Queenstown",
+          "Wellington"
+        ]
+      },
+      {
+        "questionText": "Which social media platform was the first to reach 1 billion active users?",
+        "correctAnswer": "Facebook",
+        "options": [
+          "Twitter",
+          "Instagram",
+          "MySpace",
+          "Facebook"
         ]
       }
     ]
   },
   "initialGameState": {
     "currentQuestionIndex": -1,
+    "totalRounds": 5,
     "currentQuestion": null,
+    "shuffledAnswers": [],
     "winner": null,
-    "topThreePlayers": []
+    "topThreePlayers": [],
+    "timerStart": null,
+    "playersAnswered": 0
   },
   "playerAttributes": {
     "score": 0,
-    "currentAnswer": null
+    "currentAnswer": null,
+    "submittedAt": null
   },
   "actions": {
     "goToNextQuestion": [
@@ -51,8 +1034,33 @@
       {
         "function": "setProperty",
         "args": [
+          "playersAnswered",
+          0
+        ]
+      },
+      {
+        "function": "setProperty",
+        "args": [
           "currentQuestion",
           "{{gameData.questions[gameState.currentQuestionIndex]}}"
+        ]
+      },
+      {
+        "runAction": "shuffleAnswers"
+      }
+    ],
+    "shuffleAnswers": [
+      {
+        "function": "setProperty",
+        "args": [
+          "shuffledAnswers",
+          "{{gameState.currentQuestion.options}}"
+        ]
+      },
+      {
+        "function": "shuffleArray",
+        "args": [
+          "shuffledAnswers"
         ]
       }
     ],
@@ -61,20 +1069,40 @@
         "function": "setProperty",
         "args": [
           "playerAttributes.{{actorId}}.currentAnswer",
-          "{{gameState.currentQuestion.options[payload]}}"
+          "{{gameState.shuffledAnswers[payload]}}"
+        ]
+      },
+      {
+        "function": "setProperty",
+        "args": [
+          "playerAttributes.{{actorId}}.submittedAt",
+          "{{Date.now()}}"
+        ]
+      },
+      {
+        "function": "incrementProperty",
+        "args": [
+          "playersAnswered"
         ]
       }
     ],
-    "awardPointsAndResetAnswer": [
+    "calculateScores": [
       {
         "condition": "{{player.currentAnswer === gameState.currentQuestion.correctAnswer}}",
         "function": "incrementProperty",
         "args": [
           "playerAttributes.{{player.id}}.score",
-          10
+          "{{ Math.round((1 - ( (player.submittedAt - gameState.timerStart) / 15000)) * 500) + 500 }}"
         ]
       },
-      {
+       {
+        "function": "setProperty",
+        "args": [
+          "playerAttributes.{{player.id}}.submittedAt",
+          null
+        ]
+      },
+       {
         "function": "setProperty",
         "args": [
           "playerAttributes.{{player.id}}.currentAnswer",
@@ -93,9 +1121,19 @@
     "STARTING": {
       "onEnter": [
         {
+          "function": "shuffleArray",
+          "args": [
+            "gameData.questions"
+          ]
+        },
+        {
           "function": "startTimer",
           "args": [
-            3
+            3,
+            {
+              "function": "dispatchEvent",
+              "args": ["timerExpires"]
+            }
           ]
         }
       ]
@@ -103,12 +1141,23 @@
     "ASKING_QUESTION": {
       "onEnter": [
         {
+          "function": "setProperty",
+          "args": [
+            "timerStart",
+            "{{Date.now()}}"
+          ]
+        },
+        {
           "runAction": "goToNextQuestion"
         },
         {
           "function": "startTimer",
           "args": [
-            10
+            10,
+            {
+              "function": "dispatchEvent",
+              "args": ["timerExpires"]
+            }
           ]
         }
       ]
@@ -118,17 +1167,25 @@
         {
           "function": "startTimer",
           "args": [
-            5
+            5,
+            {
+              "function": "dispatchEvent",
+              "args": ["timerExpires"]
+            }
           ]
         },
         {
           "forEachPlayer": {
             "effects": [
               {
-                "runAction": "awardPointsAndResetAnswer"
+                "runAction": "calculateScores"
               }
             ]
           }
+        },
+        {
+            "function": "setProperty",
+            "args": ["playersAnswered", 0]
         }
       ]
     },
@@ -153,8 +1210,15 @@
       "effects": [
         {
           "runAction": "recordPlayerAnswer"
+        },
+        {
+          "function": "dispatchEvent",
+          "args": ["playerAnswered"]
         }
       ]
+    },
+    "playerAnswered": {
+        "permissions": ["server"]
     },
     "timerExpires": {
       "permissions": [
@@ -174,16 +1238,22 @@
       "event": "timerExpires"
     },
     {
+        "from": "ASKING_QUESTION",
+        "to": "REVEAL_ANSWER",
+        "event": "playerAnswered",
+        "condition": "{{gameState.playersAnswered === players.length}}"
+    },
+    {
       "from": "REVEAL_ANSWER",
       "to": "ASKING_QUESTION",
       "event": "timerExpires",
-      "condition": "{{gameState.currentQuestionIndex < gameData.questions.length - 1}}"
+      "condition": "{{gameState.currentQuestionIndex < gameState.totalRounds - 1}}"
     },
     {
       "from": "REVEAL_ANSWER",
       "to": "FINISHED",
       "event": "timerExpires",
-      "condition": "{{gameState.currentQuestionIndex >= gameData.questions.length - 1}}"
+      "condition": "{{gameState.currentQuestionIndex >= gameState.totalRounds - 1}}"
     }
   ],
   "ui": {
@@ -267,7 +1337,7 @@
             {
               "component": "AnswerGrid",
               "props": {
-                "answers": "{{gameState.currentQuestion.options}}",
+                "answers": "{{gameState.shuffledAnswers}}",
                 "onAnswer": {
                   "action": "submitAnswer"
                 }

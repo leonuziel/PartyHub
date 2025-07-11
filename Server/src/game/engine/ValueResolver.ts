@@ -1,5 +1,7 @@
 import _ from 'lodash';
 
+import { StateTimer } from './StateTimer.js';
+
 export class ValueResolver {
   private fullContext: any;
 
@@ -7,7 +9,8 @@ export class ValueResolver {
     private gameState: any,
     private gameData: any,
     private players: Map<string, any>,
-    private hostId: string
+    private hostId: string,
+    private stateTimer: StateTimer
   ) {
     this.fullContext = {
       gameState: this.gameState,
@@ -20,7 +23,11 @@ export class ValueResolver {
   }
 
   public resolve(value: any, additionalContext: any = {}): any {
-    const context = { ...this.fullContext, ...additionalContext };
+    const context = { 
+        ...this.fullContext, 
+        ...additionalContext,
+        timeSinceStateEntry: this.stateTimer.getTimeSinceStateEntry(),
+    };
 
     if (typeof value !== 'string' || !value.includes('{{')) {
       return value;

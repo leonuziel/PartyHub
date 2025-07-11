@@ -478,26 +478,58 @@ A powerful feature of the engine is its ability to resolve template strings like
 
 ### `ui`
 
-**(Object)** The `ui` section defines the user interface for each state, separated by role (`host` and `player`). The backend uses this section to tell the frontend what to render.
+**(Object)** The `ui` section defines the user interface for each game state, separated by role (`host` and `player`). The backend uses this to tell the frontend what to render, resolving any template strings with real-time game state.
 
-*   The layout is defined as an array of `components`.
-*   Each object specifies the `component` name (which must exist on the frontend) and its `props`.
-*   The `props` are resolved on the backend using the same templating mechanism, injecting real-time game state into the UI definition before it's sent to the client.
+For the `host` role, the value is an object containing a `components` array.
+
+For the `player` role, the UI can be defined in two ways:
+1.  **Simple View**: A single object with a `components` array, shown to all players.
+2.  **Conditional Views**: An array of view objects. Each object has a `components` array and an optional `condition` string. The engine evaluates the conditions for each player and serves the first view that matches. A view without a condition acts as a default or fallback.
+
+This conditional structure allows for creating different UI experiences for a player based on their specific state (e.g., showing a "Waiting..." message after they've submitted an answer).
 
 **Example:**
 ```json
 "ui": {
-  "STARTING": {
-    "host": [
-      {
-        "component": "CountdownTimer",
-        "props": { "initialValue": 3 }
-      }
-    ],
+  "ASKING_QUESTION": {
+    "host": {
+      "components": [
+        {
+          "component": "QuestionDisplay",
+          "props": {
+            "question": "{{gameState.currentQuestion.questionText}}"
+          }
+        }
+      ]
+    },
     "player": [
       {
-        "component": "CenteredMessage",
-        "props": { "children": "The game is about to begin!" }
+        "condition": "{{player.currentAnswer !== null}}",
+        "components": [
+          {
+            "component": "CenteredMessage",
+            "props": {
+              "children": "You have answered. Waiting for other players..."
+            }
+          }
+        ]
+      },
+      {
+        "components": [
+          {
+            "component": "QuestionDisplay",
+            "props": {
+              "question": "{{gameState.currentQuestion.questionText}}"
+            }
+          },
+          {
+            "component": "AnswerGrid",
+            "props": {
+              "answers": "{{gameState.currentQuestion.options}}",
+              "onAnswer": { "action": "submitAnswer" }
+            }
+          }
+        ]
       }
     ]
   }

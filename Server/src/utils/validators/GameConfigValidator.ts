@@ -222,41 +222,62 @@ const uiSchema = z.record(z.object({
   ]).optional(),
 }));
 
-const effectSchema: z.ZodTypeAny = z.lazy(() =>
-  z.object({
-    runAction: z.string().optional(),
-    function: z.string().optional(),
-    args: z.array(z.any()).optional(),
-    condition: z.string().optional(),
-    forEachPlayer: z.object({
-      effects: z.array(z.lazy(() => effectSchema)),
-    }).optional(),
-  }).refine(
-    (data) => {
-      const definedKeys = [data.runAction, data.function, data.forEachPlayer].filter(Boolean).length;
-      // An effect must be based on exactly one of 'runAction', 'function', or 'forEachPlayer'
-      return definedKeys === 1;
-    },
-    {
-      message: "Effect must contain exactly one of 'runAction', 'function', or 'forEachPlayer'",
-    }
-  )
+const baseEffectSchema = z.object({
+  condition: z.string().optional(),
+});
+
+// Define a placeholder for the recursive schema
+const effectSchema: z.ZodType<any> = z.lazy(() => 
+  z.union([
+    runActionSchema,
+    forEachPlayerSchema,
+    functionEffectSchema,
+  ])
 );
 
-const stateSchema = z.object({
-  onEnter: z.array(effectSchema).optional(),
+// Define schemas for each type of effect
+const runActionSchema = baseEffectSchema.extend({
+  runAction: z.string(),
 });
+
+const forEachPlayerSchema = baseEffectSchema.extend({
+  forEachPlayer: z.object({
+    effects: z.array(effectSchema),
+    as: z.string().optional(),
+  }),
+});
+
+// Define a schema for each possible function call
+const functionEffectSchema = z.discriminatedUnion('function', [
+  baseEffectSchema.extend({ function: z.literal('setProperty'), args: z.tuple([z.string(), z.any()]) }),
+  baseEffectSchema.extend({ function: z.literal('unsetProperty'), args: z.tuple([z.string()]) }),
+  baseEffectSchema.extend({ function: z.literal('incrementProperty'), args: z.union([z.tuple([z.string()]), z.tuple([z.string(), z.any()])]) }),
+  baseEffectSchema.extend({ function: z.literal('calculateWinner'), args: z.tuple([]).optional() }),
+  baseEffectSchema.extend({ function: z.literal('shuffleArray'), args: z.tuple([z.string()]) }),
+  baseEffectSchema.extend({ function: z.literal('arrayPush'), args: z.tuple([z.string(), z.any()]) }),
+  baseEffectSchema.extend({ function: z.literal('arrayClear'), args: z.tuple([z.string()]) }),
+  baseEffectSchema.extend({ function: z.literal('arraySortBy'), args: z.tuple([z.string(), z.string(), z.enum(['asc', 'desc']).optional()]) }),
+  baseEffectSchema.extend({ function: z.literal('dispatchEvent'), args: z.tuple([z.string()]) }),
+  baseEffectSchema.extend({ function: z.literal('cancelTimer'), args: z.tuple([]).optional() }),
+  baseEffectSchema.extend({ function: z.literal('recordEvent'), args: z.tuple([z.string(), z.string()]) }),
+  baseEffectSchema.extend({ function: z.literal('startTimer'), args: z.tuple([z.number(), effectSchema]) }),
+]);
+
+const stateSchema = z.object({
+    onEnter: z.array(effectSchema).optional(),
+  });
 
 const gameEventSchema = z.object({
   permissions: z.array(z.enum(['host', 'player', 'server'])),
   effects: z.array(effectSchema).optional(),
-});
+  });
 
 const gameTransitionSchema = z.object({
   from: z.string(),
   to: z.string(),
   event: z.string(),
   condition: z.string().optional(),
+  effects: z.array(effectSchema).optional(),
 });
 
 export const gameConfigurationSchema = z.object({
