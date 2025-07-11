@@ -18,9 +18,10 @@ import {
     useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import '../GameCreatorPage.css'; // Re-use styles
+import './ScreensStage.css';
+import { PropertyInspector } from './PropertyInspector';
 
-// --- Component Data ---
+
 const COMPONENT_CATEGORIES = {
     Controls: ['ActionButton', 'AnswerGrid', 'Button', 'GameCard', 'TextAreaWithCounter', 'VotingOptions'],
     Display: ['AnswerResult', 'AwardDisplay', 'GameBranding', 'GameTitle', 'Leaderboard', 'PlayerAvatar', 'PlayerCard', 'PlayerInfo', 'PlayerStatusContainer', 'PlayerStatusGrid', 'Podium', 'PodiumList', 'QuestionDisplay', 'QuestionHeader', 'RankDisplay', 'RankUpdate', 'ResultsList', 'SpecialAwards', 'WinnerDisplay'],
@@ -29,9 +30,6 @@ const COMPONENT_CATEGORIES = {
     Cards: ['BiddingPopup', 'CardFan', 'CardSlot', 'Deck', 'DiscardPile', 'Hand', 'LastPlayedCard', 'Meld', 'PlayerHandDisplay', 'Scoreboard', 'Trick', 'TrumpIndicator']
 };
 
-const ALL_COMPONENTS = Object.values(COMPONENT_CATEGORIES).flat();
-
-// --- Draggable Item ---
 const DraggableItem = ({ id, isOverlay }: { id: string, isOverlay?: boolean }) => {
     const { attributes, listeners, setNodeRef } = useDraggable({ id });
     return (
@@ -41,8 +39,7 @@ const DraggableItem = ({ id, isOverlay }: { id: string, isOverlay?: boolean }) =
     );
 };
 
-// --- Sortable Item in Dropzone ---
-const SortableItem = ({ id, componentName }: { id: string, componentName: string }) => {
+const SortableItem = ({ id, component, isSelected, onSelect }: { id: string, component: any, isSelected: boolean, onSelect: () => void }) => {
     const {
         attributes,
         listeners,
@@ -54,24 +51,22 @@ const SortableItem = ({ id, componentName }: { id: string, componentName: string
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
-        padding: '0.75rem',
-        marginBottom: '0.5rem',
-        borderRadius: '4px',
-        backgroundColor: '#8A2BE2',
-        color: 'white',
-        fontWeight: 'bold',
     };
 
     return (
-        <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-            {componentName}
+        <div ref={setNodeRef} style={style} {...attributes} {...listeners} className={`sortable-item ${isSelected ? 'is-selected' : ''}`} onClick={onSelect}>
+            <div className="sortable-item-header">{component.component}</div>
+            <div className="sortable-item-body">
+                {Object.entries(component.props).map(([key, value]) => (
+                     <p key={key}><strong>{key}:</strong> {JSON.stringify(value)}</p>
+                ))}
+            </div>
         </div>
     );
 };
 
 
-// --- Dropzone ---
-const Dropzone = ({ id, items }: { id: string, items: { id: string, component: string }[] }) => {
+const Dropzone = ({ id, items, selectedComponentId, onSelectComponent }: { id: string, items: any[], selectedComponentId: string | null, onSelectComponent: (id: string) => void }) => {
     const { setNodeRef } = useDroppable({ id });
     const itemIds = items.map(i => i.id);
 
@@ -83,7 +78,9 @@ const Dropzone = ({ id, items }: { id: string, items: { id: string, component: s
                         <SortableItem
                             key={item.id}
                             id={item.id}
-                            componentName={item.component}
+                            component={item}
+                            isSelected={selectedComponentId === item.id}
+                            onSelect={() => onSelectComponent(item.id)}
                         />
                     ))
                 ) : (
@@ -94,13 +91,11 @@ const Dropzone = ({ id, items }: { id: string, items: { id: string, component: s
     );
 };
 
-// --- Main Stage Component ---
 export const ScreensStage = ({ config, setConfig }: any) => {
-    const [selectedState, setSelectedState] = useState('STARTING');
+    const [selectedState, setSelectedState] = useState(Object.keys(config.states)[0] || '');
     const [activeId, setActiveId] = useState<string | null>(null);
-    const [isPaletteExpanded, setIsPaletteExpanded] = useState(false);
+    const [selectedComponentId, setSelectedComponentId] = useState<string | null>(null);
     const [preview, setPreview] = useState<{ isOpen: boolean, components: any[], role: 'host' | 'player' }>({ isOpen: false, components: [], role: 'host' });
-    const paletteRef = useRef<HTMLDivElement>(null);
 
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -109,14 +104,19 @@ export const ScreensStage = ({ config, setConfig }: any) => {
         })
     );
 
-    // Helper to get items for a view, ensuring it's always an array
-    const getItems = (view: 'host' | 'player') => {
-        return config.ui?.[selectedState]?.[view]?.components || [];
+    const getItems = (view: 'host' | 'player', playerViewIndex?: number) => {
+        const stateUI = config.ui?.[selectedState];
+        if (!stateUI) return [];
+        if (view === 'host') {
+            return stateUI.host?.components || [];
+        }
+        if (view === 'player' && Array.isArray(stateUI.player) && playerViewIndex !== undefined) {
+            return stateUI.player[playerViewIndex]?.components || [];
+        }
+        return [];
     };
 
-    const handleDragStart = (event: any) => {
-        setActiveId(event.active.id);
-    };
+    const handleDragStart = (event: any) => setActiveId(event.active.id);
 
     const handlePlayerViewChange = (index: number, field: string, value: any) => {
         const newUi = { ...config.ui };
@@ -128,15 +128,11 @@ export const ScreensStage = ({ config, setConfig }: any) => {
 
     const handleAddPlayerView = () => {
         const newUi = { ...config.ui };
-        let playerConfig = newUi[selectedState]?.player;
-
-        // If it's not an array, convert it to an array with the existing view as the first item
+        let playerConfig = newUi[selectedState]?.player || [];
         if (!Array.isArray(playerConfig)) {
-            playerConfig = [playerConfig || { components: [] }];
+            playerConfig = [playerConfig];
         }
-        
-        const newPlayerViews = [...playerConfig, { condition: '', components: [] }];
-        newUi[selectedState].player = newPlayerViews;
+        newUi[selectedState].player = [...playerConfig, { condition: '', components: [] }];
         setConfig((prev: any) => ({ ...prev, ui: newUi }));
     };
 
@@ -148,20 +144,55 @@ export const ScreensStage = ({ config, setConfig }: any) => {
         setConfig((prev: any) => ({ ...prev, ui: newUi }));
     };
 
+     const handleUpdateComponent = (id: string, newProps: any, newStyle: any) => {
+        const newUi = JSON.parse(JSON.stringify(config.ui)); // Deep copy
+
+        const findAndUpdate = (components: any[]) => {
+            const index = components.findIndex(c => c.id === id);
+            if (index > -1) {
+                components[index].props = newProps;
+                components[index].style = newStyle;
+                return true;
+            }
+            return false;
+        };
+
+        if (newUi[selectedState]?.host?.components && findAndUpdate(newUi[selectedState].host.components)) {
+             setConfig((prev: any) => ({ ...prev, ui: newUi }));
+             return;
+        }
+
+        if (Array.isArray(newUi[selectedState]?.player)) {
+            for (const view of newUi[selectedState].player) {
+                if (view.components && findAndUpdate(view.components)) {
+                    setConfig((prev: any) => ({ ...prev, ui: newUi }));
+                    return;
+                }
+            }
+        }
+    };
+
+
+    const getSelectedComponent = () => {
+        if (!selectedComponentId) return null;
+        const allComponents = [
+            ...(config.ui?.[selectedState]?.host?.components || []),
+            ...(config.ui?.[selectedState]?.player?.flatMap((v: any) => v.components) || [])
+        ];
+        return allComponents.find(c => c.id === selectedComponentId) || null;
+    };
+
+
     const handleDragEnd = (event: any) => {
         const { active, over } = event;
         setActiveId(null);
         if (!over) return;
-
-        // This is a simplified logic. A real implementation would need to handle adding, removing, and reordering.
-        // For this wireframe, we'll just log the action.
-        console.log(`Component ${active.id} was dropped over ${over.id}`);
-
+        
         const componentName = active.id;
         let defaultProps = {};
 
+        // Default props logic from your original code...
         switch(componentName) {
-            // Components needing simple text/children
             case 'ActionButton':
             case 'Button':
             case 'CenteredMessage':
@@ -179,16 +210,12 @@ export const ScreensStage = ({ config, setConfig }: any) => {
             case 'GameTitle':
                 defaultProps = { title: 'My Awesome Game' };
                 break;
-
-            // Components needing arrays of strings
             case 'AnswerGrid':
                 defaultProps = { answers: ['Answer A', 'Answer B', 'Answer C', 'Answer D'] };
                 break;
             case 'VotingOptions':
                 defaultProps = { options: ['Option 1', 'Option 2', 'Option 3'] };
                 break;
-
-            // Components needing arrays of data from MOCK_DATA
             case 'Leaderboard':
             case 'PlayerStatusGrid':
             case 'Podium':
@@ -203,21 +230,17 @@ export const ScreensStage = ({ config, setConfig }: any) => {
             case 'SpecialAwards':
                 defaultProps = {
                     awards: [{
-                        awardName: 'Best Fake Answer', player: {id: '45dg', // socket.id
+                        awardName: 'Best Fake Answer', player: {id: '45dg', 
                         nickname:'Boby',
                         avatar: 'avatar1.png',
                         hasAnswered: false,
                         score: 70 } }]};
                 break;
-            
-            // Components needing single objects from MOCK_DATA
             case 'PlayerAvatar':
             case 'PlayerCard':
             case 'PlayerInfo':
                 defaultProps = { player: '{{player}}' };
                 break;
-
-            // Components needing specific values
             case 'AnswerResult':
                 defaultProps = { answer: 'A Great Answer', percentage: 75, isCorrect: true };
                 break;
@@ -243,61 +266,42 @@ export const ScreensStage = ({ config, setConfig }: any) => {
                 defaultProps = { oldRank: 2, newRank: 1 };
                 break;
             case 'TextAreaWithCounter':
-                defaultProps = { maxLength: 140, placeholder: 'Enter your text...',onChange:()=>{} };
+                defaultProps = { maxLength: 140, placeholder: 'Enter your text...'};
                 break;
-
-            // Layout components generally don't need default props as they just render children
-            case 'HostFrame':
-            case 'HostViewContainer':
-            case 'PlayArea':
-            case 'PlayerViewContainer':
-                defaultProps = {}; // No default props needed
-                break;
-            
-            // Card components are complex and will be handled later
             default:
-                // No default props for other components yet
                 break;
         }
+
 
         const newComponentData = {
             id: `${componentName.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`,
             component: componentName,
-            props: defaultProps
+            props: defaultProps,
+            style: {}
         };
 
-        const newUi = { ...config.ui };
+        const newUi = JSON.parse(JSON.stringify(config.ui)); // Deep copy
         if (!newUi[selectedState]) {
-            newUi[selectedState] = { host: { components: [] }, player: [] };
+            newUi[selectedState] = { host: { components: [] }, player: [{ condition: "", components: [] }] };
         }
 
         if (over.id === 'host-view') {
-            const hostComponents = newUi[selectedState].host.components || [];
-            newUi[selectedState].host.components = [...hostComponents, newComponentData];
+            if (!newUi[selectedState].host) newUi[selectedState].host = { components: [] };
+            newUi[selectedState].host.components.push(newComponentData);
         } else if (String(over.id).startsWith('player-view-')) {
             const viewIndex = parseInt(String(over.id).split('-')[2], 10);
-            const playerViews = newUi[selectedState].player || [];
-            if(playerViews[viewIndex]) {
-                const viewComponents = playerViews[viewIndex].components || [];
-                playerViews[viewIndex].components = [...viewComponents, newComponentData];
+            if (newUi[selectedState].player[viewIndex]) {
+                 if (!newUi[selectedState].player[viewIndex].components) {
+                    newUi[selectedState].player[viewIndex].components = [];
+                }
+                newUi[selectedState].player[viewIndex].components.push(newComponentData);
             }
         }
         
         setConfig((prev: any) => ({ ...prev, ui: newUi }));
     };
 
-    const handlePaletteToggle = (event: React.MouseEvent) => {
-        // Check if the click was on a summary element
-        if ((event.target as HTMLElement).tagName === 'SUMMARY') {
-            // Use a timeout to allow the 'open' attribute to update in the DOM
-            setTimeout(() => {
-                if (paletteRef.current) {
-                    const anyDetailsOpen = !!paletteRef.current.querySelector('details[open]');
-                    setIsPaletteExpanded(anyDetailsOpen);
-                }
-            }, 0);
-        }
-    };
+    const selectedComponent = getSelectedComponent();
     
     return (
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
@@ -306,64 +310,72 @@ export const ScreensStage = ({ config, setConfig }: any) => {
                 <p>Design the host and player screens for each game state by dragging components.</p>
                 
                 <label>Select a game state to design:</label>
-                <select value={selectedState} onChange={(e) => setSelectedState(e.target.value)} className="state-selector">
+                <select value={selectedState} onChange={(e) => {setSelectedState(e.target.value); setSelectedComponentId(null);}} className="state-selector">
                     {Object.keys(config.states).map(stateName => (
                         <option key={stateName} value={stateName}>{stateName}</option>
                     ))}
                 </select>
 
-                <div className="screen-builder-container">
-                    <div 
-                        ref={paletteRef} 
-                        className={`component-palette ${isPaletteExpanded ? 'is-expanded' : ''}`}
-                        onClick={handlePaletteToggle}
-                    >
-                        <h3>Component Library</h3>
-                        {Object.entries(COMPONENT_CATEGORIES).map(([category, components]) => (
-                            <details key={category} className="component-category-details">
-                                <summary className="component-category-summary">{category}</summary>
-                                <div className="component-grid">
-                                    {components.map(compName => <DraggableItem key={compName} id={compName} />)}
-                                </div>
-                            </details>
-                        ))}
-                    </div>
-
-                    <div className="view-editors">
-                        <div className="view-editor">
-                            <div style={{ position: 'relative' }}>
-                                <h4>Host View for: <strong>{selectedState}</strong></h4>
-                                <button className="preview-button" onClick={() => setPreview({ isOpen: true, components: getItems('host'), role: 'host' })}>Preview</button>
-                            </div>
-                            <Dropzone 
-                                id="host-view" 
-                                items={getItems('host')}
-                            />
-                        </div>
-                        <div className="view-editor">
-                            <h4>Player View for: <strong>{selectedState}</strong></h4>
-                            
-                            {(Array.isArray(config.ui?.[selectedState]?.player) ? config.ui[selectedState].player : [config.ui?.[selectedState]?.player || { components: [] }]).map((view: any, index: number, arr: any[]) => (
-                                <div key={index} className="conditional-view-container">
-                                     <button className="preview-button" onClick={() => setPreview({ isOpen: true, components: view.components || [], role: 'player' })}>Preview</button>
-                                    <label>Condition for View {index + 1}</label>
-                                    <input 
-                                        type="text"
-                                        placeholder="e.g. {{player.hasAnswered}}"
-                                        value={view.condition || ''}
-                                        onChange={(e) => handlePlayerViewChange(index, 'condition', e.target.value)}
-                                    />
-                                    <Dropzone 
-                                        id={`player-view-${index}`} 
-                                        items={view.components || []} 
-                                    />
-                                     {arr.length > 1 && <button className="button-subtle" onClick={() => handleRemovePlayerView(index)}>Remove View</button>}
-                                </div>
+                <div className="screen-builder-layout">
+                    <div className="main-content">
+                        <div className="component-palette">
+                            <h3>Component Library</h3>
+                            {Object.entries(COMPONENT_CATEGORIES).map(([category, components]) => (
+                                <details key={category} className="component-category-details" open>
+                                    <summary className="component-category-summary">{category}</summary>
+                                    <div className="component-grid">
+                                        {components.map(compName => <DraggableItem key={compName} id={compName} />)}
+                                    </div>
+                                </details>
                             ))}
+                        </div>
 
-                            <button onClick={handleAddPlayerView}>Add Conditional View</button>
+                        <div className="view-editors-container">
+                             <div className="view-editor">
+                                <div style={{ position: 'relative' }}>
+                                    <h4>Host View for: <strong>{selectedState}</strong></h4>
+                                    <button className="preview-button" onClick={() => setPreview({ isOpen: true, components: getItems('host'), role: 'host' })}>Preview</button>
+                                </div>
+                                <Dropzone
+                                    id="host-view"
+                                    items={getItems('host')}
+                                    selectedComponentId={selectedComponentId}
+                                    onSelectComponent={setSelectedComponentId}
+                                />
+                            </div>
+                            <div className="view-editor">
+                                <h4>Player View for: <strong>{selectedState}</strong></h4>
+                                {(Array.isArray(config.ui?.[selectedState]?.player) ? config.ui[selectedState].player : []).map((view: any, index: number, arr: any[]) => (
+                                    <div key={index} className="conditional-view-container">
+                                         <button className="preview-button" onClick={() => setPreview({ isOpen: true, components: view.components || [], role: 'player' })}>Preview</button>
+                                        <label>Condition for View {index + 1}</label>
+                                        <input 
+                                            type="text"
+                                            placeholder="e.g. {{player.hasAnswered}}"
+                                            value={view.condition || ''}
+                                            onChange={(e) => handlePlayerViewChange(index, 'condition', e.target.value)}
+                                        />
+                                        <Dropzone
+                                            id={`player-view-${index}`}
+                                            items={getItems('player', index)}
+                                            selectedComponentId={selectedComponentId}
+                                            onSelectComponent={setSelectedComponentId}
+                                        />
+                                         {arr.length > 1 && <button className="button-subtle" onClick={() => handleRemovePlayerView(index)}>Remove View</button>}
+                                    </div>
+                                ))}
+                                <button onClick={handleAddPlayerView}>Add Conditional View</button>
+                            </div>
                         </div>
                     </div>
+                    
+                    {selectedComponent && (
+                        <PropertyInspector
+                            component={selectedComponent}
+                            onUpdate={handleUpdateComponent}
+                            onClose={() => setSelectedComponentId(null)}
+                        />
+                    )}
                 </div>
             </div>
             <DragOverlay>

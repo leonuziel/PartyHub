@@ -1,0 +1,291 @@
+/* ScreensStage.css */
+
+.screen-builder-layout {
+    display: flex;
+    gap: 1rem;
+}
+
+.main-content {
+    flex-grow: 1;
+    display: flex;
+    gap: 1rem;
+}
+
+.component-palette {
+    flex-basis: 220px;
+    flex-shrink: 0;
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 1rem;
+    background-color: #12101F;
+    height: fit-content;
+}
+
+.component-palette h3 {
+    margin-top: 0;
+    font-size: 1.1rem;
+    color: #8A2BE2;
+}
+
+.component-category-details {
+    margin-bottom: 0.5rem;
+}
+
+.component-category-summary {
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0.5rem;
+    background-color: #333;
+    border-radius: 4px;
+    outline: none;
+    transition: background-color 0.2s;
+}
+
+.component-category-summary:hover {
+    background-color: #444;
+}
+
+.component-category-details[open] > .component-category-summary {
+    background-color: #8A2BE2;
+    color: white;
+}
+
+.component-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    padding-top: 0.75rem;
+}
+
+.draggable-component {
+    padding: 0.5rem;
+    font-size: 0.85rem;
+    background-color: #333;
+    border-radius: 4px;
+    cursor: grab;
+    text-align: center;
+    font-weight: bold;
+    user-select: none;
+}
+
+.draggable-component.is-overlay {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    transform: scale(1.05);
+    z-index: 1000;
+}
+
+.view-editors-container {
+    flex-grow: 1;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.view-editor {
+    flex: 1;
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 1rem;
+    background-color: #1C192B;
+}
+
+.view-editor h4 {
+    margin-top: 0;
+    position: relative;
+    padding-right: 80px;
+}
+
+.dropzone {
+    min-height: 300px;
+    background-color: rgba(0,0,0,0.2);
+    border: 2px dashed #333;
+    border-radius: 4px;
+    padding: 0.5rem;
+    transition: border-color 0.2s;
+}
+
+.dropzone p {
+    color: #888;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.sortable-item {
+    position: relative;
+    width: 100%;
+    z-index: 10;
+    pointer-events: auto;
+    background-color: #2a263e;
+    border: 1px solid #4a4a7a;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    user-select: none;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.sortable-item.is-selected {
+    box-shadow: 0 0 12px #8A2BE2, 0 0 2px white;
+    border-color: white;
+}
+
+.sortable-item-header {
+    background-color: #4a4a7a;
+    color: white;
+    padding: 0.5rem 0.75rem;
+    font-weight: bold;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.sortable-item-body {
+    padding: 0.75rem;
+    font-size: 0.8rem;
+    color: #ccc;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.sortable-item-body p {
+    margin: 0 0 0.25rem 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.sortable-item-body strong {
+    color: #aaa;
+}
+
+
+/* Property Inspector */
+.property-inspector {
+    flex-basis: 320px;
+    flex-shrink: 0;
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 1rem;
+    background-color: #12101F;
+    color: #eee;
+    animation: slideIn 0.3s ease-out;
+    height: fit-content;
+}
+
+.inspector-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #333;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.inspector-header h3 {
+    margin: 0;
+    color: #8A2BE2;
+    font-size: 1.2rem;
+}
+
+.inspector-header .close-btn {
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 1.75rem;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.inspector-body {
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.inspector-body h4 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: #eee;
+    font-weight: bold;
+    border-bottom: 1px solid #333;
+    padding-bottom: 0.5rem;
+}
+
+.inspector-body label {
+    font-size: 0.85rem;
+    color: #aaa;
+    margin-bottom: 0.5rem;
+    display: block;
+    font-weight: bold;
+}
+
+.inspector-body textarea,
+.inspector-body input {
+    display: block;
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background-color: #2a263e;
+    color: #eee;
+    font-size: 0.9rem;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.inspector-body textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.inspector-footer {
+    margin-top: 1rem;
+    border-top: 1px solid #333;
+    padding-top: 1rem;
+}
+
+.inspector-footer button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #8A2BE2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.conditional-view-container {
+    border: 1px solid #333;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: #12101F;
+    position: relative;
+}
+
+.view-editor button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #8A2BE2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 1rem;
+}
+
+.view-editor .button-subtle {
+    background-color: #444;
+    margin-top: 0.5rem;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
