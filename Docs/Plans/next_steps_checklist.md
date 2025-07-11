@@ -55,8 +55,10 @@ This document outlines the next phases of development for the PartyHub platform,
 
 -   [x] **Implement the "Game Flow" Stage:**
     -   [x] **Transition UI:** The interface for connecting state nodes is complete. Users can drag an arrow from an event to a target state to create a transition.
-    -   [ ] **Conditional Transitions:** Add a UI element for defining the optional `condition` string for a transition.
+    -   [ ] **Conditional Transitions:** Add a UI element for defining the optional `condition` string for a transition. This could be an icon on the transition arrow that opens an input.
     -   [x] **Backend Integration:** The visual flow is correctly translated into the `transitions` array in the JSON configuration.
+    -   [ ] **Drop on Canvas for Action Creation:** Allow users to drop a transition arrow onto the canvas background to open a context menu for creating new actions or one-off effects.
+    -   [ ] **Delete Transitions:** Add a way to delete a transition by right-clicking on the arrow.
 
 -   [ ] **Finalize and Ship:**
     -   [ ] **Backend Integration:** Connect the "Save" button in the `ReviewStage` to the `POST /api/game-configs` and `PUT /api/game-configs/:gameId` endpoints.

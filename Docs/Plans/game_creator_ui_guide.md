@@ -61,7 +61,6 @@ The game creation UI is partially implemented. Here is a summary of the current 
 The following items need to be completed to have a fully functional game creation UI:
 
 *   **Component Property Inspector:** [POSTPONED] The property inspector will be implemented in a later stage.
-*   **Component Property Inspector:** [POSTPONED] The property inspector will be implemented in a later stage.
 *   **Conditional Transitions:** Add a UI element in the Game Flow stage for defining the optional `condition` string for a transition.
 *   **Backend Integration:** The `handleSave` function in `GameCreatorPage.tsx` needs to be connected to a backend endpoint to save the game configuration.
 *   **Error Handling and Validation:** Implement robust error handling and validation throughout the wizard to ensure that the user creates a valid game configuration.
@@ -70,7 +69,10 @@ The following items need to be completed to have a fully functional game creatio
 
 Here are some ideas for additional features that would improve the game creation experience:
 
-*   **Templates:** Provide a selection of pre-built game templates that users can start from.
 *   **Live Preview:** Add a live preview that shows how the game will look and behave as the user is creating it.
+*   **Conditional Transitions:** In the Game Flow stage, add an interface for defining the optional `condition` property on a transition. This could be a small icon on the arrow that opens a text input for the condition string.
+*   **Create Actions from Canvas:** Allow users to drop a transition arrow onto the canvas background to open a context menu. This menu would provide options to create new, reusable actions or to define a one-off sequence of effects directly, further speeding up the creation process.
+*   **Delete Transitions and Actions:** Add a way to delete transitions (e.g., right-clicking the arrow) and to manage (add/remove/edit) reusable actions in a separate UI panel.
 *   **Tutorials and Documentation:** Integrate tutorials and documentation into the UI to guide users through the game creation process.
+*   **Templates:** Provide a selection of pre-built game templates that users can start from.
 *   **Community Sharing:** Allow users to share their created games with the community.
