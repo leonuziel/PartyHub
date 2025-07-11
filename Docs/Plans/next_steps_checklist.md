@@ -36,12 +36,12 @@ This document outlines the next phases of development for the PartyHub platform,
         -   **Challenge:** This would require a significant new UI component (a `DrawingCanvas`) and a new built-in function to handle saving image data.
         -   **Follow Checklists:** Use the component and function checklists to scope out and implement these new capabilities. This serves as a great test of the engine's extensibility.
 
--   [ ] **Add UI Styling and Layout Options to Configurations:**
-    -   [ ] **Research and Design:** Plan a system for how game creators can control layout. Ideas include:
-        -   **Layout Components:** Create simple layout components like `VStack`, `HStack`, `Grid`, and `Spacer` and add them to the `ComponentRegistry`.
-        -   **Component-Level Styling:** Add a `style` or `layout` prop to the base component schema in the validator. This could allow for setting `flex-grow`, `width`, `alignment`, etc.
-        -   **Theming:** Add a `theme` object to the `metadata` section of a game config, defining primary/secondary colors or fonts for that specific game.
-    -   [ ] **Implement the Chosen Approach:** Start with the simplest viable option (e.g., basic layout components) and build from there.
+-   [/] **Add UI Styling and Layout Options to Configurations:** (In Progress)
+    -   [x] **Research and Design:** Decided on a component-level `style` property approach for granular control.
+    -   [x] **Component-Level Styling:** The Property Inspector now allows editing `backgroundColor`, `color`, and `flex-grow` on a per-component basis, which are saved to a `style` object in the component's configuration.
+    -   [ ] **Layout Components:** Create simple layout components like `VStack`, `HStack`, `Grid`, and `Spacer`.
+    -   [ ] **Theming:** Add a `theme` object to the `metadata` section of a game config.
+    -   [x] **Implement the Chosen Approach:** The initial implementation of the `style` property and the property inspector UI is complete.
 
 ---
 
@@ -49,19 +49,33 @@ This document outlines the next phases of development for the PartyHub platform,
 
 **Objective:** Complete the user-facing tools so that non-developers can create and share their own games.
 
--   [ ] **Complete the "Screens" Stage:**
-    -   [ ] **Build the Property Inspector:** When a user clicks a component on the canvas, a panel should appear allowing them to edit its props (e.g., button text, timer duration, action to fire). This will require a mapping from component type to its available props.
-    -   [ ] **Data Binding:** Connect the property inspector to the state, so changes are reflected in the main game configuration JSON in real-time.
-    -   [ ] **Live Preview:** Add a "Live Preview" button that opens the current screen in a full-screen modal, rendered with mock data to show the creator how it will look.
+-   [x] **Complete the "Screens" Stage:**
+    -   [x] **Visual Overhaul:** The UI now aligns with the `GameFlowStage` style, with components represented as nodes with headers and bodies.
+    -   [x] **Build the Property Inspector:** A property inspector panel now appears when a component is clicked, allowing for the editing of its props and style attributes.
+    -   [x] **Data Binding:** The property inspector is fully connected to the main configuration state; changes are saved in real-time.
+    -   [x] **Live Preview:** The "Live Preview" button is functional and correctly placed for both host and player views.
+    -   [x] **Core Functionality:** Drag-and-drop reordering and component deletion are now fully functional.
 
--   [x] **Implement the "Game Flow" Stage:**
+-   [/] **Implement the "Game Flow" Stage:** (In Progress)
     -   [x] **Transition UI:** The interface for connecting state nodes is complete. Users can drag an arrow from an event to a target state to create a transition.
     -   [ ] **Conditional Transitions:** Add a UI element for defining the optional `condition` string for a transition. This could be an icon on the transition arrow that opens an input.
     -   [x] **Backend Integration:** The visual flow is correctly translated into the `transitions` array in the JSON configuration.
     -   [ ] **Drop on Canvas for Action Creation:** Allow users to drop a transition arrow onto the canvas background to open a context menu for creating new actions or one-off effects.
-    -   [ ] **Delete Transitions:** Add a way to delete a transition by right-clicking on the arrow.
+    -   [ ] **Delete Transitions and Actions:** Add a way to delete transitions (e.g., right-clicking the arrow) and to manage (add/remove/edit) reusable actions in a separate UI panel.
 
 -   [ ] **Finalize and Ship:**
     -   [ ] **Backend Integration:** Connect the "Save" button in the `ReviewStage` to the `POST /api/game-configs` and `PUT /api/game-configs/:gameId` endpoints.
     -   [ ] **Error Handling:** Implement robust validation and user-friendly error messages throughout the wizard.
     -   [ ] **End-to-End Test:** Create a simple game from scratch entirely through the UI, save it, and then play it to ensure the entire pipeline works perfectly.
+
+---
+
+## Phase 4: Community and Support
+
+**Objective:** Provide users with the resources they need to learn the system and share their creations.
+
+-   [ ] **Tutorials and Documentation:**
+    -   [ ] **Integrate In-UI Guides:** Add tutorials and documentation directly into the Game Creator UI to guide new users.
+-   [ ] **Community Features:**
+    -   [ ] **Game Templates:** Provide a selection of pre-built game templates that users can start from.
+    -   [ ] **Community Sharing:** Allow users to share their created games with the community.

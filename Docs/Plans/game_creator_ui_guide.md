@@ -60,8 +60,6 @@ The game creation UI is partially implemented. Here is a summary of the current 
 
 The following items need to be completed to have a fully functional game creation UI:
 
-*   **Component Property Inspector:** [POSTPONED] The property inspector will be implemented in a later stage.
-*   **Conditional Transitions:** Add a UI element in the Game Flow stage for defining the optional `condition` string for a transition.
 *   **Backend Integration:** The `handleSave` function in `GameCreatorPage.tsx` needs to be connected to a backend endpoint to save the game configuration.
 *   **Error Handling and Validation:** Implement robust error handling and validation throughout the wizard to ensure that the user creates a valid game configuration.
 
