@@ -16,6 +16,7 @@ import {
     sortableKeyboardCoordinates,
     verticalListSortingStrategy,
     useSortable,
+    arrayMove,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import './ScreensStage.css';
@@ -30,6 +31,8 @@ const COMPONENT_CATEGORIES = {
     Cards: ['BiddingPopup', 'CardFan', 'CardSlot', 'Deck', 'DiscardPile', 'Hand', 'LastPlayedCard', 'Meld', 'PlayerHandDisplay', 'Scoreboard', 'Trick', 'TrumpIndicator']
 };
 
+const ALL_COMPONENTS = Object.values(COMPONENT_CATEGORIES).flat();
+
 const DraggableItem = ({ id, isOverlay }: { id: string, isOverlay?: boolean }) => {
     const { attributes, listeners, setNodeRef } = useDraggable({ id });
     return (
@@ -39,7 +42,7 @@ const DraggableItem = ({ id, isOverlay }: { id: string, isOverlay?: boolean }) =
     );
 };
 
-const SortableItem = ({ id, component, isSelected, onSelect }: { id: string, component: any, isSelected: boolean, onSelect: () => void }) => {
+const SortableItem = ({ id, component, isSelected, onSelect, onRemove }: { id: string, component: any, isSelected: boolean, onSelect: () => void, onRemove: (id: string) => void }) => {
     const {
         attributes,
         listeners,
@@ -53,9 +56,23 @@ const SortableItem = ({ id, component, isSelected, onSelect }: { id: string, com
         transition,
     };
 
+    const handleRemove = (e: React.MouseEvent) => {
+        e.stopPropagation(); // Prevent the onSelect of the parent div from firing
+        onRemove(id);
+    };
+
     return (
-        <div ref={setNodeRef} style={style} {...attributes} {...listeners} className={`sortable-item ${isSelected ? 'is-selected' : ''}`} onClick={onSelect}>
-            <div className="sortable-item-header">{component.component}</div>
+        <div ref={setNodeRef} style={style} className={`sortable-item ${isSelected ? 'is-selected' : ''}`} onClick={onSelect}>
+            <div className="sortable-item-header" {...attributes} {...listeners}>
+                <span>{component.component}</span>
+                <button
+                    className="remove-component-btn"
+                    onClick={handleRemove}
+                    onPointerDown={(e) => e.stopPropagation()} // Prevent dnd-kit drag listeners from firing
+                >
+                    &times;
+                </button>
+            </div>
             <div className="sortable-item-body">
                 {Object.entries(component.props).map(([key, value]) => (
                      <p key={key}><strong>{key}:</strong> {JSON.stringify(value)}</p>
@@ -66,7 +83,7 @@ const SortableItem = ({ id, component, isSelected, onSelect }: { id: string, com
 };
 
 
-const Dropzone = ({ id, items, selectedComponentId, onSelectComponent }: { id: string, items: any[], selectedComponentId: string | null, onSelectComponent: (id: string) => void }) => {
+const Dropzone = ({ id, items, selectedComponentId, onSelectComponent, onRemoveComponent }: { id: string, items: any[], selectedComponentId: string | null, onSelectComponent: (id: string) => void, onRemoveComponent: (id: string) => void }) => {
     const { setNodeRef } = useDroppable({ id });
     const itemIds = items.map(i => i.id);
 
@@ -81,6 +98,7 @@ const Dropzone = ({ id, items, selectedComponentId, onSelectComponent }: { id: s
                             component={item}
                             isSelected={selectedComponentId === item.id}
                             onSelect={() => onSelectComponent(item.id)}
+                            onRemove={onRemoveComponent}
                         />
                     ))
                 ) : (
@@ -144,6 +162,38 @@ export const ScreensStage = ({ config, setConfig }: any) => {
         setConfig((prev: any) => ({ ...prev, ui: newUi }));
     };
 
+    const handleRemoveComponent = (componentIdToRemove: string) => {
+        if (selectedComponentId === componentIdToRemove) {
+            setSelectedComponentId(null);
+        }
+
+        const newUi = JSON.parse(JSON.stringify(config.ui));
+
+        const findAndRemove = (components: any[]) => {
+            if (!components) return false;
+            const index = components.findIndex((c: any) => c.id === componentIdToRemove);
+            if (index > -1) {
+                components.splice(index, 1);
+                return true;
+            }
+            return false;
+        };
+
+        if (findAndRemove(newUi[selectedState]?.host?.components)) {
+             setConfig((prev: any) => ({ ...prev, ui: newUi }));
+             return;
+        }
+
+        if (Array.isArray(newUi[selectedState]?.player)) {
+            for (const view of newUi[selectedState].player) {
+                if (findAndRemove(view.components)) {
+                    setConfig((prev: any) => ({ ...prev, ui: newUi }));
+                    return;
+                }
+            }
+        }
+    };
+
      const handleUpdateComponent = (id: string, newProps: any, newStyle: any) => {
         const newUi = JSON.parse(JSON.stringify(config.ui)); // Deep copy
 
@@ -186,119 +236,160 @@ export const ScreensStage = ({ config, setConfig }: any) => {
     const handleDragEnd = (event: any) => {
         const { active, over } = event;
         setActiveId(null);
-        if (!over) return;
-        
-        const componentName = active.id;
-        let defaultProps = {};
 
-        // Default props logic from your original code...
-        switch(componentName) {
-            case 'ActionButton':
-            case 'Button':
-            case 'CenteredMessage':
-                defaultProps = { children: 'Sample Text' };
-                break;
-            case 'QuestionDisplay':
-                 defaultProps = { question: 'Sample question?' };
-                break;
-            case 'WinnerDisplay':
-                defaultProps = { winnerName: 'Player 1' };
-                break;
-            case 'AwardDisplay':
-                defaultProps = { award: 'Most Likely to Succeed', description: 'Voted by their peers' };
-                break;
-            case 'GameTitle':
-                defaultProps = { title: 'My Awesome Game' };
-                break;
-            case 'AnswerGrid':
-                defaultProps = { answers: ['Answer A', 'Answer B', 'Answer C', 'Answer D'] };
-                break;
-            case 'VotingOptions':
-                defaultProps = { options: ['Option 1', 'Option 2', 'Option 3'] };
-                break;
-            case 'Leaderboard':
-            case 'PlayerStatusGrid':
-            case 'Podium':
-                defaultProps = { players: '{{players}}' };
-                break;
-            case 'PodiumList':
-                defaultProps = { players: '{{players}}', count: 3 };
-                break;
-            case 'ResultsList':
-                 defaultProps = { options: ['Answer A', 'Answer B'], votes: { '1': 'Answer A', '2': 'Answer B' }, correctAnswer: 'Answer A', players: '{{players}}' };
-                break;
-            case 'SpecialAwards':
-                defaultProps = {
-                    awards: [{
-                        awardName: 'Best Fake Answer', player: {id: '45dg', 
-                        nickname:'Boby',
-                        avatar: 'avatar1.png',
-                        hasAnswered: false,
-                        score: 70 } }]};
-                break;
-            case 'PlayerAvatar':
-            case 'PlayerCard':
-            case 'PlayerInfo':
-                defaultProps = { player: '{{player}}' };
-                break;
-            case 'AnswerResult':
-                defaultProps = { answer: 'A Great Answer', percentage: 75, isCorrect: true };
-                break;
-            case 'CountdownTimer':
-                defaultProps = { initialValue: 10 };
-                break;
-            case 'GameBranding':
-                defaultProps = { gameTitle: 'My Awesome Game', logoUrl: '' };
-                break;
-            case 'GameCard':
-                defaultProps = { title: 'My Game', description: 'A brief description', playerCount: '2-8', playtime: '15m' };
-                break;
-            case 'PlayerStatusContainer':
-                defaultProps = { title: 'Players', subtitle: 'Who have answered' };
-                break;
-            case 'QuestionHeader':
-                defaultProps = { round: 1, totalRounds: 5, timer: 30, answeredCount: 1, totalPlayers: 4 };
-                break;
-            case 'RankDisplay':
-                defaultProps = { rank: 1 };
-                break;
-            case 'RankUpdate':
-                defaultProps = { oldRank: 2, newRank: 1 };
-                break;
-            case 'TextAreaWithCounter':
-                defaultProps = { maxLength: 140, placeholder: 'Enter your text...'};
-                break;
-            default:
-                break;
+        if (!over) {
+            return;
         }
 
+        const isAddingNewComponent = ALL_COMPONENTS.includes(active.id);
 
-        const newComponentData = {
-            id: `${componentName.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`,
-            component: componentName,
-            props: defaultProps,
-            style: {}
-        };
+        if (isAddingNewComponent) {
+            const componentName = active.id;
+            let defaultProps = {};
 
-        const newUi = JSON.parse(JSON.stringify(config.ui)); // Deep copy
-        if (!newUi[selectedState]) {
-            newUi[selectedState] = { host: { components: [] }, player: [{ condition: "", components: [] }] };
-        }
+            // Default props logic...
+            switch(componentName) {
+                case 'ActionButton':
+                case 'Button':
+                case 'CenteredMessage':
+                    defaultProps = { children: 'Sample Text' };
+                    break;
+                case 'QuestionDisplay':
+                     defaultProps = { question: 'Sample question?' };
+                    break;
+                case 'WinnerDisplay':
+                    defaultProps = { winnerName: 'Player 1' };
+                    break;
+                case 'AwardDisplay':
+                    defaultProps = { award: 'Most Likely to Succeed', description: 'Voted by their peers' };
+                    break;
+                case 'GameTitle':
+                    defaultProps = { title: 'My Awesome Game' };
+                    break;
+                case 'AnswerGrid':
+                    defaultProps = { answers: ['Answer A', 'Answer B', 'Answer C', 'Answer D'] };
+                    break;
+                case 'VotingOptions':
+                    defaultProps = { options: ['Option 1', 'Option 2', 'Option 3'] };
+                    break;
+                case 'Leaderboard':
+                case 'PlayerStatusGrid':
+                case 'Podium':
+                    defaultProps = { players: '{{players}}' };
+                    break;
+                case 'PodiumList':
+                    defaultProps = { players: '{{players}}', count: 3 };
+                    break;
+                case 'ResultsList':
+                     defaultProps = { options: ['Answer A', 'Answer B'], votes: { '1': 'Answer A', '2': 'Answer B' }, correctAnswer: 'Answer A', players: '{{players}}' };
+                    break;
+                case 'SpecialAwards':
+                    defaultProps = {
+                        awards: [{
+                            awardName: 'Best Fake Answer', player: {id: '45dg', 
+                            nickname:'Boby',
+                            avatar: 'avatar1.png',
+                            hasAnswered: false,
+                            score: 70 } }]};
+                    break;
+                case 'PlayerAvatar':
+                case 'PlayerCard':
+                case 'PlayerInfo':
+                    defaultProps = { player: '{{player}}' };
+                    break;
+                case 'AnswerResult':
+                    defaultProps = { answer: 'A Great Answer', percentage: 75, isCorrect: true };
+                    break;
+                case 'CountdownTimer':
+                    defaultProps = { initialValue: 10 };
+                    break;
+                case 'GameBranding':
+                    defaultProps = { gameTitle: 'My Awesome Game', logoUrl: '' };
+                    break;
+                case 'GameCard':
+                    defaultProps = { title: 'My Game', description: 'A brief description', playerCount: '2-8', playtime: '15m' };
+                    break;
+                case 'PlayerStatusContainer':
+                    defaultProps = { title: 'Players', subtitle: 'Who have answered' };
+                    break;
+                case 'QuestionHeader':
+                    defaultProps = { round: 1, totalRounds: 5, timer: 30, answeredCount: 1, totalPlayers: 4 };
+                    break;
+                case 'RankDisplay':
+                    defaultProps = { rank: 1 };
+                    break;
+                case 'RankUpdate':
+                    defaultProps = { oldRank: 2, newRank: 1 };
+                    break;
+                case 'TextAreaWithCounter':
+                    defaultProps = { maxLength: 140, placeholder: 'Enter your text...'};
+                    break;
+                default:
+                    break;
+            }
 
-        if (over.id === 'host-view') {
-            if (!newUi[selectedState].host) newUi[selectedState].host = { components: [] };
-            newUi[selectedState].host.components.push(newComponentData);
-        } else if (String(over.id).startsWith('player-view-')) {
-            const viewIndex = parseInt(String(over.id).split('-')[2], 10);
-            if (newUi[selectedState].player[viewIndex]) {
-                 if (!newUi[selectedState].player[viewIndex].components) {
-                    newUi[selectedState].player[viewIndex].components = [];
+            const newComponentData = {
+                id: `${componentName.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`,
+                component: componentName,
+                props: defaultProps,
+                style: {}
+            };
+
+            const newUi = JSON.parse(JSON.stringify(config.ui));
+            if (!newUi[selectedState]) {
+                newUi[selectedState] = { host: { components: [] }, player: [{ condition: "", components: [] }] };
+            }
+
+            const dropzoneId = over.id;
+            if (dropzoneId === 'host-view') {
+                if (!newUi[selectedState].host) newUi[selectedState].host = { components: [] };
+                newUi[selectedState].host.components.push(newComponentData);
+            } else if (dropzoneId.startsWith('player-view-')) {
+                const viewIndex = parseInt(dropzoneId.split('-')[2], 10);
+                if (newUi[selectedState].player[viewIndex]) {
+                     if (!newUi[selectedState].player[viewIndex].components) {
+                        newUi[selectedState].player[viewIndex].components = [];
+                    }
+                    newUi[selectedState].player[viewIndex].components.push(newComponentData);
                 }
-                newUi[selectedState].player[viewIndex].components.push(newComponentData);
+            }
+            setConfig((prev: any) => ({ ...prev, ui: newUi }));
+            return;
+        }
+
+        // Reordering logic
+        if (active.id !== over.id) {
+            const activeContainer = active.data.current?.sortable.containerId;
+            const overContainer = over.data.current?.sortable.containerId || over.id;
+
+            if (activeContainer === overContainer) {
+                let items: any[] = [];
+                if (activeContainer === 'host-view') {
+                    items = getItems('host');
+                } else if (activeContainer.startsWith('player-view-')) {
+                    const viewIndex = parseInt(activeContainer.split('-')[2], 10);
+                    items = getItems('player', viewIndex);
+                }
+
+                if (items.length) {
+                    const oldIndex = items.findIndex(item => item.id === active.id);
+                    const newIndex = items.findIndex(item => item.id === over.id);
+
+                    if (oldIndex !== -1 && newIndex !== -1) {
+                        const newOrderedItems = arrayMove(items, oldIndex, newIndex);
+                        const newUi = JSON.parse(JSON.stringify(config.ui));
+
+                        if (activeContainer === 'host-view') {
+                            newUi[selectedState].host.components = newOrderedItems;
+                        } else if (activeContainer.startsWith('player-view-')) {
+                            const viewIndex = parseInt(activeContainer.split('-')[2], 10);
+                            newUi[selectedState].player[viewIndex].components = newOrderedItems;
+                        }
+                        setConfig((prev: any) => ({ ...prev, ui: newUi }));
+                    }
+                }
             }
         }
-        
-        setConfig((prev: any) => ({ ...prev, ui: newUi }));
     };
 
     const selectedComponent = getSelectedComponent();
@@ -332,7 +423,7 @@ export const ScreensStage = ({ config, setConfig }: any) => {
 
                         <div className="view-editors-container">
                              <div className="view-editor">
-                                <div style={{ position: 'relative' }}>
+                                <div className="view-editor-header">
                                     <h4>Host View for: <strong>{selectedState}</strong></h4>
                                     <button className="preview-button" onClick={() => setPreview({ isOpen: true, components: getItems('host'), role: 'host' })}>Preview</button>
                                 </div>
@@ -341,14 +432,17 @@ export const ScreensStage = ({ config, setConfig }: any) => {
                                     items={getItems('host')}
                                     selectedComponentId={selectedComponentId}
                                     onSelectComponent={setSelectedComponentId}
+                                    onRemoveComponent={handleRemoveComponent}
                                 />
                             </div>
                             <div className="view-editor">
                                 <h4>Player View for: <strong>{selectedState}</strong></h4>
                                 {(Array.isArray(config.ui?.[selectedState]?.player) ? config.ui[selectedState].player : []).map((view: any, index: number, arr: any[]) => (
                                     <div key={index} className="conditional-view-container">
-                                         <button className="preview-button" onClick={() => setPreview({ isOpen: true, components: view.components || [], role: 'player' })}>Preview</button>
-                                        <label>Condition for View {index + 1}</label>
+                                         <div className="conditional-view-header">
+                                            <label>Condition for View {index + 1}</label>
+                                            <button className="preview-button" onClick={() => setPreview({ isOpen: true, components: view.components || [], role: 'player' })}>Preview</button>
+                                        </div>
                                         <input 
                                             type="text"
                                             placeholder="e.g. {{player.hasAnswered}}"
@@ -360,11 +454,12 @@ export const ScreensStage = ({ config, setConfig }: any) => {
                                             items={getItems('player', index)}
                                             selectedComponentId={selectedComponentId}
                                             onSelectComponent={setSelectedComponentId}
+                                            onRemoveComponent={handleRemoveComponent}
                                         />
                                          {arr.length > 1 && <button className="button-subtle" onClick={() => handleRemovePlayerView(index)}>Remove View</button>}
                                     </div>
                                 ))}
-                                <button onClick={handleAddPlayerView}>Add Conditional View</button>
+                                <button onClick={handleAddPlayerView} className="add-view-btn">Add Conditional View</button>
                             </div>
                         </div>
                     </div>

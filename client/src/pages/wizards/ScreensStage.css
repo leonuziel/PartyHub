@@ -46,7 +46,7 @@
 }
 
 .component-category-details[open] > .component-category-summary {
-    background-color: #8A2BE2;
+    background-color: #4a4a7a;
     color: white;
 }
 
@@ -88,10 +88,41 @@
     background-color: #1C192B;
 }
 
+.view-editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
 .view-editor h4 {
-    margin-top: 0;
-    position: relative;
-    padding-right: 80px;
+    margin: 0;
+}
+
+.preview-button {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.85rem;
+    background-color: #333;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.preview-button:hover {
+    background-color: #444;
+}
+
+.conditional-view-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.conditional-view-header label {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #aaa;
 }
 
 .dropzone {
@@ -120,12 +151,11 @@
     box-shadow: 0 4px 10px rgba(0,0,0,0.4);
     user-select: none;
     margin-bottom: 0.5rem;
-    cursor: pointer;
     transition: box-shadow 0.2s, border-color 0.2s;
 }
 
 .sortable-item.is-selected {
-    box-shadow: 0 0 12px #8A2BE2, 0 0 2px white;
+    box-shadow: 0 0 12px #4a4a7a, 0 0 2px white;
     border-color: white;
 }
 
@@ -136,6 +166,30 @@
     font-weight: bold;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
+    cursor: grab;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Increased specificity to override general button styles */
+.sortable-item-header .remove-component-btn {
+    background: none;
+    border: none;
+    color: #ddd;
+    font-size: 1.4rem;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    transition: color 0.2s ease;
+    /* Explicitly reset properties that might be inherited */
+    width: auto;
+    margin: 0;
+}
+
+.sortable-item-header .remove-component-btn:hover {
+    color: white;
 }
 
 .sortable-item-body {
@@ -157,16 +211,9 @@
 
 
 /* Property Inspector */
-.property-inspector {
-    flex-basis: 320px;
-    flex-shrink: 0;
-    border: 1px solid #444;
-    border-radius: 6px;
-    padding: 1rem;
-    background-color: #12101F;
-    color: #eee;
-    animation: slideIn 0.3s ease-out;
-    height: fit-content;
+/* Adjust position of preview button in conditional view */
+.conditional-view-container {
+    position: relative;
 }
 
 .inspector-header {
@@ -244,7 +291,7 @@
 .inspector-footer button {
     width: 100%;
     padding: 0.75rem;
-    background-color: #8A2BE2;
+    background-color: #4a4a7a;
     color: white;
     border: none;
     border-radius: 4px;
@@ -260,11 +307,14 @@
     background-color: #12101F;
     position: relative;
 }
-
 .view-editor button {
+    background-color: #4a4a7a;
+}
+
+.view-editor button.add-view-btn {
     width: 100%;
     padding: 0.75rem;
-    background-color: #8A2BE2;
+    background-color: #4a4a7a;
     color: white;
     border: none;
     border-radius: 4px;
