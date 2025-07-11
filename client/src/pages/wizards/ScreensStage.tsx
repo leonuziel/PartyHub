@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { PreviewModal } from './PreviewModal';
 import {
     DndContext,
     closestCenter,
@@ -24,7 +25,7 @@ const COMPONENT_CATEGORIES = {
     Controls: ['ActionButton', 'AnswerGrid', 'Button', 'GameCard', 'TextAreaWithCounter', 'VotingOptions'],
     Display: ['AnswerResult', 'AwardDisplay', 'GameBranding', 'GameTitle', 'Leaderboard', 'PlayerAvatar', 'PlayerCard', 'PlayerInfo', 'PlayerStatusContainer', 'PlayerStatusGrid', 'Podium', 'PodiumList', 'QuestionDisplay', 'QuestionHeader', 'RankDisplay', 'RankUpdate', 'ResultsList', 'SpecialAwards', 'WinnerDisplay'],
     Gameplay: ['CountdownTimer'],
-    Layout: ['CenteredMessage', 'HostFrame', 'HostViewContainer', 'PlayArea', 'PlayerViewContainer'],
+    Layout: ['CenteredMessage', 'HostViewContainer', 'PlayArea', 'PlayerViewContainer'],
     Cards: ['BiddingPopup', 'CardFan', 'CardSlot', 'Deck', 'DiscardPile', 'Hand', 'LastPlayedCard', 'Meld', 'PlayerHandDisplay', 'Scoreboard', 'Trick', 'TrumpIndicator']
 };
 
@@ -98,6 +99,7 @@ export const ScreensStage = ({ config, setConfig }: any) => {
     const [selectedState, setSelectedState] = useState('STARTING');
     const [activeId, setActiveId] = useState<string | null>(null);
     const [isPaletteExpanded, setIsPaletteExpanded] = useState(false);
+    const [preview, setPreview] = useState<{ isOpen: boolean, components: any[], role: 'host' | 'player' }>({ isOpen: false, components: [], role: 'host' });
     const paletteRef = useRef<HTMLDivElement>(null);
 
     const sensors = useSensors(
@@ -155,10 +157,113 @@ export const ScreensStage = ({ config, setConfig }: any) => {
         // For this wireframe, we'll just log the action.
         console.log(`Component ${active.id} was dropped over ${over.id}`);
 
+        const componentName = active.id;
+        let defaultProps = {};
+
+        switch(componentName) {
+            // Components needing simple text/children
+            case 'ActionButton':
+            case 'Button':
+            case 'CenteredMessage':
+                defaultProps = { children: 'Sample Text' };
+                break;
+            case 'QuestionDisplay':
+                 defaultProps = { question: 'Sample question?' };
+                break;
+            case 'WinnerDisplay':
+                defaultProps = { winnerName: 'Player 1' };
+                break;
+            case 'AwardDisplay':
+                defaultProps = { award: 'Most Likely to Succeed', description: 'Voted by their peers' };
+                break;
+            case 'GameTitle':
+                defaultProps = { title: 'My Awesome Game' };
+                break;
+
+            // Components needing arrays of strings
+            case 'AnswerGrid':
+                defaultProps = { answers: ['Answer A', 'Answer B', 'Answer C', 'Answer D'] };
+                break;
+            case 'VotingOptions':
+                defaultProps = { options: ['Option 1', 'Option 2', 'Option 3'] };
+                break;
+
+            // Components needing arrays of data from MOCK_DATA
+            case 'Leaderboard':
+            case 'PlayerStatusGrid':
+            case 'Podium':
+                defaultProps = { players: '{{players}}' };
+                break;
+            case 'PodiumList':
+                defaultProps = { players: '{{players}}', count: 3 };
+                break;
+            case 'ResultsList':
+                 defaultProps = { options: ['Answer A', 'Answer B'], votes: { '1': 'Answer A', '2': 'Answer B' }, correctAnswer: 'Answer A', players: '{{players}}' };
+                break;
+            case 'SpecialAwards':
+                defaultProps = {
+                    awards: [{
+                        awardName: 'Best Fake Answer', player: {id: '45dg', // socket.id
+                        nickname:'Boby',
+                        avatar: 'avatar1.png',
+                        hasAnswered: false,
+                        score: 70 } }]};
+                break;
+            
+            // Components needing single objects from MOCK_DATA
+            case 'PlayerAvatar':
+            case 'PlayerCard':
+            case 'PlayerInfo':
+                defaultProps = { player: '{{player}}' };
+                break;
+
+            // Components needing specific values
+            case 'AnswerResult':
+                defaultProps = { answer: 'A Great Answer', percentage: 75, isCorrect: true };
+                break;
+            case 'CountdownTimer':
+                defaultProps = { initialValue: 10 };
+                break;
+            case 'GameBranding':
+                defaultProps = { gameTitle: 'My Awesome Game', logoUrl: '' };
+                break;
+            case 'GameCard':
+                defaultProps = { title: 'My Game', description: 'A brief description', playerCount: '2-8', playtime: '15m' };
+                break;
+            case 'PlayerStatusContainer':
+                defaultProps = { title: 'Players', subtitle: 'Who have answered' };
+                break;
+            case 'QuestionHeader':
+                defaultProps = { round: 1, totalRounds: 5, timer: 30, answeredCount: 1, totalPlayers: 4 };
+                break;
+            case 'RankDisplay':
+                defaultProps = { rank: 1 };
+                break;
+            case 'RankUpdate':
+                defaultProps = { oldRank: 2, newRank: 1 };
+                break;
+            case 'TextAreaWithCounter':
+                defaultProps = { maxLength: 140, placeholder: 'Enter your text...',onChange:()=>{} };
+                break;
+
+            // Layout components generally don't need default props as they just render children
+            case 'HostFrame':
+            case 'HostViewContainer':
+            case 'PlayArea':
+            case 'PlayerViewContainer':
+                defaultProps = {}; // No default props needed
+                break;
+            
+            // Card components are complex and will be handled later
+            default:
+                // No default props for other components yet
+                break;
+        }
+
         const newComponentData = {
-            id: `${active.id.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`,
-            component: active.id,
-            props: {} // Default empty props
+            id: `${componentName.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`,
+            component: componentName,
+            props: defaultProps
         };
 
         const newUi = { ...config.ui };
@@ -226,7 +331,10 @@ export const ScreensStage = ({ config, setConfig }: any) => {
 
                     <div className="view-editors">
                         <div className="view-editor">
-                            <h4>Host View for: <strong>{selectedState}</strong></h4>
+                            <div style={{ position: 'relative' }}>
+                                <h4>Host View for: <strong>{selectedState}</strong></h4>
+                                <button className="preview-button" onClick={() => setPreview({ isOpen: true, components: getItems('host'), role: 'host' })}>Preview</button>
+                            </div>
                             <Dropzone 
                                 id="host-view" 
                                 items={getItems('host')}
@@ -237,6 +345,7 @@ export const ScreensStage = ({ config, setConfig }: any) => {
                             
                             {(Array.isArray(config.ui?.[selectedState]?.player) ? config.ui[selectedState].player : [config.ui?.[selectedState]?.player || { components: [] }]).map((view: any, index: number, arr: any[]) => (
                                 <div key={index} className="conditional-view-container">
+                                     <button className="preview-button" onClick={() => setPreview({ isOpen: true, components: view.components || [], role: 'player' })}>Preview</button>
                                     <label>Condition for View {index + 1}</label>
                                     <input 
                                         type="text"
@@ -260,6 +369,12 @@ export const ScreensStage = ({ config, setConfig }: any) => {
             <DragOverlay>
                 {activeId ? <DraggableItem id={activeId} isOverlay /> : null}
             </DragOverlay>
+            <PreviewModal 
+                isOpen={preview.isOpen}
+                onClose={() => setPreview({ isOpen: false, components: [], role: 'host' })}
+                components={preview.components}
+                role={preview.role}
+            />
         </DndContext>
     );
 };

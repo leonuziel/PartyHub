@@ -52,6 +52,7 @@ This document outlines the next phases of development for the PartyHub platform,
 -   [ ] **Complete the "Screens" Stage:**
     -   [ ] **Build the Property Inspector:** When a user clicks a component on the canvas, a panel should appear allowing them to edit its props (e.g., button text, timer duration, action to fire). This will require a mapping from component type to its available props.
     -   [ ] **Data Binding:** Connect the property inspector to the state, so changes are reflected in the main game configuration JSON in real-time.
+    -   [ ] **Live Preview:** Add a "Live Preview" button that opens the current screen in a full-screen modal, rendered with mock data to show the creator how it will look.
 
 -   [x] **Implement the "Game Flow" Stage:**
     -   [x] **Transition UI:** The interface for connecting state nodes is complete. Users can drag an arrow from an event to a target state to create a transition.

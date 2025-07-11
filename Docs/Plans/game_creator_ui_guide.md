@@ -69,7 +69,7 @@ The following items need to be completed to have a fully functional game creatio
 
 Here are some ideas for additional features that would improve the game creation experience:
 
-*   **Live Preview:** Add a live preview that shows how the game will look and behave as the user is creating it.
+*   **Live Preview (Screens Stage):** Add a "Live Preview" button to the Screens stage. When clicked, this will open the currently designed screen (for either host or player) in a full-screen modal. The preview will render the components with mock data, giving the creator an immediate, accurate representation of how the screen will look during gameplay.
 *   **Conditional Transitions:** In the Game Flow stage, add an interface for defining the optional `condition` property on a transition. This could be a small icon on the arrow that opens a text input for the condition string.
 *   **Create Actions from Canvas:** Allow users to drop a transition arrow onto the canvas background to open a context menu. This menu would provide options to create new, reusable actions or to define a one-off sequence of effects directly, further speeding up the creation process.
 *   **Delete Transitions and Actions:** Add a way to delete transitions (e.g., right-clicking the arrow) and to manage (add/remove/edit) reusable actions in a separate UI panel.
