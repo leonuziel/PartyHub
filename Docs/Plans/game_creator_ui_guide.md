@@ -52,7 +52,7 @@ The game creation UI is partially implemented. Here is a summary of the current 
 
 *   **Stage 1: Metadata:** Complete. The user can enter all the required metadata.
 *   **Stage 2: States:** Complete. The user can add, remove, and set the initial game state.
-*   **Stage 3: Screens:** Partially complete. The user can drag and drop components to design the UI for each state, but there is no property inspector to configure the components.
+*   **Stage 3: Screens:** [IN PROGRESS] The user can drag and drop components to design the UI for each state. The focus of this stage is on managing the component lists for each view and handling the conditional logic for player views. The UI for managing conditional views is partially complete.
 *   **Stage 4: Game Flow:** Partially complete. The user can visually arrange the state nodes on a canvas, but the transition logic is not yet implemented.
 *   **Stage 5: Review and Save:** Partially complete. allows the user to review the complete configuration and save it.
 
@@ -60,7 +60,7 @@ The game creation UI is partially implemented. Here is a summary of the current 
 
 The following items need to be completed to have a fully functional game creation UI:
 
-*   **Component Property Inspector:** In the Screens stage, implement a property inspector that allows the user to configure the properties of each component (e.g., the text of a button, the duration of a timer).
+*   **Component Property Inspector:** [POSTPONED] The property inspector will be implemented in a later stage.
 *   **Transition Logic:** In the Game Flow stage, implement the logic for defining transitions between states based on events. This includes creating the UI for defining the transitions and updating the `transitions` array in the configuration object.
 *   **Backend Integration:** The `handleSave` function in `GameCreatorPage.tsx` needs to be connected to a backend endpoint to save the game configuration.
 *   **Error Handling and Validation:** Implement robust error handling and validation throughout the wizard to ensure that the user creates a valid game configuration.

@@ -33,12 +33,9 @@ const ALL_COMPONENTS = Object.values(COMPONENT_CATEGORIES).flat();
 // --- Draggable Item ---
 const DraggableItem = ({ id, isOverlay }: { id: string, isOverlay?: boolean }) => {
     const { attributes, listeners, setNodeRef } = useDraggable({ id });
-    const style = {
-        cursor: 'grab',
-    };
     return (
-        <div ref={setNodeRef} style={style} {...listeners} {...attributes} className={`draggable-component ${isOverlay ? 'is-overlay' : ''}`}>
-            {id}
+        <div ref={setNodeRef} className={`draggable-component ${isOverlay ? 'is-overlay' : ''}`} {...attributes} {...listeners}>
+            <span>{id}</span>
         </div>
     );
 };
@@ -56,12 +53,12 @@ const SortableItem = ({ id, componentName }: { id: string, componentName: string
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
-        fontWeight: 'bold',
-        color: 'white',
-        backgroundColor: '#8A2BE2',
         padding: '0.75rem',
         marginBottom: '0.5rem',
         borderRadius: '4px',
+        backgroundColor: '#8A2BE2',
+        color: 'white',
+        fontWeight: 'bold',
     };
 
     return (
@@ -81,7 +78,13 @@ const Dropzone = ({ id, items }: { id: string, items: { id: string, component: s
         <SortableContext id={id} items={itemIds} strategy={verticalListSortingStrategy}>
             <div ref={setNodeRef} className="dropzone">
                 {items.length > 0 ? (
-                    items.map(item => <SortableItem key={item.id} id={item.id} componentName={item.component} />)
+                    items.map(item => (
+                        <SortableItem
+                            key={item.id}
+                            id={item.id}
+                            componentName={item.component}
+                        />
+                    ))
                 ) : (
                     <p>Drop components here</p>
                 )}
@@ -109,7 +112,39 @@ export const ScreensStage = ({ config, setConfig }: any) => {
         return config.ui?.[selectedState]?.[view]?.components || [];
     };
 
-    const handleDragStart = (event: any) => setActiveId(event.active.id);
+    const handleDragStart = (event: any) => {
+        setActiveId(event.active.id);
+    };
+
+    const handlePlayerViewChange = (index: number, field: string, value: any) => {
+        const newUi = { ...config.ui };
+        const playerViews = [...newUi[selectedState].player];
+        playerViews[index] = { ...playerViews[index], [field]: value };
+        newUi[selectedState].player = playerViews;
+        setConfig((prev: any) => ({ ...prev, ui: newUi }));
+    };
+
+    const handleAddPlayerView = () => {
+        const newUi = { ...config.ui };
+        let playerConfig = newUi[selectedState]?.player;
+
+        // If it's not an array, convert it to an array with the existing view as the first item
+        if (!Array.isArray(playerConfig)) {
+            playerConfig = [playerConfig || { components: [] }];
+        }
+        
+        const newPlayerViews = [...playerConfig, { condition: '', components: [] }];
+        newUi[selectedState].player = newPlayerViews;
+        setConfig((prev: any) => ({ ...prev, ui: newUi }));
+    };
+
+    const handleRemovePlayerView = (index: number) => {
+        const newUi = { ...config.ui };
+        const playerViews = [...newUi[selectedState].player];
+        playerViews.splice(index, 1);
+        newUi[selectedState].player = playerViews;
+        setConfig((prev: any) => ({ ...prev, ui: newUi }));
+    };
 
     const handleDragEnd = (event: any) => {
         const { active, over } = event;
@@ -120,42 +155,30 @@ export const ScreensStage = ({ config, setConfig }: any) => {
         // For this wireframe, we'll just log the action.
         console.log(`Component ${active.id} was dropped over ${over.id}`);
 
-        if (ALL_COMPONENTS.includes(active.id) && (over.id === 'host-view' || over.id === 'player-view')) {
-            const view = over.id === 'host-view' ? 'host' : 'player';
-            
-            // Ensure the state and view structures exist
-            const newUi = { ...config.ui };
-            if (!newUi[selectedState]) {
-                newUi[selectedState] = { host: { components: [] }, player: { components: [] } };
-            }
-            if (!newUi[selectedState][view]) {
-                newUi[selectedState][view] = { components: [] };
-            }
-            
-            const currentComponents = newUi[selectedState][view].components;
+        const newComponentData = {
+            id: `${active.id.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`,
+            component: active.id,
+            props: {} // Default empty props
+        };
 
-            // Create a unique ID for the new component instance
-            const instanceId = `${active.id.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`;
-            
-            const newComponent = {
-                id: instanceId,
-                component: active.id,
-                props: {} // Default empty props
-            };
-
-            setConfig((prev: any) => ({
-                ...prev,
-                ui: {
-                    ...prev.ui,
-                    [selectedState]: {
-                        ...prev.ui[selectedState],
-                        [view]: {
-                            components: [...currentComponents, newComponent]
-                        }
-                    }
-                }
-            }));
+        const newUi = { ...config.ui };
+        if (!newUi[selectedState]) {
+            newUi[selectedState] = { host: { components: [] }, player: [] };
         }
+
+        if (over.id === 'host-view') {
+            const hostComponents = newUi[selectedState].host.components || [];
+            newUi[selectedState].host.components = [...hostComponents, newComponentData];
+        } else if (String(over.id).startsWith('player-view-')) {
+            const viewIndex = parseInt(String(over.id).split('-')[2], 10);
+            const playerViews = newUi[selectedState].player || [];
+            if(playerViews[viewIndex]) {
+                const viewComponents = playerViews[viewIndex].components || [];
+                playerViews[viewIndex].components = [...viewComponents, newComponentData];
+            }
+        }
+        
+        setConfig((prev: any) => ({ ...prev, ui: newUi }));
     };
 
     const handlePaletteToggle = (event: React.MouseEvent) => {
@@ -204,11 +227,32 @@ export const ScreensStage = ({ config, setConfig }: any) => {
                     <div className="view-editors">
                         <div className="view-editor">
                             <h4>Host View for: <strong>{selectedState}</strong></h4>
-                            <Dropzone id="host-view" items={getItems('host')} />
+                            <Dropzone 
+                                id="host-view" 
+                                items={getItems('host')}
+                            />
                         </div>
                         <div className="view-editor">
                             <h4>Player View for: <strong>{selectedState}</strong></h4>
-                            <Dropzone id="player-view" items={getItems('player')} />
+                            
+                            {(Array.isArray(config.ui?.[selectedState]?.player) ? config.ui[selectedState].player : [config.ui?.[selectedState]?.player || { components: [] }]).map((view: any, index: number, arr: any[]) => (
+                                <div key={index} className="conditional-view-container">
+                                    <label>Condition for View {index + 1}</label>
+                                    <input 
+                                        type="text"
+                                        placeholder="e.g. {{player.hasAnswered}}"
+                                        value={view.condition || ''}
+                                        onChange={(e) => handlePlayerViewChange(index, 'condition', e.target.value)}
+                                    />
+                                    <Dropzone 
+                                        id={`player-view-${index}`} 
+                                        items={view.components || []} 
+                                    />
+                                     {arr.length > 1 && <button className="button-subtle" onClick={() => handleRemovePlayerView(index)}>Remove View</button>}
+                                </div>
+                            ))}
+
+                            <button onClick={handleAddPlayerView}>Add Conditional View</button>
                         </div>
                     </div>
                 </div>

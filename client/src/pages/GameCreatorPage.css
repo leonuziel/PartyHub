@@ -376,6 +376,46 @@ textarea {
     margin-bottom: 0.5rem;
 }
 
+.conditional-view-container {
+    border: 1px solid #333;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: #12101F;
+}
+
+.conditional-view-container label {
+    font-size: 0.9rem;
+    color: #aaa;
+    margin-bottom: 0.5rem;
+}
+
+.view-editor button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #8A2BE2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 1rem;
+}
+
+.view-editor button:hover {
+    background-color: #7B24CB;
+}
+
+.view-editor .button-subtle {
+    background-color: #444;
+    margin-top: 0.5rem;
+}
+
+.view-editor .button-subtle:hover {
+    background-color: #555;
+}
+
 /* --- State Canvas Styles --- */
 
 .wizard-page-title {

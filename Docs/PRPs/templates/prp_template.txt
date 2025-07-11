@@ -43,10 +43,11 @@ PartyHub is a real-time, interactive social gaming platform. The architecture is
 │   ├── server.ts
 │   ├── types/
 │   │   ├── enums.ts
-│   │   ├── GameConfiguration.ts
 │   │   └── interfaces.ts
 │   └── utils/
-│       └── codeGenerator.ts
+│       ├── codeGenerator.ts
+│       └── validators/
+│           └── GameConfigValidator.ts
 ```
 
 #### Frontend (`/client`)
@@ -101,6 +102,8 @@ PartyHub is a real-time, interactive social gaming platform. The architecture is
 │   │   └── wizards/
 │   │       ├── GameFlowStage.tsx
 │   │       ├── MetadataStage.tsx
+│   │       ├── ReviewStage.css
+│   │       ├── ReviewStage.tsx
 │   │       ├── ScreensStage.tsx
 │   │       └── StatesStage.tsx
 │   ├── react-app-env.d.ts
@@ -122,20 +125,34 @@ PartyHub is a real-time, interactive social gaming platform. The architecture is
 ```
 /Docs
 |
-├── adding a game checklist.txt
 ├── Architecture.txt
-├── automatic_game_creation_checklist.txt
-├── design_system.txt
-├── game ideas.txt
+├── components.md
+├── configurable_game_effects.md
+├── Design/
+│   ├── design_system.txt
+│   └── game ideas.txt
 ├── Games/
-│   └── QuizClash.txt
-├── PRD.txt
-├── PRPs/
-│   └── TexasHoldemPoker.txt
-├── Requirements.txt
-├── templates/
+│   ├── QuizClash.txt
+│   └── quizclash_flow.md
+├── game_config_spec.md
+├── old/
 │   ├── add_game_template.txt
-│   └── prp_template.txt
+│   ├── PRD.txt
+│   ├── Requirements.txt
+│   └── TexasHoldemPoker.txt
+├── Plans/
+│   ├── adding_new_function_checklist.md
+│   ├── adding_new_game_checklist.md
+│   ├── adding_new_ui_component_checklist.md
+│   ���── backend_config_plan.txt
+│   ├── declerative conditional ui .txt
+│   ├── game_creator_ui_guide.md
+│   ├── next_steps_checklist.md
+│   └── Old/
+│       └── adding a game checklist.txt
+├── PRPs/
+│   └── templates/
+│       └── prp_template.txt
 └── UX/
     ├── CardsWar.txt
     ├── fakeNews.txt
@@ -156,7 +173,7 @@ The system uses a client-server model with a Node.js/Express/Socket.IO backend a
 - **Room Management**: `RoomManager` manages all `Room` instances. A `Room` contains players, state (lobby, in-game, finished), and a `GameManager`.
 - **Game Logic**: `GameManager` manages the lifecycle of a game using a `GameFactory`. The factory now implements a **dual-system approach**:
     1. It first checks for a `[gameId].json` file in `/src/game/configurations/`.
-    2. If a configuration file is found, it instantiates the generic `ConfigurableGame` engine, which runs the game based on the rules and states defined in the JSON.
+    2. If a configuration file is found, it instantiates the generic `ConfigurableGame` engine, which runs the game based on the rules and states defined in the JSON. This configuration is first validated against a strict schema defined in `GameConfigValidator.ts`.
     3. If no configuration is found, it falls back to the legacy system, creating a specific hardcoded game instance (e.g., `QuizClashGame`) that extends `BaseGame`.
 - **Communication**: The backend uses Socket.IO for real-time communication, managed by `SocketManager`. The primary event is `game:state_update`, which sends the complete game state to all clients. A REST API is also exposed via Express for two purposes:
     - `/debug`: Endpoints for server debugging.
