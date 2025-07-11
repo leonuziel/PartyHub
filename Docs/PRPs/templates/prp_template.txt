@@ -100,12 +100,16 @@ PartyHub is a real-time, interactive social gaming platform. The architecture is
 │   │   ├── PageLayouts.css
 │   │   ├── TestComponentsPage.tsx
 │   │   └── wizards/
+│   │       ├── GameFlowCanvas.tsx
+│   │       ├── GameFlowStage.css
 │   │       ├── GameFlowStage.tsx
 │   │       ├── MetadataStage.tsx
 │   │       ├── ReviewStage.css
 │   │       ├── ReviewStage.tsx
 │   │       ├── ScreensStage.tsx
-│   │       └── StatesStage.tsx
+│   │       ├── StateNode.tsx
+│   │       ├── StatesStage.tsx
+│   │       └── useGameFlow.ts
 │   ├── react-app-env.d.ts
 │   ├── reportWebVitals.ts
 │   ├── services/

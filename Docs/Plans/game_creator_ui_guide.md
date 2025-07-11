@@ -53,7 +53,7 @@ The game creation UI is partially implemented. Here is a summary of the current 
 *   **Stage 1: Metadata:** Complete. The user can enter all the required metadata.
 *   **Stage 2: States:** Complete. The user can add, remove, and set the initial game state.
 *   **Stage 3: Screens:** [IN PROGRESS] The user can drag and drop components to design the UI for each state. The focus of this stage is on managing the component lists for each view and handling the conditional logic for player views. The UI for managing conditional views is partially complete.
-*   **Stage 4: Game Flow:** Partially complete. The user can visually arrange the state nodes on a canvas, but the transition logic is not yet implemented.
+*   **Stage 4: Game Flow:** Partially complete. The user can visually arrange state nodes on a canvas. Transitions can be created by dragging an arrow from an event on one state node and dropping it onto another. The canvas supports panning and zooming for managing complex flows.
 *   **Stage 5: Review and Save:** Partially complete. allows the user to review the complete configuration and save it.
 
 ## 4. Things Left To Do
@@ -61,7 +61,8 @@ The game creation UI is partially implemented. Here is a summary of the current 
 The following items need to be completed to have a fully functional game creation UI:
 
 *   **Component Property Inspector:** [POSTPONED] The property inspector will be implemented in a later stage.
-*   **Transition Logic:** In the Game Flow stage, implement the logic for defining transitions between states based on events. This includes creating the UI for defining the transitions and updating the `transitions` array in the configuration object.
+*   **Component Property Inspector:** [POSTPONED] The property inspector will be implemented in a later stage.
+*   **Conditional Transitions:** Add a UI element in the Game Flow stage for defining the optional `condition` string for a transition.
 *   **Backend Integration:** The `handleSave` function in `GameCreatorPage.tsx` needs to be connected to a backend endpoint to save the game configuration.
 *   **Error Handling and Validation:** Implement robust error handling and validation throughout the wizard to ensure that the user creates a valid game configuration.
 

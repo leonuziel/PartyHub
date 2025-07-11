@@ -53,10 +53,10 @@ This document outlines the next phases of development for the PartyHub platform,
     -   [ ] **Build the Property Inspector:** When a user clicks a component on the canvas, a panel should appear allowing them to edit its props (e.g., button text, timer duration, action to fire). This will require a mapping from component type to its available props.
     -   [ ] **Data Binding:** Connect the property inspector to the state, so changes are reflected in the main game configuration JSON in real-time.
 
--   [ ] **Implement the "Game Flow" Stage:**
-    -   [ ] **Transition UI:** Design and build the interface for connecting state nodes. This could be a dropdown menu on each node that lists all events, allowing the user to pick a target state.
+-   [x] **Implement the "Game Flow" Stage:**
+    -   [x] **Transition UI:** The interface for connecting state nodes is complete. Users can drag an arrow from an event to a target state to create a transition.
     -   [ ] **Conditional Transitions:** Add a UI element for defining the optional `condition` string for a transition.
-    -   [ ] **Backend Integration:** Ensure the visual flow is correctly translated into the `transitions` array in the JSON configuration.
+    -   [x] **Backend Integration:** The visual flow is correctly translated into the `transitions` array in the JSON configuration.
 
 -   [ ] **Finalize and Ship:**
     -   [ ] **Backend Integration:** Connect the "Save" button in the `ReviewStage` to the `POST /api/game-configs` and `PUT /api/game-configs/:gameId` endpoints.
