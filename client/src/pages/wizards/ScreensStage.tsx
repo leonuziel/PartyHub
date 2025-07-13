@@ -24,6 +24,7 @@ import { PropertyInspector } from './PropertyInspector';
 
 
 const COMPONENT_CATEGORIES = {
+    Structure: ['VStack', 'HStack', 'Spacer'],
     Controls: ['ActionButton', 'AnswerGrid', 'Button', 'GameCard', 'TextAreaWithCounter', 'VotingOptions'],
     Display: ['AnswerResult', 'AwardDisplay', 'GameBranding', 'GameTitle', 'Leaderboard', 'PlayerAvatar', 'PlayerCard', 'PlayerInfo', 'PlayerStatusContainer', 'PlayerStatusGrid', 'Podium', 'PodiumList', 'QuestionDisplay', 'QuestionHeader', 'RankDisplay', 'RankUpdate', 'ResultsList', 'SpecialAwards', 'WinnerDisplay'],
     Gameplay: ['CountdownTimer'],
@@ -42,7 +43,7 @@ const DraggableItem = ({ id, isOverlay }: { id: string, isOverlay?: boolean }) =
     );
 };
 
-const SortableItem = ({ id, component, isSelected, onSelect, onRemove }: { id: string, component: any, isSelected: boolean, onSelect: () => void, onRemove: (id: string) => void }) => {
+const SortableItem = ({ id, component, isSelected, selectedComponentId, onSelect, onRemove, onSelectComponent, onRemoveComponent }: { id: string, component: any, isSelected: boolean, selectedComponentId: string | null, onSelect: () => void, onRemove: (id: string) => void, onSelectComponent: (id: string) => void, onRemoveComponent: (id: string) => void }) => {
     const {
         attributes,
         listeners,
@@ -57,39 +58,59 @@ const SortableItem = ({ id, component, isSelected, onSelect, onRemove }: { id: s
     };
 
     const handleRemove = (e: React.MouseEvent) => {
-        e.stopPropagation(); // Prevent the onSelect of the parent div from firing
+        e.stopPropagation();
         onRemove(id);
     };
+    
+    const handleSelect = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        onSelect();
+    }
+
+    const isContainer = component.component === 'VStack' || component.component === 'HStack';
 
     return (
-        <div ref={setNodeRef} style={style} className={`sortable-item ${isSelected ? 'is-selected' : ''}`} onClick={onSelect}>
+        <div ref={setNodeRef} style={style} className={`sortable-item ${isSelected ? 'is-selected' : ''}`}>
             <div className="sortable-item-header" {...attributes} {...listeners}>
                 <span>{component.component}</span>
                 <button
                     className="remove-component-btn"
                     onClick={handleRemove}
-                    onPointerDown={(e) => e.stopPropagation()} // Prevent dnd-kit drag listeners from firing
+                    onPointerDown={(e) => e.stopPropagation()}
                 >
                     &times;
                 </button>
             </div>
-            <div className="sortable-item-body">
-                {Object.entries(component.props).map(([key, value]) => (
-                     <p key={key}><strong>{key}:</strong> {JSON.stringify(value)}</p>
-                ))}
+            <div className="sortable-item-body" onClick={handleSelect}>
+                {Object.entries(component.props).map(([key, value]) => {
+                    if (key === 'children' && isContainer) return null;
+                    return <p key={key}><strong>{key}:</strong> {JSON.stringify(value)}</p>
+                })}
+                 {isContainer && Object.keys(component.props).length === 1 && <p>Container</p>}
             </div>
+            {isContainer && (
+                 <div className="nested-dropzone" onClick={(e) => e.stopPropagation()}>
+                    <Dropzone
+                        id={`${id}-dropzone`}
+                        items={component.props.children || []}
+                        selectedComponentId={selectedComponentId}
+                        onSelectComponent={onSelectComponent}
+                        onRemoveComponent={onRemoveComponent}
+                    />
+                </div>
+            )}
         </div>
     );
 };
 
 
 const Dropzone = ({ id, items, selectedComponentId, onSelectComponent, onRemoveComponent }: { id: string, items: any[], selectedComponentId: string | null, onSelectComponent: (id: string) => void, onRemoveComponent: (id: string) => void }) => {
-    const { setNodeRef } = useDroppable({ id });
+    const { setNodeRef, isOver } = useDroppable({ id });
     const itemIds = items.map(i => i.id);
 
     return (
         <SortableContext id={id} items={itemIds} strategy={verticalListSortingStrategy}>
-            <div ref={setNodeRef} className="dropzone">
+            <div ref={setNodeRef} className={`dropzone ${isOver ? 'is-over' : ''}`}>
                 {items.length > 0 ? (
                     items.map(item => (
                         <SortableItem
@@ -97,8 +118,11 @@ const Dropzone = ({ id, items, selectedComponentId, onSelectComponent, onRemoveC
                             id={item.id}
                             component={item}
                             isSelected={selectedComponentId === item.id}
+                            selectedComponentId={selectedComponentId}
                             onSelect={() => onSelectComponent(item.id)}
                             onRemove={onRemoveComponent}
+                            onSelectComponent={onSelectComponent}
+                            onRemoveComponent={onRemoveComponent}
                         />
                     ))
                 ) : (
@@ -247,13 +271,20 @@ export const ScreensStage = ({ config, setConfig }: any) => {
             const componentName = active.id;
             let defaultProps = {};
 
-            // Default props logic...
-            switch(componentName) {
-                case 'ActionButton':
-                case 'Button':
-                case 'CenteredMessage':
-                    defaultProps = { children: 'Sample Text' };
-                    break;
+        // Default props logic...
+        switch(componentName) {
+            case 'VStack':
+            case 'HStack':
+                defaultProps = { children: [] };
+                break;
+            case 'Spacer':
+                defaultProps = {};
+                break;
+            case 'ActionButton':
+            case 'Button':
+            case 'CenteredMessage':
+                defaultProps = { children: 'Sample Text' };
+                break;
                 case 'QuestionDisplay':
                      defaultProps = { question: 'Sample question?' };
                     break;
@@ -359,34 +390,57 @@ export const ScreensStage = ({ config, setConfig }: any) => {
 
         // Reordering logic
         if (active.id !== over.id) {
-            const activeContainer = active.data.current?.sortable.containerId;
-            const overContainer = over.data.current?.sortable.containerId || over.id;
-
-            if (activeContainer === overContainer) {
-                let items: any[] = [];
-                if (activeContainer === 'host-view') {
-                    items = getItems('host');
-                } else if (activeContainer.startsWith('player-view-')) {
-                    const viewIndex = parseInt(activeContainer.split('-')[2], 10);
-                    items = getItems('player', viewIndex);
+             const findContainer = (id: string, ui: any): any[] | null => {
+                if (id === 'host-view') return ui?.[selectedState]?.host?.components;
+                if (id.startsWith('player-view-')) {
+                    const viewIndex = parseInt(id.split('-')[2], 10);
+                    return ui?.[selectedState]?.player?.[viewIndex]?.components;
                 }
-
-                if (items.length) {
-                    const oldIndex = items.findIndex(item => item.id === active.id);
-                    const newIndex = items.findIndex(item => item.id === over.id);
-
-                    if (oldIndex !== -1 && newIndex !== -1) {
-                        const newOrderedItems = arrayMove(items, oldIndex, newIndex);
-                        const newUi = JSON.parse(JSON.stringify(config.ui));
-
-                        if (activeContainer === 'host-view') {
-                            newUi[selectedState].host.components = newOrderedItems;
-                        } else if (activeContainer.startsWith('player-view-')) {
-                            const viewIndex = parseInt(activeContainer.split('-')[2], 10);
-                            newUi[selectedState].player[viewIndex].components = newOrderedItems;
+                const [containerId] = id.split('-dropzone');
+                 let foundItems: any[] | null = null;
+                 const search = (components: any[]) => {
+                    if(!components) return;
+                    for (const component of components) {
+                        if (component.id === containerId) {
+                            foundItems = component.props.children;
+                            return;
                         }
-                        setConfig((prev: any) => ({ ...prev, ui: newUi }));
+                        if (component.props.children) {
+                            search(component.props.children);
+                        }
                     }
+                };
+                 search(ui?.[selectedState]?.host?.components);
+                 if(foundItems) return foundItems;
+                 (ui?.[selectedState]?.player || []).forEach((view: any) => {
+                      search(view.components);
+                 });
+
+                return foundItems;
+            };
+
+            const activeContainerId = active.data.current?.sortable.containerId;
+            const overContainerId = over.data.current?.sortable.containerId || over.id;
+            
+            const newUi = JSON.parse(JSON.stringify(config.ui));
+            const activeContainer = findContainer(activeContainerId, newUi);
+            const overContainer = findContainer(overContainerId, newUi);
+
+            if (activeContainer && overContainer) {
+                const oldIndex = activeContainer.findIndex(item => item.id === active.id);
+                const newIndex = overContainer.findIndex(item => item.id === over.id);
+
+                if (oldIndex !== -1) {
+                    const [movedItem] = activeContainer.splice(oldIndex, 1);
+
+                     if (newIndex !== -1) {
+                         overContainer.splice(newIndex, 0, movedItem);
+                     } else {
+                         // Dropped in a container but not on a specific item
+                         overContainer.push(movedItem);
+                     }
+                    
+                    setConfig((prev: any) => ({...prev, ui: newUi}));
                 }
             }
         }

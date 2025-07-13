@@ -131,7 +131,12 @@
     border: 2px dashed #333;
     border-radius: 4px;
     padding: 0.5rem;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.dropzone.is-over {
+    background-color: rgba(138, 43, 226, 0.2);
+    border-color: #8A2BE2;
 }
 
 .dropzone p {
@@ -207,6 +212,14 @@
 }
 .sortable-item-body strong {
     color: #aaa;
+}
+
+.nested-dropzone {
+    margin: 0.5rem;
+    padding: 0.5rem;
+    background-color: rgba(0,0,0,0.1);
+    border: 1px dashed #555;
+    border-radius: 4px;
 }
 
 

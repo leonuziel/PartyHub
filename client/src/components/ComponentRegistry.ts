@@ -56,6 +56,9 @@ import  HostFrame  from './layout/HostFrame';
 import { HostViewContainer } from './layout/HostViewContainer';
 import { PlayArea } from './layout/PlayArea';
 import { PlayerViewContainer } from './layout/PlayerViewContainer';
+import { VStack } from './layout/structural/VStack';
+import { HStack } from './layout/structural/HStack';
+import { Spacer } from './layout/structural/Spacer';
 
 // This registry maps string names (used in the game config) to actual React components.
 export const ComponentRegistry: Record<string, React.ComponentType<any>> = {
@@ -117,4 +120,7 @@ export const ComponentRegistry: Record<string, React.ComponentType<any>> = {
     'HostViewContainer': HostViewContainer,
     'PlayArea': PlayArea,
     'PlayerViewContainer': PlayerViewContainer,
+    'VStack': VStack,
+    'HStack': HStack,
+    'Spacer': Spacer,
 };
