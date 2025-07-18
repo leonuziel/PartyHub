@@ -488,82 +488,106 @@ For the `player` role, the UI can be defined in two ways:
 
 This conditional structure allows for creating different UI experiences for a player based on their specific state (e.g., showing a "Waiting..." message after they've submitted an answer).
 
-### Extended UI: Layout Controls
+### UI Layout Controls
 
-To provide fine-grained control over the presentation, each component in the `components` array can optionally include a `layout` object. This allows for direct manipulation of a component's size, alignment, and spacing within its parent container.
+To provide fine-grained control over the presentation, each component definition within the `components` array can optionally include a `layout` object. This allows for direct manipulation of a component's size, alignment, and spacing within its parent container.
+
+The parent container for a view is a CSS Grid with a single defined area. All components are placed into this area and align themselves within it based on these layout properties.
+
+#### The `layout` Object
 
 ```json
-"components": [
-  {
-    "component": "MyComponent",
-    "props": { ... },
-    "layout": {
-      "width": "80%",
-      "height": "hug",
-      "alignment": "TopCenter",
-      "padding": { "top": 10, "bottom": 10 },
-      "offset": { "left": 20 }
-    }
-  }
-]
+"layout": {
+  "width": "80%",
+  "height": "hug",
+  "alignment": "TopCenter",
+  "padding": { "top": 10, "bottom": 10 },
+  "offset": { "left": 20 }
+}
 ```
 
-*   **`layout.width`, `layout.height` (string)**: Controls the size of the component.
-    *   **Percentage:** A string ending in `%` (e.g., `"50%"`).
-    *   **Presets:**
-        *   `"fill"`: The component expands to fill all available space in that dimension.
-        *   `"hug"`: The component shrinks to fit its content.
+#### Sizing (`width`, `height`)
 
-*   **`layout.alignment` (string)**: Aligns the component within its parent container, using a 3x3 grid model.
-    *   **Values**: `TopLeft`, `TopCenter`, `TopRight`, `MiddleLeft`, `Center`, `MiddleRight`, `BottomLeft`, `BottomCenter`, `BottomRight`.
+Controls the size of the component.
 
-*   **`layout.padding`, `layout.offset` (Object)**: Controls the spacing around the component. `offset` corresponds to CSS `margin`.
-    *   **Values**: An object with optional `top`, `bottom`, `left`, `right` keys and numerical values (in pixels).
+*   **Type**: `string`
+*   **Allowed Values**:
+    *   **Percentage:** A string ending in `%` (e.g., `"50%"`). Sets the size relative to the parent container.
+    *   **Fixed:** A string ending in `px` (e.g., `"100px"`). Sets a fixed size.
+    *   **`"fill"`**: The  expands to fill all available space in that dimension (stretches). This is the default behavior if unspecified.
+    *   **`"hug"`**: The component shrinks to wrap its content.
 
-**Example:**
+**Example**:
+```json
+"layout": {
+  "width": "80%",
+  "height": "hug"
+}
+```
+
+#### Alignment (`alignment`)
+
+Aligns the component within its parent container's grid area.
+
+*   **Type**: `string`
+*   **Allowed Values**: A value representing one of the nine points on a 3x3 grid.
+    *   `TopLeft`, `TopCenter`, `TopRight`
+    *   `MiddleLeft`, `Center`, `MiddleRight`
+    *   `BottomLeft`, `BottomCenter`, `BottomRight`
+
+**Example**:
+```json
+"layout": {
+  "alignment": "BottomRight"
+}
+```
+
+#### Spacing (`padding`, `offset`)
+
+Controls the space inside and outside the component's border.
+
+*   `padding`: The space *inside* the component's border.
+*   `offset`: The space *outside* the component's border (equivalent to CSS `margin`).
+
+Both properties are objects that can contain `top`, `bottom`, `left`, and `right` keys.
+
+*   **Type**: `object`
+*   **Keys**: `top`, `bottom`, `left`, `right`
+*   **Values**: `number` (interpreted as pixels)
+
+**Example**:
+```json
+"layout": {
+  "padding": { "top": 16, "bottom": 16 },
+  "offset": { "left": 32, "right": 32 }
+}
+```
+
+**Full UI Example with Layout:**
 ```json
 "ui": {
-  "ASKING_QUESTION": {
+  "STARTING": {
     "host": {
       "components": [
         {
-          "component": "QuestionDisplay",
-          "props": {
-            "question": "{{gameState.currentQuestion.questionText}}"
+          "component": "GameTitle",
+          "props": { "title": "My Awesome Game" },
+          "layout": {
+            "alignment": "TopCenter",
+            "height": "hug",
+            "offset": { "top": 20 }
+          }
+        },
+        {
+          "component": "CenteredMessage",
+          "props": { "children": "Getting ready..." },
+          "layout": {
+            "alignment": "Center",
+            "width": "50%"
           }
         }
       ]
-    },
-    "player": [
-      {
-        "condition": "{{player.currentAnswer !== null}}",
-        "components": [
-          {
-            "component": "CenteredMessage",
-            "props": {
-              "children": "You have answered. Waiting for other players..."
-            }
-          }
-        ]
-      },
-      {
-        "components": [
-          {
-            "component": "QuestionDisplay",
-            "props": {
-              "question": "{{gameState.currentQuestion.questionText}}"
-            }
-          },
-          {
-            "component": "AnswerGrid",
-            "props": {
-              "answers": "{{gameState.currentQuestion.options}}",
-              "onAnswer": { "action": "submitAnswer" }
-            }
-          }
-        ]
-      }
-    ]
+    }
   }
 }
 ```
