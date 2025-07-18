@@ -7,6 +7,10 @@ interface CardFanProps {
 }
 
 export const CardFan: React.FC<CardFanProps> = ({ cards }) => {
+  if (!Array.isArray(cards)) {
+    return null; // or a placeholder
+  }
+
   return (
     <div className="card-fan">
       {cards.map((card, index) => (

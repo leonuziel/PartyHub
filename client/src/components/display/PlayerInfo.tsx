@@ -19,9 +19,18 @@ export const PlayerInfo: React.FC<PlayerInfoProps> = ({
 }) => {
   
   // Type guard to check if it's a poker player
-  const isPokerPlayer = (p: Player | TexasHoldemPlayer): p is TexasHoldemPlayer => {
-    return 'chips' in p;
+  const isPokerPlayer = (p: Player | TexasHoldemPlayer | null): p is TexasHoldemPlayer => {
+    return p !== null && 'chips' in p;
   };
+
+  if (!player) {
+    return (
+        <div className="player-info is-placeholder">
+            <div className="player-name">...</div>
+            <div className="player-score">...</div>
+        </div>
+    );
+  }
 
   const classNames = [
     'player-info',
