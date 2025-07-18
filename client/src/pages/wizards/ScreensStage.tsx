@@ -23,12 +23,11 @@ import { PropertyInspector } from './PropertyInspector';
 
 
 const COMPONENT_CATEGORIES = {
-    Structure: ['VStack', 'HStack', 'Spacer'],
-    Controls: ['ActionButton', 'AnswerGrid', 'Button', 'GameCard', 'TextAreaWithCounter', 'VotingOptions'],
-    Display: ['AnswerResult', 'AwardDisplay', 'GameBranding', 'GameTitle', 'Leaderboard', 'PlayerAvatar', 'PlayerCard', 'PlayerInfo', 'PlayerStatusContainer', 'PlayerStatusGrid', 'Podium', 'PodiumList', 'QuestionDisplay', 'QuestionHeader', 'RankDisplay', 'RankUpdate', 'ResultsList', 'SpecialAwards', 'WinnerDisplay'],
-    Gameplay: ['CountdownTimer'],
-    Layout: ['CenteredMessage', 'HostViewContainer', 'PlayArea', 'PlayerViewContainer'],
-    Cards: ['BiddingPopup', 'CardFan', 'CardSlot', 'Deck', 'DiscardPile', 'Hand', 'LastPlayedCard', 'Meld', 'PlayerHandDisplay', 'Scoreboard', 'Trick', 'TrumpIndicator']
+    "Layout & Structure": ['Container', 'Stack', 'Grid', 'Spacer'],
+    "Display": ['TextDisplay', 'ImageDisplay', 'ListDisplay', 'KeyValueDisplay', 'PlayerAvatar'],
+    "Input & Controls": ['Button', 'ChoiceSelector', 'TextInput', 'Slider'],
+    "Feedback & State": ['Timer', 'StateIndicator', 'Modal', 'Spinner'],
+    "Game Tools": ['Card', 'CardContainer', 'Dice', 'GameBoard', 'GamePiece'],
 };
 
 const ALL_COMPONENTS = Object.values(COMPONENT_CATEGORIES).flat();
@@ -66,7 +65,7 @@ const SortableItem = ({ id, component, isSelected, selectedComponentId, onSelect
         onSelect();
     }
 
-    const isContainer = component.component === 'VStack' || component.component === 'HStack';
+    const isContainer = ['Container', 'Stack', 'Grid', 'Modal'].includes(component.component);
 
     return (
         <div ref={setNodeRef} style={style} className={`sortable-item ${isSelected ? 'is-selected' : ''}`}>
@@ -85,7 +84,7 @@ const SortableItem = ({ id, component, isSelected, selectedComponentId, onSelect
                     if (key === 'children' && isContainer) return null;
                     return <p key={key}><strong>{key}:</strong> {JSON.stringify(value)}</p>
                 })}
-                 {isContainer && Object.keys(component.props).length === 1 && <p>Container</p>}
+                 {isContainer && (!component.props || Object.keys(component.props).length === 1) && <p>Container</p>}
             </div>
             {isContainer && (
                  <div className="nested-dropzone" onClick={(e) => e.stopPropagation()}>
@@ -192,12 +191,19 @@ export const ScreensStage = ({ config, setConfig }: any) => {
 
         const newUi = JSON.parse(JSON.stringify(config.ui));
 
-        const findAndRemove = (components: any[]) => {
+        const findAndRemove = (components: any[]): boolean => {
             if (!components) return false;
             const index = components.findIndex((c: any) => c.id === componentIdToRemove);
             if (index > -1) {
                 components.splice(index, 1);
                 return true;
+            }
+            for(const component of components) {
+                if (component.props?.children) {
+                    if(findAndRemove(component.props.children)){
+                        return true;
+                    }
+                }
             }
             return false;
         };
@@ -220,24 +226,31 @@ export const ScreensStage = ({ config, setConfig }: any) => {
      const handleUpdateComponent = (id: string, newProps: any, newStyle: any) => {
         const newUi = JSON.parse(JSON.stringify(config.ui)); // Deep copy
 
-        const findAndUpdate = (components: any[]) => {
-            const index = components.findIndex(c => c.id === id);
-            if (index > -1) {
-                components[index].props = newProps;
-                components[index].style = newStyle;
-                return true;
+        const findAndUpdate = (components: any[]): boolean => {
+            if (!components) return false;
+            for (let i = 0; i < components.length; i++) {
+                if (components[i].id === id) {
+                    components[i].props = newProps;
+                    components[i].style = newStyle;
+                    return true;
+                }
+                if (components[i].props?.children) {
+                    if (findAndUpdate(components[i].props.children)) {
+                        return true;
+                    }
+                }
             }
             return false;
         };
-
-        if (newUi[selectedState]?.host?.components && findAndUpdate(newUi[selectedState].host.components)) {
+        
+        if (findAndUpdate(newUi[selectedState]?.host?.components)) {
              setConfig((prev: any) => ({ ...prev, ui: newUi }));
              return;
         }
 
         if (Array.isArray(newUi[selectedState]?.player)) {
             for (const view of newUi[selectedState].player) {
-                if (view.components && findAndUpdate(view.components)) {
+                if (findAndUpdate(view.components)) {
                     setConfig((prev: any) => ({ ...prev, ui: newUi }));
                     return;
                 }
@@ -248,11 +261,30 @@ export const ScreensStage = ({ config, setConfig }: any) => {
 
     const getSelectedComponent = () => {
         if (!selectedComponentId) return null;
-        const allComponents = [
-            ...(config.ui?.[selectedState]?.host?.components || []),
-            ...(config.ui?.[selectedState]?.player?.flatMap((v: any) => v.components) || [])
-        ];
-        return allComponents.find(c => c.id === selectedComponentId) || null;
+        
+        const findComponent = (components: any[]): any | null => {
+            for (const component of components) {
+                if (component.id === selectedComponentId) {
+                    return component;
+                }
+                if (component.props?.children) {
+                    const found = findComponent(component.props.children);
+                    if (found) return found;
+                }
+            }
+            return null;
+        };
+
+        let component = findComponent(config.ui?.[selectedState]?.host?.components || []);
+        if (component) return component;
+
+        const playerViews = config.ui?.[selectedState]?.player || [];
+        for(const view of playerViews) {
+            component = findComponent(view.components || []);
+            if(component) return component;
+        }
+        
+        return null;
     };
 
 
@@ -264,96 +296,143 @@ export const ScreensStage = ({ config, setConfig }: any) => {
             return;
         }
 
+        const newUi = JSON.parse(JSON.stringify(config.ui));
+        if (!newUi[selectedState]) {
+            newUi[selectedState] = { host: { components: [] }, player: [{ condition: "", components: [] }] };
+        }
+
+        const findContainerList = (containerId: string, ui: any): any[] | null => {
+            if (!containerId) return null;
+        
+            if (containerId === 'host-view') {
+                if (!ui[selectedState].host) ui[selectedState].host = { components: [] };
+                return ui[selectedState].host.components;
+            }
+            if (containerId.startsWith('player-view-')) {
+                const viewIndex = parseInt(containerId.split('-')[2], 10);
+                const playerView = (ui[selectedState].player || [])[viewIndex];
+                if (playerView) {
+                    if (!playerView.components) playerView.components = [];
+                    return playerView.components;
+                }
+                return null;
+            }
+            if (containerId.endsWith('-dropzone')) {
+                const componentId = containerId.replace('-dropzone', '');
+                let container: any = null;
+        
+                const search = (components: any[]): boolean => {
+                    for (const comp of components) {
+                        if (comp.id === componentId) {
+                            container = comp;
+                            return true;
+                        }
+                        if (comp.props?.children && search(comp.props.children)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                };
+        
+                if (search(ui[selectedState]?.host?.components || [])) {
+                    if (!container.props.children) container.props.children = [];
+                    return container.props.children;
+                }
+        
+                for (const view of (ui[selectedState]?.player || [])) {
+                    if (search(view.components || [])) {
+                        if (!container.props.children) container.props.children = [];
+                        return container.props.children;
+                    }
+                }
+            }
+            return null;
+        };
+
         const isAddingNewComponent = ALL_COMPONENTS.includes(active.id);
 
         if (isAddingNewComponent) {
             const componentName = active.id;
             let defaultProps = {};
 
-        // Default props logic...
-        switch(componentName) {
-            case 'VStack':
-            case 'HStack':
-                defaultProps = { children: [] };
-                break;
-            case 'Spacer':
-                defaultProps = {};
-                break;
-            case 'ActionButton':
-            case 'Button':
-            case 'CenteredMessage':
-                defaultProps = { children: 'Sample Text' };
-                break;
-                case 'QuestionDisplay':
-                     defaultProps = { question: 'Sample question?' };
+            // Default props logic...
+            switch (componentName) {
+                // Layout & Structure
+                case 'Container':
+                    defaultProps = { children: [] };
                     break;
-                case 'WinnerDisplay':
-                    defaultProps = { winnerName: 'Player 1' };
+                case 'Stack':
+                    defaultProps = { direction: 'vertical', spacing: 8, children: [] };
                     break;
-                case 'AwardDisplay':
-                    defaultProps = { award: 'Most Likely to Succeed', description: 'Voted by their peers' };
+                case 'Grid':
+                    defaultProps = { columns: 2, spacing: 8, children: [] };
                     break;
-                case 'GameTitle':
-                    defaultProps = { title: 'My Awesome Game' };
+                case 'Spacer':
+                    defaultProps = {};
                     break;
-                case 'AnswerGrid':
-                    defaultProps = { answers: ['Answer A', 'Answer B', 'Answer C', 'Answer D'] };
+
+                // Display
+                case 'TextDisplay':
+                    defaultProps = { text: 'Sample Text' };
                     break;
-                case 'VotingOptions':
-                    defaultProps = { options: ['Option 1', 'Option 2', 'Option 3'] };
+                case 'ImageDisplay':
+                    defaultProps = { src: 'https://via.placeholder.com/150', alt: 'Placeholder Image' };
                     break;
-                case 'Leaderboard':
-                case 'PlayerStatusGrid':
-                case 'Podium':
-                    defaultProps = { players: '{{players}}' };
+                case 'ListDisplay':
+                    defaultProps = { items: '{{players}}', renderItem: { component: 'TextDisplay', props: { text: '{{item.nickname}}' } } };
                     break;
-                case 'PodiumList':
-                    defaultProps = { players: '{{players}}', count: 3 };
-                    break;
-                case 'ResultsList':
-                     defaultProps = { options: ['Answer A', 'Answer B'], votes: { '1': 'Answer A', '2': 'Answer B' }, correctAnswer: 'Answer A', players: '{{players}}' };
-                    break;
-                case 'SpecialAwards':
-                    defaultProps = {
-                        awards: [{
-                            awardName: 'Best Fake Answer', player: {id: '45dg', 
-                            nickname:'Boby',
-                            avatar: 'avatar1.png',
-                            hasAnswered: false,
-                            score: 70 } }]};
+                case 'KeyValueDisplay':
+                    defaultProps = { data: '{{player.stats}}' };
                     break;
                 case 'PlayerAvatar':
-                case 'PlayerCard':
-                case 'PlayerInfo':
-                    defaultProps = { player: '{{player}}' };
+                     defaultProps = { player: '{{player}}' };
+                     break;
+
+                // Input & Controls
+                case 'Button':
+                    defaultProps = { text: 'Click Me' };
                     break;
-                case 'AnswerResult':
-                    defaultProps = { answer: 'A Great Answer', percentage: 75, isCorrect: true };
+            case 'ChoiceSelector':
+                defaultProps = { options: ['Option 1', 'Option 2'], selectionMode: 'single' };
+                break;
+                case 'TextInput':
+                    defaultProps = { placeholder: 'Enter text...' };
                     break;
-                case 'CountdownTimer':
-                    defaultProps = { initialValue: 10 };
+                case 'Slider':
+                    defaultProps = { min: 0, max: 100, defaultValue: 50 };
                     break;
-                case 'GameBranding':
-                    defaultProps = { gameTitle: 'My Awesome Game', logoUrl: '' };
+
+                // Feedback & State
+                case 'Timer':
+                    defaultProps = { duration: 30, type: 'countdown' };
                     break;
-                case 'GameCard':
-                    defaultProps = { title: 'My Game', description: 'A brief description', playerCount: '2-8', playtime: '15m' };
+                case 'StateIndicator':
+                    defaultProps = { status: 'Ready' };
                     break;
-                case 'PlayerStatusContainer':
-                    defaultProps = { title: 'Players', subtitle: 'Who have answered' };
+                case 'Modal':
+                    defaultProps = { isOpen: false, children: [] };
                     break;
-                case 'QuestionHeader':
-                    defaultProps = { round: 1, totalRounds: 5, timer: 30, answeredCount: 1, totalPlayers: 4 };
+                case 'Spinner':
+                    defaultProps = {};
                     break;
-                case 'RankDisplay':
-                    defaultProps = { rank: 1 };
+
+                // Game Tools
+                case 'Card':
+                    defaultProps = { faceUp: true, content: 'Card Content' };
                     break;
-                case 'RankUpdate':
-                    defaultProps = { oldRank: 2, newRank: 1 };
+                case 'CardContainer':
+                    defaultProps = { layout: 'grid', cards: '{{player.hand}}' };
                     break;
-                case 'TextAreaWithCounter':
-                    defaultProps = { maxLength: 140, placeholder: 'Enter your text...'};
+                case 'Dice':
+                    defaultProps = { count: 2, values: [1, 6] };
                     break;
+                case 'GameBoard':
+                    defaultProps = { size: { rows: 8, cols: 8 } };
+                    break;
+                case 'GamePiece':
+                    defaultProps = { shape: 'circle', color: 'red', position: { row: 0, col: 0 } };
+                    break;
+
                 default:
                     break;
             }
@@ -365,23 +444,11 @@ export const ScreensStage = ({ config, setConfig }: any) => {
                 style: {}
             };
 
-            const newUi = JSON.parse(JSON.stringify(config.ui));
-            if (!newUi[selectedState]) {
-                newUi[selectedState] = { host: { components: [] }, player: [{ condition: "", components: [] }] };
-            }
-
             const dropzoneId = over.id;
-            if (dropzoneId === 'host-view') {
-                if (!newUi[selectedState].host) newUi[selectedState].host = { components: [] };
-                newUi[selectedState].host.components.push(newComponentData);
-            } else if (dropzoneId.startsWith('player-view-')) {
-                const viewIndex = parseInt(dropzoneId.split('-')[2], 10);
-                if (newUi[selectedState].player[viewIndex]) {
-                     if (!newUi[selectedState].player[viewIndex].components) {
-                        newUi[selectedState].player[viewIndex].components = [];
-                    }
-                    newUi[selectedState].player[viewIndex].components.push(newComponentData);
-                }
+            const targetContainer = findContainerList(dropzoneId, newUi);
+            
+            if(targetContainer) {
+                targetContainer.push(newComponentData);
             }
             setConfig((prev: any) => ({ ...prev, ui: newUi }));
             return;
@@ -389,57 +456,24 @@ export const ScreensStage = ({ config, setConfig }: any) => {
 
         // Reordering logic
         if (active.id !== over.id) {
-             const findContainer = (id: string, ui: any): any[] | null => {
-                if (id === 'host-view') return ui?.[selectedState]?.host?.components;
-                if (id.startsWith('player-view-')) {
-                    const viewIndex = parseInt(id.split('-')[2], 10);
-                    return ui?.[selectedState]?.player?.[viewIndex]?.components;
-                }
-                const [containerId] = id.split('-dropzone');
-                 let foundItems: any[] | null = null;
-                 const search = (components: any[]) => {
-                    if(!components) return;
-                    for (const component of components) {
-                        if (component.id === containerId) {
-                            foundItems = component.props.children;
-                            return;
-                        }
-                        if (component.props.children) {
-                            search(component.props.children);
-                        }
-                    }
-                };
-                 search(ui?.[selectedState]?.host?.components);
-                 if(foundItems) return foundItems;
-                 (ui?.[selectedState]?.player || []).forEach((view: any) => {
-                      search(view.components);
-                 });
-
-                return foundItems;
-            };
-
             const activeContainerId = active.data.current?.sortable.containerId;
-            const overContainerId = over.data.current?.sortable.containerId || over.id;
-            
-            const newUi = JSON.parse(JSON.stringify(config.ui));
-            const activeContainer = findContainer(activeContainerId, newUi);
-            const overContainer = findContainer(overContainerId, newUi);
+            const overContainerId = over.data.current?.sortable?.containerId || over.id;
+
+            const activeContainer = findContainerList(activeContainerId, newUi);
+            const overContainer = findContainerList(overContainerId, newUi);
 
             if (activeContainer && overContainer) {
-                const oldIndex = activeContainer.findIndex(item => item.id === active.id);
-                const newIndex = overContainer.findIndex(item => item.id === over.id);
+                const activeIndex = activeContainer.findIndex((item) => item.id === active.id);
+                const overIndex = overContainer.findIndex((item) => item.id === over.id);
 
-                if (oldIndex !== -1) {
-                    const [movedItem] = activeContainer.splice(oldIndex, 1);
-
-                     if (newIndex !== -1) {
-                         overContainer.splice(newIndex, 0, movedItem);
-                     } else {
-                         // Dropped in a container but not on a specific item
+                if (activeIndex !== -1) {
+                    const [movedItem] = activeContainer.splice(activeIndex, 1);
+                    if (overIndex !== -1) {
+                        overContainer.splice(overIndex, 0, movedItem);
+                    } else {
                          overContainer.push(movedItem);
-                     }
-                    
-                    setConfig((prev: any) => ({...prev, ui: newUi}));
+                    }
+                     setConfig((prev: any) => ({...prev, ui: newUi}));
                 }
             }
         }

@@ -53,14 +53,16 @@ const resolveValue = (path: string, context: any) => {
 };
 
 const resolveProps = (props: any, context: any) => {
+    if (!props) return {};
     const newProps: { [key: string]: any } = {};
     for (const key in props) {
         const propValue = props[key];
         if (typeof propValue === 'string') {
             const resolved = resolveValue(propValue, context);
-            // If a value resolves to undefined (e.g., '{{players}}' in host context), fall back to the raw string
-            // This prevents components from receiving undefined for expected arrays/objects.
             newProps[key] = resolved !== undefined ? resolved : propValue;
+        } else if (key === 'children' && Array.isArray(propValue)) {
+            // Children are handled by the renderer, not resolved as props
+            newProps[key] = propValue;
         } else if (typeof propValue === 'object' && propValue !== null && !Array.isArray(propValue)) {
             newProps[key] = resolveProps(propValue, context);
         } else {
@@ -70,6 +72,24 @@ const resolveProps = (props: any, context: any) => {
     return newProps;
 };
 
+// A simple, recursive renderer for the preview modal
+const PreviewRenderer = ({ config, context }: { config: any, context: any }) => {
+    const Component = ComponentRegistry[config.component];
+    if (!Component) {
+        return <div style={{ color: 'red' }}>Unknown component: {config.component}</div>;
+    }
+
+    const resolvedProps = resolveProps(config.props, context);
+    
+    // Recursively render children if they exist
+    const children = config.props?.children?.map((childConfig: any) => (
+        <PreviewRenderer key={childConfig.id} config={childConfig} context={context} />
+    ));
+
+    return <Component {...resolvedProps}>{children}</Component>;
+};
+
+
 export const PreviewModal = ({ isOpen, onClose, components, role }: { isOpen: boolean, onClose: () => void, components: any[], role: 'host' | 'player' }) => {
     if (!isOpen) return null;
 
@@ -77,14 +97,9 @@ export const PreviewModal = ({ isOpen, onClose, components, role }: { isOpen: bo
         ? { ...MOCK_DATA, player: null }
         : { ...MOCK_DATA, players: MOCK_DATA.players.filter(p => p.id !== MOCK_DATA.player.id) };
 
-    const renderedComponents = components.map((compInfo, index) => {
-        const Component = ComponentRegistry[compInfo.component];
-        if (!Component) {
-            return <div key={index} style={{ color: 'red' }}>Unknown component: {compInfo.component}</div>;
-        }
-        const resolved = resolveProps(compInfo.props, context);
-        return <Component key={index} {...resolved} />;
-    });
+    const renderedComponents = components.map((compInfo) => (
+         <PreviewRenderer key={compInfo.id} config={compInfo} context={context} />
+    ));
 
     return (
         <div className="preview-modal-overlay" onClick={onClose}>

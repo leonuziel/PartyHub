@@ -132,4 +132,3 @@ Let's use the example of adding a new component called `InfoBanner`.
       }
     }
     ```
-//TODO add an issue regarding unlimited number of answers

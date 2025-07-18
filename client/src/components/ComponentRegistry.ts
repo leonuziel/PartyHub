@@ -1,3 +1,37 @@
+// --- New Generic Components ---
+
+// Layout
+import { Container } from './layout/Container';
+import { Grid } from './layout/Grid';
+import { Spacer } from './layout/Spacer';
+import { Stack } from './layout/Stack';
+
+// Display
+import { ImageDisplay } from './display/ImageDisplay';
+import { KeyValueDisplay } from './display/KeyValueDisplay';
+import { ListDisplay } from './display/ListDisplay';
+import { TextDisplay } from './display/TextDisplay';
+
+// Input
+import { Button as NewButton } from './input/Button';
+import { ChoiceSelector } from './input/ChoiceSelector';
+import { Slider } from './input/Slider';
+import { TextInput } from './input/TextInput';
+
+// Feedback
+import { StateIndicator } from './feedback/StateIndicator';
+import { Timer } from './feedback/Timer';
+
+// Game Tools
+import { Card as NewCard } from './game-tools/Card';
+import { CardContainer } from './game-tools/CardContainer';
+import { Dice } from './game-tools/Dice';
+import { GameBoard } from './game-tools/GameBoard';
+import { GamePiece } from './game-tools/GamePiece';
+
+
+// --- Old Components (for backward compatibility) ---
+
 // Cards
 import { BiddingPopup } from './old/cards/BiddingPopup';
 import { Card } from './old/cards/Card';
@@ -56,15 +90,36 @@ import HostFrame from './old/layout/HostFrame';
 import { HostViewContainer } from './old/layout/HostViewContainer';
 import { PlayArea } from './old/layout/PlayArea';
 import { PlayerViewContainer } from './old/layout/PlayerViewContainer';
-import { VStack } from './old/structural/VStack';
-import { HStack } from './old/structural/HStack';
-import { Spacer } from './old/structural/Spacer';
+
 
 // This registry maps string names (used in the game config) to actual React components.
 export const ComponentRegistry: Record<string, React.ComponentType<any>> = {
+    // --- New Generic Components ---
+    Container,
+    Grid,
+    Spacer,
+    Stack,
+    ImageDisplay,
+    KeyValueDisplay,
+    ListDisplay,
+    TextDisplay,
+    Button: NewButton,
+    ChoiceSelector,
+    Slider,
+    TextInput,
+    StateIndicator,
+    Timer,
+    Card: NewCard,
+    CardContainer,
+    Dice,
+    GameBoard,
+    GamePiece,
+
+
+    // --- Old Components ---
     // Cards
     'BiddingPopup': BiddingPopup,
-    'Card': Card,
+    'OldCard': Card, // Renamed to avoid conflict
     'CardFan': CardFan,
     'CardSlot': CardSlot,
     'Deck': Deck,
@@ -85,7 +140,7 @@ export const ComponentRegistry: Record<string, React.ComponentType<any>> = {
     // Controls
     'ActionButton': ActionButton,
     'AnswerGrid': AnswerGrid,
-    'Button': Button,
+    'OldButton': Button, // Renamed to avoid conflict
     'GameCard': GameCard,
     'TextAreaWithCounter': TextAreaWithCounter,
     'VotingOptions': VotingOptions,
@@ -119,8 +174,5 @@ export const ComponentRegistry: Record<string, React.ComponentType<any>> = {
     'HostFrame': HostFrame,
     'HostViewContainer': HostViewContainer,
     'PlayArea': PlayArea,
-    'PlayerViewContainer': PlayerViewContainer,
-    'VStack': VStack,
-    'HStack': HStack,
-    'Spacer': Spacer,
+    'PlayerViewContainer': PlayerViewContainer
 };

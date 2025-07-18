@@ -23,7 +23,7 @@ const ActionButtonProps = ButtonProps;
 const AnswerGridProps = z.object({
   answers: z.string(),
   onAnswer: uiActionSchema,
-  disabled: z.boolean().optional(),
+  disabled: z.union([z.boolean(), z.string()]).optional(),
   selectedAnswer: z.any().optional(),
   fillParent: z.boolean().optional(),
 }).passthrough();
@@ -43,7 +43,7 @@ const TextAreaWithCounterProps = z.object({
 const VotingOptionsProps = z.object({
   options: z.string(),
   onVote: uiActionSchema.optional(),
-  disabled: z.boolean().optional(),
+  disabled: z.union([z.boolean(), z.string()]).optional(),
 }).passthrough();
 const AnswerResultProps = z.object({
   answer: z.string(),
@@ -141,7 +141,7 @@ const PlayerViewContainerProps = z.object({}).passthrough();
 const BiddingPopupProps = z.object({ onBid: uiActionSchema, onPass: uiActionSchema }).passthrough();
 const CardProps = z.object({ faceUp: z.boolean().optional(), content: z.any().optional(), className: z.string().optional() }).passthrough();
 const CardFanProps = z.object({ cards: z.string() }).passthrough();
-const CardSlotProps = z.object({ card: z.string().optional(), onClick: uiActionSchema.optional(), isFaceUp: z.boolean().optional() }).passthrough();
+const CardSlotProps = z.object({ card: z.string().optional(), onClick: uiActionSchema.optional(), isFaceUp: z.union([z.boolean(), z.string()]).optional() }).passthrough();
 const DeckProps = z.object({ count: z.any(), onDraw: uiActionSchema.optional() }).passthrough();
 const DiscardPileProps = z.object({ topCard: z.string().optional() }).passthrough();
 const HandProps = z.object({ cards: z.string(), onCardClick: uiActionSchema.optional() }).passthrough();
@@ -151,10 +151,149 @@ const PlayerHandDisplayProps = z.object({ cardCount: z.any(), playerName: z.stri
 const ScoreboardProps = z.object({ scores: z.string() }).passthrough();
 const TrickProps = z.object({ cards: z.string() }).passthrough();
 const TrumpIndicatorProps = z.object({ suit: z.string() }).passthrough();
-const ModalProps = z.object({ isOpen: z.boolean(), onClose: z.string(), children: z.any() }).passthrough();
+const ModalProps = z.object({ isOpen: z.union([z.boolean(), z.string()]), onClose: uiActionSchema.optional(), children: z.any() }).passthrough();
 const SpinnerProps = z.object({}).passthrough();
 
-// New schemas for layout properties based on ui_layout_config_plan.md
+// --- New Generic Component Schemas ---
+
+// Layout
+const ContainerProps = z.object({
+  children: z.any(), // In config, children will be other components, handled by renderer
+  display: z.enum(['flex', 'grid']).optional(),
+  flexDirection: z.enum(['row', 'column']).optional(),
+  gap: z.number().optional(),
+  alignItems: z.string().optional(),
+  justifyContent: z.string().optional(),
+}).passthrough();
+
+const GridProps = z.object({
+  children: z.any(),
+  columns: z.number().optional(),
+  rows: z.number().optional(),
+  spacing: z.number().optional(),
+}).passthrough();
+
+const SpacerProps = z.object({
+  // Spacer has no props in the config
+}).passthrough();
+
+const StackProps = z.object({
+  children: z.any(),
+  direction: z.enum(['vertical', 'horizontal']).optional(),
+  spacing: z.number().optional(),
+}).passthrough();
+
+// Display
+const TextDisplayProps = z.object({
+  text: z.string(),
+  fontSize: z.string().optional(),
+  fontWeight: z.string().optional(),
+  fontFamily: z.string().optional(),
+  color: z.string().optional(),
+  textAlign: z.enum(['left', 'center', 'right', 'justify']).optional(),
+}).passthrough();
+
+const ImageDisplayProps = z.object({
+  src: z.string(),
+  alt: z.string(),
+  fit: z.enum(['cover', 'contain', 'fill']).optional(),
+}).passthrough();
+
+const ListDisplayProps = z.object({
+  items: z.string(), // Template variable like "{{players}}"
+  renderItem: z.any(), // A template component definition
+}).passthrough();
+
+const KeyValueDisplayProps = z.object({
+  data: z.string(), // Template variable like "{{player.stats}}"
+  layout: z.enum(['horizontal', 'vertical']).optional(),
+}).passthrough();
+
+// Input & Controls
+const NewButtonProps = z.object({
+  text: z.string().optional(),
+  icon: z.string().optional(),
+  onClick: uiActionSchema.optional(),
+  variant: z.enum(['primary', 'secondary']).optional(),
+  disabled: z.union([z.boolean(), z.string()]).optional(),
+}).passthrough();
+
+const ChoiceSelectorProps = z.object({
+    options: z.string(), // template variable
+    onSelect: uiActionSchema.optional(),
+    selectionMode: z.enum(['single', 'multiple']).optional(),
+    layout: z.enum(['grid', 'list', 'carousel']).optional(),
+    disabled: z.union([z.boolean(), z.string()]).optional(),
+}).passthrough();
+
+const TextInputProps = z.object({
+    placeholder: z.string().optional(),
+    maxLength: z.number().optional(),
+    showCounter: z.boolean().optional(),
+    onChange: uiActionSchema.optional(),
+    multiline: z.boolean().optional(),
+}).passthrough();
+
+const SliderProps = z.object({
+    min: z.number().optional(),
+    max: z.number().optional(),
+    step: z.number().optional(),
+    onChange: uiActionSchema.optional(),
+    defaultValue: z.number().optional(),
+}).passthrough();
+
+// Feedback & State
+const TimerProps = z.object({
+    duration: z.number(),
+    type: z.enum(['countdown', 'progress']).optional(),
+    onComplete: uiActionSchema.optional(),
+    label: z.string().optional(),
+}).passthrough();
+
+const StateIndicatorProps = z.object({
+    status: z.string(), // template variable
+    indicator: z.enum(['icon', 'text', 'color']).optional(),
+}).passthrough();
+
+// Game Tools
+const NewCardProps = z.object({
+  faceUp: z.union([z.boolean(), z.string()]).optional(),
+  content: z.any().optional(), // Can be complex, allow anything for now
+  back: z.any().optional(),
+  isSelectable: z.union([z.boolean(), z.string()]).optional(),
+  isSelected: z.union([z.boolean(), z.string()]).optional(),
+  onClick: uiActionSchema.optional(),
+}).passthrough();
+
+const CardContainerProps = z.object({
+  layout: z.enum(['fan', 'grid', 'stack', 'pile']).optional(),
+  cards: z.string(), // template variable
+  onCardClick: uiActionSchema.optional(),
+  selectedCardIds: z.string().optional(), // template variable
+}).passthrough();
+
+const DiceProps = z.object({
+  count: z.number().optional(),
+  values: z.string().optional(), // template variable
+  isRolling: z.union([z.boolean(), z.string()]).optional(),
+  onRollComplete: uiActionSchema.optional(),
+}).passthrough();
+
+const GameBoardProps = z.object({
+  size: z.object({ rows: z.number(), cols: z.number() }),
+  onCellClick: uiActionSchema.optional(),
+  children: z.any(),
+}).passthrough();
+
+const GamePieceProps = z.object({
+  shape: z.enum(['circle', 'square']).optional(),
+  color: z.string().optional(),
+  image: z.string().optional(),
+  position: z.object({ row: z.number(), col: z.number() }).optional(),
+}).passthrough();
+
+
+// --- New schemas for layout properties based on ui_layout_config_plan.md ---
 
 const spacingSchema = z.object({
   top: z.number().optional(),
@@ -178,10 +317,32 @@ const layoutSchema = z.object({
 }).passthrough();
 
 // Discriminated union to validate props based on the component name
-const componentSchema = z.discriminatedUnion('component', [
+const componentSchema = z.lazy(() => z.discriminatedUnion('component', [
+  // New Generic Components
+  z.object({ component: z.literal('Container'), props: ContainerProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('Grid'), props: GridProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('Spacer'), props: SpacerProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('Stack'), props: StackProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('TextDisplay'), props: TextDisplayProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('ImageDisplay'), props: ImageDisplayProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('ListDisplay'), props: ListDisplayProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('KeyValueDisplay'), props: KeyValueDisplayProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('Button'), props: NewButtonProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('ChoiceSelector'), props: ChoiceSelectorProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('TextInput'), props: TextInputProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('Slider'), props: SliderProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('Timer'), props: TimerProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('StateIndicator'), props: StateIndicatorProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('Card'), props: NewCardProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('CardContainer'), props: CardContainerProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('Dice'), props: DiceProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('GameBoard'), props: GameBoardProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('GamePiece'), props: GamePieceProps, layout: layoutSchema.optional() }),
+
+  // Old Components
   z.object({ component: z.literal('DebugPanel'), props: DebugPanelProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('ActionButton'), props: ActionButtonProps, layout: layoutSchema.optional() }),
-  z.object({ component: z.literal('Button'), props: ButtonProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('OldButton'), props: ButtonProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('AnswerGrid'), props: AnswerGridProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('GameCard'), props: GameCardProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('TextAreaWithCounter'), props: TextAreaWithCounterProps, layout: layoutSchema.optional() }),
@@ -194,7 +355,7 @@ const componentSchema = z.discriminatedUnion('component', [
   z.object({ component: z.literal('PlayerAvatar'), props: PlayerAvatarProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('PlayerCard'), props: PlayerCardProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('PlayerInfo'), props: PlayerInfoProps, layout: layoutSchema.optional() }),
-  z.object({ component: z.literal('PlayerStatusContainer'), props: PlayerStatusContainerProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('PlayerStatusContainer'), props: PlayerStatusContainerProps, layout: layoutSchema.default({}) }),
   z.object({ component: z.literal('PlayerStatusGrid'), props: PlayerStatusGridProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('Podium'), props: PodiumProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('PodiumList'), props: PodiumListProps, layout: layoutSchema.optional() }),
@@ -212,7 +373,7 @@ const componentSchema = z.discriminatedUnion('component', [
   z.object({ component: z.literal('PlayArea'), props: PlayAreaProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('PlayerViewContainer'), props: PlayerViewContainerProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('BiddingPopup'), props: BiddingPopupProps, layout: layoutSchema.optional() }),
-  z.object({ component: z.literal('Card'), props: CardProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('OldCard'), props: CardProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('CardFan'), props: CardFanProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('CardSlot'), props: CardSlotProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('Deck'), props: DeckProps, layout: layoutSchema.optional() }),
@@ -226,7 +387,7 @@ const componentSchema = z.discriminatedUnion('component', [
   z.object({ component: z.literal('TrumpIndicator'), props: TrumpIndicatorProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('Modal'), props: ModalProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('Spinner'), props: SpinnerProps, layout: layoutSchema.optional() }),
-]);
+]));
 
 // Define the conditional view schema separately for clarity and robust type inference.
 const conditionalUIViewSchema = z.object({

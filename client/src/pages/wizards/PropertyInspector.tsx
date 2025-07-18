@@ -4,16 +4,49 @@ export const PropertyInspector = ({ component, onUpdate, onClose }: { component:
 
     const [props, setProps] = useState(component.props || {});
     const [style, setStyle] = useState(component.style || {});
+    const [propStrings, setPropStrings] = useState<{ [key: string]: string }>({});
 
     useEffect(() => {
-        setProps(component.props || {});
+        const initialProps = component.props || {};
+        setProps(initialProps);
         setStyle(component.style || {});
-    }
-    , [component]);
+        
+        const initialPropStrings: { [key: string]: string } = {};
+        for (const key in initialProps) {
+            const value = initialProps[key];
+            if (typeof value === 'string') {
+                initialPropStrings[key] = value;
+            } else {
+                initialPropStrings[key] = JSON.stringify(value, null, 2);
+            }
+        }
+        setPropStrings(initialPropStrings);
+    }, [component]);
 
-    const handlePropChange = (key: string, value: any) => {
-        const newProps = { ...props, [key]: value };
-        setProps(newProps);
+    const handlePropStringChange = (key: string, value: string) => {
+        setPropStrings(prev => ({ ...prev, [key]: value }));
+    };
+
+    const parsePropValue = (key: string, rawString: string): { value: any; error: boolean } => {
+        const originalValue = component.props[key];
+        try {
+            return { value: JSON.parse(rawString), error: false };
+        } catch (e) {
+            if (typeof originalValue === 'string') {
+                return { value: rawString, error: false };
+            } else {
+                return { value: null, error: true };
+            }
+        }
+    };
+
+    const handlePropBlur = (key: string) => {
+        const { value, error } = parsePropValue(key, propStrings[key]);
+        if (error) {
+             alert(`Invalid JSON in property: ${key}`);
+        } else {
+            setProps((prev:any) => ({ ...prev, [key]: value }));
+        }
     };
 
     const handleStyleChange = (key: string, value: any) => {
@@ -22,8 +55,26 @@ export const PropertyInspector = ({ component, onUpdate, onClose }: { component:
     };
 
     const handleSaveChanges = () => {
-        onUpdate(component.id, props, style);
-        onClose();
+        const newProps = { ...props };
+        let hasError = false;
+
+        for (const key in propStrings) {
+            if (key === 'children') continue;
+            
+            const { value, error } = parsePropValue(key, propStrings[key]);
+            
+            if (error) {
+                alert(`Cannot save: Invalid JSON in property: ${key}`);
+                hasError = true;
+                break;
+            }
+            newProps[key] = value;
+        }
+
+        if (!hasError) {
+            onUpdate(component.id, newProps, style);
+            onClose();
+        }
     };
 
     return (
@@ -35,13 +86,16 @@ export const PropertyInspector = ({ component, onUpdate, onClose }: { component:
             <div className="inspector-body">
                 <h4>Properties</h4>
                 {Object.keys(props).map(key => (
-                    <div key={key}>
-                        <label>{key}</label>
-                        <textarea
-                            value={JSON.stringify(props[key])}
-                            onChange={(e) => handlePropChange(key, e.target.value)}
-                        />
-                    </div>
+                     key !== 'children' && (
+                        <div key={key}>
+                            <label>{key}</label>
+                            <textarea
+                                value={propStrings[key] ?? ''}
+                                onChange={(e) => handlePropStringChange(key, e.target.value)}
+                                onBlur={() => handlePropBlur(key)}
+                            />
+                        </div>
+                    )
                 ))}
 
                 <h4>Styling</h4>
