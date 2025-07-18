@@ -1,25 +1,87 @@
 /* ScreensStage.css */
 
+/* --- Main Layout Orchestrator --- */
 .screen-builder-layout {
-    display: flex;
+    display: grid;
+    /* Default state: 1:1:1 ratio for visible panels, inspector is hidden. Always 4 columns. */
+    grid-template-columns: 1fr 1fr 1fr 0fr;
     gap: 1rem;
+    transition: grid-template-columns 0.45s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.main-content {
-    flex-grow: 1;
-    display: flex;
-    gap: 1rem;
+/* --- STATE 1: Inspector OPEN for HOST view --- */
+.screen-builder-layout.inspector-open.active-view-host {
+    /* Palette=0, Host=1fr, Player=0, Inspector=2fr */
+    grid-template-columns: 0fr 1fr 0fr 2fr;
 }
 
-.component-palette {
-    flex-basis: 220px;
-    flex-shrink: 0;
-    border: 1px solid #444;
+/* --- STATE 2: Inspector OPEN for PLAYER view --- */
+.screen-builder-layout.inspector-open.active-view-player {
+    /* Palette=0, Host=0, Player=1fr, Inspector=2fr */
+    grid-template-columns: 0fr 0fr 1fr 2fr;
+}
+
+
+/* --- Base Styles & Transitions for Grid Children --- */
+.component-palette,
+.view-editor,
+.property-inspector {
+    opacity: 1;
+    transform: scale(1);
+    /* Transition opacity and transform for smooth fade/scale effect */
+    transition: opacity 0.25s ease-out, transform 0.25s ease-out;
     border-radius: 6px;
     padding: 1rem;
-    background-color: #12101F;
-    height: fit-content;
+    overflow: hidden;
+    border: 1px solid #444;
 }
+
+/* --- Grid Children Placement & Specific Styles --- */
+.component-palette {
+    grid-column: 1;
+    background-color: #12101F;
+}
+
+/* Use adjacent sibling selectors for robust placement */
+.component-palette + .view-editor {
+    grid-column: 2;
+    background-color: #1C192B;
+}
+
+.component-palette + .view-editor + .view-editor {
+    grid-column: 3;
+    background-color: #1C192B;
+}
+
+.property-inspector {
+    grid-column: 4;
+    background-color: #12101F;
+    /* Inspector is invisible by default because its track is 0fr and it has 0 opacity */
+    opacity: 0;
+}
+
+
+/* --- Child Visibility Toggles for Inspector States --- */
+
+/* When inspector's column grows, fade it in */
+.screen-builder-layout.inspector-open .property-inspector {
+    opacity: 1;
+}
+
+/* When HOST is active, hide Player view and Palette */
+.screen-builder-layout.inspector-open.active-view-host .component-palette,
+.screen-builder-layout.inspector-open.active-view-host .component-palette + .view-editor + .view-editor {
+    opacity: 0;
+}
+
+/* When PLAYER is active, hide Host view and Palette */
+.screen-builder-layout.inspector-open.active-view-player .component-palette,
+.screen-builder-layout.inspector-open.active-view-player .component-palette + .view-editor {
+    opacity: 0;
+}
+
+
+/* --- General Inner Component Styles (largely unchanged) --- */
 
 .component-palette h3 {
     margin-top: 0;
@@ -72,20 +134,6 @@
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     transform: scale(1.05);
     z-index: 1000;
-}
-
-.view-editors-container {
-    flex-grow: 1;
-    display: flex;
-    gap: 1.5rem;
-}
-
-.view-editor {
-    flex: 1;
-    border: 1px solid #444;
-    border-radius: 6px;
-    padding: 1rem;
-    background-color: #1C192B;
 }
 
 .view-editor-header {
@@ -177,7 +225,6 @@
     align-items: center;
 }
 
-/* Increased specificity to override general button styles */
 .sortable-item-header .remove-component-btn {
     background: none;
     border: none;
@@ -188,7 +235,6 @@
     line-height: 1;
     padding: 0;
     transition: color 0.2s ease;
-    /* Explicitly reset properties that might be inherited */
     width: auto;
     margin: 0;
 }
@@ -222,96 +268,6 @@
     border-radius: 4px;
 }
 
-
-/* Property Inspector */
-/* Adjust position of preview button in conditional view */
-.conditional-view-container {
-    position: relative;
-}
-
-.inspector-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #333;
-    padding-bottom: 0.75rem;
-    margin-bottom: 1rem;
-}
-
-.inspector-header h3 {
-    margin: 0;
-    color: #8A2BE2;
-    font-size: 1.2rem;
-}
-
-.inspector-header .close-btn {
-    background: none;
-    border: none;
-    color: #aaa;
-    font-size: 1.75rem;
-    font-weight: bold;
-    cursor: pointer;
-    line-height: 1;
-}
-
-.inspector-body {
-    max-height: 60vh;
-    overflow-y: auto;
-}
-
-.inspector-body h4 {
-    margin-top: 0;
-    margin-bottom: 1rem;
-    color: #eee;
-    font-weight: bold;
-    border-bottom: 1px solid #333;
-    padding-bottom: 0.5rem;
-}
-
-.inspector-body label {
-    font-size: 0.85rem;
-    color: #aaa;
-    margin-bottom: 0.5rem;
-    display: block;
-    font-weight: bold;
-}
-
-.inspector-body textarea,
-.inspector-body input {
-    display: block;
-    width: 100%;
-    padding: 0.5rem;
-    margin-bottom: 1rem;
-    border: 1px solid #444;
-    border-radius: 4px;
-    background-color: #2a263e;
-    color: #eee;
-    font-size: 0.9rem;
-    font-family: 'Courier New', Courier, monospace;
-}
-
-.inspector-body textarea {
-    min-height: 80px;
-    resize: vertical;
-}
-
-.inspector-footer {
-    margin-top: 1rem;
-    border-top: 1px solid #333;
-    padding-top: 1rem;
-}
-
-.inspector-footer button {
-    width: 100%;
-    padding: 0.75rem;
-    background-color: #4a4a7a;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
 .conditional-view-container {
     border: 1px solid #333;
     border-radius: 6px;
@@ -340,15 +296,4 @@
 .view-editor .button-subtle {
     background-color: #444;
     margin-top: 0.5rem;
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
 }

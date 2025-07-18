@@ -223,7 +223,7 @@ export const ScreensStage = ({ config, setConfig }: any) => {
         }
     };
 
-     const handleUpdateComponent = (id: string, newProps: any, newStyle: any) => {
+     const handleUpdateComponent = (id: string, newProps: any, newLayout: any) => {
         const newUi = JSON.parse(JSON.stringify(config.ui)); // Deep copy
 
         const findAndUpdate = (components: any[]): boolean => {
@@ -231,7 +231,7 @@ export const ScreensStage = ({ config, setConfig }: any) => {
             for (let i = 0; i < components.length; i++) {
                 if (components[i].id === id) {
                     components[i].props = newProps;
-                    components[i].style = newStyle;
+                    components[i].layout = newLayout;
                     return true;
                 }
                 if (components[i].props?.children) {
@@ -480,84 +480,109 @@ export const ScreensStage = ({ config, setConfig }: any) => {
     };
 
     const selectedComponent = getSelectedComponent();
-    
+
+    const findComponentLocation = (componentId: string | null): 'host' | 'player' | null => {
+        if (!componentId) return null;
+        
+        const findIn = (components: any[]): boolean => {
+            if (!components) return false;
+            return components.some(c => c.id === componentId || findIn(c.props?.children));
+        }
+
+        if (findIn(config.ui?.[selectedState]?.host?.components)) {
+            return 'host';
+        }
+
+        const playerViews = config.ui?.[selectedState]?.player || [];
+        for (const view of playerViews) {
+            if (findIn(view.components)) {
+                return 'player';
+            }
+        }
+        
+        return null;
+    };
+
+    const inspectorOpen = !!selectedComponentId;
+    const activeView = findComponentLocation(selectedComponentId);
+    const layoutClass = inspectorOpen ? `inspector-open active-view-${activeView}` : '';
+
     return (
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-            <div className="form-section animate-fade-in">
+            <div className={`form-section animate-fade-in`}>
                 <h2>Stage 3: Screen Builder</h2>
                 <p>Design the host and player screens for each game state by dragging components.</p>
-                
+
                 <label>Select a game state to design:</label>
-                <select value={selectedState} onChange={(e) => {setSelectedState(e.target.value); setSelectedComponentId(null);}} className="state-selector">
+                <select value={selectedState} onChange={(e) => { setSelectedState(e.target.value); setSelectedComponentId(null); }} className="state-selector">
                     {Object.keys(config.states).map(stateName => (
                         <option key={stateName} value={stateName}>{stateName}</option>
                     ))}
                 </select>
 
-                <div className="screen-builder-layout">
-                    <div className="main-content">
-                        <div className="component-palette">
-                            <h3>Component Library</h3>
-                            {Object.entries(COMPONENT_CATEGORIES).map(([category, components]) => (
-                                <details key={category} className="component-category-details" open>
-                                    <summary className="component-category-summary">{category}</summary>
-                                    <div className="component-grid">
-                                        {components.map(compName => <DraggableItem key={compName} id={compName} />)}
-                                    </div>
-                                </details>
-                            ))}
-                        </div>
-
-                        <div className="view-editors-container">
-                             <div className="view-editor">
-                                <div className="view-editor-header">
-                                    <h4>Host View for: <strong>{selectedState}</strong></h4>
-                                    <button className="preview-button" onClick={() => setPreview({ isOpen: true, components: getItems('host'), role: 'host' })}>Preview</button>
+                <div className={`screen-builder-layout ${layoutClass}`}>
+                    <div className="component-palette">
+                        <h3>Component Library</h3>
+                        {Object.entries(COMPONENT_CATEGORIES).map(([category, components]) => (
+                            <details key={category} className="component-category-details" open>
+                                <summary className="component-category-summary">{category}</summary>
+                                <div className="component-grid">
+                                    {components.map(compName => <DraggableItem key={compName} id={compName} />)}
                                 </div>
+                            </details>
+                        ))}
+                    </div>
+
+                    <div className="view-editor">
+                        <div className="view-editor-header">
+                            <h4>Host View for: <strong>{selectedState}</strong></h4>
+                            <button className="preview-button" onClick={() => setPreview({ isOpen: true, components: getItems('host'), role: 'host' })}>Preview</button>
+                        </div>
+                        <Dropzone
+                            id="host-view"
+                            items={getItems('host')}
+                            selectedComponentId={selectedComponentId}
+                            onSelectComponent={setSelectedComponentId}
+                            onRemoveComponent={handleRemoveComponent}
+                        />
+                    </div>
+
+                    <div className="view-editor">
+                        <h4>Player View for: <strong>{selectedState}</strong></h4>
+                        {(Array.isArray(config.ui?.[selectedState]?.player) ? config.ui[selectedState].player : []).map((view: any, index: number, arr: any[]) => (
+                            <div key={index} className="conditional-view-container">
+                                <div className="conditional-view-header">
+                                    <label>Condition for View {index + 1}</label>
+                                    <button className="preview-button" onClick={() => setPreview({ isOpen: true, components: view.components || [], role: 'player' })}>Preview</button>
+                                </div>
+                                <input
+                                    type="text"
+                                    placeholder="e.g. {{player.hasAnswered}}"
+                                    value={view.condition || ''}
+                                    onChange={(e) => handlePlayerViewChange(index, 'condition', e.target.value)}
+                                />
                                 <Dropzone
-                                    id="host-view"
-                                    items={getItems('host')}
+                                    id={`player-view-${index}`}
+                                    items={getItems('player', index)}
                                     selectedComponentId={selectedComponentId}
                                     onSelectComponent={setSelectedComponentId}
                                     onRemoveComponent={handleRemoveComponent}
                                 />
+                                {arr.length > 1 && <button className="button-subtle" onClick={() => handleRemovePlayerView(index)}>Remove View</button>}
                             </div>
-                            <div className="view-editor">
-                                <h4>Player View for: <strong>{selectedState}</strong></h4>
-                                {(Array.isArray(config.ui?.[selectedState]?.player) ? config.ui[selectedState].player : []).map((view: any, index: number, arr: any[]) => (
-                                    <div key={index} className="conditional-view-container">
-                                         <div className="conditional-view-header">
-                                            <label>Condition for View {index + 1}</label>
-                                            <button className="preview-button" onClick={() => setPreview({ isOpen: true, components: view.components || [], role: 'player' })}>Preview</button>
-                                        </div>
-                                        <input 
-                                            type="text"
-                                            placeholder="e.g. {{player.hasAnswered}}"
-                                            value={view.condition || ''}
-                                            onChange={(e) => handlePlayerViewChange(index, 'condition', e.target.value)}
-                                        />
-                                        <Dropzone
-                                            id={`player-view-${index}`}
-                                            items={getItems('player', index)}
-                                            selectedComponentId={selectedComponentId}
-                                            onSelectComponent={setSelectedComponentId}
-                                            onRemoveComponent={handleRemoveComponent}
-                                        />
-                                         {arr.length > 1 && <button className="button-subtle" onClick={() => handleRemovePlayerView(index)}>Remove View</button>}
-                                    </div>
-                                ))}
-                                <button onClick={handleAddPlayerView} className="add-view-btn">Add Conditional View</button>
-                            </div>
-                        </div>
+                        ))}
+                        <button onClick={handleAddPlayerView} className="add-view-btn">Add Conditional View</button>
                     </div>
-                    
-                    {selectedComponent && (
-                        <PropertyInspector
-                            component={selectedComponent}
-                            onUpdate={handleUpdateComponent}
-                            onClose={() => setSelectedComponentId(null)}
-                        />
-                    )}
+
+                    <div className="property-inspector">
+                        {selectedComponent && (
+                            <PropertyInspector
+                                component={selectedComponent}
+                                onUpdate={handleUpdateComponent}
+                                onClose={() => setSelectedComponentId(null)}
+                            />
+                        )}
+                    </div>
                 </div>
             </div>
             <DragOverlay>

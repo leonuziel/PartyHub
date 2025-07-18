@@ -43,50 +43,54 @@ interface ConditionalUIViewConfig {
 const getStyleFromLayout = (layout: LayoutConfig): CSSProperties => {
     const style: CSSProperties = {};
 
-    // Sizing
+    // Sizing: 'fill' provides a default that can be overridden by alignment.
     if (layout.width) {
-        style.width = layout.width === 'hug' ? 'fit-content' : layout.width;
-        if (layout.width === 'fill') {
-            style.flexGrow = 1;
-            style.alignSelf = 'stretch';
+        if (layout.width === 'hug' || layout.width === 'fit') {
+            style.width = 'fit-content';
+        } else if (layout.width === 'fill') {
+            style.justifySelf = 'stretch';
+        } else {
+            style.width = layout.width;
         }
     }
     if (layout.height) {
-        style.height = layout.height === 'hug' ? 'fit-content' : layout.height;
-         if (layout.height === 'fill') {
-            style.flexGrow = 1;
+        if (layout.width === 'hug' || layout.width === 'fit') {
+            style.height = 'fit-content';
+        } else if (layout.height === 'fill') {
             style.alignSelf = 'stretch';
+        } else {
+            style.height = layout.height;
         }
     }
 
-    // Alignment
+    // Alignment: Overrides 'fill' behavior by setting justify/align self.
     if (layout.alignment) {
         const alignments = {
-            TopLeft: { justifyContent: 'flex-start', alignItems: 'flex-start' },
-            TopCenter: { justifyContent: 'center', alignItems: 'flex-start' },
-            TopRight: { justifyContent: 'flex-end', alignItems: 'flex-start' },
-            MiddleLeft: { justifyContent: 'flex-start', alignItems: 'center' },
-            Center: { justifyContent: 'center', alignItems: 'center' },
-            MiddleRight: { justifyContent: 'flex-end', alignItems: 'center' },
-            BottomLeft: { justifyContent: 'flex-start', alignItems: 'flex-end' },
-            BottomCenter: { justifyContent: 'center', alignItems: 'flex-end' },
-            BottomRight: { justifyContent: 'flex-end', alignItems: 'flex-end' },
+            TopLeft: { justifySelf: 'start', alignSelf: 'start' },
+            TopCenter: { justifySelf: 'center', alignSelf: 'start' },
+            TopRight: { justifySelf: 'end', alignSelf: 'start' },
+            MiddleLeft: { justifySelf: 'start', alignSelf: 'center' },
+            Center: { justifySelf: 'center', alignSelf: 'center' },
+            MiddleRight: { justifySelf: 'end', alignSelf: 'center' },
+            BottomLeft: { justifySelf: 'start', alignSelf: 'end' },
+            BottomCenter: { justifySelf: 'center', alignSelf: 'end' },
+            BottomRight: { justifySelf: 'end', alignSelf: 'end' },
         };
         Object.assign(style, alignments[layout.alignment]);
     }
     
     // Spacing
     if (layout.padding) {
-        style.paddingTop = layout.padding.top;
-        style.paddingBottom = layout.padding.bottom;
-        style.paddingLeft = layout.padding.left;
-        style.paddingRight = layout.padding.right;
+        style.paddingTop = layout.padding.top ? `${layout.padding.top}px` : undefined;
+        style.paddingBottom = layout.padding.bottom ? `${layout.padding.bottom}px` : undefined;
+        style.paddingLeft = layout.padding.left ? `${layout.padding.left}px` : undefined;
+        style.paddingRight = layout.padding.right ? `${layout.padding.right}px` : undefined;
     }
     if (layout.offset) {
-        style.marginTop = layout.offset.top;
-        style.marginBottom = layout.offset.bottom;
-        style.marginLeft = layout.offset.left;
-        style.marginRight = layout.offset.right;
+        style.marginTop = layout.offset.top ? `${layout.offset.top}px` : undefined;
+        style.marginBottom = layout.offset.bottom ? `${layout.offset.bottom}px` : undefined;
+        style.marginLeft = layout.offset.left ? `${layout.offset.left}px` : undefined;
+        style.marginRight = layout.offset.right ? `${layout.offset.right}px` : undefined;
     }
 
     return style;
@@ -121,7 +125,10 @@ export const DynamicViewRenderer: React.FC = () => {
         }
 
         const transformedProps = transformProps(config.props);
-        const wrapperStyle = config.layout ? getStyleFromLayout(config.layout) : {};
+        // Base wrapper style for grid placement
+        const wrapperStyle: CSSProperties = { gridArea: 'main-area' };
+        // Merge with layout styles
+        Object.assign(wrapperStyle, config.layout ? getStyleFromLayout(config.layout) : {});
 
         // If the component has children, recursively render them
         if (Array.isArray(transformedProps.children)) {
@@ -179,10 +186,13 @@ export const DynamicViewRenderer: React.FC = () => {
         );
     }
     
+    // The main view is a grid container that defines a single area.
+    // All components are placed into this area and align themselves within it.
     const viewStyle: CSSProperties = viewConfig.layout ? getStyleFromLayout(viewConfig.layout) : {
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%'
+        display: 'grid',
+        gridTemplateAreas: '"main-area"',
+        height: '100%',
+        width: '100%',
     };
 
     const renderedComponents = viewConfig.components.map(renderComponent);

@@ -1,16 +1,23 @@
 import React, { useState, useEffect } from 'react';
-
-export const PropertyInspector = ({ component, onUpdate, onClose }: { component: any, onUpdate: (id: string, newProps: any, newStyle: any) => void, onClose: () => void }) => {
+import './PropertyInspector.css';
+export const PropertyInspector = ({ component, onUpdate, onClose }: { component: any, onUpdate: (id: string, newProps: any, newLayout: any) => void, onClose: () => void }) => {
 
     const [props, setProps] = useState(component.props || {});
-    const [style, setStyle] = useState(component.style || {});
+    const [layout, setLayout] = useState(component.layout || {});
     const [propStrings, setPropStrings] = useState<{ [key: string]: string }>({});
+    const [sizingMode, setSizingMode] = useState<{ width: string, height: string }>({ width: 'fill', height: 'fill' });
 
     useEffect(() => {
         const initialProps = component.props || {};
         setProps(initialProps);
-        setStyle(component.style || {});
+        const initialLayout = component.layout || {};
+        setLayout(initialLayout);
         
+        // Determine initial sizing modes
+        const widthMode = initialLayout.width?.endsWith('%') || initialLayout.width?.endsWith('px') ? 'fixed' : (initialLayout.width || 'fill');
+        const heightMode = initialLayout.height?.endsWith('%') || initialLayout.height?.endsWith('px') ? 'fixed' : (initialLayout.height || 'fill');
+        setSizingMode({ width: widthMode, height: heightMode });
+
         const initialPropStrings: { [key: string]: string } = {};
         for (const key in initialProps) {
             const value = initialProps[key];
@@ -49,9 +56,25 @@ export const PropertyInspector = ({ component, onUpdate, onClose }: { component:
         }
     };
 
-    const handleStyleChange = (key: string, value: any) => {
-        const newStyle = { ...style, [key]: value };
-        setStyle(newStyle);
+    const handleLayoutChange = (key: string, value: any) => {
+        const newLayout = { ...layout, [key]: value };
+        setLayout(newLayout);
+    };
+    
+    const handleSpacingChange = (type: 'padding' | 'offset', side: string, value: string) => {
+        const newLayout = { ...layout };
+        if (!newLayout[type]) {
+            newLayout[type] = {};
+        }
+        newLayout[type][side] = value === '' ? undefined : Number(value);
+        setLayout(newLayout);
+    };
+
+    const handleSizingModeChange = (dimension: 'width' | 'height', mode: string) => {
+        setSizingMode(prev => ({ ...prev, [dimension]: mode }));
+        if (mode !== 'fixed') {
+            handleLayoutChange(dimension, mode);
+        }
     };
 
     const handleSaveChanges = () => {
@@ -72,7 +95,7 @@ export const PropertyInspector = ({ component, onUpdate, onClose }: { component:
         }
 
         if (!hasError) {
-            onUpdate(component.id, newProps, style);
+            onUpdate(component.id, newProps, layout);
             onClose();
         }
     };
@@ -98,30 +121,79 @@ export const PropertyInspector = ({ component, onUpdate, onClose }: { component:
                     )
                 ))}
 
-                <h4>Styling</h4>
-                <div>
-                    <label>Background Color</label>
-                    <input
-                        type="text"
-                        value={style.backgroundColor || ''}
-                        onChange={(e) => handleStyleChange('backgroundColor', e.target.value)}
-                    />
+                <h4>Layout</h4>
+                {/* Sizing Controls */}
+                <div className="layout-group">
+                    <h5>Sizing</h5>
+                    <label>Width</label>
+                    <select value={sizingMode.width} onChange={(e) => handleSizingModeChange('width', e.target.value)}>
+                        <option value="fill">Fill</option>
+                        <option value="hug">Hug</option>
+                        <option value="fixed">Fixed</option>
+                    </select>
+                    {sizingMode.width === 'fixed' && (
+                        <input
+                            type="text"
+                            placeholder="e.g., 80% or 250px"
+                            value={layout.width || ''}
+                            onChange={(e) => handleLayoutChange('width', e.target.value)}
+                        />
+                    )}
+                    <label>Height</label>
+                    <select value={sizingMode.height} onChange={(e) => handleSizingModeChange('height', e.target.value)}>
+                        <option value="fill">Fill</option>
+                        <option value="hug">Hug</option>
+                        <option value="fixed">Fixed</option>
+                    </select>
+                    {sizingMode.height === 'fixed' && (
+                        <input
+                            type="text"
+                            placeholder="e.g., 50% or 100px"
+                            value={layout.height || ''}
+                            onChange={(e) => handleLayoutChange('height', e.target.value)}
+                        />
+                    )}
                 </div>
-                <div>
-                    <label>Text Color</label>
-                    <input
-                        type="text"
-                        value={style.color || ''}
-                        onChange={(e) => handleStyleChange('color', e.target.value)}
-                    />
+
+                {/* Alignment Controls */}
+                <div className="layout-group">
+                    <h5>Alignment</h5>
+                    <div className="alignment-grid">
+                        {([
+                            { val: 'TopLeft', symbol: '↖' }, { val: 'TopCenter', symbol: '↑' }, { val: 'TopRight', symbol: '↗' },
+                            { val: 'MiddleLeft', symbol: '←' }, { val: 'Center', symbol: '·' }, { val: 'MiddleRight', symbol: '→' },
+                            { val: 'BottomLeft', symbol: '↙' }, { val: 'BottomCenter', symbol: '↓' }, { val: 'BottomRight', symbol: '↘' }
+                        ]).map(align => (
+                            <button 
+                                key={align.val} 
+                                className={layout.alignment === align.val ? 'active' : ''} 
+                                onClick={() => handleLayoutChange('alignment', align.val)}
+                                title={align.val}
+                            >
+                                {align.symbol}
+                            </button>
+                        ))}
+                    </div>
                 </div>
-                <div>
-                    <label>Flex Grow</label>
-                    <input
-                        type="number"
-                        value={style.flexGrow || 0}
-                        onChange={(e) => handleStyleChange('flexGrow', e.target.value)}
-                    />
+
+                {/* Spacing Controls */}
+                <div className="layout-group">
+                    <h5>Padding (px)</h5>
+                    <div className="spacing-inputs">
+                        <input type="number" placeholder="Top" value={layout.padding?.top || ''} onChange={(e) => handleSpacingChange('padding', 'top', e.target.value)} />
+                        <input type="number" placeholder="Right" value={layout.padding?.right || ''} onChange={(e) => handleSpacingChange('padding', 'right', e.target.value)} />
+                        <input type="number" placeholder="Bottom" value={layout.padding?.bottom || ''} onChange={(e) => handleSpacingChange('padding', 'bottom', e.target.value)} />
+                        <input type="number" placeholder="Left" value={layout.padding?.left || ''} onChange={(e) => handleSpacingChange('padding', 'left', e.target.value)} />
+                    </div>
+                </div>
+                 <div className="layout-group">
+                    <h5>Offset (Margin, px)</h5>
+                    <div className="spacing-inputs">
+                        <input type="number" placeholder="Top" value={layout.offset?.top || ''} onChange={(e) => handleSpacingChange('offset', 'top', e.target.value)} />
+                        <input type="number" placeholder="Right" value={layout.offset?.right || ''} onChange={(e) => handleSpacingChange('offset', 'right', e.target.value)} />
+                        <input type="number" placeholder="Bottom" value={layout.offset?.bottom || ''} onChange={(e) => handleSpacingChange('offset', 'bottom', e.target.value)} />
+                        <input type="number" placeholder="Left" value={layout.offset?.left || ''} onChange={(e) => handleSpacingChange('offset', 'left', e.target.value)} />
+                    </div>
                 </div>
             </div>
             <div className="inspector-footer">

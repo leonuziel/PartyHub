@@ -53,6 +53,25 @@ interface Layout {
   width?: string;  // e.g., "80%", "fill", "hug"
   height?: string; // e.g., "25%", "fill", "hug"
 }
+
+```
+**Visual Representation:**
++---------------------------+
+|      Simple Layout        |
+|---------------------------|
+| Alignment:                |
+|  [↖] [↑] [↗]              |
+|  [←] [C] [→]              |
+|  [↙] [↓] [↘]              |
+|---------------------------|
+| Sizing:                   |
+| (•) Fit  ( ) Stretch  ( ) Fixed |
+|---------------------------|
+| Offset:                   |
+|   X [  10  ]   Y [  10  ]  |
++---------------------------+
+
+note - Fixed selection reveals width and height control.
 ```
 
 **Example:**
