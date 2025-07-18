@@ -51,11 +51,11 @@ import { WinnerDisplay } from './old/display/WinnerDisplay';
 import { CountdownTimer } from './old/gameplay/CountdownTimer';
 
 // Layout
-import { CenteredMessage } from './old/CenteredMessage';
-import HostFrame from './old/HostFrame';
-import { HostViewContainer } from './old/HostViewContainer';
-import { PlayArea } from './old/PlayArea';
-import { PlayerViewContainer } from './old/PlayerViewContainer';
+import { CenteredMessage } from './old/layout/CenteredMessage';
+import HostFrame from './old/layout/HostFrame';
+import { HostViewContainer } from './old/layout/HostViewContainer';
+import { PlayArea } from './old/layout/PlayArea';
+import { PlayerViewContainer } from './old/layout/PlayerViewContainer';
 import { VStack } from './old/structural/VStack';
 import { HStack } from './old/structural/HStack';
 import { Spacer } from './old/structural/Spacer';

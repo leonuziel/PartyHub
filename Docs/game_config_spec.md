@@ -488,6 +488,38 @@ For the `player` role, the UI can be defined in two ways:
 
 This conditional structure allows for creating different UI experiences for a player based on their specific state (e.g., showing a "Waiting..." message after they've submitted an answer).
 
+### Extended UI: Layout Controls
+
+To provide fine-grained control over the presentation, each component in the `components` array can optionally include a `layout` object. This allows for direct manipulation of a component's size, alignment, and spacing within its parent container.
+
+```json
+"components": [
+  {
+    "component": "MyComponent",
+    "props": { ... },
+    "layout": {
+      "width": "80%",
+      "height": "hug",
+      "alignment": "TopCenter",
+      "padding": { "top": 10, "bottom": 10 },
+      "offset": { "left": 20 }
+    }
+  }
+]
+```
+
+*   **`layout.width`, `layout.height` (string)**: Controls the size of the component.
+    *   **Percentage:** A string ending in `%` (e.g., `"50%"`).
+    *   **Presets:**
+        *   `"fill"`: The component expands to fill all available space in that dimension.
+        *   `"hug"`: The component shrinks to fit its content.
+
+*   **`layout.alignment` (string)**: Aligns the component within its parent container, using a 3x3 grid model.
+    *   **Values**: `TopLeft`, `TopCenter`, `TopRight`, `MiddleLeft`, `Center`, `MiddleRight`, `BottomLeft`, `BottomCenter`, `BottomRight`.
+
+*   **`layout.padding`, `layout.offset` (Object)**: Controls the spacing around the component. `offset` corresponds to CSS `margin`.
+    *   **Values**: An object with optional `top`, `bottom`, `left`, `right` keys and numerical values (in pixels).
+
 **Example:**
 ```json
 "ui": {

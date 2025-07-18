@@ -1,5 +1,5 @@
 import React from 'react';
-import { Player } from '../../../../types/types';
+import { Player } from '../../../types/types';
 import { PlayerAvatar } from './PlayerAvatar';
 import './Podium.css'; // Can reuse some styles from Podium
 

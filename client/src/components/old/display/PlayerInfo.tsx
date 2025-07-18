@@ -1,5 +1,5 @@
 import React from 'react';
-import { Player, TexasHoldemPlayer } from '../../../../types/types';
+import { Player, TexasHoldemPlayer } from '../../../types/types';
 import './PlayerInfo.css';
 
 interface PlayerInfoProps {

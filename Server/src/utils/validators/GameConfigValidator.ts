@@ -154,71 +154,99 @@ const TrumpIndicatorProps = z.object({ suit: z.string() }).passthrough();
 const ModalProps = z.object({ isOpen: z.boolean(), onClose: z.string(), children: z.any() }).passthrough();
 const SpinnerProps = z.object({}).passthrough();
 
+// New schemas for layout properties based on ui_layout_config_plan.md
+
+const spacingSchema = z.object({
+  top: z.number().optional(),
+  bottom: z.number().optional(),
+  left: z.number().optional(),
+  right: z.number().optional(),
+}).passthrough();
+
+const sizeRegex = /^(\d+(\.\d+)?%|fill|hug)$/;
+
+const layoutSchema = z.object({
+  width: z.string().regex(sizeRegex).optional(),
+  height: z.string().regex(sizeRegex).optional(),
+  alignment: z.enum([
+    'TopLeft', 'TopCenter', 'TopRight',
+    'MiddleLeft', 'Center', 'MiddleRight',
+    'BottomLeft', 'BottomCenter', 'BottomRight'
+  ]).optional(),
+  padding: spacingSchema.optional(),
+  offset: spacingSchema.optional(), // Corresponds to margin
+}).passthrough();
+
 // Discriminated union to validate props based on the component name
 const componentSchema = z.discriminatedUnion('component', [
-  z.object({ component: z.literal('DebugPanel'), props: DebugPanelProps }),
-  z.object({ component: z.literal('ActionButton'), props: ActionButtonProps }),
-  z.object({ component: z.literal('Button'), props: ButtonProps }),
-  z.object({ component: z.literal('AnswerGrid'), props: AnswerGridProps }),
-  z.object({ component: z.literal('GameCard'), props: GameCardProps }),
-  z.object({ component: z.literal('TextAreaWithCounter'), props: TextAreaWithCounterProps }),
-  z.object({ component: z.literal('VotingOptions'), props: VotingOptionsProps }),
-  z.object({ component: z.literal('AnswerResult'), props: AnswerResultProps }),
-  z.object({ component: z.literal('AwardDisplay'), props: AwardDisplayProps }),
-  z.object({ component: z.literal('GameBranding'), props: GameBrandingProps }),
-  z.object({ component: z.literal('GameTitle'), props: GameTitleProps }),
-  z.object({ component: z.literal('Leaderboard'), props: LeaderboardProps }),
-  z.object({ component: z.literal('PlayerAvatar'), props: PlayerAvatarProps }),
-  z.object({ component: z.literal('PlayerCard'), props: PlayerCardProps }),
-  z.object({ component: z.literal('PlayerInfo'), props: PlayerInfoProps }),
-  z.object({ component: z.literal('PlayerStatusContainer'), props: PlayerStatusContainerProps }),
-  z.object({ component: z.literal('PlayerStatusGrid'), props: PlayerStatusGridProps }),
-  z.object({ component: z.literal('Podium'), props: PodiumProps }),
-  z.object({ component: z.literal('PodiumList'), props: PodiumListProps }),
-  z.object({ component: z.literal('QuestionDisplay'), props: QuestionDisplayProps }),
-  z.object({ component: z.literal('QuestionHeader'), props: QuestionHeaderProps }),
-  z.object({ component: z.literal('RankDisplay'), props: RankDisplayProps }),
-  z.object({ component: z.literal('RankUpdate'), props: RankUpdateProps }),
-  z.object({ component: z.literal('ResultsList'), props: ResultsListProps }),
-  z.object({ component: z.literal('SpecialAwards'), props: SpecialAwardsProps }),
-  z.object({ component: z.literal('WinnerDisplay'), props: WinnerDisplayProps }),
-  z.object({ component: z.literal('CountdownTimer'), props: CountdownTimerProps }),
-  z.object({ component: z.literal('CenteredMessage'), props: CenteredMessageProps }),
-  z.object({ component: z.literal('HostFrame'), props: HostFrameProps }),
-  z.object({ component: z.literal('HostViewContainer'), props: HostViewContainerProps }),
-  z.object({ component: z.literal('PlayArea'), props: PlayAreaProps }),
-  z.object({ component: z.literal('PlayerViewContainer'), props: PlayerViewContainerProps }),
-  z.object({ component: z.literal('BiddingPopup'), props: BiddingPopupProps }),
-  z.object({ component: z.literal('Card'), props: CardProps }),
-  z.object({ component: z.literal('CardFan'), props: CardFanProps }),
-  z.object({ component: z.literal('CardSlot'), props: CardSlotProps }),
-  z.object({ component: z.literal('Deck'), props: DeckProps }),
-  z.object({ component: z.literal('DiscardPile'), props: DiscardPileProps }),
-  z.object({ component: z.literal('Hand'), props: HandProps }),
-  z.object({ component: z.literal('LastPlayedCard'), props: LastPlayedCardProps }),
-  z.object({ component: z.literal('Meld'), props: MeldProps }),
-  z.object({ component: z.literal('PlayerHandDisplay'), props: PlayerHandDisplayProps }),
-  z.object({ component: z.literal('Scoreboard'), props: ScoreboardProps }),
-  z.object({ component: z.literal('Trick'), props: TrickProps }),
-  z.object({ component: z.literal('TrumpIndicator'), props: TrumpIndicatorProps }),
-  z.object({ component: z.literal('Modal'), props: ModalProps }),
-  z.object({ component: z.literal('Spinner'), props: SpinnerProps }),
+  z.object({ component: z.literal('DebugPanel'), props: DebugPanelProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('ActionButton'), props: ActionButtonProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('Button'), props: ButtonProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('AnswerGrid'), props: AnswerGridProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('GameCard'), props: GameCardProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('TextAreaWithCounter'), props: TextAreaWithCounterProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('VotingOptions'), props: VotingOptionsProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('AnswerResult'), props: AnswerResultProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('AwardDisplay'), props: AwardDisplayProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('GameBranding'), props: GameBrandingProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('GameTitle'), props: GameTitleProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('Leaderboard'), props: LeaderboardProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('PlayerAvatar'), props: PlayerAvatarProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('PlayerCard'), props: PlayerCardProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('PlayerInfo'), props: PlayerInfoProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('PlayerStatusContainer'), props: PlayerStatusContainerProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('PlayerStatusGrid'), props: PlayerStatusGridProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('Podium'), props: PodiumProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('PodiumList'), props: PodiumListProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('QuestionDisplay'), props: QuestionDisplayProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('QuestionHeader'), props: QuestionHeaderProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('RankDisplay'), props: RankDisplayProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('RankUpdate'), props: RankUpdateProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('ResultsList'), props: ResultsListProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('SpecialAwards'), props: SpecialAwardsProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('WinnerDisplay'), props: WinnerDisplayProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('CountdownTimer'), props: CountdownTimerProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('CenteredMessage'), props: CenteredMessageProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('HostFrame'), props: HostFrameProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('HostViewContainer'), props: HostViewContainerProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('PlayArea'), props: PlayAreaProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('PlayerViewContainer'), props: PlayerViewContainerProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('BiddingPopup'), props: BiddingPopupProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('Card'), props: CardProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('CardFan'), props: CardFanProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('CardSlot'), props: CardSlotProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('Deck'), props: DeckProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('DiscardPile'), props: DiscardPileProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('Hand'), props: HandProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('LastPlayedCard'), props: LastPlayedCardProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('Meld'), props: MeldProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('PlayerHandDisplay'), props: PlayerHandDisplayProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('Scoreboard'), props: ScoreboardProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('Trick'), props: TrickProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('TrumpIndicator'), props: TrumpIndicatorProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('Modal'), props: ModalProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('Spinner'), props: SpinnerProps, layout: layoutSchema.optional() }),
 ]);
 
 // Define the conditional view schema separately for clarity and robust type inference.
 const conditionalUIViewSchema = z.object({
   condition: z.string().optional(),
   components: z.array(componentSchema),
+  layout: layoutSchema.optional(), // Allow layout settings on the conditional view itself
 });
 
 const uiSchema = z.record(z.object({
   host: z.object({
     components: z.array(componentSchema),
+    layout: layoutSchema.optional(), // Allow layout settings on the host view
   }).optional(),
   // Player's UI can be a simple component list or an array of conditional views
   player: z.union([
-    z.object({ components: z.array(componentSchema) }), // Original format for backward compatibility
-    z.array(conditionalUIViewSchema), // New conditional format
+    z.object({ 
+      components: z.array(componentSchema),
+      layout: layoutSchema.optional(), // Allow layout settings on the simple player view
+    }),
+    z.array(conditionalUIViewSchema), // Array of conditional views
   ]).optional(),
 }));
 

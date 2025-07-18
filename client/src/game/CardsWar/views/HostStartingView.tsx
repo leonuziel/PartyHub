@@ -1,5 +1,5 @@
 import React from 'react';
-import { CenteredMessage } from '../../../components/old/CenteredMessage';
+import { CenteredMessage } from '../../../components/old/layout/CenteredMessage';
 import { GameTitle } from '../../../components/old/display/GameTitle';
 import { CountdownTimer } from '../../../components/old/gameplay/CountdownTimer';
 

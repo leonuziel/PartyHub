@@ -1,5 +1,5 @@
 import React from 'react';
-import { CenteredMessage } from '../../../components/old/CenteredMessage';
+import { CenteredMessage } from '../../../components/old/layout/CenteredMessage';
 import { GameTitle } from '../../../components/old/display/GameTitle';
 import { WinnerDisplay } from '../../../components/old/display/WinnerDisplay';
 import { Player } from '../../../types/types';

@@ -2,6 +2,8 @@
 
 This document outlines the reusable React components available in the PartyHub frontend.
 
+**Note on Dynamic Layouts:** When these components are used within a server-driven UI via the `ConfigurableGame` engine, their position, size, and spacing can be controlled by an optional `layout` object in the game's JSON configuration. This object provides properties for alignment, sizing (presets and percentages), and spacing (padding and offset). This is a feature of the rendering engine, not an inherent prop of each individual component. For more details, see the `game_config_spec.md`.
+
 ## Common Components
 
 ### DebugPanel

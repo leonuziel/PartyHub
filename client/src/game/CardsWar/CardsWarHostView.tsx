@@ -3,7 +3,7 @@ import { useGameStore } from '../../store/gameStore';
 import { useRoomStore } from '../../store/roomStore';
 import { CardsWarGameState, Player } from '../../types/types';
 import { Spinner } from '../../components/old/common/Spinner';
-import { HostViewContainer } from '../../components/old/HostViewContainer';
+import { HostViewContainer } from '../../components/old/layout/HostViewContainer';
 import { HostStartingView } from './views/HostStartingView';
 import { HostFinishedView } from './views/HostFinishedView';
 import { HostRoundInProgressView } from './views/HostRoundInProgressView';
