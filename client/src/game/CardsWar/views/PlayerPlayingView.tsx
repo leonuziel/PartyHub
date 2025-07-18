@@ -1,6 +1,6 @@
 import React from 'react';
-import { ActionButton } from '../../../components/controls/ActionButton';
-import { PlayerViewContainer } from '../../../components/layout/PlayerViewContainer';
+import { ActionButton } from '../../../components/old/controls/ActionButton';
+import { PlayerViewContainer } from '../../../components/old/PlayerViewContainer';
 
 interface PlayerPlayingViewProps {
   onPlayCard: () => void;

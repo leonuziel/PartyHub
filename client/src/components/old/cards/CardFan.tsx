@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card as CardType } from '../../types/types';
+import { Card as CardType } from '../../../types/types';
 import { Card } from './Card';
 
 interface CardFanProps {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { QuestionDisplay } from '../../../components/display/QuestionDisplay';
+import { QuestionDisplay } from '../../../components/old/display/QuestionDisplay';
 
 interface HostVotingViewProps {
   question: string;

@@ -1,8 +1,8 @@
 import React from 'react';
 import { useGameStore } from '../../../store/gameStore';
-import { TexasHoldemGameState, TexasHoldemPlayer } from '../../../types/types';
-import { CardSlot } from '../../../components/cards/CardSlot';
-import { PlayerInfo } from '../../../components/display/PlayerInfo';
+import { TexasHoldemGameState } from '../../../types/types';
+import { CardSlot } from '../../../components/old/cards/CardSlot';
+import { PlayerInfo } from '../../../components/old/display/PlayerInfo';
 import '../TexasHoldemHostView.css';
 
 export const HostPlayingView: React.FC = () => {

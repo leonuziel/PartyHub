@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from '../components/controls/Button';
+import { Button } from '../components/old/controls/Button';
 import { Player } from '../types/types';
 
 // QuizClash Views
@@ -35,7 +35,7 @@ import { PlayerPlayingView as CardsWarPlayerPlayingView } from '../game/CardsWar
 import { PlayerWarDeclaredView as CardsWarPlayerWarDeclaredView } from '../game/CardsWar/views/PlayerWarDeclaredView';
 import { PlayerFinishedView as CardsWarPlayerFinishedView } from '../game/CardsWar/views/PlayerFinishedView';
 import { PlayerWarTransitionView as CardsWarPlayerWarTransitionView } from '../game/CardsWar/views/PlayerWarTransitionView';
-import HostFrame from '../components/layout/HostFrame';
+import HostFrame from '../components/old/layout/HostFrame';
 
 
 const dummyPlayer: Player = {
@@ -47,103 +47,103 @@ const dummyPlayer: Player = {
 };
 
 const dummyPlayers: Player[] = [
-    { id: '1', nickname: 'Gold Winner', avatar: '/avatars/avatar1.png', score: 1500, hasAnswered: true },
-    { id: '2', nickname: 'Silver Medalist', avatar: '/avatars/avatar2.png', score: 1200, hasAnswered: false },
-    { id: '3', nickname: 'Bronze Finisher', avatar: '/avatars/avatar3.png', score: 900, hasAnswered: true },
-    { id: '4', nickname: 'Fourth Place', avatar: '/avatars/avatar4.png', score: 600, hasAnswered: true },
-    { id: '5', nickname: 'Fifth Place', avatar: '/avatars/avatar5.png', score: 300, hasAnswered: false },
-  ];
+  { id: '1', nickname: 'Gold Winner', avatar: '/avatars/avatar1.png', score: 1500, hasAnswered: true },
+  { id: '2', nickname: 'Silver Medalist', avatar: '/avatars/avatar2.png', score: 1200, hasAnswered: false },
+  { id: '3', nickname: 'Bronze Finisher', avatar: '/avatars/avatar3.png', score: 900, hasAnswered: true },
+  { id: '4', nickname: 'Fourth Place', avatar: '/avatars/avatar4.png', score: 600, hasAnswered: true },
+  { id: '5', nickname: 'Fifth Place', avatar: '/avatars/avatar5.png', score: 300, hasAnswered: false },
+];
 
 const quizClashViews = {
-    'Starting': {
+  'Starting': {
     host: <HostFrame><QuizClashHostStartingView timer={10} /></HostFrame>,
-        player: <QuizClashPlayerStartingView player={dummyPlayer} />
-    },
-    'Asking Question': {
-        host: <HostFrame><QuizClashHostAskingQuestionView round={1} totalRounds={10} timer={10} answeredCount={2} totalPlayers={5} question="What is the capital of France?" answers={['Paris', 'London', 'Berlin', 'Madrid']} /></HostFrame>,
-        player: <QuizClashPlayerAnsweringView answers={['Paris', 'London', 'Berlin', 'Madrid']} onAnswer={() => {}} disabled={false} selectedAnswer={null} />
-    },
-    'Answered': {
-        host: null,
-        player: <QuizClashPlayerAnsweredView />
-    },
-    'Reveal': {
-        host: <HostFrame><QuizClashHostRevealView question="What is the capital of France?" answers={['Paris', 'London', 'Berlin', 'Madrid']} answerCounts={{0: 3, 1: 1, 2: 1}} correctAnswerIndex={0} players={dummyPlayers} /></HostFrame>,
-        player: <QuizClashPlayerRevealingAnswerView wasCorrect={true} pointsGained={100} lastRank={3} newRank={2} />
-    },
-    'Finished': {
-        host: <HostFrame><QuizClashHostFinishedView players={dummyPlayers} onPlayAgain={() => {}} /></HostFrame>,
-        player: <QuizClashPlayerFinishedView rank={2} playerCount={5} score={1200} topPlayers={dummyPlayers} onPlayAgain={() => {}} onBackToLobby={() => {}} />
-    }
+    player: <QuizClashPlayerStartingView player={dummyPlayer} />
+  },
+  'Asking Question': {
+    host: <HostFrame><QuizClashHostAskingQuestionView round={1} totalRounds={10} timer={10} answeredCount={2} totalPlayers={5} question="What is the capital of France?" answers={['Paris', 'London', 'Berlin', 'Madrid']} /></HostFrame>,
+    player: <QuizClashPlayerAnsweringView answers={['Paris', 'London', 'Berlin', 'Madrid']} onAnswer={() => { }} disabled={false} selectedAnswer={null} />
+  },
+  'Answered': {
+    host: null,
+    player: <QuizClashPlayerAnsweredView />
+  },
+  'Reveal': {
+    host: <HostFrame><QuizClashHostRevealView question="What is the capital of France?" answers={['Paris', 'London', 'Berlin', 'Madrid']} answerCounts={{ 0: 3, 1: 1, 2: 1 }} correctAnswerIndex={0} players={dummyPlayers} /></HostFrame>,
+    player: <QuizClashPlayerRevealingAnswerView wasCorrect={true} pointsGained={100} lastRank={3} newRank={2} />
+  },
+  'Finished': {
+    host: <HostFrame><QuizClashHostFinishedView players={dummyPlayers} onPlayAgain={() => { }} /></HostFrame>,
+    player: <QuizClashPlayerFinishedView rank={2} playerCount={5} score={1200} topPlayers={dummyPlayers} onPlayAgain={() => { }} onBackToLobby={() => { }} />
+  }
 };
 
 const fakeNewsViews = {
-    'Starting': {
-        host: <HostFrame><FakeNewsHostStartingView timer={10} /></HostFrame>,
-        player: <FakeNewsPlayerStartingView />
-    },
-    'Writing': {
-        host: <HostFrame><FakeNewsHostWritingView question="The best thing about pineapple on pizza is ________." players={dummyPlayers} /></HostFrame>,
-        player: <FakeNewsPlayerWritingView question="The best thing about pineapple on pizza is ________." onLieChange={() => {}} onSubmit={() => {}} lie="" />
-    },
-    'Voting': {
-        host: <HostFrame><FakeNewsHostVotingView question="The best thing about pineapple on pizza is ________." options={['its sweetness', 'its juiciness', 'the texture', 'absolutely nothing']} /></HostFrame>,
-        player: <FakeNewsPlayerVotingView options={['its sweetness', 'its juiciness', 'the texture', 'absolutely nothing']} onVote={() => {}} />
-    },
-    'Reveal': {
-        host: <HostFrame><FakeNewsHostRevealView options={['a', 'b']} votes={{}} correctAnswer="a" players={dummyPlayers} /></HostFrame>,
-        player: <FakeNewsPlayerRevealView wasCorrect={true} playerLie="My Lie" foolingCount={2} />
-    },
-    'Finished': {
-        host: <HostFrame><FakeNewsHostFinishedView players={dummyPlayers} awards={[]} /></HostFrame>,
-        player: <FakeNewsPlayerFinishedView myFinalRank={1} iAmMasterLiar={true} iAmTruthSeeker={false} />
-    }
+  'Starting': {
+    host: <HostFrame><FakeNewsHostStartingView timer={10} /></HostFrame>,
+    player: <FakeNewsPlayerStartingView />
+  },
+  'Writing': {
+    host: <HostFrame><FakeNewsHostWritingView question="The best thing about pineapple on pizza is ________." players={dummyPlayers} /></HostFrame>,
+    player: <FakeNewsPlayerWritingView question="The best thing about pineapple on pizza is ________." onLieChange={() => { }} onSubmit={() => { }} lie="" />
+  },
+  'Voting': {
+    host: <HostFrame><FakeNewsHostVotingView question="The best thing about pineapple on pizza is ________." options={['its sweetness', 'its juiciness', 'the texture', 'absolutely nothing']} /></HostFrame>,
+    player: <FakeNewsPlayerVotingView options={['its sweetness', 'its juiciness', 'the texture', 'absolutely nothing']} onVote={() => { }} />
+  },
+  'Reveal': {
+    host: <HostFrame><FakeNewsHostRevealView options={['a', 'b']} votes={{}} correctAnswer="a" players={dummyPlayers} /></HostFrame>,
+    player: <FakeNewsPlayerRevealView wasCorrect={true} playerLie="My Lie" foolingCount={2} />
+  },
+  'Finished': {
+    host: <HostFrame><FakeNewsHostFinishedView players={dummyPlayers} awards={[]} /></HostFrame>,
+    player: <FakeNewsPlayerFinishedView myFinalRank={1} iAmMasterLiar={true} iAmTruthSeeker={false} />
+  }
 };
 
 const cardsWarViews = {
-    'Starting': {
-        host: <HostFrame><CardsWarHostStartingView timer={10} /></HostFrame>,
-        player: <CardsWarPlayerStartingView />
-    },
-    'Playing': {
-        host: <HostFrame><CardsWarHostRoundInProgressView player1={dummyPlayers[0]} player2={dummyPlayers[1]} player1Card={{ suit: 'hearts', rank: 10, value: 10, name: '10' }} player2Card={{ suit: 'spades', rank: 5, value: 5, name: '5' }} /></HostFrame>,
-        player: <CardsWarPlayerPlayingView onPlayCard={() => {}} />
-    },
-    'War Transition': {
-        host: null,
-        player: <CardsWarPlayerWarTransitionView />
-    },
-    'War Declared': {
-        host: <HostFrame><CardsWarHostWarDeclaredView player1Card={{ suit: 'hearts', rank: 10, value: 10, name: '10' }} player2Card={{ suit: 'spades', rank: 5, value: 5, name: '5' }} /></HostFrame>,
-        player: <CardsWarPlayerWarDeclaredView onPlayCard={() => {}} />
-    },
-    'Finished': {
-        host: <HostFrame><CardsWarHostFinishedView winner={dummyPlayer} /></HostFrame>,
-        player: <CardsWarPlayerFinishedView isWinner={true} />
-    }
+  'Starting': {
+    host: <HostFrame><CardsWarHostStartingView timer={10} /></HostFrame>,
+    player: <CardsWarPlayerStartingView />
+  },
+  'Playing': {
+    host: <HostFrame><CardsWarHostRoundInProgressView player1={dummyPlayers[0]} player2={dummyPlayers[1]} player1Card={{ suit: 'hearts', rank: 10, value: 10, name: '10' }} player2Card={{ suit: 'spades', rank: 5, value: 5, name: '5' }} /></HostFrame>,
+    player: <CardsWarPlayerPlayingView onPlayCard={() => { }} />
+  },
+  'War Transition': {
+    host: null,
+    player: <CardsWarPlayerWarTransitionView />
+  },
+  'War Declared': {
+    host: <HostFrame><CardsWarHostWarDeclaredView player1Card={{ suit: 'hearts', rank: 10, value: 10, name: '10' }} player2Card={{ suit: 'spades', rank: 5, value: 5, name: '5' }} /></HostFrame>,
+    player: <CardsWarPlayerWarDeclaredView onPlayCard={() => { }} />
+  },
+  'Finished': {
+    host: <HostFrame><CardsWarHostFinishedView winner={dummyPlayer} /></HostFrame>,
+    player: <CardsWarPlayerFinishedView isWinner={true} />
+  }
 };
 
 
 const HostResolutions = {
-    'Desktop (Default)': { width: '100%', height: '100%' },
-    'iPad Air': { height: '820px', width: '1180px' },
-    'iPad Pro 12.9"': { height: '1024px', width: '1366px' },
+  'Desktop (Default)': { width: '100%', height: '100%' },
+  'iPad Air': { height: '820px', width: '1180px' },
+  'iPad Pro 12.9"': { height: '1024px', width: '1366px' },
 };
-const playerResolutions={
-    'iPhone 12/13 Pro': { width: '390px', height: '844px' },
-    'Samsung Galaxy S21': { width: '360px', height: '800px' },
-    'Google Pixel 5': { width: '393px', height: '851px' },
-    'iPhone 14 Pro Max': { width: '430px', height: '932px' },
-    'Samsung Galaxy S23 Ultra': { width: '412px', height: '892px' },
-    'Google Pixel 7 Pro': { width: '412px', height: '892px' },
-    'iPad Air': { width: '820px', height: '1180px' },
-    'iPad Pro 12.9"': { width: '1024px', height: '1366px' },
+const playerResolutions = {
+  'iPhone 12/13 Pro': { width: '390px', height: '844px' },
+  'Samsung Galaxy S21': { width: '360px', height: '800px' },
+  'Google Pixel 5': { width: '393px', height: '851px' },
+  'iPhone 14 Pro Max': { width: '430px', height: '932px' },
+  'Samsung Galaxy S23 Ultra': { width: '412px', height: '892px' },
+  'Google Pixel 7 Pro': { width: '412px', height: '892px' },
+  'iPad Air': { width: '820px', height: '1180px' },
+  'iPad Pro 12.9"': { width: '1024px', height: '1366px' },
 };
 
 const allViews = {
-    'QuizClash': quizClashViews,
-    'FakeNews': fakeNewsViews,
-    'CardsWar': cardsWarViews,
+  'QuizClash': quizClashViews,
+  'FakeNews': fakeNewsViews,
+  'CardsWar': cardsWarViews,
 };
 
 
@@ -217,7 +217,7 @@ const GameUITestPage: React.FC = () => {
           </div>
           <div>
             <select value={currentResolutionName} onChange={(e) => setResolutions(prev => ({ ...prev, [viewType]: e.target.value }))}>
-                {Object.keys(currentResolutionSet).map(res => <option key={res} value={res}>{res}</option>)}
+              {Object.keys(currentResolutionSet).map(res => <option key={res} value={res}>{res}</option>)}
             </select>
           </div>
           <h2 style={{ marginTop: '1rem' }}>{currentStateName}</h2>

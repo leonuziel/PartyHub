@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GameCard } from '../components/controls/GameCard';
+import { GameCard } from '../components/old/controls/GameCard';
 import { socketService } from '../services/socketService';
 import { usePlayerStore } from '../store/playerStore';
 import './PageLayouts.css';
 import './HomePage.css';
 
 interface GameInfo {
-  id: string;
-  title: string;
-  description: string;
-  playerCount: string;
-  playtime: string;
-  imageUrl: string;
+    id: string;
+    title: string;
+    description: string;
+    playerCount: string;
+    playtime: string;
+    imageUrl: string;
 }
 
 const hardcodedGames: GameInfo[] = [
@@ -60,7 +60,7 @@ const HomePage: React.FC = () => {
             try {
                 const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/game-configs`);
                 const dynamicGames = await response.json();
-                
+
                 const formattedDynamicGames = dynamicGames.map((game: any) => ({
                     id: game.gameId,
                     title: game.title,

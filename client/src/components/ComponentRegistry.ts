@@ -1,64 +1,64 @@
 // Cards
-import { BiddingPopup } from './cards/BiddingPopup';
-import { Card } from './cards/Card';
-import { CardFan } from './cards/CardFan';
-import { CardSlot } from './cards/CardSlot';
-import { Deck } from './cards/Deck';
-import { DiscardPile } from './cards/DiscardPile';
-import { Hand } from './cards/Hand';
-import { LastPlayedCard } from './cards/LastPlayedCard';
-import { Meld } from './cards/Meld';
-import { PlayerHandDisplay } from './cards/PlayerHandDisplay';
-import { Scoreboard } from './cards/Scoreboard';
-import { Trick } from './cards/Trick';
-import { TrumpIndicator } from './cards/TrumpIndicator';
+import { BiddingPopup } from './old/cards/BiddingPopup';
+import { Card } from './old/cards/Card';
+import { CardFan } from './old/cards/CardFan';
+import { CardSlot } from './old/cards/CardSlot';
+import { Deck } from './old/cards/Deck';
+import { DiscardPile } from './old/cards/DiscardPile';
+import { Hand } from './old/cards/Hand';
+import { LastPlayedCard } from './old/cards/LastPlayedCard';
+import { Meld } from './old/cards/Meld';
+import { PlayerHandDisplay } from './old/cards/PlayerHandDisplay';
+import { Scoreboard } from './old/cards/Scoreboard';
+import { Trick } from './old/cards/Trick';
+import { TrumpIndicator } from './old/cards/TrumpIndicator';
 
 // Common
-import { DebugPanel } from './common/DebugPanel';
-import {Modal} from './common/Modal';
-import { Spinner } from './common/Spinner';
+import { DebugPanel } from './old/common/DebugPanel';
+import { Modal } from './old/common/Modal';
+import { Spinner } from './old/common/Spinner';
 
 // Controls
-import { ActionButton } from './controls/ActionButton';
-import { AnswerGrid } from './controls/AnswerGrid';
-import { Button } from './controls/Button';
-import { GameCard } from './controls/GameCard';
-import { TextAreaWithCounter } from './controls/TextAreaWithCounter';
-import { VotingOptions } from './controls/VotingOptions';
+import { ActionButton } from './old/controls/ActionButton';
+import { AnswerGrid } from './old/controls/AnswerGrid';
+import { Button } from './old/controls/Button';
+import { GameCard } from './old/controls/GameCard';
+import { TextAreaWithCounter } from './old/controls/TextAreaWithCounter';
+import { VotingOptions } from './old/controls/VotingOptions';
 
 // Display
-import { AnswerResult } from './display/AnswerResult';
-import { AwardDisplay } from './display/AwardDisplay';
-import { GameBranding } from './display/GameBranding';
-import { GameTitle } from './display/GameTitle';
-import { Leaderboard } from './display/Leaderboard';
-import { PlayerAvatar } from './display/PlayerAvatar';
-import { PlayerCard } from './display/PlayerCard';
-import { PlayerInfo } from './display/PlayerInfo';
-import { PlayerStatusContainer } from './display/PlayerStatusContainer';
-import { PlayerStatusGrid } from './display/PlayerStatusGrid';
-import { Podium } from './display/Podium';
-import { PodiumList } from './display/PodiumList';
-import { QuestionDisplay } from './display/QuestionDisplay';
-import { QuestionHeader } from './display/QuestionHeader';
-import { RankDisplay } from './display/RankDisplay';
-import { RankUpdate } from './display/RankUpdate';
-import { ResultsList } from './display/ResultsList';
-import { SpecialAwards } from './display/SpecialAwards';
-import { WinnerDisplay } from './display/WinnerDisplay';
+import { AnswerResult } from './old/display/AnswerResult';
+import { AwardDisplay } from './old/display/AwardDisplay';
+import { GameBranding } from './old/display/GameBranding';
+import { GameTitle } from './old/display/GameTitle';
+import { Leaderboard } from './old/display/Leaderboard';
+import { PlayerAvatar } from './old/display/PlayerAvatar';
+import { PlayerCard } from './old/display/PlayerCard';
+import { PlayerInfo } from './old/display/PlayerInfo';
+import { PlayerStatusContainer } from './old/display/PlayerStatusContainer';
+import { PlayerStatusGrid } from './old/display/PlayerStatusGrid';
+import { Podium } from './old/display/Podium';
+import { PodiumList } from './old/display/PodiumList';
+import { QuestionDisplay } from './old/display/QuestionDisplay';
+import { QuestionHeader } from './old/display/QuestionHeader';
+import { RankDisplay } from './old/display/RankDisplay';
+import { RankUpdate } from './old/display/RankUpdate';
+import { ResultsList } from './old/display/ResultsList';
+import { SpecialAwards } from './old/display/SpecialAwards';
+import { WinnerDisplay } from './old/display/WinnerDisplay';
 
 // Gameplay
-import { CountdownTimer } from './gameplay/CountdownTimer';
+import { CountdownTimer } from './old/gameplay/CountdownTimer';
 
 // Layout
-import { CenteredMessage } from './layout/CenteredMessage';
-import  HostFrame  from './layout/HostFrame';
-import { HostViewContainer } from './layout/HostViewContainer';
-import { PlayArea } from './layout/PlayArea';
-import { PlayerViewContainer } from './layout/PlayerViewContainer';
-import { VStack } from './layout/structural/VStack';
-import { HStack } from './layout/structural/HStack';
-import { Spacer } from './layout/structural/Spacer';
+import { CenteredMessage } from './old/CenteredMessage';
+import HostFrame from './old/HostFrame';
+import { HostViewContainer } from './old/HostViewContainer';
+import { PlayArea } from './old/PlayArea';
+import { PlayerViewContainer } from './old/PlayerViewContainer';
+import { VStack } from './old/structural/VStack';
+import { HStack } from './old/structural/HStack';
+import { Spacer } from './old/structural/Spacer';
 
 // This registry maps string names (used in the game config) to actual React components.
 export const ComponentRegistry: Record<string, React.ComponentType<any>> = {
@@ -81,7 +81,7 @@ export const ComponentRegistry: Record<string, React.ComponentType<any>> = {
     'DebugPanel': DebugPanel,
     'Modal': Modal,
     'Spinner': Spinner,
-    
+
     // Controls
     'ActionButton': ActionButton,
     'AnswerGrid': AnswerGrid,

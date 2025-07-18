@@ -1,6 +1,6 @@
 import React from 'react';
-import { PlayerStatusContainer } from '../../../components/display/PlayerStatusContainer';
-import { RankUpdate } from '../../../components/display/RankUpdate';
+import { PlayerStatusContainer } from '../../../components/old/display/PlayerStatusContainer';
+import { RankUpdate } from '../../../components/old/display/RankUpdate';
 
 interface PlayerRevealingAnswerViewProps {
   wasCorrect: boolean;

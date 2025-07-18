@@ -1,7 +1,7 @@
 import React from 'react';
 import { useGameStore } from '../../store/gameStore';
 import { QuizClashGameState, QuizClashRevealState } from '../../types/types';
-import { Spinner } from '../../components/common/Spinner';
+import { Spinner } from '../../components/old/common/Spinner';
 import { HostStartingView } from './views/HostStartingView';
 import { HostFinishedView } from './views/HostFinishedView';
 import { HostRevealView } from './views/HostRevealView';
@@ -21,8 +21,8 @@ export const QuizClashHostView: React.FC = () => {
 
   if (gameState.status === 'FINISHED') {
     const playersWithScores = gameState.players.map(p => ({
-        ...p,
-        score: gameState.scores[p.id] || 0
+      ...p,
+      score: gameState.scores[p.id] || 0
     }));
     return <HostFinishedView players={playersWithScores} onPlayAgain={() => { /* Handle Play Again */ }} />;
   }
@@ -30,8 +30,8 @@ export const QuizClashHostView: React.FC = () => {
   if (gameState.status === 'REVEALING_ANSWERS') {
     const revealState = gameState as QuizClashRevealState;
     const playersWithScores = revealState.players.map(p => ({
-        ...p,
-        score: revealState.scores[p.id] || 0
+      ...p,
+      score: revealState.scores[p.id] || 0
     }));
 
     if (!revealState.question) {
@@ -58,10 +58,10 @@ export const QuizClashHostView: React.FC = () => {
 
   if (gameState.status === 'ASKING_QUESTION') {
     if (!gameState.question) {
-        return <Spinner />;
+      return <Spinner />;
     }
     return (
-        <HostAskingQuestionView
+      <HostAskingQuestionView
         round={gameState.round}
         totalRounds={gameState.totalRounds}
         timer={gameState.timer}
@@ -69,7 +69,7 @@ export const QuizClashHostView: React.FC = () => {
         totalPlayers={totalPlayers}
         question={gameState.question.questionText}
         answers={gameState.question.answers}
-        />
+      />
     );
   }
   return <Spinner />

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useGameStore } from '../store/gameStore';
-import { Spinner } from '../components/common/Spinner';
+import { Spinner } from '../components/old/common/Spinner';
 import { GameContainer } from '../game/GameContainer';
 import { Navigate, useParams } from 'react-router-dom';
 import { useRoomStore } from '../store/roomStore';
@@ -17,7 +17,7 @@ const GamePage: React.FC = () => {
   if (!room || room.roomCode !== roomCode) {
     return <Navigate to="/" />;
   }
-  
+
   // If the game is over and we're back in the lobby, go there.
   if (room.state === RoomState.LOBBY) {
     return <Navigate to={`/lobby/${room.roomCode}`} />;

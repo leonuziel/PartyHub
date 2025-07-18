@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card } from '../../../components/cards/Card';
+import { Card } from '../../../components/old/cards/Card';
 import { Card as CardType } from '../../../types/types';
 
 interface HostWarDeclaredViewProps {

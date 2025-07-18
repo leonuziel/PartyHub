@@ -9,7 +9,7 @@ import TestComponentsPage from './pages/TestComponentsPage';
 import GameUITestPage from './pages/GameUITestPage';
 import GameCreatorPage from './pages/GameCreatorPage';
 import { socketService } from './services/socketService';
-import { DebugPanel } from './components/common/DebugPanel';
+import { DebugPanel } from './components/old/common/DebugPanel';
 
 function App() {
   // Establish socket connection when the app loads

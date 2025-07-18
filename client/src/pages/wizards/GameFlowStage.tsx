@@ -1,6 +1,6 @@
 import React from 'react';
 import './GameFlowStage.css';
-import { Button } from '../../components/controls/Button';
+import { Button } from '../../components/old/controls/Button';
 import { useGameFlow } from './useGameFlow';
 import { GameFlowCanvas } from './GameFlowCanvas';
 

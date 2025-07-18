@@ -1,60 +1,59 @@
 import React, { useState } from 'react';
 // --- Controls ---
-import { Button } from '../components/controls/Button';
-import { ActionButton } from '../components/controls/ActionButton';
-import { TextAreaWithCounter } from '../components/controls/TextAreaWithCounter';
-import { VotingOptions } from '../components/controls/VotingOptions';
-import { AnswerGrid } from '../components/controls/AnswerGrid';
-import { GameCard } from '../components/controls/GameCard';
+import { Button } from '../components/old/controls/Button';
+import { ActionButton } from '../components/old/controls/ActionButton';
+import { TextAreaWithCounter } from '../components/old/controls/TextAreaWithCounter';
+import { VotingOptions } from '../components/old/controls/VotingOptions';
+import { AnswerGrid } from '../components/old/controls/AnswerGrid';
 
 // --- Display ---
-import { GameTitle } from '../components/display/GameTitle';
-import { Leaderboard } from '../components/display/Leaderboard';
-import { PlayerAvatar } from '../components/display/PlayerAvatar';
-import { Podium } from '../components/display/Podium';
-import { PlayerStatusContainer } from '../components/display/PlayerStatusContainer';
-import { WinnerDisplay } from '../components/display/WinnerDisplay';
-import { PlayerCard } from '../components/display/PlayerCard';
-import { PlayerInfo } from '../components/display/PlayerInfo';
-import { RankDisplay } from '../components/display/RankDisplay';
-import { PlayerStatusGrid } from '../components/display/PlayerStatusGrid';
-import { RankUpdate } from '../components/display/RankUpdate';
-import { PodiumList } from '../components/display/PodiumList';
-import { QuestionDisplay } from '../components/display/QuestionDisplay';
-import { AnswerResult } from '../components/display/AnswerResult';
-import { AwardDisplay } from '../components/display/AwardDisplay';
-import { ResultsList } from '../components/display/ResultsList';
-import { SpecialAwards } from '../components/display/SpecialAwards';
-import { GameBranding } from '../components/display/GameBranding';
-import { QuestionHeader } from '../components/display/QuestionHeader';
+import { GameTitle } from '../components/old/display/GameTitle';
+import { Leaderboard } from '../components/old/display/Leaderboard';
+import { PlayerAvatar } from '../components/old/display/PlayerAvatar';
+import { Podium } from '../components/old/display/Podium';
+import { PlayerStatusContainer } from '../components/old/display/PlayerStatusContainer';
+import { WinnerDisplay } from '../components/old/display/WinnerDisplay';
+import { PlayerCard } from '../components/old/display/PlayerCard';
+import { PlayerInfo } from '../components/old/display/PlayerInfo';
+import { RankDisplay } from '../components/old/display/RankDisplay';
+import { PlayerStatusGrid } from '../components/old/display/PlayerStatusGrid';
+import { RankUpdate } from '../components/old/display/RankUpdate';
+import { PodiumList } from '../components/old/display/PodiumList';
+import { QuestionDisplay } from '../components/old/display/QuestionDisplay';
+import { AnswerResult } from '../components/old/display/AnswerResult';
+import { AwardDisplay } from '../components/old/display/AwardDisplay';
+import { ResultsList } from '../components/old/display/ResultsList';
+import { SpecialAwards } from '../components/old/display/SpecialAwards';
+import { GameBranding } from '../components/old/display/GameBranding';
+import { QuestionHeader } from '../components/old/display/QuestionHeader';
 
 // --- Gameplay ---
-import { CountdownTimer } from '../components/gameplay/CountdownTimer';
+import { CountdownTimer } from '../components/old/gameplay/CountdownTimer';
 
 // --- Layout ---
-import { PlayArea } from '../components/layout/PlayArea';
-import { CenteredMessage } from '../components/layout/CenteredMessage';
+import { PlayArea } from '../components/old/layout/PlayArea';
+import { CenteredMessage } from '../components/old/layout/CenteredMessage';
 
 // --- Common ---
-import { Spinner } from '../components/common/Spinner';
-import { Modal } from '../components/common/Modal';
+import { Spinner } from '../components/old/common/Spinner';
+import { Modal } from '../components/old/common/Modal';
 
 // --- Cards ---
-import { Card } from '../components/cards/Card';
+import { Card } from '../components/old/cards/Card';
 
 // Card Game Components
-import { BiddingPopup } from '../components/cards/BiddingPopup';
-import { CardFan } from '../components/cards/CardFan';
-import { CardSlot } from '../components/cards/CardSlot';
-import { Deck } from '../components/cards/Deck';
-import { DiscardPile } from '../components/cards/DiscardPile';
-import { Hand } from '../components/cards/Hand';
-import { LastPlayedCard } from '../components/cards/LastPlayedCard';
-import { Meld } from '../components/cards/Meld';
-import { PlayerHandDisplay } from '../components/cards/PlayerHandDisplay';
-import { Scoreboard } from '../components/cards/Scoreboard';
-import { Trick } from '../components/cards/Trick';
-import { TrumpIndicator } from '../components/cards/TrumpIndicator';
+import { BiddingPopup } from '../components/old/cards/BiddingPopup';
+import { CardFan } from '../components/old/cards/CardFan';
+import { CardSlot } from '../components/old/cards/CardSlot';
+import { Deck } from '../components/old/cards/Deck';
+import { DiscardPile } from '../components/old/cards/DiscardPile';
+import { Hand } from '../components/old/cards/Hand';
+import { LastPlayedCard } from '../components/old/cards/LastPlayedCard';
+import { Meld } from '../components/old/cards/Meld';
+import { PlayerHandDisplay } from '../components/old/cards/PlayerHandDisplay';
+import { Scoreboard } from '../components/old/cards/Scoreboard';
+import { Trick } from '../components/old/cards/Trick';
+import { TrumpIndicator } from '../components/old/cards/TrumpIndicator';
 
 // Types
 import { Player, Card as CardType } from '../types/types';
@@ -135,10 +134,10 @@ const TestComponentsPage: React.FC = () => {
         { title: 'Award Display', component: <AwardDisplay award="Master Liar" description="Fooled the most players!" /> },
         { title: 'Results List', component: <ResultsList options={['Paris', 'London', 'Berlin']} votes={{ '1': 'Paris', '2': 'Paris', '3': 'London', '4': 'Paris', '5': 'Berlin' }} correctAnswer="Paris" players={dummyPlayers} /> },
         { title: 'Special Awards', component: <SpecialAwards awards={[{ awardName: 'Master Liar', player: dummyPlayers[1] }, { awardName: 'Truth Seeker', player: dummyPlayers[0] }]} /> },
-        { title: 'Game Branding', component: <div style={{display: 'flex', gap: '1rem'}}><GameBranding gameTitle="QuizClash" logoUrl="/game-art/quizclash.png" /><GameBranding gameTitle="FakeNews" logoUrl="/game-art/fakenews.png" /></div> },
+        { title: 'Game Branding', component: <div style={{ display: 'flex', gap: '1rem' }}><GameBranding gameTitle="QuizClash" logoUrl="/game-art/quizclash.png" /><GameBranding gameTitle="FakeNews" logoUrl="/game-art/fakenews.png" /></div> },
         { title: 'Question Header', component: <QuestionHeader round={3} totalRounds={10} timer={7} answeredCount={3} totalPlayers={5} /> },
         { title: 'Answer Grid (Player)', component: <AnswerGrid answers={['', '', '', '']} onAnswer={(index) => alert(`Chose ${index}`)} /> },
-        { title: 'Answer Grid (Host)', component: <AnswerGrid answers={['Ans 1', 'Ans 2', 'Ans 3', 'Ans 4']} onAnswer={() => {}} disabled={true} /> },
+        { title: 'Answer Grid (Host)', component: <AnswerGrid answers={['Ans 1', 'Ans 2', 'Ans 3', 'Ans 4']} onAnswer={() => { }} disabled={true} /> },
       ],
     },
     {
@@ -148,13 +147,13 @@ const TestComponentsPage: React.FC = () => {
         { title: 'Deck', component: <Deck count={52} onDraw={() => alert('Drew card!')} /> },
         { title: 'Discard Pile', component: <DiscardPile topCard={{ suit: dummyCard1.suit, value: dummyCard1.name }} /> },
         { title: 'Hand', component: <Hand cards={dummyHand} onCardClick={(c) => alert(`Clicked ${c.name}`)} /> },
-        { title: 'Card Slot', component: <div style={{display: 'flex', gap: '1rem'}}><CardSlot card={dummyCard2} /><CardSlot card={null} /></div> },
+        { title: 'Card Slot', component: <div style={{ display: 'flex', gap: '1rem' }}><CardSlot card={dummyCard2} /><CardSlot card={null} /></div> },
         { title: 'Player Hand Display', component: <PlayerHandDisplay cardCount={5} playerName="Opponent" /> },
-        { title: 'Trick', component: <Trick cards={[{player: 'p1', card: dummyCard1}, {player: 'p2', card: dummyCard2}]} /> },
+        { title: 'Trick', component: <Trick cards={[{ player: 'p1', card: dummyCard1 }, { player: 'p2', card: dummyCard2 }]} /> },
         { title: 'Bidding Popup', component: <BiddingPopup onBid={(a) => alert(`Bid ${a}`)} onPass={() => alert('Passed')} /> },
-        { title: 'Scoreboard', component: <Scoreboard scores={{'Player 1': 120, 'Player 2': 95}} /> },
-        { title: 'Meld', component: <Meld cards={dummyHand.slice(0,3)} /> },
-        { title: 'Card Fan', component: <div style={{paddingTop: '3rem'}}><CardFan cards={dummyHand} /></div> },
+        { title: 'Scoreboard', component: <Scoreboard scores={{ 'Player 1': 120, 'Player 2': 95 }} /> },
+        { title: 'Meld', component: <Meld cards={dummyHand.slice(0, 3)} /> },
+        { title: 'Card Fan', component: <div style={{ paddingTop: '3rem' }}><CardFan cards={dummyHand} /></div> },
         { title: 'Trump Indicator', component: <TrumpIndicator suit={'♠'} /> },
         { title: 'Last Played Card', component: <LastPlayedCard card={dummyCard2} /> },
       ],
@@ -179,7 +178,7 @@ const TestComponentsPage: React.FC = () => {
     cursor: 'pointer',
     fontSize: '1rem',
   };
-  
+
   const activeButtonStyle: React.CSSProperties = {
     ...buttonStyles,
     color: 'var(--primary-main)',
@@ -190,7 +189,7 @@ const TestComponentsPage: React.FC = () => {
   return (
     <div style={{ padding: '2rem', background: 'var(--background-dark)', color: 'var(--text-main)', minHeight: '100vh' }}>
       <GameTitle title="Component Test Page" />
-      
+
       <div style={tabStyles}>
         {testTabs.map(tab => (
           <button

@@ -5,14 +5,14 @@ import { usePlayerStore } from '../../store/playerStore';
 import { socketService } from '../../services/socketService';
 import { FakeNewsGameState } from '../../types/types';
 
-import { Spinner } from '../../components/common/Spinner';
-import { PlayerViewContainer } from '../../components/layout/PlayerViewContainer';
+import { Spinner } from '../../components/old/common/Spinner';
+import { PlayerViewContainer } from '../../components/old/layout/PlayerViewContainer';
 import { PlayerStartingView } from './views/PlayerStartingView';
 import { PlayerWritingView } from './views/PlayerWritingView';
 import { PlayerVotingView } from './views/PlayerVotingView';
 import { PlayerRevealView } from './views/PlayerRevealView';
 import { PlayerFinishedView } from './views/PlayerFinishedView';
-import { PlayerStatusContainer } from '../../components/display/PlayerStatusContainer';
+import { PlayerStatusContainer } from '../../components/old/display/PlayerStatusContainer';
 import './FakeNewsPlayerView.css';
 
 const FakeNewsPlayerView: React.FC = () => {

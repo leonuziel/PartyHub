@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from '../components/controls/Button';
+import { Button } from '../components/old/controls/Button';
 import './PageLayouts.css';
 import './GameCreatorPage.css';
 import './wizards/ReviewStage.css';
@@ -70,7 +70,7 @@ const GameCreatorPage: React.FC = () => {
             alert('An error occurred while saving.');
         }
     };
-    
+
     const totalStages = 5;
     const isWideStage = stage === 3;
 

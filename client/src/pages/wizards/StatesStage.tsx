@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from '../../components/controls/Button';
+import { Button } from '../../components/old/controls/Button';
 
 export const StatesStage = ({ config, setConfig }: any) => {
     const [newStateName, setNewStateName] = useState('');
@@ -14,7 +14,7 @@ export const StatesStage = ({ config, setConfig }: any) => {
             setNewStateName('');
         }
     };
-    
+
     const handleRemoveState = (stateName: string) => {
         if (stateName === 'STARTING' || stateName === 'FINISHED') {
             alert('Cannot remove default STARTING or FINISHED states.');
@@ -41,10 +41,10 @@ export const StatesStage = ({ config, setConfig }: any) => {
             <div className="states-stage-layout">
                 <div className="states-add-column">
                     <h3>Add New State</h3>
-                     <div className="state-input-group">
-                        <input 
-                            value={newStateName} 
-                            onChange={(e) => setNewStateName(e.target.value)} 
+                    <div className="state-input-group">
+                        <input
+                            value={newStateName}
+                            onChange={(e) => setNewStateName(e.target.value)}
                             placeholder="e.g., VOTING ROUND"
                         />
                         <Button onClick={handleAddState}>Add</Button>

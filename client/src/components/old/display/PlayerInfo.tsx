@@ -1,5 +1,5 @@
 import React from 'react';
-import { Player, TexasHoldemPlayer } from '../../types/types';
+import { Player, TexasHoldemPlayer } from '../../../../types/types';
 import './PlayerInfo.css';
 
 interface PlayerInfoProps {
@@ -10,14 +10,14 @@ interface PlayerInfoProps {
   isBigBlind?: boolean;
 }
 
-export const PlayerInfo: React.FC<PlayerInfoProps> = ({ 
-    player, 
-    isCurrent,
-    isDealer,
-    isSmallBlind,
-    isBigBlind
+export const PlayerInfo: React.FC<PlayerInfoProps> = ({
+  player,
+  isCurrent,
+  isDealer,
+  isSmallBlind,
+  isBigBlind
 }) => {
-  
+
   // Type guard to check if it's a poker player
   const isPokerPlayer = (p: Player | TexasHoldemPlayer | null): p is TexasHoldemPlayer => {
     return p !== null && 'chips' in p;
@@ -25,10 +25,10 @@ export const PlayerInfo: React.FC<PlayerInfoProps> = ({
 
   if (!player) {
     return (
-        <div className="player-info is-placeholder">
-            <div className="player-name">...</div>
-            <div className="player-score">...</div>
-        </div>
+      <div className="player-info is-placeholder">
+        <div className="player-name">...</div>
+        <div className="player-score">...</div>
+      </div>
     );
   }
 
@@ -44,13 +44,13 @@ export const PlayerInfo: React.FC<PlayerInfoProps> = ({
 
       {isPokerPlayer(player) ? (
         <>
-            <div className="player-chips">Chips: ${player.chips}</div>
-            {player.currentBet > 0 && (
-                <div className="player-bet">Bet: ${player.currentBet}</div>
-            )}
+          <div className="player-chips">Chips: ${player.chips}</div>
+          {player.currentBet > 0 && (
+            <div className="player-bet">Bet: ${player.currentBet}</div>
+          )}
         </>
       ) : (
-         'score' in player && player.score !== undefined && <div className="player-score">{player.score}</div>
+        'score' in player && player.score !== undefined && <div className="player-score">{player.score}</div>
       )}
 
       <div className="player-status-icons">

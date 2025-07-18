@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useDebugStore } from '../../store/debugStore';
-import { usePlayerStore } from '../../store/playerStore';
-import { useRoomStore } from '../../store/roomStore';
-import { useGameStore } from '../../store/gameStore';
-import { usePlayerHandStore } from '../../store/playerHandStore';
+import { useDebugStore } from '../../../store/debugStore';
+import { usePlayerStore } from '../../../store/playerStore';
+import { useRoomStore } from '../../../store/roomStore';
+import { useGameStore } from '../../../store/gameStore';
+import { usePlayerHandStore } from '../../../store/playerHandStore';
 
 export function DebugPanel() {
     const [isVisible, setIsVisible] = useState(false);
@@ -65,10 +65,10 @@ export function DebugPanel() {
                 <span onClick={() => setIsVisible(false)} style={{ cursor: 'pointer', padding: '0 5px' }}>✖</span>
             </div>
             <hr style={{ borderColor: 'rgba(255,255,255,0.3)' }} />
-            
+
             <div><strong>Status:</strong> {connectionStatus}</div>
             <div><strong>Last Event:</strong> {lastEvent}</div>
-            
+
             <details>
                 <summary><strong>Player Store</strong></summary>
                 <pre style={preStyle}>{JSON.stringify(playerState, null, 2)}</pre>
@@ -97,8 +97,8 @@ export function DebugPanel() {
                             <strong style={{ color: msg.direction === 'SENT' ? '#81c784' : '#64b5f6' }}>
                                 [{msg.direction}] {msg.event}
                             </strong>
-                            <span style={{color: '#aaa', marginLeft: '10px'}}>{new Date(msg.timestamp).toLocaleTimeString()}</span>
-                            <pre style={{ ...preStyle,maxHeight:300, margin: '4px 0 0', backgroundColor: '#222' }}>
+                            <span style={{ color: '#aaa', marginLeft: '10px' }}>{new Date(msg.timestamp).toLocaleTimeString()}</span>
+                            <pre style={{ ...preStyle, maxHeight: 300, margin: '4px 0 0', backgroundColor: '#222' }}>
                                 {JSON.stringify(msg.payload, null, 2)}
                             </pre>
                         </div>

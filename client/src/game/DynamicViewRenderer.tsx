@@ -3,8 +3,8 @@ import { useGameStore } from '../store/gameStore';
 import { usePlayerStore } from '../store/playerStore';
 import { usePlayerRole } from '../hooks/usePlayerRole';
 import { ComponentRegistry } from '../components/ComponentRegistry';
-import { CenteredMessage } from '../components/layout/CenteredMessage';
-import HostFrame from '../components/layout/HostFrame';
+import { CenteredMessage } from '../components/old/layout/CenteredMessage';
+import HostFrame from '../components/old/layout/HostFrame';
 import { socketService } from '../services/socketService';
 
 interface ComponentConfig {

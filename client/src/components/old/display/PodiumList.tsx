@@ -1,13 +1,13 @@
 import React from 'react';
-import { Player } from '../../types/types';
+import { Player } from '../../../../types/types';
 import { PlayerAvatar } from './PlayerAvatar';
 import './Podium.css'; // Can reuse some styles from Podium
 
 const getOrdinal = (n: number) => {
-    if (n <= 0) return n;
-    const s = ['th', 'st', 'nd', 'rd'];
-    const v = n % 100;
-    return n + (s[(v - 20) % 10] || s[v] || s[0]);
+  if (n <= 0) return n;
+  const s = ['th', 'st', 'nd', 'rd'];
+  const v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
 };
 
 interface PodiumListProps {

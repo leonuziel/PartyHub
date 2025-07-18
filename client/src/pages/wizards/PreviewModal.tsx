@@ -1,6 +1,6 @@
 import React from 'react';
 import { ComponentRegistry } from '../../components/ComponentRegistry';
-import HostFrame from '../../components/layout/HostFrame';
+import HostFrame from '../../components/old/layout/HostFrame';
 
 const MOCK_DATA = {
     gameState: {
@@ -33,7 +33,7 @@ const resolveValue = (path: string, context: any) => {
     }
 
     const key = path.substring(2, path.length - 2).trim();
-    
+
     // Special case for 'players' to return the full array
     if (key === 'players') {
         return context.players;
@@ -73,8 +73,8 @@ const resolveProps = (props: any, context: any) => {
 export const PreviewModal = ({ isOpen, onClose, components, role }: { isOpen: boolean, onClose: () => void, components: any[], role: 'host' | 'player' }) => {
     if (!isOpen) return null;
 
-    const context = role === 'host' 
-        ? { ...MOCK_DATA, player: null } 
+    const context = role === 'host'
+        ? { ...MOCK_DATA, player: null }
         : { ...MOCK_DATA, players: MOCK_DATA.players.filter(p => p.id !== MOCK_DATA.player.id) };
 
     const renderedComponents = components.map((compInfo, index) => {

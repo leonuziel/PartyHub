@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { usePlayerStore } from '../store/playerStore';
 import { socketService } from '../services/socketService';
-import { Button } from '../components/controls/Button';
+import { Button } from '../components/old/controls/Button';
 import './PageLayouts.css';
 import './JoinPage.css';
 
@@ -39,8 +39,8 @@ const JoinPage: React.FC = () => {
       return;
     }
     if (!roomCode) {
-        setError('No room code provided.');
-        return;
+      setError('No room code provided.');
+      return;
     }
 
     setPlayerNickname(nickname);

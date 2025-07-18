@@ -7,7 +7,7 @@ import FakeNewsHostView from './FakeNewsGame/FakeNewsHostView';
 import FakeNewsPlayerView from './FakeNewsGame/FakeNewsPlayerView';
 import { CardsWarHostView } from './CardsWar/CardsWarHostView';
 import { CardsWarPlayerView } from './CardsWar/CardsWarPlayerView';
-import HostFrame from '../components/layout/HostFrame';
+import HostFrame from '../components/old/layout/HostFrame';
 import TexasHoldemHostView from './TexasHoldem/TexasHoldemHostView';
 import TexasHoldemPlayerView from './TexasHoldem/TexasHoldemPlayerView';
 import { DynamicViewRenderer } from './DynamicViewRenderer';
@@ -22,7 +22,7 @@ export const GameContainer: React.FC = () => {
 
   const renderGameView = () => {
     if (isConfigurable) {
-        return <DynamicViewRenderer />;
+      return <DynamicViewRenderer />;
     }
 
     switch (gameState.gameId) {

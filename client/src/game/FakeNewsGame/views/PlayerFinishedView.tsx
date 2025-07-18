@@ -1,7 +1,7 @@
 import React from 'react';
-import { PlayerStatusContainer } from '../../../components/display/PlayerStatusContainer';
-import { RankDisplay } from '../../../components/display/RankDisplay';
-import { AwardDisplay } from '../../../components/display/AwardDisplay';
+import { PlayerStatusContainer } from '../../../components/old/display/PlayerStatusContainer';
+import { RankDisplay } from '../../../components/old/display/RankDisplay';
+import { AwardDisplay } from '../../../components/old/display/AwardDisplay';
 
 interface PlayerFinishedViewProps {
   myFinalRank: number;

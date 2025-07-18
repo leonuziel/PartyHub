@@ -1,7 +1,7 @@
 import React from 'react';
-import { CenteredMessage } from '../../../components/layout/CenteredMessage';
-import { GameTitle } from '../../../components/display/GameTitle';
-import { CountdownTimer } from '../../../components/gameplay/CountdownTimer';
+import { CenteredMessage } from '../../../components/old/CenteredMessage';
+import { GameTitle } from '../../../components/old/display/GameTitle';
+import { CountdownTimer } from '../../../components/old/gameplay/CountdownTimer';
 
 interface HostStartingViewProps {
   timer: number;

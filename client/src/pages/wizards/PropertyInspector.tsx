@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
 export const PropertyInspector = ({ component, onUpdate, onClose }: { component: any, onUpdate: (id: string, newProps: any, newStyle: any) => void, onClose: () => void }) => {
-    if (!component) return null;
 
     const [props, setProps] = useState(component.props || {});
     const [style, setStyle] = useState(component.style || {});
