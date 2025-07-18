@@ -53,11 +53,19 @@ const GameCreatorPage: React.FC = () => {
             return;
         }
 
+        // Ensure the config has all required top-level properties before saving
+        const finalConfig = {
+            gameData: {},
+            initialGameState: {},
+            events: {},
+            ...config,
+        };
+
         try {
             const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/game-configs`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(config),
+                body: JSON.stringify(finalConfig),
             });
 
             if (response.ok) {

@@ -2,12 +2,16 @@ import React from 'react';
 
 export const MetadataStage = ({ config, setConfig }: any) => {
     const handleMetadataChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
+        const { name, value, type } = e.target;
+        
+        // Convert to number if the input type is 'number'
+        const finalValue = type === 'number' ? parseInt(value, 10) || 0 : value;
+
         setConfig((prevConfig: any) => ({
             ...prevConfig,
             metadata: {
                 ...prevConfig.metadata,
-                [name]: value,
+                [name]: finalValue,
             },
         }));
     };

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import { ComponentRegistry } from '../../components/ComponentRegistry';
 import HostFrame from '../../components/old/layout/HostFrame';
+import { getStyleFromLayout, ComponentConfig } from '../../utils/layoutUtils';
 
 const MOCK_DATA = {
     gameState: {
@@ -72,21 +73,32 @@ const resolveProps = (props: any, context: any) => {
     return newProps;
 };
 
-// A simple, recursive renderer for the preview modal
-const PreviewRenderer = ({ config, context }: { config: any, context: any }) => {
+// A simple, recursive renderer for the preview modal that mimics DynamicViewRenderer
+const PreviewRenderer = ({ config, context }: { config: ComponentConfig, context: any }) => {
     const Component = ComponentRegistry[config.component];
     if (!Component) {
         return <div style={{ color: 'red' }}>Unknown component: {config.component}</div>;
     }
 
     const resolvedProps = resolveProps(config.props, context);
-    
-    // Recursively render children if they exist
-    const children = config.props?.children?.map((childConfig: any) => (
-        <PreviewRenderer key={childConfig.id} config={childConfig} context={context} />
-    ));
 
-    return <Component {...resolvedProps}>{children}</Component>;
+    // Get layout styles from the shared utility
+    const wrapperStyle: CSSProperties = { gridArea: 'main-area' }; // Base style for grid placement
+    Object.assign(wrapperStyle, config.layout ? getStyleFromLayout(config.layout) : {});
+
+    // Recursively render children if they exist
+    const children = Array.isArray(resolvedProps.children)
+        ? resolvedProps.children.map((childConfig: any) => (
+              <PreviewRenderer key={childConfig.id} config={childConfig} context={context} />
+          ))
+        : null;
+
+    // Wrap the component in a styled div, just like in the live renderer
+    return (
+        <div style={wrapperStyle}>
+            <Component {...resolvedProps}>{children}</Component>
+        </div>
+    );
 };
 
 
@@ -101,12 +113,24 @@ export const PreviewModal = ({ isOpen, onClose, components, role }: { isOpen: bo
          <PreviewRenderer key={compInfo.id} config={compInfo} context={context} />
     ));
 
+    // The main preview view is a grid container, just like the DynamicViewRenderer
+    const viewStyle: CSSProperties = {
+        display: 'grid',
+        gridTemplateAreas: '"main-area"',
+        height: '100%',
+        width: '100%',
+    };
+
     return (
         <div className="preview-modal-overlay" onClick={onClose}>
             <div className="preview-modal-content" onClick={(e) => e.stopPropagation()}>
                 <button className="preview-modal-close" onClick={onClose}>&times;</button>
                 <div className={`preview-container ${role}-preview`}>
-                    {role === 'host' ? <HostFrame>{renderedComponents}</HostFrame> : renderedComponents}
+                    {role === 'host' ? (
+                        <HostFrame><div style={viewStyle}>{renderedComponents}</div></HostFrame>
+                    ) : (
+                        <div style={viewStyle}>{renderedComponents}</div>
+                    )}
                 </div>
             </div>
         </div>

@@ -274,7 +274,10 @@ const CardContainerProps = z.object({
 
 const DiceProps = z.object({
   count: z.number().optional(),
-  values: z.string().optional(), // template variable
+  values: z.union([
+    z.string(), // For template variables like "{{gameState.dice}}"
+    z.array(z.number()) // For hardcoded values like [1, 6]
+  ]).optional(),
   isRolling: z.union([z.boolean(), z.string()]).optional(),
   onRollComplete: uiActionSchema.optional(),
 }).passthrough();
