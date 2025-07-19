@@ -11,32 +11,17 @@
       {
         "questionText": "What is the chemical symbol for gold?",
         "correctAnswer": "Au",
-        "options": [
-          "Ag",
-          "Go",
-          "Gd",
-          "Au"
-        ]
+        "options": [ "Ag", "Go", "Gd", "Au" ]
       },
       {
         "questionText": "Which planet is known as the Red Planet?",
         "correctAnswer": "Mars",
-        "options": [
-          "Jupiter",
-          "Venus",
-          "Saturn",
-          "Mars"
-        ]
+        "options": [ "Jupiter", "Venus", "Saturn", "Mars" ]
       },
       {
         "questionText": "What is the most abundant gas in Earth's atmosphere?",
         "correctAnswer": "Nitrogen",
-        "options": [
-          "Oxygen",
-          "Carbon Dioxide",
-          "Argon",
-          "Nitrogen"
-        ]
+        "options": [ "Oxygen", "Carbon Dioxide", "Argon", "Nitrogen" ]
       }
     ]
   },
@@ -48,438 +33,293 @@
     "winner": null,
     "topThreePlayers": [],
     "timerStart": null,
-    "playersAnswered": 0
+    "playersAnswered": 0,
+    "answerStats": {},
+    "leaderboard": []
   },
   "playerAttributes": {
     "score": 0,
     "currentAnswer": null,
-    "submittedAt": null
+    "submittedAt": null,
+    "lastScoreGained": 0,
+    "rank": 0,
+    "previousRank": 0,
+    "streak": 0
   },
   "actions": {
     "goToNextQuestion": [
-      {
-        "function": "incrementProperty",
-        "args": [
-          "currentQuestionIndex"
-        ]
-      },
-      {
-        "function": "setProperty",
-        "args": [
-          "playersAnswered",
-          0
-        ]
-      },
-      {
-        "function": "setProperty",
-        "args": [
-          "currentQuestion",
-          "{{gameData.questions[gameState.currentQuestionIndex]}}"
-        ]
-      },
-      {
-        "function": "setProperty",
-        "args": [
-          "shuffledAnswers",
-          "{{gameState.currentQuestion.options}}"
-        ]
-      },
-      {
-        "function": "shuffleArray",
-        "args": [
-          "shuffledAnswers"
-        ]
-      }
+      { "function": "incrementProperty", "args": [ "currentQuestionIndex" ] },
+      { "function": "setProperty", "args": [ "playersAnswered", 0 ] },
+      { "function": "setProperty", "args": [ "currentQuestion", "{{gameData.questions[gameState.currentQuestionIndex]}}" ] },
+      { "function": "setProperty", "args": [ "shuffledAnswers", "{{gameState.currentQuestion.options}}" ] },
+      { "function": "shuffleArray", "args": [ "shuffledAnswers" ] }
     ],
     "recordPlayerAnswer": [
-      {
-        "function": "setProperty",
-        "args": [
-          "playerAttributes.{{actorId}}.currentAnswer",
-          "{{payload.text}}"
-        ]
-      },
-      {
-        "function": "setProperty",
-        "args": [
-          "playerAttributes.{{actorId}}.submittedAt",
-          "{{Date.now()}}"
-        ]
-      },
-      {
-        "function": "incrementProperty",
-        "args": [
-          "playersAnswered"
-        ]
-      }
+      { "function": "setProperty", "args": [ "playerAttributes.{{actorId}}.currentAnswer", "{{payload.text}}" ] },
+      { "function": "setProperty", "args": [ "playerAttributes.{{actorId}}.submittedAt", "{{Date.now()}}" ] },
+      { "function": "incrementProperty", "args": [ "playersAnswered" ] }
     ],
     "calculateScores": [
+      { "function": "setProperty", "args": [ "playerAttributes.{{player.id}}.lastScoreGained", 0 ] },
       {
         "condition": "{{player.currentAnswer === gameState.currentQuestion.correctAnswer}}",
-        "function": "incrementProperty",
+        "function": "setProperty",
         "args": [
-          "playerAttributes.{{player.id}}.score",
+          "playerAttributes.{{player.id}}.lastScoreGained",
           "{{ Math.round((1 - ( (player.submittedAt - gameState.timerStart) / 10000)) * 500) + 500 }}"
         ]
       },
-       {
-        "function": "setProperty",
-        "args": [
-          "playerAttributes.{{player.id}}.submittedAt",
-          null
-        ]
+      { "function": "incrementProperty", "args": [ "playerAttributes.{{player.id}}.score", "{{player.lastScoreGained}}" ] }
+    ],
+    "updateStreaks": [
+      {
+        "condition": "{{player.currentAnswer === gameState.currentQuestion.correctAnswer}}",
+        "function": "incrementProperty",
+        "args": [ "playerAttributes.{{player.id}}.streak" ]
       },
-       {
+      {
+        "condition": "{{player.currentAnswer !== gameState.currentQuestion.correctAnswer}}",
         "function": "setProperty",
-        "args": [
-          "playerAttributes.{{player.id}}.currentAnswer",
-          null
-        ]
+        "args": [ "playerAttributes.{{player.id}}.streak", 0 ]
+      }
+    ],
+    "calculateAnswerStats": [
+      { "function": "setProperty", "args": [ "answerStats", {} ] },
+      {
+        "forEachPlayer": {
+          "effects": [
+            { "function": "incrementProperty", "args": [ "answerStats.{{player.currentAnswer}}", 1 ] }
+          ]
+        }
+      }
+    ],
+    "updateLeaderboardAndRanks": [
+      {
+        "forEachPlayer": {
+           "effects": [
+             { "function": "setProperty", "args": [ "playerAttributes.{{player.id}}.previousRank", "{{player.rank}}" ] }
+           ]
+        }
+      },
+      { "function": "setProperty", "args": [ "leaderboard", "{{players.map(p => ({ id: p.id, nickname: p.nickname, score: p.score, streak: p.streak }))}}" ] },
+      { "function": "arraySortBy", "args": [ "leaderboard", "score", "desc" ] },
+      {
+        "forEachPlayer": {
+          "effects": [
+             { "function": "setProperty", "args": [ "playerAttributes.{{player.id}}.rank", "{{gameState.leaderboard.findIndex(p => p.id === player.id) + 1}}" ] }
+          ]
+        }
+      }
+    ],
+    "resetPlayerTurnData": [
+       {
+        "forEachPlayer": {
+          "effects": [
+             { "function": "setProperty", "args": [ "playerAttributes.{{player.id}}.submittedAt", null ] },
+             { "function": "setProperty", "args": [ "playerAttributes.{{player.id}}.currentAnswer", null ] }
+          ]
+        }
       }
     ],
     "calculateWinner": [
-      {
-        "function": "calculateWinner"
-      }
+      { "function": "calculateWinner", "args": [] }
     ]
   },
   "initialState": "STARTING",
   "states": {
     "STARTING": {
       "onEnter": [
-        {
-          "function": "shuffleArray",
-          "args": [
-            "gameData.questions"
-          ]
-        },
-        {
-          "function": "startTimer",
-          "args": [
-            5,
-            {
-              "function": "dispatchEvent",
-              "args": ["timerExpires"]
-            }
-          ]
-        }
+        { "function": "shuffleArray", "args": [ "gameData.questions" ] },
+        { "function": "startTimer", "args": [ 5, { "function": "dispatchEvent", "args": ["timerExpires"] } ] }
       ]
     },
     "ASKING_QUESTION": {
       "onEnter": [
-        {
-          "function": "setProperty",
-          "args": [
-            "timerStart",
-            "{{Date.now()}}"
-          ]
-        },
-        {
-          "runAction": "goToNextQuestion"
-        },
-        {
-          "function": "startTimer",
-          "args": [
-            10,
-            {
-              "function": "dispatchEvent",
-              "args": ["timerExpires"]
-            }
-          ]
-        }
+        { "function": "setProperty", "args": [ "timerStart", "{{Date.now()}}" ] },
+        { "runAction": "goToNextQuestion" },
+        { "function": "startTimer", "args": [ 10, { "function": "dispatchEvent", "args": ["timerExpires"] } ] }
       ]
     },
     "REVEAL_ANSWER": {
       "onEnter": [
-        {
-          "function": "startTimer",
-          "args": [
-            5,
-            {
-              "function": "dispatchEvent",
-              "args": ["timerExpires"]
-            }
-          ]
-        },
-        {
-          "forEachPlayer": {
-            "effects": [
-              {
-                "runAction": "calculateScores"
-              }
-            ]
-          }
-        },
-        {
-            "function": "setProperty",
-            "args": ["playersAnswered", 0]
-        }
+        { "forEachPlayer": { "effects": [{ "runAction": "calculateScores" }, { "runAction": "updateStreaks" }] } },
+        { "function": "startTimer", "args": [ 5, { "function": "dispatchEvent", "args": ["timerExpires"] } ] }
       ]
+    },
+    "SHOW_STATS": {
+      "onEnter": [
+        { "runAction": "calculateAnswerStats" },
+        { "function": "startTimer", "args": [ 8, { "function": "dispatchEvent", "args": ["timerExpires"] } ] }
+      ]
+    },
+    "LEADERBOARD": {
+        "onEnter": [
+            { "runAction": "updateLeaderboardAndRanks" },
+            { "runAction": "resetPlayerTurnData" },
+            { "function": "startTimer", "args": [ 8, { "function": "dispatchEvent", "args": ["timerExpires"] } ] }
+        ]
     },
     "FINISHED": {
       "onEnter": [
-        {
-          "runAction": "calculateWinner"
-        }
+        { "runAction": "calculateWinner" }
       ]
     }
   },
   "events": {
     "submitAnswer": {
-      "permissions": [
-        "player"
-      ],
+      "permissions": [ "player" ],
       "effects": [
-        {
-          "runAction": "recordPlayerAnswer"
-        },
-        {
-          "function": "dispatchEvent",
-          "args": ["playerAnswered"]
-        }
+        { "runAction": "recordPlayerAnswer" },
+        { "function": "dispatchEvent", "args": ["playerAnswered"] }
       ]
     },
     "playerAnswered": {
-        "permissions": ["server"]
+        "permissions": ["server"],
+        "effects": [
+          {
+            "condition": "{{gameState.playersAnswered === players.length}}",
+            "function": "cancelTimer"
+          },
+          {
+            "condition": "{{gameState.playersAnswered === players.length}}",
+            "function": "dispatchEvent",
+            "args": ["allPlayersAnswered"]
+          }
+        ]
     },
-    "timerExpires": {
-      "permissions": [
-        "server"
-      ]
-    }
+    "allPlayersAnswered": { "permissions": ["server"] },
+    "timerExpires": { "permissions": [ "server" ] }
   },
   "transitions": [
-    {
-      "from": "STARTING",
-      "to": "ASKING_QUESTION",
-      "event": "timerExpires"
-    },
-    {
-      "from": "ASKING_QUESTION",
-      "to": "REVEAL_ANSWER",
-      "event": "timerExpires"
-    },
-    {
-        "from": "ASKING_QUESTION",
-        "to": "REVEAL_ANSWER",
-        "event": "playerAnswered",
-        "condition": "{{gameState.playersAnswered === players.length}}"
-    },
-    {
-      "from": "REVEAL_ANSWER",
-      "to": "ASKING_QUESTION",
-      "event": "timerExpires",
-      "condition": "{{gameState.currentQuestionIndex < gameState.totalRounds - 1}}"
-    },
-    {
-      "from": "REVEAL_ANSWER",
-      "to": "FINISHED",
-      "event": "timerExpires",
-      "condition": "{{gameState.currentQuestionIndex >= gameState.totalRounds - 1}}"
-    }
+    { "from": "STARTING", "to": "ASKING_QUESTION", "event": "timerExpires" },
+    { "from": "ASKING_QUESTION", "to": "REVEAL_ANSWER", "event": "timerExpires" },
+    { "from": "ASKING_QUESTION", "to": "REVEAL_ANSWER", "event": "allPlayersAnswered" },
+    { "from": "REVEAL_ANSWER", "to": "SHOW_STATS", "event": "timerExpires" },
+    { "from": "SHOW_STATS", "to": "LEADERBOARD", "event": "timerExpires" },
+    { "from": "LEADERBOARD", "to": "ASKING_QUESTION", "event": "timerExpires", "condition": "{{gameState.currentQuestionIndex < gameState.totalRounds - 1}}" },
+    { "from": "LEADERBOARD", "to": "FINISHED", "event": "timerExpires", "condition": "{{gameState.currentQuestionIndex >= gameState.totalRounds - 1}}" }
   ],
   "ui": {
     "STARTING": {
       "host": {
         "components": [
-          {
-            "component": "TextDisplay",
-            "props": {
-              "text": "Kahoot Clone!"
-            },
-            "layout": { "alignment": "TopCenter", "height": "hug", "offset": {"top": 50} }
-          },
-          {
-            "component": "TextDisplay",
-            "props": {
-              "text": "Getting ready to start..."
-            },
-            "layout": { "alignment": "Center", "height": "hug" }
-          },
-          {
-            "component": "Timer",
-            "props": {
-              "duration": 5,
-              "type": "countdown"
-            },
-            "layout": { "alignment": "BottomCenter", "height": "hug", "offset": {"bottom": 50} }
-          }
+          { "component": "TextDisplay", "props": { "text": "Kahoot Clone!", "fontSize": "3rem" }, "layout": { "alignment": "TopCenter", "height": "hug", "offset": {"top": 50} } },
+          { "component": "TextDisplay", "props": { "text": "Getting ready to start..." }, "layout": { "alignment": "Center", "height": "hug" } },
+          { "component": "Timer", "props": { "duration": 5, "type": "countdown" }, "layout": { "alignment": "BottomCenter", "height": "hug", "offset": {"bottom": 50} } }
         ]
       },
-      "player": {
-        "components": [
-          {
-            "component": "TextDisplay",
-            "props": {
-              "text": "The game is about to begin!"
-            },
-            "layout": { "alignment": "Center", "height": "hug" }
-          }
-        ]
-      }
+      "player": { "components": [ { "component": "TextDisplay", "props": { "text": "The game is about to begin!" }, "layout": { "alignment": "Center", "height": "hug" } } ] }
     },
     "ASKING_QUESTION": {
       "host": {
         "components": [
-           {
-            "component": "TextDisplay",
-            "props": {
-              "text": "Question {{gameState.currentQuestionIndex + 1}}"
-            },
-             "layout": { "alignment": "TopLeft", "height": "hug", "offset": {"top": 20, "left": 20} }
-          },
-          {
-            "component": "Timer",
-            "props": {
-                "duration": 10,
-                "type": "progress"
-            },
-            "layout": { "alignment": "TopCenter", "height": "hug", "width": "50%" }
-          },
-          {
-            "component": "TextDisplay",
-            "props": {
-              "text": "{{gameState.currentQuestion.questionText}}",
-              "fontSize": "2rem"
-            },
-            "layout": { "alignment": "Center", "height": "hug", "width": "80%"}
-          },
-          {
-            "component": "Grid",
-            "props": {
-                "columns": 2,
-                "children": "{{gameState.shuffledAnswers.map(answer => ({component: 'Button', props: { text: answer, disabled: true }}))}}"
-            },
-            "layout": { "alignment": "BottomCenter", "height": "hug", "width": "80%", "offset": {"bottom": 20}}
-          }
+           { "component": "TextDisplay", "props": { "text": "Question {{gameState.currentQuestionIndex + 1}}" }, "layout": { "alignment": "TopLeft", "height": "hug", "offset": {"top": 20, "left": 20} } },
+           { "component": "Timer", "props": { "duration": 10, "type": "progress" }, "layout": { "alignment": "TopCenter", "height": "hug", "width": "50%" } },
+           { "component": "TextDisplay", "props": { "text": "{{gameState.currentQuestion.questionText}}", "fontSize": "2.5rem" }, "layout": { "alignment": "Center", "height": "hug", "width": "80%"} },
+           { "component": "Grid", "props": { "columns": 2, "children": "{{gameState.shuffledAnswers.map(answer => ({component: 'Button', props: { text: answer, disabled: true }}))}}" }, "layout": { "alignment": "BottomCenter", "height": "hug", "width": "80%", "offset": {"bottom": 20}} },
+           { "component": "TextDisplay", "props": { "text": "{{gameState.playersAnswered}} / {{players.length}} Answered" }, "layout": { "alignment": "BottomRight", "height": "hug", "offset": {"bottom": 10, "right": 20} } }
         ]
       },
       "player": [
-        {
-          "condition": "{{player.currentAnswer !== null}}",
-          "components": [
-            {
-              "component": "TextDisplay",
-              "props": {
-                "text": "You have answered. Waiting for other players..."
-              },
-               "layout": { "alignment": "Center", "height": "hug" }
-            }
-          ]
-        },
-        {
-          "components": [
-             {
-              "component": "ChoiceSelector",
-              "props": {
-                "options": "{{gameState.shuffledAnswers.map(answer => ({text: answer}))}}",
-                "layout": "grid",
-                "onSelect": {
-                    "action": "submitAnswer"
-                }
-              },
-              "layout": { "alignment": "Center", "width": "100%", "height": "100%" }
-            }
-          ]
-        }
+        { "condition": "{{player.currentAnswer !== null}}", "components": [ { "component": "TextDisplay", "props": { "text": "You have answered. Waiting for other players..." }, "layout": { "alignment": "Center", "height": "hug" } } ] },
+        { "components": [ { "component": "ChoiceSelector", "props": { "options": "{{gameState.shuffledAnswers.map(answer => ({text: answer}))}}", "layout": "grid", "onSelect": { "action": "submitAnswer" } }, "layout": { "alignment": "Center", "width": "100%", "height": "100%" } } ] }
       ]
     },
     "REVEAL_ANSWER": {
       "host": {
         "components": [
+          { "component": "TextDisplay", "props": { "text": "The correct answer is...", "fontSize": "2.5rem" }, "layout": { "alignment": "Center" } }
+        ]
+      },
+      "player": {
+        "components": [
+           { "component": "Stack", "props": { "direction": "vertical", "spacing": 20, "alignItems": "center" }, "layout": { "alignment": "Center", "height": "hug", "width": "80%" },
+              "children": [
+                  { "component": "TextDisplay", "props": { "text": "{{player.lastScoreGained > 0 ? 'Correct!' : 'Incorrect!'}}", "fontSize": "3rem", "color": "{{player.lastScoreGained > 0 ? '#28a745' : '#dc3545'}}" } },
+                  { "component": "TextDisplay", "props": { "text": "+{{player.lastScoreGained}} points", "fontSize": "2rem" }, "layout": { "height": "hug" } }
+              ]
+           }
+        ]
+      }
+    },
+    "SHOW_STATS": {
+        "host": {
+            "components": [
+                { "component": "TextDisplay", "props": { "text": "{{gameState.currentQuestion.questionText}}", "fontSize": "1.5rem" }, "layout": { "alignment": "TopCenter", "height": "hug", "offset": { "top": 20 } } },
+                { "component": "TextDisplay", "props": { "text": "Correct Answer: {{gameState.currentQuestion.correctAnswer}}", "fontSize": "1.8rem", "fontWeight": "bold" }, "layout": { "alignment": "TopCenter", "height": "hug", "offset": { "top": 80 } } },
+                {
+                    "component": "ListDisplay",
+                    "props": {
+                        "items": "{{gameState.currentQuestion.options}}",
+                        "renderItem": {
+                            "component": "Stack", "props": { "direction": "vertical", "spacing": 5, "width": "100%" },
+                            "children": [
+                                { "component": "TextDisplay", "props": { "text": "{{item}} ({{gameState.answerStats[item] || 0}} votes)" } },
+                                {
+                                    "component": "Container", "props": { "backgroundColor": "#444", "borderRadius": "5px", "width": "100%", "height": "30px" },
+                                    "children": [{
+                                        "component": "Container",
+                                        "props": { "backgroundColor": "{{item === gameState.currentQuestion.correctAnswer ? '#28a745' : '#8A2BE2'}}", "height": "100%", "borderRadius": "5px", "width": "{{ ((gameState.answerStats[item] || 0) / players.length) * 100 }}%" }
+                                    }]
+                                }
+                            ]
+                        }
+                    },
+                    "layout": { "alignment": "Center", "width": "70%", "height": "hug" }
+                }
+            ]
+        },
+        "player": { "components": [ { "component": "TextDisplay", "props": { "text": "Let's see how everyone answered..." }, "layout": { "alignment": "Center" } } ] }
+    },
+    "LEADERBOARD": {
+      "host": {
+        "components": [
+          { "component": "TextDisplay", "props": { "text": "Leaderboard", "fontSize": "2.5rem" }, "layout": { "alignment": "TopCenter", "height": "hug", "offset": {"top": 50} } },
           {
-            "component": "TextDisplay",
+            "component": "ListDisplay",
             "props": {
-              "text": "{{gameState.currentQuestion.questionText}}",
-               "fontSize": "1.5rem"
+              "items": "{{gameState.leaderboard}}",
+              "renderItem": {
+                "component": "Container", "props": { "display": "flex", "alignItems": "center", "justifyContent": "space-between", "width": "100%", "padding": "10px", "backgroundColor": "#2a2a2e", "borderRadius": "8px", "marginBottom": "10px" },
+                "children": [
+                  { "component": "TextDisplay", "props": { "text": "#{{gameState.leaderboard.findIndex(p => p.id === item.id) + 1}} {{item.nickname}}", "fontSize": "1.5rem" } },
+                  { "component": "Stack", "props": { "direction": "horizontal", "spacing": 15, "alignItems": "center" }, "children": [
+                      { "component": "TextDisplay", "props": { "text": "{{item.streak > 1 ? '🔥' + item.streak : ''}}", "fontSize": "1.5rem" } },
+                      { "component": "TextDisplay", "props": { "text": "{{item.score}}", "fontSize": "1.5rem", "fontWeight": "bold" } }
+                  ]}
+                ]
+              }
             },
-             "layout": { "alignment": "TopCenter", "height": "hug", "offset": {"top": 20} }
-          },
-          {
-            "component": "TextDisplay",
-            "props": {
-                "text": "The correct answer was: {{gameState.currentQuestion.correctAnswer}}",
-                "fontSize": "2rem"
-            },
-            "layout": { "alignment": "TopCenter", "height": "hug", "offset": {"top": 100} }
-          },
-          {
-              "component": "ListDisplay",
-              "props": {
-                  "items": "{{players.sort((a,b) => b.score - a.score)}}",
-                  "renderItem": {
-                      "component": "TextDisplay",
-                      "props": {
-                          "text": "{{item.nickname}}: {{item.score}}"
-                      }
-                  }
-              },
-              "layout": { "alignment": "Center", "height": "hug", "width": "60%" }
+            "layout": { "alignment": "Center", "width": "70%", "height": "hug" }
           }
         ]
       },
       "player": {
         "components": [
-           {
-              "component": "Container",
-              "props": {},
-               "layout": { "alignment": "Center", "height": "hug", "width": "80%" },
-              "children": [
-                  {
-                      "component": "TextDisplay",
-                      "props": {
-                          "text": "{{player.currentAnswer === gameState.currentQuestion.correctAnswer ? 'Correct!' : 'Incorrect!'}}",
-                          "fontSize": "2rem"
-                      },
-                      "layout": { "alignment": "TopCenter", "height": "hug" }
-                  },
-                  {
-                       "component": "TextDisplay",
-                       "props": {
-                           "text": "Your score is now: {{player.score}}"
-                       },
-                       "layout": { "alignment": "BottomCenter", "height": "hug", "offset": {"top": 20} }
-                  }
-              ]
-           }
+          {
+            "component": "Stack", "props": { "direction": "vertical", "spacing": 10, "alignItems": "center" }, "layout": { "alignment": "Center", "height": "hug", "width": "80%" },
+            "children": [
+              { "component": "TextDisplay", "props": { "text": "You are rank", "fontSize": "1.5rem" } },
+              { "component": "TextDisplay", "props": { "text": "{{player.rank}} / {{players.length}}", "fontSize": "4rem", "fontWeight": "bold" } },
+              { "component": "Stack", "props": { "direction": "horizontal", "spacing": 10 }, "children": [
+                  { "component": "TextDisplay", "props": { "text": "Score: {{player.score}}" } },
+                  { "component": "TextDisplay", "props": { "text": "{{player.streak > 1 ? '🔥' + player.streak : ''}}" } }
+              ]}
+            ]
+          }
         ]
       }
     },
     "FINISHED": {
       "host": {
         "components": [
-          {
-            "component": "TextDisplay",
-            "props": {
-              "text": "Winner: {{gameState.winner.nickname}}",
-              "fontSize": "2.5rem"
-            },
-             "layout": { "alignment": "TopCenter", "height": "hug", "offset": {"top": 50} }
-          },
-          {
-            "component": "ListDisplay",
-            "props": {
-                "items": "{{gameState.topThreePlayers}}",
-                 "renderItem": {
-                      "component": "TextDisplay",
-                      "props": {
-                          "text": "{{item.nickname}}: {{item.score}}"
-                      }
-                  }
-            },
-            "layout": { "alignment": "Center" }
-          }
+          { "component": "TextDisplay", "props": { "text": "Winner: {{gameState.winner.nickname}}", "fontSize": "2.5rem" }, "layout": { "alignment": "TopCenter", "height": "hug", "offset": {"top": 50} } },
+          { "component": "ListDisplay", "props": { "items": "{{gameState.topThreePlayers}}", "renderItem": { "component": "TextDisplay", "props": { "text": "{{item.nickname}}: {{item.score}}" } } }, "layout": { "alignment": "Center" } }
         ]
       },
       "player": {
         "components": [
-          {
-            "component": "TextDisplay",
-            "props": {
-              "text": "Game Over! Your final rank is {{player.rank}}"
-            },
-            "layout": { "alignment": "Center" }
-          }
+          { "component": "TextDisplay", "props": { "text": "Game Over! Your final rank is {{player.rank}}" }, "layout": { "alignment": "Center" } }
         ]
       }
     }
