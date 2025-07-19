@@ -10,7 +10,7 @@ interface ChoiceOption {
 }
 
 interface ChoiceSelectorProps {
-  options: ChoiceOption[];
+  options: ChoiceOption[] | string[];
   onSelect: (selectedIds: string[]) => void;
   selectionMode?: 'single' | 'multiple';
   layout?: 'grid' | 'list' | 'carousel';
@@ -25,6 +25,10 @@ export const ChoiceSelector: React.FC<ChoiceSelectorProps> = ({
   disabled = false,
 }) => {
   const [selected, setSelected] = useState<string[]>([]);
+
+  const normalizedOptions: ChoiceOption[] = options.map(opt => 
+    typeof opt === 'string' ? { id: opt, label: opt } : opt
+  );
 
   const handleSelect = (id: string) => {
     if (disabled) return;
@@ -72,12 +76,12 @@ export const ChoiceSelector: React.FC<ChoiceSelectorProps> = ({
   }
 
   const LayoutComponent = layout === 'grid' ? Grid : Stack;
-  const layoutProps = layout === 'grid' ? { columns: Math.ceil(Math.sqrt(options.length)) } : { direction: 'vertical' as const };
+  const layoutProps = layout === 'grid' ? { columns: Math.ceil(Math.sqrt(normalizedOptions.length)) } : { direction: 'vertical' as const };
 
   return (
     <div>
         <LayoutComponent {...layoutProps} spacing={16}>
-            {options.map(renderOption)}
+            {normalizedOptions.map(renderOption)}
         </LayoutComponent>
         {selectionMode === 'multiple' && (
             <Button onClick={handleSubmit} disabled={disabled || selected.length === 0} style={{marginTop: '16px'}}>
