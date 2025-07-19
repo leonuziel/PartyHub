@@ -1,3 +1,6 @@
+
+## Update: all components have been implemented.
+
 # Generic UI Component Architecture Plan for PartyHub
 
 This document outlines a plan for a generic and reusable UI component library for PartyHub. The goal is to maximize flexibility for game creation by providing a set of powerful, generic building blocks rather than game-specific components.

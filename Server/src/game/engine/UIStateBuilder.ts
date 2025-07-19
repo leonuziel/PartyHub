@@ -19,10 +19,14 @@ export class UIStateBuilder {
     };
     console.log(`[UIBuilder] Resolving UI for player: ${player.nickname} (${player.id}) with context:`, playerAttributes);
 
-    // Handle new conditional UI structure
-    if (Array.isArray(playerUIConfig)) {
-      console.log(`[UIBuilder] -> Found conditional UI config. Evaluating conditions...`);
-      for (const view of playerUIConfig) {
+    // Normalize the UI config to an array of views to handle both simple and conditional structures with one logic path.
+    const views: ConditionalUIView[] = Array.isArray(playerUIConfig) 
+      ? playerUIConfig 
+      : playerUIConfig ? [playerUIConfig] : [];
+
+    if (views.length > 0) {
+      console.log(`[UIBuilder] -> Processing ${views.length} UI view(s). Evaluating conditions...`);
+      for (const view of views) {
         // A view with no condition is a default/fallback view.
         if (!view.condition) {
           console.log(`[UIBuilder] --> Matched default view (no condition).`);
@@ -37,14 +41,7 @@ export class UIStateBuilder {
           return this.valueResolver.interpolate({ components: view.components }, playerContext);
         }
       }
-      console.log(`[UIBuilder] -> No condition matched for player ${player.nickname}. Returning empty UI.`);
-      return { components: [] }; 
-    }
-    
-    // Handle original, non-conditional UI structure
-    if (playerUIConfig) {
-      console.log(`[UIBuilder] -> Found non-conditional UI config for player ${player.nickname}. Interpolating directly.`);
-      return this.valueResolver.interpolate(playerUIConfig, playerContext);
+       console.log(`[UIBuilder] -> No condition matched for player ${player.nickname}. Returning empty UI.`);
     }
 
     console.log(`[UIBuilder] -> No UI config found for player ${player.nickname}. Returning empty UI.`);

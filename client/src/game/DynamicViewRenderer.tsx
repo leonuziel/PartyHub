@@ -79,21 +79,10 @@ export const DynamicViewRenderer: React.FC = () => {
     if (isHost) {
         viewConfig = gameState.ui?.host;
     } else {
-        // Check for a specific UI configuration for the current player
-        const playerSpecificUI = Array.isArray(gameState.ui?.player) 
-            ? gameState.ui.player.find((view: ConditionalUIViewConfig) => {
-                // This is a simplified placeholder for condition evaluation.
-                // A real implementation would need a robust way to evaluate these server-side conditions.
-                // For now, we'll assume the first view without a condition is the one to use.
-                return !view.condition;
-            })
-            : gameState.ui?.player;
-
-        if (playerSpecificUI) {
-            viewConfig = playerSpecificUI;
-        } else {
-            // Fallback to the first conditional view if no specific logic matches.
-            viewConfig = Array.isArray(gameState.ui?.player) ? gameState.ui.player[0] : undefined;
+        // The server resolves the UI for each player and sends it in the `players` map.
+        // We just need to look up the correct UI for our player's ID.
+        if (playerId && gameState.ui?.players) {
+            viewConfig = gameState.ui.players[playerId];
         }
     }
     
