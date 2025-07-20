@@ -167,7 +167,6 @@ const ContainerProps = z.object({
 }).passthrough();
 
 const GridProps = z.object({
-  children: z.any(),
   columns: z.number().optional(),
   rows: z.number().optional(),
   spacing: z.number().optional(),
@@ -320,10 +319,10 @@ const layoutSchema = z.object({
 }).passthrough();
 
 // Discriminated union to validate props based on the component name
-const componentSchema = z.lazy(() => z.discriminatedUnion('component', [
+const componentSchema: z.ZodType<any> = z.lazy(() => z.discriminatedUnion('component', [
   // New Generic Components
   z.object({ component: z.literal('Container'), props: ContainerProps, layout: layoutSchema.optional() }),
-  z.object({ component: z.literal('Grid'), props: GridProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('Grid'), props: GridProps, layout: layoutSchema.optional(), children: z.array(componentSchema).optional()}),
   z.object({ component: z.literal('Spacer'), props: SpacerProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('Stack'), props: StackProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('TextDisplay'), props: TextDisplayProps, layout: layoutSchema.optional() }),

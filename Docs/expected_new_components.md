@@ -77,8 +77,8 @@ These components form the skeleton of the UI.
     *   **Notes**: Simplifies common layout patterns. Existing `HStack` and `VStack` can be merged into this.
 
 *   **`Grid`**
-    *   **Description**: A component for arranging items in a grid.
-    *   **Key Props**: `columns` (number), `rows` (number), `spacing` (number), `children`.
+    *   **Description**: A component for arranging items in a grid. Its `children` property should be an array of component configurations.
+    *   **Key Props**: `columns` (number), `rows` (number), `spacing` (number).
     *   **Notes**: Useful for leaderboards, answer grids, game boards, etc.
 
 *   **`Spacer`**

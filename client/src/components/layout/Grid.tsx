@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface GridProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   columns?: number;
   rows?: number;
   spacing?: number;
@@ -17,9 +17,9 @@ export const Grid: React.FC<GridProps> = ({
 }) => {
   const style: React.CSSProperties = {
     display: 'grid',
-    gridTemplateColumns: columns ? `repeat(${columns}, 1fr)` : undefined,
-    gridTemplateRows: rows ? `repeat(${rows}, 1fr)` : undefined,
-    gap: `${spacing}px`,
+    gridTemplateColumns: columns ? `repeat(${columns}, 1fr)` : 'none',
+    gridTemplateRows: rows ? `repeat(${rows}, 1fr)` : 'none',
+    gap: spacing ? `${spacing}px` : undefined,
   };
 
   return (

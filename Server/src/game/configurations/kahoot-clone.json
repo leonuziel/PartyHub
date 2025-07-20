@@ -216,7 +216,43 @@
            { "component": "TextDisplay", "props": { "text": "Question {{gameState.currentQuestionIndex + 1}}" }, "layout": { "alignment": "TopLeft", "height": "hug", "offset": {"top": 20, "left": 20} } },
            { "component": "Timer", "props": { "duration": 10, "type": "progress" }, "layout": { "alignment": "TopCenter", "height": "hug", "width": "50%" } },
            { "component": "TextDisplay", "props": { "text": "{{gameState.currentQuestion.questionText}}", "fontSize": "2.5rem" }, "layout": { "alignment": "Center", "height": "hug", "width": "80%"} },
-           { "component": "Grid", "props": { "columns": 2, "children": "{{gameState.shuffledAnswers.map(answer => ({component: 'Button', props: { text: answer, disabled: true }}))}}" }, "layout": { "alignment": "BottomCenter", "height": "hug", "width": "80%", "offset": {"bottom": 20}} },
+           {
+             "component": "Grid",
+             "props": { 
+                "columns": 2,
+                    "children": [
+                        {
+                            "component": "Button",
+                            "props": {
+                                "text": "{{gameState.shuffledAnswers[0]}}",
+                                "disabled": true
+                            }
+                        },
+                        {
+                            "component": "Button",
+                            "props": {
+                                "text": "{{gameState.shuffledAnswers[1]}}",
+                                "disabled": true
+                            }
+                        },
+                        {
+                            "component": "Button",
+                            "props": {
+                                "text": "{{gameState.shuffledAnswers[2]}}",
+                                "disabled": true
+                            }
+                        },
+                        {
+                            "component": "Button",
+                            "props": {
+                                "text": "{{gameState.shuffledAnswers[3]}}",
+                                "disabled": true
+                            }
+                        }
+                    ]
+            },
+             "layout": { "alignment": "BottomCenter", "height": "hug", "width": "80%", "offset": {"bottom": 20}}
+           },
            { "component": "TextDisplay", "props": { "text": "{{gameState.playersAnswered}} / {{players.length}} Answered" }, "layout": { "alignment": "BottomRight", "height": "hug", "offset": {"bottom": 10, "right": 20} } }
         ]
       },

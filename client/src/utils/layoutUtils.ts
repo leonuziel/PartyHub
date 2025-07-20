@@ -25,6 +25,7 @@ export interface ComponentConfig {
     component: string;
     props: Record<string, any>;
     layout?: LayoutConfig;
+    children?:any;
 }
 
 // --- Style Calculation Logic ---

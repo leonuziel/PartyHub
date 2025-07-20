@@ -37,30 +37,35 @@ export const DynamicViewRenderer: React.FC = () => {
     const playerId = usePlayerStore((state) => state.socketId);
 
     // Recursive rendering function defined inside the main component
-    const renderComponent = (config: ComponentConfig, index: number): React.ReactNode => {
+    const renderComponent = (config: ComponentConfig, index: number, isGridChild = false): React.ReactNode => {
         const Component = ComponentRegistry[config.component];
         if (!Component) {
             return <div key={index}>Error: Component '{config.component}' not found in registry.</div>;
         }
-
+    
         const transformedProps = transformProps(config.props);
-        // Base wrapper style for grid placement
-        const wrapperStyle: CSSProperties = { gridArea: 'main-area' };
-        // Merge with layout styles
-        Object.assign(wrapperStyle, config.layout ? getStyleFromLayout(config.layout) : {});
-
-        // If the component has children, recursively render them
-        if (Array.isArray(transformedProps.children)) {
-            const childComponents = transformedProps.children.map((childConfig, childIndex) =>
-                renderComponent(childConfig, childIndex)
-            );
-            return (
-                <div key={index} style={wrapperStyle}>
-                    <Component {...transformedProps}>{childComponents}</Component>
-                </div>
+    
+        // Children can be a top-level property or inside props. This checks both.
+        const childrenSource = config.children || (config.props ? config.props.children : undefined);
+        const isParentGrid = config.component === 'Grid';
+    
+        if (Array.isArray(childrenSource)) {
+            // Recursively render children, passing the isGridChild flag if the parent is a Grid.
+            transformedProps.children = childrenSource.map((childConfig, childIndex) =>
+                renderComponent(childConfig, childIndex, isParentGrid)
             );
         }
-
+    
+        // If this component is a child of a Grid, it should not be wrapped in a layout div.
+        // The parent Grid component is responsible for its layout.
+        if (isGridChild) {
+            return <Component key={index} {...transformedProps} />;
+        }
+    
+        // This is a top-level component. Wrap it in a div to apply layout styles.
+        const wrapperStyle: CSSProperties = { gridArea: 'main-area' };
+        Object.assign(wrapperStyle, config.layout ? getStyleFromLayout(config.layout) : {});
+    
         return (
             <div key={index} style={wrapperStyle}>
                 <Component {...transformedProps} />
