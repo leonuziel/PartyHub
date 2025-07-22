@@ -168,7 +168,7 @@ const ContainerProps = z.object({
 
 const GridProps = z.object({
   columns: z.number().optional(),
-  rows: z.number().optional(),
+  rows: z.number(),
   spacing: z.number().optional(),
 }).passthrough();
 

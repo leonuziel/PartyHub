@@ -365,7 +365,7 @@ export const ScreensStage = ({ config, setConfig }: any) => {
                     defaultProps = { direction: 'vertical', spacing: 8, children: [] };
                     break;
                 case 'Grid':
-                    defaultProps = { columns: 2, spacing: 8, children: [] };
+                    defaultProps = { columns: 2, rows: 2, spacing: 8, children: [] };
                     break;
                 case 'Spacer':
                     defaultProps = {};
