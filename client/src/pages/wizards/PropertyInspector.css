@@ -37,7 +37,8 @@
     flex-grow: 1;
 }
 
-.inspector-body h4, .inspector-body h5 {
+.inspector-body h4,
+.inspector-body h5 {
     color: #8a2be2;
     margin-top: 1.5rem;
     margin-bottom: 0.5rem;
@@ -52,7 +53,10 @@
     color: #b0b0d0;
 }
 
-.inspector-body textarea, .inspector-body input[type="text"], .inspector-body input[type="number"], .inspector-body select {
+.inspector-body textarea,
+.inspector-body input[type="text"],
+.inspector-body input[type="number"],
+.inspector-body select {
     width: 100%;
     background-color: #1e1e2f;
     border: 1px solid #4a4a6a;
@@ -71,6 +75,10 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 5px;
     margin-bottom: 1rem;
+    width: 50%;
+    height: 50%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .alignment-grid button {
@@ -102,7 +110,8 @@
 }
 
 .spacing-inputs input {
-    margin-bottom: 0; /* Override default margin for compact layout */
+    margin-bottom: 0;
+    /* Override default margin for compact layout */
 }
 
 .inspector-footer {
