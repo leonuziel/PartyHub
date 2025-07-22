@@ -12,24 +12,29 @@ interface TextDisplayProps {
 
 export const TextDisplay: React.FC<TextDisplayProps> = ({
   text,
-  fontSize = '1rem',
-  fontWeight = 'normal',
-  fontFamily = 'Inter, sans-serif',
-  color = 'white',
-  textAlign = 'left',
+  fontSize,
+  fontWeight,
+  fontFamily,
+  color,
+  textAlign,
   className,
 }) => {
   const style: React.CSSProperties = {
+    width: '100%',
+    height: '100%',
     fontSize,
     fontWeight,
     fontFamily,
     color,
     textAlign,
+    margin: 0, // Remove default margin from <p>
+    padding: 0,
+    overflowWrap: 'break-word', // Ensure long text wraps
   };
 
   return (
-    <p style={style} className={className}>
+    <div style={style} className={className}>
       {text}
-    </p>
+    </div>
   );
 };

@@ -22,8 +22,9 @@ export const Card: React.FC<CardProps> = ({
   style,
 }) => {
   const baseStyle: React.CSSProperties = {
-    width: '100px',
-    height: '140px',
+    width: '100%',
+    height: '100%',
+    aspectRatio: '2.5 / 3.5', // Standard poker card aspect ratio
     border: '1px solid #ccc',
     borderRadius: '10px',
     display: 'flex',

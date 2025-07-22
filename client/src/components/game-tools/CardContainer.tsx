@@ -21,64 +21,74 @@ export const CardContainer: React.FC<CardContainerProps> = ({
   selectedCardIds = [],
 }) => {
   const containerStyle: React.CSSProperties = {
-    position: 'relative',
-    minHeight: '160px', // Base height for a card
+    display: 'flex', // Use flexbox for basic alignment
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%',
+    position: 'relative', // Needed for absolute positioning of fan/pile
   };
-  
-  const renderCards = () => {
-    return cards.map((card, index) => {
-      let style: React.CSSProperties = { position: 'absolute' };
-      
-      switch (layout) {
-        case 'grid':
-          style = {
-            ...style,
-            // Naive grid layout, a real one would be more robust
-            left: `${(index % 5) * 110}px`,
-            top: `${Math.floor(index / 5) * 150}px`,
-          };
-          break;
-        case 'fan':
-          style = {
-            ...style,
-            transform: `rotate(${(index - (cards.length - 1) / 2) * 10}deg)`,
-            transformOrigin: 'bottom center',
-            bottom: 0,
-            left: '50%',
-            marginLeft: '-50px' // Half card width
-          };
-          break;
-        case 'pile':
-           style = {
-            ...style,
-            left: `${index * 2}px`, // Slight offset to show stack depth
-            top: `${index * 1}px`,
-          };
-          break;
-        case 'stack':
-        default:
-          // All cards in the same spot
-          style = { ...style };
-          break;
-      }
 
-      return (
-        <div key={card.id} style={style}>
-            <Card
-                content={card.content}
-                faceUp={card.faceUp}
-                onClick={() => onCardClick && onCardClick(card.id)}
-                isSelected={selectedCardIds.includes(card.id)}
-                isSelectable={!!onCardClick}
-            />
-        </div>
-      );
-    });
+  const renderCard = (card: CardData, index: number, style: React.CSSProperties = {}) => (
+    <div key={card.id} style={{ ...style, width: '15%', minWidth: '80px', maxWidth: '120px' }}>
+      <Card
+        content={card.content}
+        faceUp={card.faceUp}
+        onClick={() => onCardClick(card.id)}
+        isSelected={selectedCardIds.includes(card.id)}
+        isSelectable={!!onCardClick}
+      />
+    </div>
+  );
+
+  const renderLayout = () => {
+    switch (layout) {
+      case 'grid':
+        return (
+            <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))',
+                gap: '16px',
+                width: '100%',
+                height: '100%',
+                padding: '16px'
+            }}>
+                {cards.map((card, index) => renderCard(card, index))}
+            </div>
+        );
+      case 'fan':
+        return cards.map((card, index) => {
+            const rotation = (index - (cards.length - 1) / 2) * 15;
+            const style: React.CSSProperties = {
+                position: 'absolute',
+                transform: `rotate(${rotation}deg) translateY(${Math.abs(rotation) * 1.5}px)`,
+                transformOrigin: 'bottom center',
+                transition: 'transform 0.3s ease',
+            };
+            return renderCard(card, index, style);
+        });
+      case 'pile':
+        return cards.map((card, index) => {
+            const style: React.CSSProperties = {
+                position: 'absolute',
+                transform: `translate(${index * 2}px, ${index * 2}px)`,
+            };
+            return renderCard(card, index, style);
+        });
+      case 'stack':
+      default:
+        return cards.map((card, index) => {
+            const style: React.CSSProperties = {
+                position: 'absolute',
+            };
+            return renderCard(card, index, style);
+        });
+    }
   };
 
   return (
     <div style={containerStyle}>
-      {renderCards()}
+      {renderLayout()}
     </div>
   );
 };

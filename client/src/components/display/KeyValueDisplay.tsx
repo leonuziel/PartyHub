@@ -13,13 +13,15 @@ export const KeyValueDisplay: React.FC<KeyValueDisplayProps> = ({
   className,
 }) => {
   return (
-    <Stack direction={layout === 'vertical' ? 'vertical' : 'horizontal'} spacing={8} className={className}>
-      {Object.entries(data).map(([key, value]) => (
-        <div key={key} style={{ display: 'flex', gap: '8px' }}>
-          <span style={{ fontWeight: 'bold' }}>{key}:</span>
-          <span>{value}</span>
-        </div>
-      ))}
-    </Stack>
+    <div style={{ width: '100%', height: '100%' }} className={className}>
+      <Stack direction={layout === 'vertical' ? 'vertical' : 'horizontal'} spacing={8}>
+        {Object.entries(data).map(([key, value]) => (
+          <div key={key} style={{ display: 'flex', gap: '8px' }}>
+            <span style={{ fontWeight: 'bold' }}>{key}:</span>
+            <span>{value}</span>
+          </div>
+        ))}
+      </Stack>
+    </div>
   );
 };

@@ -26,7 +26,7 @@ export const Slider: React.FC<SliderProps> = ({
   };
 
   return (
-    <div className={className} style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+    <div className={className} style={{ display: 'flex', alignItems: 'center', gap: '16px', width: '100%' }}>
       <input
         type="range"
         min={min}

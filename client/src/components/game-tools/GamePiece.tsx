@@ -16,17 +16,21 @@ export const GamePiece: React.FC<GamePieceProps> = ({
   style: propStyle,
 }) => {
   const style: React.CSSProperties = {
-    width: '80%',
-    height: '80%',
+    width: '80%', // Takes up 80% of the grid cell's width
+    height: '80%', // Takes up 80% of the grid cell's height
+    justifySelf: 'center', // Center horizontally in the grid cell
+    alignSelf: 'center', // Center vertically in the grid cell
     borderRadius: shape === 'circle' ? '50%' : '0',
     backgroundColor: image ? 'transparent' : color,
     backgroundImage: image ? `url(${image})` : 'none',
-    backgroundSize: 'cover',
-    position: 'absolute',
-    // This positioning logic assumes the parent GameBoard grid cells are the reference
-    top: position ? `${(position.row / 1) * 100}%` : '10%', // Simplified, would need board context
-    left: position ? `${(position.col / 1) * 100}%` : '10%', // Simplified, would need board context
-    transform: 'translate(10%, 10%)', // Center the piece roughly
+    backgroundSize: 'contain',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+    
+    // CSS Grid positioning
+    gridColumn: position ? `${position.col}` : undefined,
+    gridRow: position ? `${position.row}` : undefined,
+
     ...propStyle,
   };
 

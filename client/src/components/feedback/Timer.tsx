@@ -33,10 +33,31 @@ export const Timer: React.FC<TimerProps> = ({
   }, [timeLeft, onComplete]);
 
   const renderCountdown = () => {
+    const containerStyle: React.CSSProperties = {
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+    }
+
+    const numberStyle: React.CSSProperties = {
+        // Use viewport width unit for scalability. 10vw could be a good starting point.
+        // The actual value might need adjustment based on desired look.
+        fontSize: 'clamp(1rem, 10vw, 8rem)', // Min, preferred, max
+        lineHeight: 1,
+        fontWeight: 'bold',
+    }
+
+    const labelStyle: React.CSSProperties = {
+        fontSize: 'clamp(0.75rem, 3vw, 2rem)',
+    }
+
     return (
-      <div className={className}>
-        {label && <span>{label}: </span>}
-        <span>{timeLeft}</span>
+      <div className={className} style={containerStyle}>
+        {label && <span style={labelStyle}>{label}</span>}
+        <span style={numberStyle}>{timeLeft}</span>
       </div>
     );
   };

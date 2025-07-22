@@ -7,30 +7,26 @@ interface GameBoardProps {
   children?: React.ReactNode; // For placing GamePieces
 }
 
-export const GameBoard: React.FC<GameBoardProps> = ({ size, onCellClick = () => {}, children }) => {
-  const cells = [];
-  for (let r = 0; r < size.rows; r++) {
-    for (let c = 0; c < size.cols; c++) {
-      cells.push(
-        <div 
-          key={`${r}-${c}`} 
-          style={{ border: '1px solid #555', minHeight: '50px', position: 'relative' }} 
-          onClick={() => onCellClick && onCellClick(r, c)}
-        >
-          {/* A cell can contain other elements */}
-        </div>
-      );
-    }
-  }
+export const GameBoard: React.FC<GameBoardProps> = ({ size, children }) => {
+  const boardStyle: React.CSSProperties = {
+    display: 'grid',
+    gridTemplateColumns: `repeat(${size.cols}, 1fr)`,
+    gridTemplateRows: `repeat(${size.rows}, 1fr)`,
+    width: '100%',
+    height: '100%',
+    border: '1px solid #555',
+    backgroundColor: '#333',
+    // Add background pattern for cells
+    backgroundImage: `
+      linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)
+    `,
+    backgroundSize: `${100 / size.cols}% ${100 / size.rows}%`,
+  };
 
   return (
-    <div style={{ position: 'relative' }}>
-      <Grid columns={size.cols} rows={size.rows} spacing={0}>
-        {cells}
-      </Grid>
-      <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
-        {children}
-      </div>
+    <div style={boardStyle}>
+      {children}
     </div>
   );
 };

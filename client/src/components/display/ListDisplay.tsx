@@ -17,8 +17,18 @@ export function ListDisplay<T>({
   // Ensure items is an array before mapping
   const a_items = Array.isArray(items) ? items : [];
 
+  const containerStyle: React.CSSProperties = {
+    ...style,
+    width: '100%',
+    height: '100%',
+    overflowY: 'auto', // Make it scrollable if content overflows
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8px', // Add some space between list items
+  };
+
   return (
-    <div style={style} className={className}>
+    <div style={containerStyle} className={className}>
       {a_items.map((item, index) => (
         // Use the ComponentRenderer to render the template for each item
         <ComponentRenderer

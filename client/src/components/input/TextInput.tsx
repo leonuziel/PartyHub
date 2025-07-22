@@ -49,9 +49,9 @@ export const TextInput: React.FC<TextInputProps> = ({
   const InputComponent = multiline ? 'textarea' : 'input';
 
   return (
-    <div className={className}>
+    <div className={className} style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
       <InputComponent
-        style={inputStyle}
+        style={{ ...inputStyle, flexGrow: 1, resize: multiline ? 'none' : undefined }}
         placeholder={placeholder}
         value={value}
         onChange={handleChange}

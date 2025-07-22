@@ -9,8 +9,9 @@ interface DiceProps {
 
 const Die: React.FC<{ value: number }> = ({ value }) => {
   const dieStyle: React.CSSProperties = {
-    width: '50px',
-    height: '50px',
+    width: '100%',
+    height: '100%',
+    aspectRatio: '1 / 1',
     backgroundColor: 'white',
     color: 'black',
     border: '1px solid black',

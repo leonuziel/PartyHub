@@ -17,6 +17,8 @@ export const Button: React.FC<ButtonProps> = ({
 }) => {
   // Basic styling - can be replaced with CSS modules or a styling library
   const baseStyle: React.CSSProperties = {
+    width: '100%',
+    height: '100%',
     padding: '10px 20px',
     border: 'none',
     borderRadius: '8px',
