@@ -110,8 +110,8 @@ Player: Shows "You're in!" and a list of other players. Displays the chosen nick
 
 GameView.tsx: This is the main, dynamic view.
 It acts as a container that listens to game:state_update events from the backend.
-Based on the game type and game state received, it dynamically renders the appropriate game component (e.g., <QuizClashView>, <DoodleDorksView>).
-Each of these specific game views will contain separate rendering logic for the host and player roles.
+For legacy games, it renders a specific game component (e.g., `<QuizClashView>`).
+For games using the configurable engine, it uses a `DynamicViewRenderer` that interprets a UI schema sent from the server. This schema defines which components to render, their props, and their layout (sizing, alignment, spacing), allowing for UIs to be defined entirely in JSON. For more details on the layout system, see `Docs/layout_capabilities.md`.
 
 
 Generated typescript
