@@ -20,10 +20,22 @@ PartyHub is a real-time, interactive social gaming platform. The architecture is
 │   │   └── SocketManager.ts
 │   ├── game/
 │   │   ├── BaseGame.ts
+│   │   ├── configurations/
+│   │   │   ├── fakenews.json
+│   │   │   ├── kahoot-clone.json
+│   │   │   ├── new-component-test.json
+│   │   │   ├── quizclash.json
+│   │   │   ├── test-game.json
+│   │   │   └── ui-layout-test.json
+│   │   ├── engine/
+│   │   │   ├── EffectExecutor.ts
+│   │   │   ├── GameEventHandler.ts
+│   │   │   ├── GameStateInitializer.ts
+│   │   │   ├── StateTimer.ts
+│   │   │   ├── UIStateBuilder.ts
+│   │   │   └── ValueResolver.ts
 │   │   ├── GameFactory.ts
 │   │   ├── GameManager.ts
-│   │   ├── configurations/
-│   │   │   └── quizclash.json
 │   │   └── games/
 │   │       ├── cardGames/
 │   │       │   ├── cards.ts
@@ -59,25 +71,195 @@ PartyHub is a real-time, interactive social gaming platform. The architecture is
 │   ├── App.test.tsx
 │   ├── App.tsx
 │   ├── components/
-│   │   ├── cards/
 │   │   ├── card_game_components.txt
-│   │   ├── common/
 │   │   ├── ComponentRegistry.ts
-│   │   ├── controls/
 │   │   ├── display/
-│   │   ├── gameplay/
+│   │   │   ├── ImageDisplay.tsx
+│   │   │   ├── KeyValueDisplay.tsx
+│   │   │   ├── ListDisplay.tsx
+│   │   │   └── TextDisplay.tsx
+│   │   ├── feedback/
+│   │   │   ├── StateIndicator.tsx
+│   │   │   └── Timer.tsx
+│   │   ├── game-tools/
+│   │   │   ├── Card.tsx
+│   │   │   ├── CardContainer.tsx
+│   │   │   ├── Dice.tsx
+│   │   │   ├── GameBoard.tsx
+│   │   │   └── GamePiece.tsx
+│   │   ├── input/
+│   │   │   ├── Button.tsx
+│   │   │   ├── ChoiceSelector.tsx
+│   │   │   ├── Slider.tsx
+│   │   │   └── TextInput.tsx
 │   │   ├── layout/
+│   │   │   ├── Container.tsx
+│   │   │   ├── Grid.tsx
+│   │   │   ├── Spacer.tsx
+│   │   │   └── Stack.tsx
 │   │   ├── missing_components.txt
-│   │   ├── player/
-│   │   └── reusable_components.txt
+│   │   ├── old/
+│   │   │   ├── cards/
+│   │   │   │   ├── BiddingPopup.tsx
+│   │   │   │   ├── Card.css
+│   │   │   │   ├── Card.tsx
+│   │   │   │   ├── CardFan.tsx
+│   │   │   │   ├── CardSlot.css
+│   │   │   │   ├── CardSlot.tsx
+│   │   │   │   ├── Deck.css
+│   │   │   │   ├── Deck.tsx
+│   │   │   │   ├── DiscardPile.css
+│   │   │   │   ├── DiscardPile.tsx
+│   │   │   │   ├── Hand.css
+│   │   │   │   ├── Hand.tsx
+│   │   │   │   ├── LastPlayedCard.tsx
+│   │   │   │   ├── Meld.css
+│   │   │   │   ├── Meld.tsx
+│   │   │   │   ├── PlayerHandDisplay.css
+│   │   │   │   ├── PlayerHandDisplay.tsx
+│   │   │   │   ├── Scoreboard.css
+│   │   │   │   ├── Scoreboard.tsx
+│   │   │   │   ├── Trick.css
+│   │   │   │   ├── Trick.tsx
+│   │   │   │   └── TrumpIndicator.tsx
+│   │   │   ├── common/
+│   │   │   │   ├── DebugPanel.tsx
+│   │   │   │   ├── Modal.css
+│   │   │   │   ├── Modal.tsx
+│   │   │   │   ├── Spinner.css
+│   │   │   │   └── Spinner.tsx
+│   │   │   ├── controls/
+│   │   │   │   ├── ActionButton.tsx
+│   │   │   │   ├── AnswerGrid.css
+│   │   │   │   ├── AnswerGrid.tsx
+│   │   │   │   ├── Button.css
+│   │   │   │   ├── Button.tsx
+│   │   │   │   ├── GameCard.css
+│   │   │   │   ├── GameCard.tsx
+│   │   │   │   ├── TextAreaWithCounter.css
+│   │   │   │   ├── TextAreaWithCounter.tsx
+│   │   │   │   ├── VotingOptions.css
+│   │   │   │   └── VotingOptions.tsx
+│   │   │   ├── display/
+���   │   │   │   └── AnswerResult.css
+│   │   │   │   ├── AnswerResult.tsx
+│   │   │   │   ├── AwardDisplay.css
+│   │   │   │   ├── AwardDisplay.tsx
+│   │   │   │   ├── GameBranding.css
+│   │   │   │   ├── GameBranding.tsx
+│   │   │   │   ├── GameTitle.css
+│   │   │   │   ├── GameTitle.tsx
+│   │   │   │   ├── Leaderboard.css
+│   │   │   │   ├── Leaderboard.tsx
+│   │   │   │   ├── PlayerAvatar.css
+│   │   │   │   ├── PlayerAvatar.tsx
+│   │   │   │   ├── PlayerCard.css
+│   │   │   │   ├── PlayerCard.tsx
+│   │   │   │   ├── PlayerInfo.css
+│   │   │   │   ├── PlayerInfo.tsx
+│   │   │   │   ├── PlayerStatusContainer.css
+│   │   │   │   ├── PlayerStatusContainer.tsx
+│   │   │   │   ├── PlayerStatusGrid.css
+│   │   │   │   ├── PlayerStatusGrid.tsx
+│   │   │   │   ├── Podium.css
+│   │   │   │   ├── Podium.tsx
+│   │   │   │   ├── PodiumList.css
+│   │   │   │   ├── PodiumList.tsx
+│   │   │   │   ├── QuestionDisplay.css
+│   │   │   │   ├── QuestionDisplay.tsx
+│   │   │   │   ├── QuestionHeader.css
+│   │   │   │   ├── QuestionHeader.tsx
+│   │   │   │   ├── RankDisplay.css
+│   │   │   │   ├── RankDisplay.tsx
+│   │   │   │   ├── RankUpdate.css
+│   │   │   │   ├── RankUpdate.tsx
+│   │   │   │   ├── ResultsList.css
+│   │   │   │   ├── ResultsList.tsx
+│   │   │   │   ├── SpecialAwards.css
+│   │   │   │   ├── SpecialAwards.tsx
+│   │   │   │   ├── WinnerDisplay.css
+│   │   │   │   └── WinnerDisplay.tsx
+│   │   │   ├── gameplay/
+│   │   │   │   ├── CountdownTimer.css
+│   │   │   │   └── CountdownTimer.tsx
+│   │   │   ├── layout/
+│   │   │   │   ├── CenteredMessage.css
+│   │   │   │   ├── CenteredMessage.tsx
+│   │   │   │   ├── HostFrame.css
+│   │   │   │   ├── HostFrame.tsx
+│   │   │   │   ├── HostViewContainer.css
+│   │   │   │   ├── HostViewContainer.tsx
+│   │   │   │   ├── PlayArea.css
+│   │   │   │   ├── PlayArea.tsx
+│   │   │   │   ├── PlayerViewContainer.css
+│   │   │   │   └── PlayerViewContainer.tsx
+│   │   │   └── player/
+│   │   ├── reusable_components.txt
+│   │   └── utility/
+│   │       └── ComponentRenderer.tsx
 │   ├── game/
 │   │   ├── CardsWar/
+│   │   │   ├── CardsWarHostView.css
+│   │   │   ├── CardsWarHostView.tsx
+│   │   │   ├── CardsWarPlayerView.css
+│   │   │   ├── CardsWarPlayerView.tsx
+│   │   │   └── views/
+│   │   │       ├── HostFinishedView.tsx
+│   │   │       ├── HostRoundInProgressView.tsx
+│   │   │       ├── HostStartingView.tsx
+│   │   │       ├── HostWarDeclaredView.tsx
+│   │   │       ├── PlayerFinishedView.tsx
+│   │   │       ├── PlayerPlayingView.tsx
+│   │   │       ├── PlayerStartingView.tsx
+│   │   │       ├── PlayerWarDeclaredView.tsx
+│   │   │       └── PlayerWarTransitionView.tsx
 │   │   ├── DynamicViewRenderer.tsx
 │   │   ├── FakeNewsGame/
+│   │   │   ├── FakeNews.css
+│   │   │   ├── FakeNewsHostView.css
+│   │   │   ├── FakeNewsHostView.tsx
+│   │   │   ├── FakeNewsPlayerView.css
+│   │   │   ├── FakeNewsPlayerView.tsx
+│   │   │   └── views/
+│   │   │       ├── HostFinishedView.tsx
+│   │   │       ├── HostRevealView.tsx
+│   │   │       ├── HostStartingView.tsx
+│   │   │       ├── HostVotingView.tsx
+│   │   │       ├── HostWritingView.tsx
+│   │   │       ├── PlayerFinishedView.tsx
+│   │   │       ├── PlayerRevealView.tsx
+│   │   │       ├── PlayerStartingView.tsx
+│   │   │       ├── PlayerVotingView.tsx
+│   │   │       └── PlayerWritingView.tsx
 │   │   ├── GameContainer.tsx
 │   │   ├── GameView.css
 │   │   ├── QuizClash/
+│   │   │   ├── QuizClashHostView.css
+│   │   │   ├── QuizClashHostView.tsx
+│   │   │   ├── QuizClashPlayerView.css
+│   │   │   ├── QuizClashPlayerView.tsx
+│   │   │   └── views/
+│   │   │       ├── HostAskingQuestionView.tsx
+│   │   │       ├── HostFinishedView.tsx
+│   │   │       ├── HostRevealView.tsx
+│   │   │       ├── HostStartingView.tsx
+│   │   │       ├── PlayerAnsweredView.tsx
+│   │   │       ├── PlayerAnsweringView.tsx
+│   │   │       ├── PlayerFinishedView.tsx
+│   │   │       ├── PlayerRevealingAnswerView.tsx
+│   │   │       └── PlayerStartingView.tsx
 │   │   └── TexasHoldem/
+│   │       ├── TexasHoldemHostView.css
+│   │       ├── TexasHoldemHostView.tsx
+│   │       ├── TexasHoldemPlayerView.css
+│   │       ├── TexasHoldemPlayerView.tsx
+│   │       └── views/
+│   │           ├── HostFinishedView.tsx
+│   │           ├── HostPlayingView.tsx
+│   │           ├── HostStartingView.tsx
+│   │           ├── PlayerFinishedView.tsx
+│   │           ├── PlayerPlayingView.tsx
+│   │           └── PlayerStartingView.tsx
 │   ├── hooks/
 │   │   └── usePlayerRole.ts
 │   ├── index.css
@@ -100,12 +282,17 @@ PartyHub is a real-time, interactive social gaming platform. The architecture is
 │   │   ├── PageLayouts.css
 │   │   ├── TestComponentsPage.tsx
 │   │   └── wizards/
+│   │       ├── componentDefaultProps.ts
 │   │       ├── GameFlowCanvas.tsx
 │   │       ├── GameFlowStage.css
 │   │       ├── GameFlowStage.tsx
 │   │       ├── MetadataStage.tsx
+│   │       ├── PreviewModal.tsx
+│   │       ├── PropertyInspector.css
+│   │       ├── PropertyInspector.tsx
 │   │       ├── ReviewStage.css
 │   │       ├── ReviewStage.tsx
+│   │       ├── ScreensStage.css
 │   │       ├── ScreensStage.tsx
 │   │       ├── StateNode.tsx
 │   │       ├── StatesStage.tsx
@@ -121,8 +308,10 @@ PartyHub is a real-time, interactive social gaming platform. The architecture is
 │   │   ├── playerHandStore.ts
 │   │   ├── playerStore.ts
 │   │   └── roomStore.ts
-│   └── types/
-│       └── types.ts
+│   ├── types/
+│   │   └── types.ts
+│   └── utils/
+│       └── layoutUtils.ts
 ```
 
 #### Docs (`/Docs`)
@@ -131,39 +320,51 @@ PartyHub is a real-time, interactive social gaming platform. The architecture is
 |
 ├── Architecture.txt
 ├── components.md
+├── component_layout_report.md
+├── component_plan.md
 ├── configurable_game_effects.md
 ├── Design/
 │   ├── design_system.txt
 │   └── game ideas.txt
+├── expected_new_components.md
 ├── Games/
 │   ├── QuizClash.txt
 │   └── quizclash_flow.md
 ├── game_config_spec.md
+├── layout_capabilities.md
+├── missing_elements.md
 ├── old/
 │   ├── add_game_template.txt
 │   ├── PRD.txt
 │   ├── Requirements.txt
 │   └── TexasHoldemPoker.txt
+├── PartyHub_Whitepaper.md
 ├── Plans/
 │   ├── adding_new_function_checklist.md
 │   ├── adding_new_game_checklist.md
 │   ├── adding_new_ui_component_checklist.md
-│   ���── backend_config_plan.txt
+│   ├── backend_config_plan.txt
+│   ├── component_preview_checklist.md
 │   ├── declerative conditional ui .txt
 │   ├── game_creator_ui_guide.md
 │   ├── next_steps_checklist.md
-│   └── Old/
-│       └── adding a game checklist.txt
+│   ├── Old/
+│   │   └── adding a game checklist.txt
+│   └── ui_layout_config_plan.md
 ├── PRPs/
 │   └── templates/
 │       └── prp_template.txt
-└── UX/
-    ├── CardsWar.txt
-    ├── fakeNews.txt
-    ├── Game design strategy.txt
-    ├── mainScreens.txt
-    ├── quizClash.txt
-    └── ui_ux_update_plan.txt
+├── Requirements/
+│   └── compound_functions_feature.md
+├── strategic_analysis.md
+├── UX/
+│   ├── CardsWar.txt
+│   ├── fakeNews.txt
+│   ├── Game design strategy.txt
+│   ├── mainScreens.txt
+│   ├── quizClash.txt
+│   └── ui_ux_update_plan.txt
+└── validation_report.md
 ```
 
 ### Design & Architecture Summaries
@@ -207,67 +408,6 @@ The system uses a client-server model with a Node.js/Express/Socket.IO backend a
 #### 6. Voice & Tone Summary
 - **Platform Voice**: Clear, concise, and helpful (like a "Concierge"). Used for system messages, settings, and menus.
 - **Game Voice**: Witty, energetic, and playful (like a "Host"). Used for in-game instructions, questions, and results to entertain players.
-
-### Frontend Component Summary (`client/src/components/`)
-
-#### Common (`/common`)
-- `DebugPanel.tsx`: A panel for displaying debug information.
-- `Modal.tsx`: A modal dialog that can be displayed over the main content.
-- `Spinner.tsx`: A loading spinner to indicate that content is being loaded.
-
-#### Controls (`/controls`)
-- `ActionButton.tsx`: A primary button for main user actions.
-- `AnswerGrid.tsx`: A grid of possible answers for a question.
-- `Button.tsx`: A standard, reusable button component.
-- `GameCard.tsx`: A card used to display a game in a list.
-- `TextAreaWithCounter.tsx`: A text area with a character counter.
-- `VotingOptions.tsx`: Displays options for voting.
-
-#### Display (`/display`)
-- `AnswerResult.tsx`: Displays the result of an answer.
-- `AwardDisplay.tsx`: Displays any awards a player has received.
-- `GameBranding.tsx`: A component to display the branding of the current game.
-- `GameTitle.tsx`: A component for displaying the title of the game.
-- `Leaderboard.tsx`: Displays the game's leaderboard.
-- `PlayerAvatar.tsx`: Displays a player's avatar.
-- `PlayerCard.tsx`: A card displaying a player's information.
-- `PlayerInfo.tsx`: A component to display information about a player.
-- `PlayerStatusContainer.tsx`: A container for the status of all players.
-- `PlayerStatusGrid.tsx`: A grid displaying the status of all players.
-- `Podium.tsx`: A component to display the top players at the end of a game.
-- `PodiumList.tsx`: A list of players on the podium.
-- `QuestionDisplay.tsx`: Displays a question.
-- `QuestionHeader.tsx`: The header for a question.
-- `RankDisplay.tsx`: Displays a player's rank.
-- `RankUpdate.tsx`: Displays an update to a player's rank.
-- `ResultsList.tsx`: A list of results.
-- `SpecialAwards.tsx`: Displays any special awards.
-- `WinnerDisplay.tsx`: Displays the winner of the game.
-
-#### Gameplay (`/gameplay`)
-- `CountdownTimer.tsx`: A visual timer that counts down from a specified time.
-
-#### Layout (`/layout`)
-- `CenteredMessage.tsx`: A component to display a message centered on the screen.
-- `HostFrame.tsx`: A container for the host's view.
-- `HostViewContainer.tsx`: A container for the main content of the host's view.
-- `PlayArea.tsx`: The main area where the game is played.
-- `PlayerViewContainer.tsx`: A container for the player's view.
-
-#### Card Game Components (`client/src/components/cards/`)
-- `BiddingPopup.tsx`: A popup for bidding.
-- `Card.tsx`: A single card component.
-- `CardFan.tsx`: A fan of cards.
-- `CardSlot.tsx`: A slot for a card.
-- `Deck.tsx`: A deck of cards.
-- `DiscardPile.tsx`: A pile of discarded cards.
-- `Hand.tsx`: A player's hand of cards.
-- `LastPlayedCard.tsx`: The last card that was played.
-- `Meld.tsx`: A meld of cards.
-- `PlayerHandDisplay.tsx`: Displays a player's hand.
-- `Scoreboard.tsx`: A scoreboard for a card game.
-- `Trick.tsx`: A trick of cards.
-- `TrumpIndicator.tsx`: Indicates the trump suit.
 
 ### Available Games (`client/src/game/`)
 

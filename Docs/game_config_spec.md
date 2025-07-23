@@ -213,26 +213,29 @@ A game configuration is a single JSON object. The sections below describe each o
       "condition": "{{gameState.currentQuestionIndex >= gameData.questions.length - 1}}"
     }
   ],
-  "ui": {
+"ui": {
     "STARTING": {
       "host": {
         "components": [
           {
-            "component": "GameTitle",
+            "component": "TextDisplay",
             "props": {
-              "title": "QuizClash"
+              "text": "QuizClash",
+              "fontSize": "3rem",
+              "fontWeight": "bold"
             }
           },
           {
-            "component": "CenteredMessage",
+            "component": "TextDisplay",
             "props": {
-              "children": "Getting ready to start..."
+              "text": "Getting ready to start..."
             }
           },
           {
-            "component": "CountdownTimer",
+            "component": "Timer",
             "props": {
-              "initialValue": 3
+              "duration": 3,
+              "type": "countdown"
             }
           }
         ]
@@ -240,9 +243,9 @@ A game configuration is a single JSON object. The sections below describe each o
       "player": {
         "components": [
           {
-            "component": "CenteredMessage",
+            "component": "TextDisplay",
             "props": {
-              "children": "The game is about to begin!"
+              "text": "The game is about to begin!"
             }
           }
         ]
@@ -252,66 +255,92 @@ A game configuration is a single JSON object. The sections below describe each o
       "host": {
         "components": [
           {
-            "component": "QuestionHeader",
+            "component": "TextDisplay",
             "props": {
-              "text": "Question {{gameState.currentQuestionIndex + 1}}"
+              "text": "Question {{gameState.currentQuestionIndex + 1}}",
+              "fontSize": "1.5rem"
             }
           },
           {
-            "component": "QuestionDisplay",
+            "component": "TextDisplay",
             "props": {
-              "question": "{{gameState.currentQuestion.questionText}}"
+              "text": "{{gameState.currentQuestion.questionText}}",
+              "fontSize": "2.5rem",
+              "fontWeight": "bold"
             }
           },
           {
-            "component": "PlayerStatusGrid",
+            "component": "ListDisplay",
             "props": {
-              "players": "{{players}}"
-            }
-          }
-        ]
-      },
-      "player": {
-        "components": [
-          {
-            "component": "QuestionDisplay",
-            "props": {
-              "question": "{{gameState.currentQuestion.questionText}}"
-            }
-          },
-          {
-            "component": "AnswerGrid",
-            "props": {
-              "answers": "{{gameState.currentQuestion.options}}",
-              "onAnswer": {
-                "action": "submitAnswer"
+                "items": "{{players}}",
+                "renderItem": {
+                    "component": "StateIndicator",
+                    "props": {
+                        "status": "{{item.currentAnswer ? 'Answered' : 'Thinking'}}"
+                    }
                 }
             }
           }
         ]
-      }
+      },
+      "player": [
+        {
+          "condition": "{{!player.currentAnswer}}",
+          "components": [
+            {
+              "component": "TextDisplay",
+              "props": {
+                "text": "{{gameState.currentQuestion.questionText}}"
+              }
+            },
+            {
+              "component": "ChoiceSelector",
+              "props": {
+                "options": "{{gameState.currentQuestion.options}}",
+                "onSelect": {
+                  "dispatchEvent": "submitAnswer"
+                }
+              }
+            }
+          ]
+        },
+        {
+           "components": [
+             {
+                "component": "TextDisplay",
+                "props": { "text": "Waiting for other players..." }
+             }
+           ]
+        }
+      ]
     },
     "REVEAL_ANSWER": {
       "host": {
         "components": [
           {
-            "component": "QuestionDisplay",
+            "component": "TextDisplay",
             "props": {
-              "question": "{{gameState.currentQuestion.questionText}}"
+              "text": "{{gameState.currentQuestion.questionText}}"
             }
           },
           {
-            "component": "AnswerResult",
+            "component": "TextDisplay",
             "props": {
-              "answer": "{{gameState.currentQuestion.correctAnswer}}",
-              "percentage": 100,
-              "isCorrect": true
+              "text": "The correct answer was: {{gameState.currentQuestion.correctAnswer}}",
+               "fontSize": "2rem",
+               "fontWeight": "bold"
             }
           },
           {
-            "component": "Leaderboard",
+            "component": "ListDisplay",
             "props": {
-              "players": "{{players}}"
+                "items": "{{players}}",
+                "renderItem": {
+                    "component": "TextDisplay",
+                    "props": {
+                        "text": "{{item.nickname}}: {{item.score}}"
+                    }
+                }
             }
           }
         ]
@@ -319,17 +348,15 @@ A game configuration is a single JSON object. The sections below describe each o
       "player": {
         "components": [
           {
-            "component": "AnswerResult",
+            "component": "TextDisplay",
             "props": {
-              "answer": "{{player.currentAnswer}}",
-              "percentage": 0,
-              "isCorrect": "{{player.currentAnswer === gameState.currentQuestion.correctAnswer}}"
+                "text": "{{player.currentAnswer === gameState.currentQuestion.correctAnswer ? 'Correct!' : 'Wrong!'}}"
             }
           },
-          {
-            "component": "RankUpdate",
+           {
+            "component": "TextDisplay",
             "props": {
-              "newRank": "{{player.rank}}"
+                "text": "Your new score: {{player.score}}"
             }
           }
         ]
@@ -339,15 +366,20 @@ A game configuration is a single JSON object. The sections below describe each o
       "host": {
         "components": [
           {
-            "component": "WinnerDisplay",
+            "component": "TextDisplay",
             "props": {
-              "winnerName": "{{gameState.winner.nickname}}"
+              "text": "Winner: {{gameState.winner.nickname}}",
+              "fontSize": "3rem"
             }
           },
           {
-            "component": "Podium",
+            "component": "ListDisplay",
             "props": {
-              "players": "{{gameState.topThreePlayers}}"
+              "items": "{{gameState.topThreePlayers}}",
+              "renderItem": {
+                  "component": "TextDisplay",
+                  "props": { "text": "{{item.nickname}}: {{item.score}}" }
+              }
             }
           }
         ]
@@ -355,9 +387,9 @@ A game configuration is a single JSON object. The sections below describe each o
       "player": {
         "components": [
           {
-            "component": "RankDisplay",
+            "component": "TextDisplay",
             "props": {
-              "rank": "{{player.rank}}"
+              "text": "You finished with a score of {{player.score}}"
             }
           }
         ]
@@ -570,8 +602,8 @@ Both properties are objects that can contain `top`, `bottom`, `left`, and `right
     "host": {
       "components": [
         {
-          "component": "GameTitle",
-          "props": { "title": "My Awesome Game" },
+          "component": "TextDisplay",
+          "props": { "text": "My Awesome Game", "fontSize": "3rem" },
           "layout": {
             "alignment": "TopCenter",
             "height": "hug",
@@ -579,8 +611,8 @@ Both properties are objects that can contain `top`, `bottom`, `left`, and `right
           }
         },
         {
-          "component": "CenteredMessage",
-          "props": { "children": "Getting ready..." },
+          "component": "TextDisplay",
+          "props": { "text": "Getting ready..." },
           "layout": {
             "alignment": "Center",
             "width": "50%"

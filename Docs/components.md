@@ -1,105 +1,96 @@
 # Component Library
 
-This document outlines the reusable React components available in the PartyHub frontend.
+This document outlines the reusable React components available in the PartyHub frontend. These components are the building blocks for creating dynamic and interactive game UIs through the configurable game engine.
 
 **Note on Dynamic Layouts:** When these components are used within a server-driven UI via the `ConfigurableGame` engine, their position, size, and spacing can be controlled by an optional `layout` object in the game's JSON configuration. This object provides properties for alignment, sizing (presets and percentages), and spacing (padding and offset). This is a feature of the rendering engine, not an inherent prop of each individual component. For more details, see the `layout_capabilities.md` and `game_config_spec.md` documents.
 
-## Common Components
+---
 
-### DebugPanel
-Displays a panel with debugging information. It can be toggled with Ctrl+D.
+## Layout & Structure
 
-**Props:**
-- `None`
+Components for organizing the UI structure.
 
-## Controls Components
-
-### ActionButton
-A primary button for main user actions. It is a wrapper around the `Button` component.
+### Container
+A flexible wrapper for grouping other components.
 
 **Props:**
-- Inherits all props from `Button`.
+- `children` (React.ReactNode): The content to be displayed inside the container.
+- `display` ('flex' | 'grid'): The display type of the container. Defaults to `flex`.
+- `flexDirection` ('row' | 'column'): The direction of the flex container. Defaults to `column`.
+- `gap` (number): The space between children in pixels. Defaults to `0`.
+- `alignItems` (string): CSS `align-items` property.
+- `justifyContent` (string): CSS `justify-content` property.
+- `className` (string): Optional CSS class.
 
-### Button
-A standard, reusable button component.
-
-**Props:**
-- `children` (React.ReactNode): The content to be displayed inside the button.
-- `variant` ('primary' | 'secondary'): The visual style of the button. Defaults to `primary`.
-- All other standard button attributes are accepted.
-
-### AnswerGrid
-A grid of possible answers for a question.
+### Stack
+A component for arranging children in a vertical or horizontal line with consistent spacing.
 
 **Props:**
-- `answers` (string[]): An array of answer strings.
-- `onAnswer` (function): A function to be called when an answer is selected. It receives the index of the selected answer.
-- `disabled` (boolean): If `true`, the buttons are disabled.
-- `selectedAnswer` (number | null): The index of the currently selected answer.
-- `fillParent` (boolean): If `true`, the grid will fill its parent container.
+- `children` (React.ReactNode): The content to be stacked.
+- `direction` ('vertical' | 'horizontal'): The direction of the stack. Defaults to `vertical`.
+- `spacing` (number): The space between children in pixels. Defaults to `8`.
+- `className` (string): Optional CSS class.
 
-### GameCard
-A card used to display a game in a list.
-
-**Props:**
-- `title` (string): The title of the game.
-- `description` (string): A short description of the game.
-- `playerCount` (string): A string indicating the number of players (e.g., "2-8 players").
-- `playtime` (string): A string indicating the estimated playtime (e.g., "15-20 min").
-- `imageUrl` (string): The URL of the image to be displayed for the game.
-- `onClick` (function): A function to be called when the card is clicked.
-
-### TextAreaWithCounter
-A text area with a character counter.
+### Grid
+A component for arranging children in a grid.
 
 **Props:**
-- `maxLength` (number): The maximum number of characters allowed.
-- `placeholder` (string): The placeholder text for the text area.
-- `onChange` (function): A function to be called when the value of the text area changes. It receives the new string value.
+- `children` (React.ReactNode): The content to be placed in the grid.
+- `columns` (number): The number of columns in the grid.
+- `rows` (number): The number of rows in the grid.
+- `spacing` (number): The space between grid items in pixels. Defaults to `8`.
+- `className` (string): Optional CSS class.
 
-### VotingOptions
-Displays options for voting.
-
-**Props:**
-- `options` (string[]): An array of strings representing the voting options.
-- `onVote` (function): A function to be called when an option is voted for. It receives the selected option string.
-- `disabled` (boolean): If `true`, the voting buttons are disabled.
-
-## Display Components
-
-### AnswerResult
-Displays the result of an answer, including a bar showing the percentage of players who chose it.
+### Spacer
+A flexible, empty component that expands to fill available space. Useful in flexbox layouts.
 
 **Props:**
-- `answer` (string): The answer text.
-- `percentage` (number): The percentage of players who chose this answer.
-- `isCorrect` (boolean): If `true`, the answer is styled as correct.
+- `style` (React.CSSProperties): Optional inline styles.
 
-### AwardDisplay
-Displays a single award.
+---
 
-**Props:**
-- `award` (string): The name of the award.
-- `description` (string): An optional description of the award.
+## Display
 
-### GameBranding
-A component to display the branding of the current game.
+Components for showing information to the user.
+
+### TextDisplay
+A component for displaying text with various styling options.
 
 **Props:**
-- `gameTitle` (string): The title of the game.
-- `logoUrl` (string): An optional URL for the game's logo.
+- `text` (string): The text to display.
+- `fontSize` (string): CSS `font-size` property.
+- `fontWeight` (string): CSS `font-weight` property.
+- `fontFamily` (string): CSS `font-family` property.
+- `color` (string): CSS `color` property.
+- `textAlign` ('left' | 'center' | 'right' | 'justify'): The text alignment.
+- `className` (string): Optional CSS class.
 
-### GameTitle
-A component for displaying the title of the game.
+### ImageDisplay
+A component for displaying images with different fitting options.
 
 **Props:**
-- `title` (string): The title to display.
+- `src` (string): The URL of the image.
+- `alt` (string): The alternative text for the image.
+- `fit` ('cover' | 'contain' | 'fill'): How the image should fit its container. Defaults to `contain`.
+- `className` (string): Optional CSS class.
+- `style` (React.CSSProperties): Optional inline styles.
 
-### Leaderboard
-Displays the game's leaderboard.
+### ListDisplay
+A component that renders a list of items using a template component for each item.
 
 **Props:**
-- `players` (Player[]): An array of player objects.
+- `items` (T[]): An array of data items.
+- `renderItem` (any): A component definition object used to render each item. The item's data is passed in the `context`.
+- `className` (string): Optional CSS class.
+- `style` (React.CSSProperties): Optional inline styles.
+
+### KeyValueDisplay
+A component for displaying key-value pairs.
+
+**Props:**
+- `data` (Record<string, string | number>): An object containing the data to display.
+- `layout` ('horizontal' | 'vertical'): The layout direction. Defaults to `vertical`.
+- `className` (string): Optional CSS class.
 
 ### PlayerAvatar
 Displays a player's avatar.
@@ -108,234 +99,83 @@ Displays a player's avatar.
 - `player` (Player): The player object.
 - `size` ('small' | 'medium' | 'large'): The size of the avatar. Defaults to `medium`.
 
-### PlayerCard
-A card displaying a player's information.
+---
+
+## Input & Controls
+
+Components that allow users to interact with the game.
+
+### Button
+A standard, clickable button.
 
 **Props:**
-- `player` (Player): The player object.
-- `size` ('small' | 'medium' | 'large'): The size of the card. Defaults to `medium`.
+- `text` (string): The text to display on the button.
+- `icon` (string): The URL for an icon to display on the button.
+- `variant` ('primary' | 'secondary'): The visual style of the button. Defaults to `primary`.
+- Extends all other standard HTML button attributes.
 
-### PlayerInfo
-A component to display information about a player, including poker-specific details.
-
-**Props:**
-- `player` (Player | TexasHoldemPlayer): The player object.
-- `isCurrent` (boolean): If `true`, indicates that it is the player's turn.
-- `isDealer` (boolean): If `true`, displays a dealer chip.
-- `isSmallBlind` (boolean): If `true`, indicates the player is the small blind.
-- `isBigBlind` (boolean): If `true`, indicates the player is the big blind.
-
-### PlayerStatusContainer
-A container for the status of all players.
+### ChoiceSelector
+A component that allows users to select one or more options from a list.
 
 **Props:**
-- `title` (string): The main title to display.
-- `subtitle` (string): An optional subtitle.
+- `options` (ChoiceOption[] | string[]): An array of choices. Can be simple strings or objects with `id`, `label`, and `imageUrl`.
+- `onSelect` ((selectedIds: string[]) => void): Callback function when a selection is made or submitted.
+- `selectionMode` ('single' | 'multiple'): Whether to allow single or multiple selections. Defaults to `single`.
+- `layout` ('grid' | 'list' | 'carousel'): The layout of the choices. Defaults to `grid`.
+- `disabled` (boolean): If `true`, the selector is disabled.
 
-### PlayerStatusGrid
-A grid displaying the status of all players.
-
-**Props:**
-- `players` (Player[]): An array of player objects.
-
-### Podium
-A component to display the top players at the end of a game.
+### TextInput
+A field for user text input.
 
 **Props:**
-- `players` (Player[]): An array of player objects.
+- `placeholder` (string): Placeholder text.
+- `maxLength` (number): Maximum number of characters.
+- `showCounter` (boolean): Whether to display a character counter. Defaults to `false`.
+- `onChange` ((value: string) => void): Callback function when the text changes.
+- `multiline` (boolean): Whether to use a textarea for multiline input. Defaults to `false`.
+- `className` (string): Optional CSS class.
 
-### PodiumList
-A list of players on the podium.
-
-**Props:**
-- `players` (Player[]): An array of player objects.
-- `count` (number): The number of players to display. Defaults to 3.
-
-### QuestionDisplay
-Displays a question.
+### Slider
+A slider for selecting a value from a range.
 
 **Props:**
-- `question` (string): The question to display.
+- `min` (number): The minimum value. Defaults to `0`.
+- `max` (number): The maximum value. Defaults to `100`.
+- `step` (number): The increment value. Defaults to `1`.
+- `onChange` ((value: number) => void): Callback function when the value changes.
+- `defaultValue` (number): The initial value. Defaults to `50`.
+- `className` (string): Optional CSS class.
 
-### QuestionHeader
-The header for a question, showing round, timer, and answer counts.
+---
 
-**Props:**
-- `round` (number): The current round number.
-- `totalRounds` (number): The total number of rounds.
-- `timer` (number): The current timer value.
-- `answeredCount` (number): The number of players who have answered.
-- `totalPlayers` (number): The total number of players.
+## Feedback & State
 
-### RankDisplay
-Displays a player's rank.
+Components for providing feedback to the user.
 
-**Props:**
-- `rank` (number): The player's rank.
-
-### RankUpdate
-Displays an update to a player's rank.
+### Timer
+A component to display a countdown or progress bar.
 
 **Props:**
-- `oldRank` (number): The player's previous rank.
-- `newRank` (number): The player's new rank.
+- `duration` (number): The duration in seconds.
+- `type` ('countdown' | 'progress'): The visual type of the timer. Defaults to `countdown`.
+- `onComplete` (() => void): Callback function when the timer finishes.
+- `label` (string): A label to display with the timer.
+- `className` (string): Optional CSS class.
 
-### ResultsList
-A list of results, showing who voted for which option.
-
-**Props:**
-- `options` (string[]): The list of answer options.
-- `votes` ({ [playerId: string]: string }): An object mapping player IDs to their chosen option.
-- `correctAnswer` (string): The correct answer.
-- `players` (Player[]): An array of all player objects.
-
-### SpecialAwards
-Displays any special awards.
+### StateIndicator
+A component to indicate a status or state.
 
 **Props:**
-- `awards` (SpecialAward[]): An array of special award objects, where `SpecialAward` has `awardName` (string) and `player` (Player).
-
-### WinnerDisplay
-Displays the winner of the game.
-
-**Props:**
-- `winnerName` (string): The name of the winner.
-
-## Gameplay Components
-
-### CountdownTimer
-A visual timer that counts down from a specified time.
-
-**Props:**
-- `initialValue` (number): The number to count down from.
-- `onComplete` (function): An optional function to call when the countdown completes.
-
-## Layout Components
-
-### CenteredMessage
-A component to display a message centered on the screen.
-
-**Props:**
-- `children` (React.ReactNode): The content to be centered.
-
-### HostFrame
-A container for the host's view, including a header with the logo.
-
-**Props:**
-- `children` (React.ReactNode): The content of the host's view.
-
-### HostViewContainer
-A container for the main content of the host's view.
-
-**Props:**
-- `children` (React.ReactNode): The content to be displayed.
-
-### PlayArea
-The main area where the game is played.
-
-**Props:**
-- `children` (React.ReactNode): The content of the play area.
-
-### PlayerViewContainer
-A container for the player's view.
-
-**Props:**
-- `children` (React.ReactNode): The content of the player's view.
-
-## Card Game Components
-
-### BiddingPopup
-A popup for bidding.
-
-**Props:**
-- `onBid` (function): A function to be called when a bid is made. It receives the bid amount.
-- `onPass` (function): A function to be called when the player passes.
-
-### Card
-A single card component.
-
-**Props:**
-- `faceUp` (boolean): If `true`, the card's face is shown. Defaults to `false`.
-- `content` (React.ReactNode): The content to display on the card's face.
-- `className` (string): Optional additional CSS class for the card.
-
-### CardFan
-A fan of cards.
-
-**Props:**
-- `cards` (CardType[]): An array of card objects.
-
-### CardSlot
-A slot for a card.
-
-**Props:**
-- `card` (CardType | null): The card to display in the slot.
-- `onClick` (function): An optional function to call when the slot is clicked.
-- `isFaceUp` (boolean): If `true`, the card is face up. Defaults to `true`.
-
-### Deck
-A deck of cards.
-
-**Props:**
-- `count` (number): The number of cards in the deck.
-- `onDraw` (function): An optional function to call when the deck is clicked.
-
-### DiscardPile
-A pile of discarded cards.
-
-**Props:**
-- `topCard` ({ suit: string; value: string; }): The top card of the discard pile.
-
-### Hand
-A player's hand of cards.
-
-**Props:**
-- `cards` (CardType[]): An array of card objects in the hand.
-- `onCardClick` (function): An optional function to call when a card is clicked.
-
-### LastPlayedCard
-The last card that was played.
-
-**Props:**
-- `card` (CardType): The card that was last played.
-
-### Meld
-A meld of cards.
-
-**Props:**
-- `cards` (CardType[]): An array of card objects in the meld.
-
-### PlayerHandDisplay
-Displays a player's hand without revealing the cards.
-
-**Props:**
-- `cardCount` (number): The number of cards in the player's hand.
-- `playerName` (string): The name of the player.
-
-### Scoreboard
-A scoreboard for a card game.
-
-**Props:**
-- `scores` ({ [playerName: string]: number }): An object mapping player names to their scores.
-
-### Trick
-A trick of cards.
-
-**Props:**
-- `cards` ({ player: string; card: CardType }[]): An array of objects representing the cards in the trick.
-
-### TrumpIndicator
-Indicates the trump suit.
-
-**Props:**
-- `suit` (string): The trump suit to display.
+- `status` (string): The status to display (e.g., 'Ready', 'Answered').
+- `indicator` ('icon' | 'text' | 'color'): The type of indicator to use. Defaults to `icon`.
+- `className` (string): Optional CSS class.
 
 ### Modal
 A modal dialog that can be displayed over the main content.
 
 **Props:**
 - `isOpen` (boolean): Controls whether the modal is open or closed.
-- `onClose` (function): A function to be called when the modal is closed.
+- `onClose` (() => void): Callback function for when the modal is closed.
 - `children` (React.ReactNode): The content to be displayed inside the modal.
 
 ### Spinner
@@ -343,3 +183,58 @@ A loading spinner to indicate that content is being loaded.
 
 **Props:**
 - `None`
+
+---
+
+## Game Tools
+
+Specialized components for building games.
+
+### Card
+Represents a single playing card.
+
+**Props:**
+- `faceUp` (boolean): Whether the card's face is visible. Defaults to `false`.
+- `content` (React.ReactNode): The content for the card's face.
+- `back` (React.ReactNode): The content for the card's back.
+- `isSelectable` (boolean): If `true`, the card can be clicked.
+- `isSelected` (boolean): If `true`, the card is styled as selected.
+- `onClick` (() => void): Callback function for when the card is clicked.
+- `className` (string): Optional CSS class.
+- `style` (React.CSSProperties): Optional inline styles.
+
+### CardContainer
+A container for arranging and displaying multiple cards.
+
+**Props:**
+- `layout` ('fan' | 'grid' | 'stack' | 'pile'): The layout style for the cards. Defaults to `grid`.
+- `cards` (CardData[]): An array of card data objects.
+- `onCardClick` ((cardId: string) => void): Callback for when a card is clicked.
+- `selectedCardIds` (string[]): An array of IDs of the currently selected cards.
+
+### Dice
+A component to display one or more dice.
+
+**Props:**
+- `count` (number): The number of dice to display. Defaults to `1`.
+- `values` (number[]): The values to show on the dice faces.
+- `isRolling` (boolean): If `true`, applies a rolling animation.
+- `onRollComplete` (() => void): A callback for when the rolling animation finishes.
+
+### GameBoard
+A grid-based board for games.
+
+**Props:**
+- `size` ({ rows: number; cols: number }): The dimensions of the board.
+- `onCellClick` ((row: number, col: number) => void): Callback for when a cell is clicked.
+- `children` (React.ReactNode): For placing `GamePiece` components on the board.
+
+### GamePiece
+Represents a piece on a game board.
+
+**Props:**
+- `shape` ('circle' | 'square'): The shape of the piece. Defaults to `circle`.
+- `color` (string): The color of the piece.
+- `image` (string): An image URL for the piece.
+- `position` ({ row: number; col: number }): The grid position on a `GameBoard`.
+- `style` (React.CSSProperties): Optional inline styles.

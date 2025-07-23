@@ -112,6 +112,7 @@ A single-page application built with React that renders views for both the host 
 ├── game/           # Views for the legacy, hardcoded games.
 ├── pages/          # Top-level page components (e.g., HomePage, GamePage).
 │   └── wizards/      # Components for the multi-stage Game Creator UI.
+│       └── componentDefaultProps.ts # Default properties for components in the wizard.
 ├── services/       # Encapsulates the Socket.IO client logic.
 └── store/          # Zustand stores for global state management.
 ```
