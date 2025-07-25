@@ -65,7 +65,7 @@ export const Timer: React.FC<TimerProps> = ({
   const renderProgressBar = () => {
     const percentage = (timeLeft / duration) * 100;
     return (
-      <div className={className} style={{ width: '100%', backgroundColor: '#eee' }}>
+      <div data-testid="progress-bar-container" className={className} style={{ width: '100%', backgroundColor: '#eee' }}>
         <div
           style={{
             width: `${percentage}%`,

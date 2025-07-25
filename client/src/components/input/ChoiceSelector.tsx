@@ -59,6 +59,7 @@ export const ChoiceSelector: React.FC<ChoiceSelectorProps> = ({
             key={option.id}
             onClick={() => handleSelect(option.id)}
             variant={isSelected ? 'primary' : 'secondary'}
+            disabled={disabled}
             style={{
                 flexDirection: 'column',
                 height: '100%',

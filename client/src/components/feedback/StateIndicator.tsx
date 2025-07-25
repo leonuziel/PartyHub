@@ -23,19 +23,19 @@ export const StateIndicator: React.FC<StateIndicatorProps> = ({
   const renderIndicator = () => {
     switch (indicator) {
       case 'icon':
-        return <span>{iconMap[status] || '❔'}</span>;
+        return <span data-testid="icon-indicator">{iconMap[status] || '❔'}</span>;
       case 'text':
-        return <span>{status}</span>;
+        return <span data-testid="text-indicator">{status}</span>;
       case 'color':
         // This would likely be a colored dot or background
-        return <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: 'green' /* Map status to color */ }}></div>;
+        return <div data-testid="color-indicator" style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: 'green' /* Map status to color */ }}></div>;
       default:
-        return <span>{status}</span>;
+        return <span data-testid="text-indicator">{status}</span>;
     }
   };
 
   return (
-    <div className={className}>
+    <div data-testid="state-indicator" className={className}>
       {renderIndicator()}
     </div>
   );

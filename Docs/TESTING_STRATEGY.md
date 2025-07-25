@@ -39,10 +39,35 @@ We will adopt the classic testing pyramid model to structure our test suite.
 
 *   **Framework:** Jest with React Testing Library.
 *   **Targets:**
-    *   **UI Components (`/src/components`):** Every UI component should have basic rendering tests. For components with logic (e.g., `ChoiceSelector`, `TextInput`), tests should simulate user interaction (`fireEvent`) and verify that callbacks are fired correctly.
+    *   **UI Components (`/src/components`):**
+        *   **General Approach:** All components must have tests to ensure they render correctly without crashing ("smoke tests"). Components with props should be tested to ensure they render correctly based on different prop values. Interactive components must have tests that simulate user events and assert that the correct callbacks are fired with the expected payloads.
+        *   **Layout Components (`/src/components/layout`):**
+            *   `Container`, `Stack`, `Grid`: Test that they render their `children` correctly. Test that props like `direction`, `spacing`, or `columns` apply the correct CSS classes or styles, both to the parent and children.
+            *   `Spacer`: Test that it renders and can accept custom styles.
+        *   **Display Components (`/src/components/display`):**
+            *   `TextDisplay`: Test rendering of text. Test that props like `fontSize`, `fontWeight`, etc., are applied.
+            *   `ImageDisplay`: Test rendering of the `img` element with correct `src` and `alt` tags. Test that the `fit` prop applies the correct CSS class.
+            *   `ListDisplay`: This is a complex component. Test that it correctly renders a list of items using the provided `renderItem` component. Test with an empty `items` array.
+            *   `KeyValueDisplay`: Test that it correctly renders all key-value pairs from the `data` prop.
+        *   **Input Components (`/src/components/input`):**
+            *   `Button`: Test rendering with text. Simulate a `click` event and assert that the `onClick` handler is called. Test the `disabled` state. (Note: `Button.test.tsx` already exists as a good example).
+            *   `ChoiceSelector`: Test rendering of options. Simulate selection for both `single` and `multiple` selection modes and verify `onSelect` is called with the correct value. Test `disabled` state.
+            *   `TextInput`: Test that user input correctly updates the component's value and that `onChange` is fired. Test `maxLength` and `multiline` props.
+            *   `Slider`: Simulate a change event and verify that `onChange` is called with the correct value.
+        *   **Feedback Components (`/src/components/feedback`):**
+            *   `Timer`: Test that the visual display updates over time. Mocks will be needed for `setTimeout`/`setInterval`. Test that `onComplete` is called when the timer finishes.
+            *   `StateIndicator`: Test that it renders the correct text/icon/color based on the `status` prop.
+        *   **Game Tools (`/src/components/game-tools`):**
+            *   `Card`: Test rendering in both `faceUp` and face-down states. Test that `onClick` is fired when `isSelectable` is true.
+            *   `CardContainer`: Test that it correctly renders multiple `Card` components based on the `cards` prop. Test different `layout` props.
+            *   `Dice`: Test that it renders the correct number of dice with the correct values. Test the `isRolling` state.
+            *   `GameBoard`, `GamePiece`: Test that the board renders with the correct dimensions and that pieces are placed in the correct cells.
+        *   **Utility Components (`/src/components/utility`):**
+            *   `ComponentRenderer`: This is a critical component for the dynamic UI. Its tests will be more like integration tests. It should be tested to ensure it can render a simple component from the `ComponentRegistry`. Test that it correctly applies layout props. Test its behavior with an unknown component name (e.g., render nothing or an error message).
     *   **Zustand Stores (`/src/store`):** Test state transitions. For each store, call its action functions and assert that the state changes as expected.
     *   **Utils (`/src/utils`):** Any frontend utility functions should be unit-tested.
-
+    *   **Hooks (`/src/hooks`):**
+        *   `usePlayerRole`: Mock the Zustand store (`useRoomStore`) and test that the hook returns the correct role (`host`, `player`, or `none`) based on the mocked state.
 *   **Execution:** Run via `npm test` in the `/client` directory.
 
 ---

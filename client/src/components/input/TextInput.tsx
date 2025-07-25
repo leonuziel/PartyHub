@@ -3,8 +3,9 @@ import React, { useState } from 'react';
 interface TextInputProps {
   placeholder?: string;
   maxLength?: number;
+  disabled?: boolean;
   showCounter?: boolean;
-  onChange: (value: string) => void;
+  onChange?: (value: string) => void;
   multiline?: boolean;
   className?: string;
 }
@@ -12,8 +13,9 @@ interface TextInputProps {
 export const TextInput: React.FC<TextInputProps> = ({
   placeholder,
   maxLength,
+  disabled=false,
   showCounter = false,
-  onChange = () => {},
+  onChange = () => { },
   multiline = false,
   className,
 }) => {
@@ -56,6 +58,7 @@ export const TextInput: React.FC<TextInputProps> = ({
         value={value}
         onChange={handleChange}
         rows={multiline ? 4 : undefined}
+        disabled={disabled}
       />
       {showCounter && maxLength && (
         <div style={counterStyle}>

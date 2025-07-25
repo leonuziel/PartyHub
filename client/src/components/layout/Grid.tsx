@@ -31,7 +31,7 @@ export const Grid: React.FC<GridProps> = ({
   if (rows && columns) {
     const totalCells = rows * columns;
     return (
-      <div style={style} className={className}>
+      <div data-testid="grid" style={style} className={className}>
         {Array.from({ length: totalCells }).map((_, index) => (
           <div key={index} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             {/* Place the child for this cell, or render null if no child exists for this index. */}
@@ -44,7 +44,7 @@ export const Grid: React.FC<GridProps> = ({
 
   // Fallback to the original implicit grid behavior if rows or columns are not specified.
   return (
-    <div style={style} className={className}>
+    <div data-testid="grid" style={style} className={className}>
       {children}
     </div>
   );

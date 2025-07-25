@@ -28,7 +28,7 @@ export const Container: React.FC<ContainerProps> = ({
   };
 
   return (
-    <div style={style} className={className}>
+    <div data-testid="container" style={style} className={className}>
       {children}
     </div>
   );
