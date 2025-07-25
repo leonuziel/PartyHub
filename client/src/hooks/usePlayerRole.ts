@@ -10,7 +10,7 @@ export const usePlayerRole = () => {
   // The user's "player" object could be the host object or from the players array
   const player = isHost 
     ? room?.host 
-    : room?.players.find(p => p.id === socketId);
+    : (room?.players && room.players.find(p => p.id === socketId));
   
   const isPlayer = !!player;
 
