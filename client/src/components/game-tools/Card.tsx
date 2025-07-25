@@ -47,7 +47,7 @@ export const Card: React.FC<CardProps> = ({
     ...(isSelected ? selectedStyle : {}),
   };
 
-  const backContent = back || <div style={{backgroundColor: '#555', width: '100%', height: '100%', borderRadius: '10px' }}></div>;
+  const backContent = back || <div data-testid="default-card-back" style={{backgroundColor: '#555', width: '100%', height: '100%', borderRadius: '10px' }}></div>;
 
   return (
     <div style={finalStyle} onClick={onClick} className={className}>

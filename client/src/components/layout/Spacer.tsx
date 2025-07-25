@@ -6,6 +6,6 @@ export const Spacer = ({ style }: { style?: React.CSSProperties }) => {
     };
 
     return (
-        <div style={{ ...defaultStyle, ...style }} />
+<div data-testid="spacer" style={{ ...defaultStyle, ...style }} />
     );
 };

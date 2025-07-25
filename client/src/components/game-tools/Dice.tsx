@@ -41,7 +41,9 @@ export const Dice: React.FC<DiceProps> = ({
   return (
     <div style={containerStyle}>
       {diceToRender.map((value, index) => (
-        <Die key={index} value={value} />
+        <div key={index} className="die-wrapper">
+          <Die value={value} />
+        </div>
       ))}
     </div>
   );

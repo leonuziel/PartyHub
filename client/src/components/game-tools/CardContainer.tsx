@@ -30,7 +30,7 @@ export const CardContainer: React.FC<CardContainerProps> = ({
   };
 
   const renderCard = (card: CardData, index: number, style: React.CSSProperties = {}) => (
-    <div key={card.id} style={{ ...style, width: '15%', minWidth: '80px', maxWidth: '120px' }}>
+    <div key={card.id} className="card-wrapper" style={{ ...style, width: '15%', minWidth: '80px', maxWidth: '120px' }}>
       <Card
         content={card.content}
         faceUp={card.faceUp}

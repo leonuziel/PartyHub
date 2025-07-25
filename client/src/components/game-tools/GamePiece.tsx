@@ -8,12 +8,13 @@ interface GamePieceProps {
   style?: React.CSSProperties;
 }
 
-export const GamePiece: React.FC<GamePieceProps> = ({
+export const GamePiece: React.FC<GamePieceProps & { [key: string]: any }> = ({
   shape = 'circle',
   color = 'red',
   image,
   position,
   style: propStyle,
+  ...rest
 }) => {
   const style: React.CSSProperties = {
     width: '80%', // Takes up 80% of the grid cell's width
@@ -34,5 +35,5 @@ export const GamePiece: React.FC<GamePieceProps> = ({
     ...propStyle,
   };
 
-  return <div style={style}></div>;
+  return <div style={style} {...rest}></div>;
 };
