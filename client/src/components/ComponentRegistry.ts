@@ -53,6 +53,11 @@ import { PlayerLobbyView } from './patterns/player/PlayerLobbyView';
 import { PlayerAnswerView } from './patterns/player/PlayerAnswerView';
 import { PlayerVotingView } from './patterns/player/PlayerVotingView';
 import { PlayerResultView } from './patterns/player/PlayerResultView';
+import { TurnOrderDisplay } from './patterns/gameplay/TurnOrderDisplay';
+import { MatchupDisplay } from './patterns/gameplay/MatchupDisplay';
+import { PersonalScoreCard } from './patterns/results/PersonalScoreCard';
+import { FinalResultsScreen } from './patterns/results/FinalResultsScreen';
+import { EmojiReactionToolbar } from './patterns/feedback/EmojiReactionToolbar';
 
 
 // --- Old Components (for backward compatibility) ---
@@ -162,6 +167,11 @@ export const ComponentRegistry: Record<string, React.ComponentType<any>> = {
     PlayerAnswerView,
     PlayerVotingView,
     PlayerResultView,
+    TurnOrderDisplay,
+    MatchupDisplay,
+    PersonalScoreCard,
+    FinalResultsScreen,
+    EmojiReactionToolbar,
 
 
     // --- Old Components ---

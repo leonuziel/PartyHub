@@ -123,6 +123,108 @@ export const getComponentDefaultProps = (componentName: string) => {
         case 'WordGuesserInput':
             defaultProps = { wordLength: '{{gameState.secretWord.length}}', correctLetters: '{{gameState.correctLetters}}', onGuess: { action: 'submitGuess' } };
             break;
+        case 'TurnOrderDisplay':
+            defaultProps = { players: '{{players}}', activePlayerId: '{{gameState.activePlayerId}}' };
+            break;
+        
+        // --- Newly Added Components ---
+
+        case 'MatchupDisplay':
+            defaultProps = { player1: '{{players[0]}}', player2: '{{players[1]}}', matchupTitle: 'VS' };
+            break;
+
+        case 'PersonalScoreCard':
+            defaultProps = { player: '{{player}}', scoreDetails: { 'Round 1': 500, 'Bonus': 100 }, totalScore: 600 };
+            break;
+
+        case 'FinalResultsScreen':
+            defaultProps = { players: '{{players}}', onPlayAgain: { action: 'playAgain' }, onExit: { action: 'exitLobby' } };
+            break;
+
+        case 'EmojiReactionToolbar':
+            defaultProps = { onReaction: { action: 'sendReaction' } };
+            break;
+            
+        case 'HostQuestionView':
+            defaultProps = { question: 'What is the capital of France?', choices: ['Paris', 'London', 'Berlin', 'Madrid'], players: '{{players}}', timeLimit: 30 };
+            break;
+        
+        case 'HostLeaderboardView':
+            defaultProps = { players: '{{players}}' };
+            break;
+
+        case 'HostResultView':
+            defaultProps = { question: 'What was the capital of France?', options: '{{gameState.currentQuestion.options}}', correctAnswerId: '{{gameState.currentQuestion.correctAnswerId}}', players: '{{players}}', winner: '{{gameState.winner}}' };
+            break;
+
+        case 'PlayerLobbyView':
+            defaultProps = { isReady: '{{player.isReady}}', onReady: { action: 'toggleReady' } };
+            break;
+
+        case 'PlayerAnswerView':
+            defaultProps = { questionType: 'multiple-choice', options: ['A', 'B', 'C', 'D'], onAnswer: { action: 'submitAnswer' } };
+            break;
+        
+        case 'PlayerVotingView':
+            defaultProps = { prompt: 'Vote for your favorite!', options: '{{gameState.submissions}}', onVote: { action: 'submitVote' } };
+            break;
+        
+        case 'PlayerResultView':
+            defaultProps = { isCorrect: true, pointsEarned: 550, oldRank: 3, newRank: 2 };
+            break;
+
+        case 'PlayerHandView':
+            defaultProps = { cards: '{{player.hand}}', selectedCardIds: '{{player.selectedCardIds}}', onPlayCard: { action: 'playCard' }, onDrawCard: { action: 'drawCard' }, onPass: { action: 'passTurn' } };
+            break;
+
+        case 'CommunityCardsView':
+            defaultProps = { cards: '{{gameState.communityCards}}', potSize: 1500 };
+            break;
+
+        case 'BiddingView':
+            defaultProps = { currentBid: 100, onBid: { action: 'placeBid' }, onCheck: { action: 'check' }, onFold: { action: 'fold' } };
+            break;
+
+        // --- Legacy Components ---
+
+        // old/display
+        case 'PlayerInfo':
+            defaultProps = { player: '{{player}}' };
+            break;
+        case 'Podium':
+            defaultProps = { players: '{{gameState.topThreePlayers}}' };
+            break;
+        case 'WinnerDisplay':
+            defaultProps = { winnerName: '{{gameState.winner.nickname}}' };
+            break;
+        case 'QuestionDisplay':
+            defaultProps = { text: '{{gameState.currentQuestion.questionText}}' };
+            break;
+        case 'Leaderboard':
+            defaultProps = { players: '{{players}}' };
+            break;
+        
+        // old/controls
+        case 'AnswerGrid':
+            defaultProps = { answers: '{{gameState.currentQuestion.options}}', onAnswer: { action: 'submitAnswer' } };
+            break;
+        case 'TextAreaWithCounter':
+            defaultProps = { maxLength: 140, placeholder: 'Enter your submission...' };
+            break;
+        case 'VotingOptions':
+            defaultProps = { options: '{{gameState.submissions}}', onVote: { action: 'submitVote' } };
+            break;
+        
+        // old/cards
+        case 'CardSlot':
+            defaultProps = { isFaceUp: true, card: '{{gameState.communityCards[0]}}' };
+            break;
+        case 'Deck':
+            defaultProps = { count: 52, onDraw: { action: 'drawCard' } };
+            break;
+        case 'Hand':
+            defaultProps = { cards: '{{player.hand}}' };
+            break;
 
         default:
             break;

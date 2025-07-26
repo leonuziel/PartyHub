@@ -79,7 +79,26 @@ Let's use the example of adding a new component called `InfoBanner`.
     ]);
     ```
 
-### ☐ 4. Document the New Component in `components.md`
+### ☐ 4. Add Default Props for the Component Previewer
+
+-   **Objective:** Ensure the new component can be previewed without errors in the Game Creator UI.
+-   **File:** `client/src/pages/wizards/componentDefaultProps.ts`
+-   **Action:**
+    -   Open the `componentDefaultProps.ts` file.
+    -   Add a new `case` to the `switch` statement for your component's name.
+    -   Provide a sensible set of default props. Use template strings (e.g., `'{{player.nickname}}'`) for props that will be connected to game state. *This step is crucial to prevent the visual editor from crashing when a user drags your component onto a screen.*
+
+    **Example (`InfoBanner`):**
+    ```typescript
+    case 'InfoBanner':
+        defaultProps = { 
+            title: 'Info Banner Title', 
+            message: 'This is some default info.' 
+        };
+        break;
+    ```
+
+### ☐ 5. Document the New Component in `components.md`
 
 -   **Objective:** Provide clear documentation for game creators on how to use the new component.
 -   **File:** `Docs/components.md`
@@ -99,14 +118,14 @@ Let's use the example of adding a new component called `InfoBanner`.
     - `icon` (string): Optional. The name of the icon to display (e.g., 'warning', 'info').
     ```
 
-### ☐ 5. (Optional) Update the Game Creator UI
+### ☐ 6. (Optional) Update the Game Creator UI
 
 -   **Objective:** Make the new component available in the drag-and-drop UI.
 -   **File:** `client/src/pages/GameCreatorPage.tsx` (or related sub-components)
 -   **Action:**
     -   If your game creator UI has a palette of components, add the new `InfoBanner` to the list so that users can drag it onto their screens.
 
-### ☐ 6. (Optional) Create or Update a Test Game Configuration
+### ☐ 7. (Optional) Create or Update a Test Game Configuration
 
 -   **Objective:** Verify that the new component renders correctly when loaded from a configuration.
 -   **File:** `Server/src/game/configurations/test-game.json`

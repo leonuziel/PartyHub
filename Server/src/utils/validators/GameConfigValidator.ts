@@ -448,7 +448,36 @@ const PlayerVotingViewProps = baseStylingProps.extend({
 const PlayerResultViewProps = baseStylingProps.extend({
   isCorrect: z.union([z.boolean(), z.string()]),
   pointsEarned: z.number(),
-  rankChange: z.number(),
+  oldRank: z.number(),
+  newRank: z.number(),
+}).passthrough();
+
+const TurnOrderDisplayProps = baseStylingProps.extend({
+    players: z.string(),
+    activePlayerId: z.string(),
+}).passthrough();
+
+const MatchupDisplayProps = baseStylingProps.extend({
+    player1: z.string(),
+    player2: z.string(),
+    matchupTitle: z.string().optional(),
+}).passthrough();
+
+const PersonalScoreCardProps = baseStylingProps.extend({
+    player: z.string(),
+    scoreDetails: z.string(),
+    totalScore: z.number(),
+}).passthrough();
+
+const FinalResultsScreenProps = baseStylingProps.extend({
+    players: z.string(),
+    onPlayAgain: uiActionSchema,
+    onExit: uiActionSchema,
+}).passthrough();
+
+const EmojiReactionToolbarProps = baseStylingProps.extend({
+    onReaction: uiActionSchema,
+    allowedReactions: z.array(z.string()).optional(),
 }).passthrough();
 
 const InstructionCarouselProps = baseStylingProps.extend({
@@ -526,6 +555,11 @@ const componentSchema: z.ZodType<any> = z.lazy(() => z.discriminatedUnion('compo
   z.object({ component: z.literal('PlayerAnswerView'), props: PlayerAnswerViewProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('PlayerVotingView'), props: PlayerVotingViewProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('PlayerResultView'), props: PlayerResultViewProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('TurnOrderDisplay'), props: TurnOrderDisplayProps, layout: layoutSchema.optional() }),
+    z.object({ component: z.literal('MatchupDisplay'), props: MatchupDisplayProps, layout: layoutSchema.optional() }),
+    z.object({ component: z.literal('PersonalScoreCard'), props: PersonalScoreCardProps, layout: layoutSchema.optional() }),
+    z.object({ component: z.literal('FinalResultsScreen'), props: FinalResultsScreenProps, layout: layoutSchema.optional() }),
+    z.object({ component: z.literal('EmojiReactionToolbar'), props: EmojiReactionToolbarProps, layout: layoutSchema.optional() }),
 
   // Old Components
   z.object({ component: z.literal('DebugPanel'), props: DebugPanelProps, layout: layoutSchema.optional() }),
