@@ -8,12 +8,7 @@ import HostFrame from '../components/old/layout/HostFrame';
 import { socketService } from '../services/socketService';
 import { getStyleFromLayout, ComponentConfig, LayoutConfig } from '../utils/layoutUtils';
 
-// Type alias for clarity
-interface ConditionalUIViewConfig {
-    condition?: string;
-    components: ComponentConfig[];
-    layout?: LayoutConfig;
-}
+
 
 const transformProps = (props: Record<string, any>): Record<string, any> => {
     const newProps: Record<string, any> = {};

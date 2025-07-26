@@ -158,7 +158,7 @@ export const useGameFlow = (config: any, setConfig: any) => {
         });
         setArrows(newArrows);
 
-    }, [config.transitions, positions, zoom, viewport, config.states]);
+    }, [config.transitions, positions, zoom, viewport, config.states, calculateArrowPoints]);
 
     return {
         isFullscreen,

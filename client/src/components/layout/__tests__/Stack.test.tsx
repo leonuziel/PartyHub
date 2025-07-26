@@ -4,10 +4,20 @@ import '@testing-library/jest-dom';
 import { Stack } from '../Stack';
 
 // The Container component is mocked to isolate the Stack component's logic.
-// The mock correctly mimics the named export structure of the actual module.
+// The mock is updated to consume layout-specific props and not pass them to the DOM.
 jest.mock('../Container', () => ({
-  Container: ({ children, ...props }) => {
-    return <div {...props}>{children}</div>;
+  Container: ({
+    children,
+    display,
+    flexDirection,
+    gap,
+    alignItems,
+    justifyContent,
+    className,
+  }) => {
+    // We don't need to replicate the style logic, just prevent invalid props
+    // from being passed to the underlying div.
+    return <div className={className}>{children}</div>;
   },
 }));
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid } from '../layout/Grid';
+
 
 interface GameBoardProps {
   size: { rows: number; cols: number };

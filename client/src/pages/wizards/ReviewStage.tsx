@@ -6,7 +6,7 @@ interface ReviewStageProps {
 }
 
 export const ReviewStage: React.FC<ReviewStageProps> = ({ config }) => {
-  const { metadata, initialState, states, ui, transitions } = config;
+  const { metadata, initialState, states, ui } = config;
 
   return (
     <div className="form-section animate-fade-in">

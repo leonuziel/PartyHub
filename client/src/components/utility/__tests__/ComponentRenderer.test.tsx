@@ -31,10 +31,18 @@ describe('ComponentRenderer', () => {
     expect(container.firstChild).toBeNull();
   });
 
-  it('renders a "not found" message for an unknown component', () => {
+  it('renders a "not found" message for an unknown component and suppresses console warning', () => {
+    // Mock console.warn to prevent logging during this specific test
+    const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
     const config = { component: 'UnknownComponent', props: {} };
     render(<ComponentRenderer config={config} context={{}} />);
+    
     expect(screen.getByText('Component not found: UnknownComponent')).toBeInTheDocument();
+    
+    // Verify that the warning was called, and then restore the original implementation
+    expect(consoleWarnSpy).toHaveBeenCalledWith('Component "UnknownComponent" not found in registry.');
+    consoleWarnSpy.mockRestore();
   });
 
   it('resolves simple template strings from context', () => {
