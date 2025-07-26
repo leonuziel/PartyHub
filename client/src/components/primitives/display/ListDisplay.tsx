@@ -1,5 +1,5 @@
 import React from 'react';
-import { ComponentRenderer } from '../utility/ComponentRenderer';
+import { ComponentRenderer } from '../../utility/ComponentRenderer';
 
 interface ListDisplayProps<T> {
   items: T[];

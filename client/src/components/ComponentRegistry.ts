@@ -1,33 +1,33 @@
 // --- New Generic Components ---
 
 // Layout
-import { Container } from './layout/Container';
-import { Grid } from './layout/Grid';
-import { Spacer } from './layout/Spacer';
-import { Stack } from './layout/Stack';
+import { Container } from './primitives/layout/Container';
+import { Grid } from './primitives/layout/Grid';
+import { Spacer } from './primitives/layout/Spacer';
+import { Stack } from './primitives/layout/Stack';
 
 // Display
-import { ImageDisplay } from './display/ImageDisplay';
-import { KeyValueDisplay } from './display/KeyValueDisplay';
-import { ListDisplay } from './display/ListDisplay';
-import { TextDisplay } from './display/TextDisplay';
+import { ImageDisplay } from './primitives/display/ImageDisplay';
+import { KeyValueDisplay } from './primitives/display/KeyValueDisplay';
+import { ListDisplay } from './primitives/display/ListDisplay';
+import { TextDisplay } from './primitives/display/TextDisplay';
 
 // Input
-import { Button as NewButton } from './input/Button';
-import { ChoiceSelector } from './input/ChoiceSelector';
-import { Slider } from './input/Slider';
-import { TextInput } from './input/TextInput';
+import { Button as NewButton } from './primitives/input/Button';
+import { ChoiceSelector } from './primitives/input/ChoiceSelector';
+import { Slider } from './primitives/input/Slider';
+import { TextInput } from './primitives/input/TextInput';
 
 // Feedback
-import { StateIndicator } from './feedback/StateIndicator';
-import { Timer } from './feedback/Timer';
+import { StateIndicator } from './primitives/feedback/StateIndicator';
+import { Timer } from './primitives/feedback/Timer';
 
 // Game Tools
-import { Card as NewCard } from './game-tools/Card';
-import { CardContainer } from './game-tools/CardContainer';
-import { Dice } from './game-tools/Dice';
-import { GameBoard } from './game-tools/GameBoard';
-import { GamePiece } from './game-tools/GamePiece';
+import { Card as NewCard } from './elements/Card';
+import { CardContainer } from './elements/CardContainer';
+import { Dice } from './elements/Dice';
+import { GameBoard } from './elements/GameBoard';
+import { GamePiece } from './elements/GamePiece';
 
 
 // --- Old Components (for backward compatibility) ---

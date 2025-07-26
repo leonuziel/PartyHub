@@ -29,7 +29,7 @@ interface ChoiceSelectorProps {
 
 export const ChoiceSelector: React.FC<ChoiceSelectorProps> = ({
   options,
-  onSelect = () => {},
+  onSelect = () => { },
   selectionMode = 'single',
   layout = 'grid',
   disabled = false,
@@ -46,7 +46,7 @@ export const ChoiceSelector: React.FC<ChoiceSelectorProps> = ({
 }) => {
   const [selected, setSelected] = useState<string[]>([]);
 
-  const normalizedOptions: ChoiceOption[] = options.map(opt => 
+  const normalizedOptions: ChoiceOption[] = options.map(opt =>
     typeof opt === 'string' ? { id: opt, label: opt } : opt
   );
 
@@ -68,30 +68,30 @@ export const ChoiceSelector: React.FC<ChoiceSelectorProps> = ({
     // For single selection, it's common to fire immediately.
     // This implementation fires on change for both.
     if (selectionMode !== 'single') {
-       // onSelect(newSelected) // could be called here or via a submit button
+      // onSelect(newSelected) // could be called here or via a submit button
     }
   };
 
   const renderOption = (option: ChoiceOption) => {
     const isSelected = selected.includes(option.id);
     return (
-        <Button
-            key={option.id}
-            onClick={() => handleSelect(option.id)}
-            variant={isSelected ? 'primary' : 'secondary'}
-            disabled={disabled}
-            style={{
-                flexDirection: 'column',
-                height: '100%',
-                border: isSelected ? '2px solid #8A2BE2' : '2px solid transparent',
-            }}
-        >
-            {option.imageUrl && <img src={option.imageUrl} alt={option.label} style={{ width: '100px', height: '100px', objectFit: 'cover' }} />}
-            <span>{option.label}</span>
-        </Button>
+      <Button
+        key={option.id}
+        onClick={() => handleSelect(option.id)}
+        variant={isSelected ? 'primary' : 'secondary'}
+        disabled={disabled}
+        style={{
+          flexDirection: 'column',
+          height: '100%',
+          border: isSelected ? '2px solid #8A2BE2' : '2px solid transparent',
+        }}
+      >
+        {option.imageUrl && <img src={option.imageUrl} alt={option.label} style={{ width: '100px', height: '100px', objectFit: 'cover' }} />}
+        <span>{option.label}</span>
+      </Button>
     );
   };
-  
+
   const handleSubmit = () => {
     onSelect(selected);
   }
@@ -113,14 +113,14 @@ export const ChoiceSelector: React.FC<ChoiceSelectorProps> = ({
 
   return (
     <div style={containerStyle} className={className}>
-        <LayoutComponent {...layoutProps} spacing={16}>
-            {normalizedOptions.map(renderOption)}
-        </LayoutComponent>
-        {selectionMode === 'multiple' && (
-            <Button onClick={handleSubmit} disabled={disabled || selected.length === 0} style={{marginTop: '16px'}}>
-                Submit
-            </Button>
-        )}
+      <LayoutComponent {...layoutProps} spacing={16}>
+        {normalizedOptions.map(renderOption)}
+      </LayoutComponent>
+      {selectionMode === 'multiple' && (
+        <Button onClick={handleSubmit} disabled={disabled || selected.length === 0} style={{ marginTop: '16px' }}>
+          Submit
+        </Button>
+      )}
     </div>
   );
 };

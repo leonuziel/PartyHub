@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { ListDisplay } from '../ListDisplay';
-import { ComponentRenderer } from '../../utility/ComponentRenderer';
+import { ComponentRenderer } from '../../../utility/ComponentRenderer';
 
 // Mock the ComponentRenderer as ListDisplay depends on it.
 // This allows us to inspect the props passed to it.
@@ -41,7 +41,7 @@ describe('ListDisplay Component', () => {
   // 2. Renders a list of items
   test('calls ComponentRenderer for each item in the list', () => {
     render(<ListDisplay items={testItems} renderItem={renderItemProps} />);
-    
+
     // Check that ComponentRenderer was called 3 times
     expect(ComponentRenderer).toHaveBeenCalledTimes(testItems.length);
   });
@@ -59,7 +59,7 @@ describe('ListDisplay Component', () => {
         context: { item: testItems[0] },
       })
     );
-    
+
     // Check the props of the second call
     expect((ComponentRenderer as jest.Mock).mock.calls[1][0]).toEqual(
       expect.objectContaining({
