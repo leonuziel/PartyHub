@@ -7,6 +7,10 @@ interface TextDisplayProps {
   fontFamily?: string;
   color?: string;
   textAlign?: 'left' | 'center' | 'right' | 'justify';
+  backgroundColor?: string;
+  padding?: string;
+  borderRadius?: string;
+  border?: string;
   className?: string;
 }
 
@@ -17,6 +21,10 @@ export const TextDisplay: React.FC<TextDisplayProps> = ({
   fontFamily,
   color,
   textAlign,
+  backgroundColor,
+  padding,
+  borderRadius,
+  border,
   className,
 }) => {
   const style: React.CSSProperties = {
@@ -27,9 +35,15 @@ export const TextDisplay: React.FC<TextDisplayProps> = ({
     fontFamily,
     color,
     textAlign,
+    backgroundColor,
+    padding,
+    borderRadius,
+    border,
     margin: 0, // Remove default margin from <p>
-    padding: 0,
     overflowWrap: 'break-word', // Ensure long text wraps
+    display: 'flex', // Use flexbox for alignment
+    alignItems: 'center', // Center vertically
+    justifyContent: 'center', // Center horizontally
   };
 
   return (

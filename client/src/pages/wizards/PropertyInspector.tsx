@@ -1,5 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import './PropertyInspector.css';
+const getStylePropsForComponent = (componentName: string): string[] => {
+  const commonStyleProps = ['color', 'backgroundColor', 'padding', 'borderRadius', 'border'];
+  const textStyleProps = ['fontSize', 'fontWeight', 'fontFamily', 'textAlign'];
+
+  switch (componentName) {
+    case 'TextDisplay':
+      return [...textStyleProps, ...commonStyleProps];
+    case 'Button':
+      return ['variant',...textStyleProps.filter(p => p !== 'textAlign'), ...commonStyleProps];
+    default:
+      return [];
+  }
+};
+
 export const PropertyInspector = ({ component, onUpdate, onClose }: { component: any, onUpdate: (id: string, newProps: any, newLayout: any) => void, onClose: () => void }) => {
 
     const [props, setProps] = useState(component.props || {});
@@ -35,16 +49,22 @@ export const PropertyInspector = ({ component, onUpdate, onClose }: { component:
     };
 
     const parsePropValue = (key: string, rawString: string): { value: any; error: boolean } => {
-        const originalValue = component.props[key];
-        try {
-            return { value: JSON.parse(rawString), error: false };
-        } catch (e) {
-            if (typeof originalValue === 'string') {
-                return { value: rawString, error: false };
-            } else {
-                return { value: null, error: true };
-            }
+        if (rawString.trim() === '') {
+            return { value: undefined, error: false }; // Allow unsetting optional props
         }
+        try {
+            const parsed = JSON.parse(rawString);
+             // It's valid JSON, but not a string literal. Use the parsed value.
+            if (typeof parsed !== 'string') {
+                return { value: parsed, error: false };
+            }
+        } catch (e) {
+            // It's not a valid JSON literal (e.g., just a word like 'red' or a CSS value).
+            // Treat it as a raw string. This is the desired behavior for style props.
+            return { value: rawString, error: false };
+        }
+         // It was a string wrapped in quotes (e.g., '"hello"'). Return the raw, unwrapped string.
+        return { value: rawString, error: false };
     };
 
     const handlePropBlur = (key: string) => {
@@ -107,19 +127,42 @@ export const PropertyInspector = ({ component, onUpdate, onClose }: { component:
                 <button onClick={onClose} className="close-btn">&times;</button>
             </div>
             <div className="inspector-body">
-                <h4>Properties</h4>
-                {Object.keys(props).map(key => (
-                     key !== 'children' && (
-                        <div key={key}>
-                            <label>{key}</label>
-                            <textarea
+<h4>Properties</h4>
+                {Object.keys(props).filter(key => !getStylePropsForComponent(component.component).includes(key) && key !== 'children').map(key => (
+                    <div key={key}>
+                        <label>{key}</label>
+                        <textarea
+                            value={propStrings[key] ?? ''}
+                            onChange={(e) => handlePropStringChange(key, e.target.value)}
+                            onBlur={() => handlePropBlur(key)}
+                        />
+                    </div>
+                ))}
+
+                <h4>Appearance</h4>
+                <div className="layout-group">
+                {getStylePropsForComponent(component.component).map(key => (
+                    <div key={key} className="style-prop-input">
+                        <label>{key}</label>
+                        <input
+                            type={key === 'color' || key === 'backgroundColor' ? 'color' : 'text'}
+                            value={propStrings[key] ?? ''}
+                            onChange={(e) => handlePropStringChange(key, e.target.value)}
+                            onBlur={() => handlePropBlur(key)}
+                        />
+                         { (key === 'color' || key === 'backgroundColor') &&
+                            <input
+                                type="text"
+                                className="style-prop-input-text"
+                                placeholder="e.g. #ff0000 or {{some.variable}}"
                                 value={propStrings[key] ?? ''}
                                 onChange={(e) => handlePropStringChange(key, e.target.value)}
                                 onBlur={() => handlePropBlur(key)}
                             />
-                        </div>
-                    )
+                         }
+                    </div>
                 ))}
+                </div>
 
                 <h4>Layout</h4>
                 {/* Sizing Controls */}

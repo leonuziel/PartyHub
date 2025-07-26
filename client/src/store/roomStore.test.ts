@@ -20,8 +20,10 @@ describe('useRoomStore', () => {
   it('should set the room data correctly', () => {
     const newRoomData: RoomData = {
       roomCode: 'TEST',
-      players: [{ id: '1', nickname: 'Player1' }],
-      host: { id: 'host1', nickname: 'Host' },
+      players: [{ id: '1', nickname: 'Player1', score: 0 }],
+      host: { id: 'host1', nickname: 'Host', score: 0 },
+      hostId: 'host1',
+      state: 'LOBBY' as any,
       gameId: 'quizclash',
     };
 
@@ -34,8 +36,10 @@ describe('useRoomStore', () => {
   it('should clear the room data', () => {
     const newRoomData: RoomData = {
         roomCode: 'TEST',
-        players: [{ id: '1', nickname: 'Player1' }],
-        host: { id: 'host1', nickname: 'Host' },
+        players: [{ id: '1', nickname: 'Player1', score: 0 }],
+        host: { id: 'host1', nickname: 'Host', score: 0 },
+        hostId: 'host1',
+        state: 'LOBBY' as any,
         gameId: 'quizclash',
     };
     useRoomStore.getState().setRoom(newRoomData);

@@ -1,15 +1,11 @@
 import { useDebugStore } from './debugStore';
 
-// Mock initial state for testing
-const initialState = {
-  connectionStatus: 'connecting',
-  lastEvent: null,
-  messageLog: [],
-};
+// Get the initial state from the store itself
+const initialState = useDebugStore.getState();
 
 // Reset the store before each test
 beforeEach(() => {
-  useDebugStore.setState(initialState);
+  useDebugStore.setState(initialState, true);
 });
 
 describe('useDebugStore', () => {

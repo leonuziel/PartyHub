@@ -190,6 +190,10 @@ const TextDisplayProps = z.object({
   fontFamily: z.string().optional(),
   color: z.string().optional(),
   textAlign: z.enum(['left', 'center', 'right', 'justify']).optional(),
+  backgroundColor: z.string().optional(),
+  padding: z.string().optional(),
+  borderRadius: z.string().optional(),
+  border: z.string().optional(),
 }).passthrough();
 
 const ImageDisplayProps = z.object({
@@ -215,6 +219,13 @@ const NewButtonProps = z.object({
   onClick: uiActionSchema.optional(),
   variant: z.enum(['primary', 'secondary']).optional(),
   disabled: z.union([z.boolean(), z.string()]).optional(),
+  fontSize: z.string().optional(),
+  fontWeight: z.string().optional(),
+  fontFamily: z.string().optional(),
+  color: z.string().optional(),
+  backgroundColor: z.string().optional(),
+  borderRadius: z.string().optional(),
+  border: z.string().optional(),
 }).passthrough();
 
 const ChoiceSelectorProps = z.object({

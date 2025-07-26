@@ -63,6 +63,10 @@ A component for displaying text with various styling options.
 - `fontFamily` (string): CSS `font-family` property.
 - `color` (string): CSS `color` property.
 - `textAlign` ('left' | 'center' | 'right' | 'justify'): The text alignment.
+- `backgroundColor` (string): CSS `background-color` property.
+- `padding` (string): CSS `padding` property (e.g., "10px", "5px 10px").
+- `borderRadius` (string): CSS `border-radius` property (e.g., "8px").
+- `border` (string): CSS `border` property (e.g., "1px solid white").
 - `className` (string): Optional CSS class.
 
 ### ImageDisplay
@@ -111,7 +115,14 @@ A standard, clickable button.
 **Props:**
 - `text` (string): The text to display on the button.
 - `icon` (string): The URL for an icon to display on the button.
-- `variant` ('primary' | 'secondary'): The visual style of the button. Defaults to `primary`.
+- `variant` ('primary' | 'secondary'): The base visual style of the button. Defaults to `primary`.
+- `fontSize` (string): CSS `font-size` property.
+- `fontWeight` (string): CSS `font-weight` property.
+- `fontFamily` (string): CSS `font-family` property.
+- `color` (string): CSS `color` property.
+- `backgroundColor` (string): CSS `background-color` property. Overrides the variant's default.
+- `borderRadius` (string): CSS `border-radius` property (e.g., "8px").
+- `border` (string): CSS `border` property (e.g., "1px solid black").
 - Extends all other standard HTML button attributes.
 
 ### ChoiceSelector

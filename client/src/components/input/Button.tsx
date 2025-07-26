@@ -4,6 +4,13 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   text?: string;
   icon?: string; // URL or name of an icon
   variant?: 'primary' | 'secondary';
+  fontSize?: string;
+  fontWeight?: string;
+  fontFamily?: string;
+  color?: string;
+  backgroundColor?: string;
+  borderRadius?: string;
+  border?: string;
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -13,6 +20,13 @@ export const Button: React.FC<ButtonProps> = ({
   onClick = () => {},
   disabled,
   children,
+  fontSize,
+  fontWeight,
+  fontFamily,
+  color,
+  backgroundColor,
+  borderRadius,
+  border,
   ...props
 }) => {
   // Basic styling - can be replaced with CSS modules or a styling library
@@ -46,10 +60,21 @@ export const Button: React.FC<ButtonProps> = ({
     opacity: 0.5,
   };
 
+  const overrideStyle: React.CSSProperties = {
+    fontSize,
+    fontWeight,
+    fontFamily,
+    color,
+    backgroundColor,
+    borderRadius,
+    border,
+  };
+
   const style = {
     ...baseStyle,
     ...variantStyle,
     ...(disabled ? disabledStyle : {}),
+    ...overrideStyle,
   };
 
   return (

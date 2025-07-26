@@ -19,8 +19,8 @@ describe('usePlayerHandStore', () => {
 
   it('should set the player hand correctly', () => {
     const newHand: Card[] = [
-      { suit: 'hearts', rank: 'A' },
-      { suit: 'spades', rank: 'K' },
+      { suit: 'hearts', rank: 14, value: 14, name: 'Ace' },
+      { suit: 'spades', rank: 13, value: 13, name: 'King' },
     ];
     usePlayerHandStore.getState().setHand(newHand);
 
@@ -30,7 +30,7 @@ describe('usePlayerHandStore', () => {
 
   it('should be able to clear the hand by setting an empty array', () => {
     const newHand: Card[] = [
-      { suit: 'diamonds', rank: 'Q' },
+      { suit: 'diamonds', rank: 12, value: 12, name: 'Queen' },
     ];
     usePlayerHandStore.getState().setHand(newHand);
 
