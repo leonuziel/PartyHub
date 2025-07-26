@@ -302,6 +302,96 @@ const GamePieceProps = baseStylingProps.extend({
   position: z.object({ row: z.number(), col: z.number() }).optional(),
 }).passthrough();
 
+const PhaseBannerProps = baseStylingProps.extend({
+  title: z.string(),
+  subtitle: z.string().optional(),
+  duration: z.number().optional(),
+  onComplete: uiActionSchema.optional(),
+}).passthrough();
+
+const AvatarCustomizerProps = baseStylingProps.extend({
+  avatars: z.string(), // Expect a template variable like "{{gameData.avatars}}"
+  onSubmit: uiActionSchema,
+}).passthrough();
+
+const ReadyCheckDisplayProps = baseStylingProps.extend({
+  players: z.string(), // Expect a template variable like "{{players}}"
+  isHost: z.union([z.boolean(), z.string()]), // Can be a boolean or a template variable like "{{player.isHost}}"
+  currentPlayerId: z.string().optional(), // Expect a template variable like "{{player.id}}"
+  onPlayerReadyToggle: uiActionSchema,
+  onStartGame: uiActionSchema,
+}).passthrough();
+
+const SubmissionReelProps = baseStylingProps.extend({
+  submissions: z.string(), // Expect a template variable like "{{gameState.submissions}}"
+  showAuthor: z.union([z.boolean(), z.string()]),
+}).passthrough();
+
+const VotingGridProps = baseStylingProps.extend({
+  options: z.string(), // Expect a template variable like "{{gameState.submissions}}"
+  onVote: uiActionSchema,
+  disabled: z.union([z.boolean(), z.string()]).optional(),
+}).passthrough();
+
+const CorrectAnswerOverlayProps = baseStylingProps.extend({
+    options: z.string(), // template variable
+    correctAnswerId: z.string(), // template variable
+    players: z.string(), // template variable
+    onComplete: uiActionSchema.optional(),
+}).passthrough();
+
+const ScoreAccumulationBarProps = baseStylingProps.extend({
+  initialScore: z.number(),
+  scoreChange: z.number(),
+  label: z.string(),
+  startDelay: z.number().optional(),
+  onComplete: uiActionSchema.optional(),
+}).passthrough();
+
+const InGameNotificationProps = baseStylingProps.extend({
+  message: z.string(),
+  type: z.enum(['info', 'warning', 'success']).optional(),
+  duration: z.number().optional(),
+  onComplete: uiActionSchema.optional(),
+}).passthrough();
+
+const InstructionCarouselProps = baseStylingProps.extend({
+  slides: z.string(), // Expect a template variable like "{{gameData.instructions}}"
+  autoPlayInterval: z.number().optional(),
+}).passthrough();
+
+const TeamSelectionGridProps = baseStylingProps.extend({
+  teams: z.string(), // Expect a template variable like "{{gameState.teams}}"
+  players: z.string(), // Expect a template variable like "{{gameState.unassignedPlayers}}"
+  isHost: z.union([z.boolean(), z.string()]),
+  onJoinTeam: uiActionSchema,
+  onMovePlayer: uiActionSchema,
+}).passthrough();
+
+const RoleRevealCardProps = baseStylingProps.extend({
+  roleName: z.string(),
+  roleDescription: z.string(),
+  roleImageUrl: z.string().optional(),
+  onAcknowledge: uiActionSchema,
+}).passthrough();
+
+const DrawingCanvasProps = baseStylingProps.extend({
+  isReadOnly: z.union([z.boolean(), z.string()]),
+  drawingData: z.string().optional(), // Expect a template variable
+  onDraw: uiActionSchema,
+}).passthrough();
+
+const WordGuesserInputProps = baseStylingProps.extend({
+  wordLength: z.number(),
+  correctLetters: z.string(), // Expect a template variable like "{{gameState.correctLetters}}"
+  onGuess: uiActionSchema,
+}).passthrough();
+
+const InstructionCarouselProps = baseStylingProps.extend({
+  slides: z.string(), // Expect a template variable like "{{gameData.instructions}}"
+  autoPlayInterval: z.number().optional(),
+}).passthrough();
+
 
 // --- New schemas for layout properties based on ui_layout_config_plan.md ---
 
@@ -348,6 +438,20 @@ const componentSchema: z.ZodType<any> = z.lazy(() => z.discriminatedUnion('compo
   z.object({ component: z.literal('Dice'), props: DiceProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('GameBoard'), props: GameBoardProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('GamePiece'), props: GamePieceProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('PhaseBanner'), props: PhaseBannerProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('AvatarCustomizer'), props: AvatarCustomizerProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('ReadyCheckDisplay'), props: ReadyCheckDisplayProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('SubmissionReel'), props: SubmissionReelProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('VotingGrid'), props: VotingGridProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('CorrectAnswerOverlay'), props: CorrectAnswerOverlayProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('ScoreAccumulationBar'), props: ScoreAccumulationBarProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('InGameNotification'), props: InGameNotificationProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('InstructionCarousel'), props: InstructionCarouselProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('TeamSelectionGrid'), props: TeamSelectionGridProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('RoleRevealCard'), props: RoleRevealCardProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('DrawingCanvas'), props: DrawingCanvasProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('WordGuesserInput'), props: WordGuesserInputProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('InstructionCarousel'), props: InstructionCarouselProps, layout: layoutSchema.optional() }),
 
   // Old Components
   z.object({ component: z.literal('DebugPanel'), props: DebugPanelProps, layout: layoutSchema.optional() }),

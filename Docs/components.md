@@ -196,6 +196,123 @@ A loading spinner to indicate that content is being loaded.
 
 ---
 
+## Patterns
+
+High-level, pre-composed components that solve common UI problems in game design.
+
+### WordGuesserInput
+An input field specifically for guessing a secret word. It shows correctly guessed letters and provides input boxes for the remaining letters.
+
+**Props:**
+- `wordLength` (number): The total number of letters in the word.
+- `correctLetters` (object): An object where keys are indices and values are the correctly guessed letters at those positions (e.g., `{ 0: 'A', 3: 'L' }`).
+- `onGuess` (Action): The action dispatched when the player submits their guess. The payload will be the full guessed word as a string.
+
+### DrawingCanvas
+A component for drawing games. Provides a canvas and drawing tools for the active player, and a read-only view for guessers.
+
+**Props:**
+- `isReadOnly` (boolean): If true, the canvas cannot be drawn on.
+- `drawingData` (string): Base64 encoded image data to display on the canvas (used for read-only mode).
+- `onDraw` (Action): The action dispatched when the drawing player finishes a stroke. The payload is the base64 encoded image data.
+
+### RoleRevealCard
+A component that dramatically reveals a player's secret role to them. It starts as a facedown card and flips over on click.
+
+**Props:**
+- `roleName` (string): The name of the role to be revealed.
+- `roleDescription` (string): A description of the role's abilities or purpose.
+- `roleImageUrl` (string): An optional image to display for the role.
+- `onAcknowledge` (Action): The action dispatched when the player clicks the "Got it!" button after revealing the role.
+
+### TeamSelectionGrid
+A component for lobbies that displays multiple teams and allows players to join them. For hosts, it supports dragging and dropping players between teams.
+
+**Props:**
+- `teams` (Team[]): An array of team objects. Each object should have an `id`, `name`, `color`, and an array of `players`.
+- `players` (Player[]): An array of unassigned players (only used by the host view).
+- `isHost` (boolean): Should be true if the current user is the host.
+- `onJoinTeam` (Action): The action dispatched when a player clicks to join a team.
+- `onMovePlayer` (Action): The action dispatched when a host drags a player to a new team.
+
+### InstructionCarousel
+A component that displays a series of slides with titles, text, and optional images. It's designed for "How to Play" instructions in a lobby and auto-plays on a timer.
+
+**Props:**
+- `slides` (InstructionSlide[]): An array of slide objects. Each object should have a `title`, `text`, and an optional `imageUrl`.
+- `autoPlayInterval` (number): The number of seconds to wait before automatically advancing to the next slide. Defaults to `5`.
+
+### InGameNotification
+A temporary "toast" or "snackbar" notification that appears at the bottom of the screen to deliver information without interrupting gameplay. It disappears automatically.
+
+**Props:**
+- `message` (string): The text to display in the notification.
+- `type` ('info' | 'warning' | 'success'): The visual style of the notification. Defaults to `info`.
+- `duration` (number): The number of seconds the notification should be visible. Defaults to `4`.
+- `onComplete` (Action): An action to be dispatched after the notification has disappeared.
+
+### ScoreAccumulationBar
+A visual bar that animates a player's score changing. It's useful for adding suspense when revealing scores.
+
+**Props:**
+- `initialScore` (number): The score before the change.
+- `scoreChange` (number): The amount to add or subtract from the score.
+- `label` (string): A label to display next to the bar, usually the player's name.
+- `startDelay` (number): An optional delay in milliseconds before the animation starts.
+- `onComplete` (Action): An action to be dispatched after the animation is finished.
+
+### CorrectAnswerOverlay
+An overlay that displays the results of a question. It highlights the correct answer and shows which players chose each option.
+
+**Props:**
+- `options` (AnswerOption[]): The array of answer options that were shown to the players.
+- `correctAnswerId` (string): The `id` of the correct answer option.
+- `players` (Player[]): An array of player objects. Each object must have an `answerId` property corresponding to the option they chose.
+- `onComplete` (Action): An action to be dispatched when the overlay is clicked to be dismissed.
+
+### VotingGrid
+Displays a grid of options (text or images) for players to vote on. Once a player votes, the grid becomes disabled for them.
+
+**Props:**
+- `options` (VoteOption[]): An array of options to display. Each object should have an `id`, `content`, and `type` ('text' or 'image').
+- `onVote` (Action): The action dispatched when a player clicks an option. The payload will be the `id` of the selected option.
+- `disabled` (boolean): If true, disables the voting grid.
+
+### SubmissionReel
+A component that displays submissions (text or images) one by one, with navigation controls to cycle through them.
+
+**Props:**
+- `submissions` (Submission[]): An array of submission objects. Each object should have `content`, `type` ('text' or 'image'), and an optional `author`.
+- `showAuthor` (boolean): If true, displays the author's name on each submission.
+
+### ReadyCheckDisplay
+A component for the lobby that shows a list of all players and their "Ready" status. It provides a button for players to toggle their own status, and a button for the host to start the game once all players are ready.
+
+**Props:**
+- `players` (Player[]): An array of player objects. Each player object should have an `isReady` property.
+- `isHost` (boolean): Should be true if the current user is the host, to show the "Start Game" button.
+- `currentPlayerId` (string): The ID of the current player, so the "Ready Up" button is only shown to them.
+- `onPlayerReadyToggle` (Action): The action dispatched when a player clicks the ready button.
+- `onStartGame` (Action): The action dispatched when the host clicks the "Start Game" button.
+
+### AvatarCustomizer
+A component for the lobby that allows a player to choose an avatar and submit a nickname.
+
+**Props:**
+- `avatars` (string[]): An array of image URLs to be displayed as choices.
+- `onSubmit` (Action): The action to be dispatched when the player submits their choice. The payload will be `{ nickname: string, avatar: string }`.
+
+### PhaseBanner
+A prominent, temporary banner that appears to announce a new phase of a round (e.g., "Writing Phase," "Voting Phase"). It automatically disappears after a few seconds.
+
+**Props:**
+- `title` (string): The main text to display in the banner.
+- `subtitle` (string): Optional smaller text displayed below the title.
+- `duration` (number): The number of seconds the banner should be visible. Defaults to `3`.
+- `onComplete` (Action): An action to trigger after the banner has disappeared.
+
+---
+
 ## Game Tools
 
 Specialized components for building games.

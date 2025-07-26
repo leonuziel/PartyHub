@@ -1,0 +1,61 @@
+.phase-banner-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  .phase-banner-content {
+    text-align: center;
+    color: white;
+    padding: 40px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #8a2be2, #4a0e81);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    transform: scale(0.9);
+    animation: popIn 0.5s 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  }
+  
+  .phase-banner-content h1 {
+    font-size: 4rem;
+    margin: 0;
+    font-family: 'Bangers', cursive;
+    letter-spacing: 2px;
+    text-shadow: 4px 4px 0px #4a0e81;
+  }
+  
+  .phase-banner-content h2 {
+    font-size: 2rem;
+    margin: 10px 0 0;
+    font-family: 'Luckiest Guy', cursive;
+    opacity: 0.9;
+    text-shadow: 2px 2px 0px #4a0e81;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      background-color: rgba(0, 0, 0, 0);
+    }
+    to {
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+  }
+  
+  @keyframes popIn {
+    from {
+      transform: scale(0.9);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  

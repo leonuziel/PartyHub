@@ -24,6 +24,7 @@ import { getComponentDefaultProps } from './componentDefaultProps';
 
 
 const COMPONENT_CATEGORIES = {
+    "Patterns": ['WordGuesserInput', 'DrawingCanvas', 'RoleRevealCard', 'TeamSelectionGrid', 'InstructionCarousel', 'PhaseBanner', 'AvatarCustomizer', 'ReadyCheckDisplay', 'SubmissionReel', 'VotingGrid', 'CorrectAnswerOverlay', 'ScoreAccumulationBar', 'InGameNotification'],
     "Layout & Structure": ['Container', 'Stack', 'Grid', 'Spacer'],
     "Display": ['TextDisplay', 'ImageDisplay', 'ListDisplay', 'KeyValueDisplay', 'PlayerAvatar'],
     "Input & Controls": ['Button', 'ChoiceSelector', 'TextInput', 'Slider'],

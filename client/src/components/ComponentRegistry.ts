@@ -29,6 +29,21 @@ import { Dice } from './elements/Dice';
 import { GameBoard } from './elements/GameBoard';
 import { GamePiece } from './elements/GamePiece';
 
+// Patterns
+import { PhaseBanner } from './patterns/gameplay/PhaseBanner';
+import { DrawingCanvas } from './patterns/gameplay/DrawingCanvas';
+import { RoleRevealCard } from './patterns/gameplay/RoleRevealCard';
+import { WordGuesserInput } from './patterns/gameplay/WordGuesserInput';
+import { SubmissionReel } from './patterns/gameplay/SubmissionReel';
+import { AvatarCustomizer } from './patterns/lobby/AvatarCustomizer';
+import { InstructionCarousel } from './patterns/lobby/InstructionCarousel';
+import { ReadyCheckDisplay } from './patterns/lobby/ReadyCheckDisplay';
+import { TeamSelectionGrid } from './patterns/lobby/TeamSelectionGrid';
+import { CorrectAnswerOverlay } from './patterns/results/CorrectAnswerOverlay';
+import { ScoreAccumulationBar } from './patterns/results/ScoreAccumulationBar';
+import { VotingGrid } from './patterns/results/VotingGrid';
+import { InGameNotification } from './patterns/meta/InGameNotification';
+
 
 // --- Old Components (for backward compatibility) ---
 
@@ -114,6 +129,19 @@ export const ComponentRegistry: Record<string, React.ComponentType<any>> = {
     Dice,
     GameBoard,
     GamePiece,
+    PhaseBanner,
+    AvatarCustomizer,
+    ReadyCheckDisplay,
+    SubmissionReel,
+    VotingGrid,
+    CorrectAnswerOverlay,
+    ScoreAccumulationBar,
+    InGameNotification,
+    InstructionCarousel,
+    TeamSelectionGrid,
+    RoleRevealCard,
+    DrawingCanvas,
+    WordGuesserInput,
 
 
     // --- Old Components ---

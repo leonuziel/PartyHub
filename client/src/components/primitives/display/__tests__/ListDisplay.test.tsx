@@ -6,7 +6,7 @@ import { ComponentRenderer } from '../../../utility/ComponentRenderer';
 
 // Mock the ComponentRenderer as ListDisplay depends on it.
 // This allows us to inspect the props passed to it.
-jest.mock('../../utility/ComponentRenderer', () => ({
+jest.mock('../../../utility/ComponentRenderer', () => ({
   ComponentRenderer: jest.fn(() => null),
 }));
 

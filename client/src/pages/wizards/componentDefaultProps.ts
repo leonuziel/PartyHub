@@ -78,6 +78,52 @@ export const getComponentDefaultProps = (componentName: string) => {
             defaultProps = { shape: 'circle', color: 'red', position: { row: 0, col: 0 } };
             break;
 
+        // Patterns
+        case 'PhaseBanner':
+            defaultProps = { title: 'Round 1', subtitle: 'Writing Phase', duration: 3 };
+            break;
+        case 'AvatarCustomizer':
+            defaultProps = { avatars: '{{gameData.avatars}}', onSubmit: { action: 'setPlayerDetails' } };
+            break;
+        case 'ReadyCheckDisplay':
+            defaultProps = { players: '{{players}}', isHost: '{{player.isHost}}', currentPlayerId: '{{player.id}}', onPlayerReadyToggle: { action: 'toggleReady' }, onStartGame: { action: 'startGame' } };
+            break;
+        case 'SubmissionReel':
+            defaultProps = { submissions: '{{gameState.submissions}}', showAuthor: false };
+            break;
+        case 'VotingGrid':
+            defaultProps = { options: '{{gameState.submissions}}', onVote: { action: 'submitVote' } };
+            break;
+        case 'CorrectAnswerOverlay':
+            defaultProps = { options: '{{gameState.currentQuestion.options}}', correctAnswerId: '{{gameState.currentQuestion.correctAnswerId}}', players: '{{players}}' };
+            break;
+        case 'ScoreAccumulationBar':
+            defaultProps = { initialScore: 0, scoreChange: 100, label: '{{player.nickname}}' };
+            break;
+        case 'InGameNotification':
+            defaultProps = { message: 'Player X has joined!', type: 'info' };
+            break;
+        
+        case 'InstructionCarousel':
+            defaultProps = { slides: '{{gameData.instructions}}', autoPlayInterval: 5 };
+            break;
+
+        case 'TeamSelectionGrid':
+            defaultProps = { teams: '{{gameState.teams}}', players: '{{gameState.unassignedPlayers}}', isHost: '{{player.isHost}}', onJoinTeam: { action: 'joinTeam' }, onMovePlayer: { action: 'movePlayer' } };
+            break;
+
+        case 'RoleRevealCard':
+            defaultProps = { roleName: '{{player.role.name}}', roleDescription: '{{player.role.description}}', onAcknowledge: { action: 'acknowledgeRole' } };
+            break;
+
+        case 'DrawingCanvas':
+            defaultProps = { isReadOnly: '{{player.role !== "artist"}}', drawingData: '{{gameState.currentDrawing}}', onDraw: { action: 'updateDrawing' } };
+            break;
+
+        case 'WordGuesserInput':
+            defaultProps = { wordLength: '{{gameState.secretWord.length}}', correctLetters: '{{gameState.correctLetters}}', onGuess: { action: 'submitGuess' } };
+            break;
+
         default:
             break;
     }

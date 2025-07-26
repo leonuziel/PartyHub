@@ -1,0 +1,70 @@
+.voting-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    padding: 1.5rem;
+    width: 100%;
+  }
+  
+  .vote-option-card {
+    background-color: #fff;
+    color: #12101f;
+    border-radius: 12px;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+    overflow: hidden;
+    border: 3px solid transparent;
+  }
+  
+  .vote-option-card:hover:not(.voted) {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    border-color: #8a2be2;
+  }
+  
+  .vote-option-card.voted {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  .vote-option-card.selected-vote {
+    opacity: 1;
+    border-color: #39e686;
+    box-shadow: 0 0 20px rgba(57, 230, 134, 0.7);
+  }
+  
+  .card-content {
+    padding: 1rem;
+  }
+  
+  .card-content p {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin: 0;
+  }
+  
+  .card-content img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  .voted-indicator {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #39e686;
+    color: #12101f;
+    padding: 0.5rem;
+    font-weight: bold;
+    text-align: center;
+  }
+  
