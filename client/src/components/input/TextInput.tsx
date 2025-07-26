@@ -7,17 +7,37 @@ interface TextInputProps {
   showCounter?: boolean;
   onChange?: (value: string) => void;
   multiline?: boolean;
+  fontSize?: string;
+  fontWeight?: string;
+  fontFamily?: string;
+  color?: string;
+  textAlign?: 'left' | 'center' | 'right' | 'justify';
+  backgroundColor?: string;
+  padding?: string;
+  borderRadius?: string;
+  border?: string;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 export const TextInput: React.FC<TextInputProps> = ({
   placeholder,
   maxLength,
-  disabled=false,
+  disabled = false,
   showCounter = false,
-  onChange = () => { },
+  onChange = () => {},
   multiline = false,
+  fontSize,
+  fontWeight,
+  fontFamily,
+  color,
+  textAlign,
+  backgroundColor,
+  padding,
+  borderRadius,
+  border,
   className,
+  style: propStyle = {},
 }) => {
   const [value, setValue] = useState('');
 
@@ -34,12 +54,19 @@ export const TextInput: React.FC<TextInputProps> = ({
 
   const inputStyle: React.CSSProperties = {
     width: '100%',
-    padding: '10px',
-    borderRadius: '8px',
-    border: '1px solid #3A3A5A',
-    backgroundColor: '#1C192B',
-    color: 'white',
     boxSizing: 'border-box',
+    resize: multiline ? 'none' : undefined,
+    flexGrow: 1,
+    fontSize,
+    fontWeight,
+    fontFamily,
+    color: color || 'white',
+    textAlign,
+    backgroundColor: backgroundColor || '#1C192B',
+    padding: padding || '10px',
+    borderRadius: borderRadius || '8px',
+    border: border || '1px solid #3A3A5A',
+    ...propStyle,
   };
 
   const counterStyle: React.CSSProperties = {
@@ -53,7 +80,7 @@ export const TextInput: React.FC<TextInputProps> = ({
   return (
     <div className={className} style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
       <InputComponent
-        style={{ ...inputStyle, flexGrow: 1, resize: multiline ? 'none' : undefined }}
+        style={inputStyle}
         placeholder={placeholder}
         value={value}
         onChange={handleChange}

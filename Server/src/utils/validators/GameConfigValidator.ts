@@ -13,6 +13,19 @@ const uiActionObjectSchema = z.object({
 // An action can be either the new structured object or the legacy string format.
 const uiActionSchema = z.union([uiActionObjectSchema, z.string()]);
 
+const baseStylingProps = z.object({
+  fontSize: z.string().optional(),
+  fontWeight: z.string().optional(),
+  fontFamily: z.string().optional(),
+  color: z.string().optional(),
+  textAlign: z.enum(['left', 'center', 'right', 'justify']).optional(),
+  backgroundColor: z.string().optional(),
+  padding: z.string().optional(),
+  borderRadius: z.string().optional(),
+  border: z.string().optional(),
+  style: z.record(z.any()).optional(),
+});
+
 
 const DebugPanelProps = z.object({}).passthrough();
 const ButtonProps = z.object({
@@ -157,7 +170,7 @@ const SpinnerProps = z.object({}).passthrough();
 // --- New Generic Component Schemas ---
 
 // Layout
-const ContainerProps = z.object({
+const ContainerProps = baseStylingProps.extend({
   children: z.any(), // In config, children will be other components, handled by renderer
   display: z.enum(['flex', 'grid']).optional(),
   flexDirection: z.enum(['row', 'column']).optional(),
@@ -166,69 +179,53 @@ const ContainerProps = z.object({
   justifyContent: z.string().optional(),
 }).passthrough();
 
-const GridProps = z.object({
+const GridProps = baseStylingProps.extend({
   columns: z.number().optional(),
-  rows: z.number(),
+  rows: z.number().optional(),
   spacing: z.number().optional(),
 }).passthrough();
 
-const SpacerProps = z.object({
+const SpacerProps = baseStylingProps.extend({
   // Spacer has no props in the config
 }).passthrough();
 
-const StackProps = z.object({
+const StackProps = baseStylingProps.extend({
   children: z.any(),
   direction: z.enum(['vertical', 'horizontal']).optional(),
   spacing: z.number().optional(),
 }).passthrough();
 
 // Display
-const TextDisplayProps = z.object({
+const TextDisplayProps = baseStylingProps.extend({
   text: z.string(),
-  fontSize: z.string().optional(),
-  fontWeight: z.string().optional(),
-  fontFamily: z.string().optional(),
-  color: z.string().optional(),
-  textAlign: z.enum(['left', 'center', 'right', 'justify']).optional(),
-  backgroundColor: z.string().optional(),
-  padding: z.string().optional(),
-  borderRadius: z.string().optional(),
-  border: z.string().optional(),
 }).passthrough();
 
-const ImageDisplayProps = z.object({
+const ImageDisplayProps = baseStylingProps.extend({
   src: z.string(),
   alt: z.string(),
   fit: z.enum(['cover', 'contain', 'fill']).optional(),
 }).passthrough();
 
-const ListDisplayProps = z.object({
+const ListDisplayProps = baseStylingProps.extend({
   items: z.string(), // Template variable like "{{players}}"
   renderItem: z.any(), // A template component definition
 }).passthrough();
 
-const KeyValueDisplayProps = z.object({
+const KeyValueDisplayProps = baseStylingProps.extend({
   data: z.string(), // Template variable like "{{player.stats}}"
   layout: z.enum(['horizontal', 'vertical']).optional(),
 }).passthrough();
 
 // Input & Controls
-const NewButtonProps = z.object({
+const NewButtonProps = baseStylingProps.extend({
   text: z.string().optional(),
   icon: z.string().optional(),
   onClick: uiActionSchema.optional(),
   variant: z.enum(['primary', 'secondary']).optional(),
   disabled: z.union([z.boolean(), z.string()]).optional(),
-  fontSize: z.string().optional(),
-  fontWeight: z.string().optional(),
-  fontFamily: z.string().optional(),
-  color: z.string().optional(),
-  backgroundColor: z.string().optional(),
-  borderRadius: z.string().optional(),
-  border: z.string().optional(),
 }).passthrough();
 
-const ChoiceSelectorProps = z.object({
+const ChoiceSelectorProps = baseStylingProps.extend({
     options: z.string(), // template variable
     onSelect: uiActionSchema.optional(),
     selectionMode: z.enum(['single', 'multiple']).optional(),
@@ -236,7 +233,7 @@ const ChoiceSelectorProps = z.object({
     disabled: z.union([z.boolean(), z.string()]).optional(),
 }).passthrough();
 
-const TextInputProps = z.object({
+const TextInputProps = baseStylingProps.extend({
     placeholder: z.string().optional(),
     maxLength: z.number().optional(),
     showCounter: z.boolean().optional(),
@@ -244,7 +241,7 @@ const TextInputProps = z.object({
     multiline: z.boolean().optional(),
 }).passthrough();
 
-const SliderProps = z.object({
+const SliderProps = baseStylingProps.extend({
     min: z.number().optional(),
     max: z.number().optional(),
     step: z.number().optional(),
@@ -253,20 +250,20 @@ const SliderProps = z.object({
 }).passthrough();
 
 // Feedback & State
-const TimerProps = z.object({
+const TimerProps = baseStylingProps.extend({
     duration: z.number(),
     type: z.enum(['countdown', 'progress']).optional(),
     onComplete: uiActionSchema.optional(),
     label: z.string().optional(),
 }).passthrough();
 
-const StateIndicatorProps = z.object({
+const StateIndicatorProps = baseStylingProps.extend({
     status: z.string(), // template variable
     indicator: z.enum(['icon', 'text', 'color']).optional(),
 }).passthrough();
 
 // Game Tools
-const NewCardProps = z.object({
+const NewCardProps = baseStylingProps.extend({
   faceUp: z.union([z.boolean(), z.string()]).optional(),
   content: z.any().optional(), // Can be complex, allow anything for now
   back: z.any().optional(),
@@ -275,14 +272,14 @@ const NewCardProps = z.object({
   onClick: uiActionSchema.optional(),
 }).passthrough();
 
-const CardContainerProps = z.object({
+const CardContainerProps = baseStylingProps.extend({
   layout: z.enum(['fan', 'grid', 'stack', 'pile']).optional(),
   cards: z.string(), // template variable
   onCardClick: uiActionSchema.optional(),
   selectedCardIds: z.string().optional(), // template variable
 }).passthrough();
 
-const DiceProps = z.object({
+const DiceProps = baseStylingProps.extend({
   count: z.number().optional(),
   values: z.union([
     z.string(), // For template variables like "{{gameState.dice}}"
@@ -292,13 +289,13 @@ const DiceProps = z.object({
   onRollComplete: uiActionSchema.optional(),
 }).passthrough();
 
-const GameBoardProps = z.object({
+const GameBoardProps = baseStylingProps.extend({
   size: z.object({ rows: z.number(), cols: z.number() }),
   onCellClick: uiActionSchema.optional(),
   children: z.any(),
 }).passthrough();
 
-const GamePieceProps = z.object({
+const GamePieceProps = baseStylingProps.extend({
   shape: z.enum(['circle', 'square']).optional(),
   color: z.string().optional(),
   image: z.string().optional(),

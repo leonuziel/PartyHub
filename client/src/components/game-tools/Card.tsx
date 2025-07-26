@@ -7,6 +7,15 @@ interface CardProps {
   isSelectable?: boolean;
   isSelected?: boolean;
   onClick?: () => void;
+  fontSize?: string;
+  fontWeight?: string;
+  fontFamily?: string;
+  color?: string;
+  textAlign?: 'left' | 'center' | 'right' | 'justify';
+  backgroundColor?: string;
+  padding?: string;
+  borderRadius?: string;
+  border?: string;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -18,6 +27,15 @@ export const Card: React.FC<CardProps> = ({
   isSelectable = false,
   isSelected = false,
   onClick,
+  fontSize,
+  fontWeight,
+  fontFamily,
+  color,
+  textAlign,
+  backgroundColor,
+  padding,
+  borderRadius,
+  border,
   className,
   style,
 }) => {
@@ -25,15 +43,20 @@ export const Card: React.FC<CardProps> = ({
     width: '100%',
     height: '100%',
     aspectRatio: '2.5 / 3.5', // Standard poker card aspect ratio
-    border: '1px solid #ccc',
-    borderRadius: '10px',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     cursor: isSelectable ? 'pointer' : 'default',
-    backgroundColor: 'white',
-    color: 'black',
     boxSizing: 'border-box',
+    fontSize: fontSize,
+    fontWeight: fontWeight,
+    fontFamily: fontFamily,
+    color: color || 'black',
+    textAlign,
+    backgroundColor: backgroundColor || 'white',
+    padding: padding,
+    borderRadius: borderRadius || '10px',
+    border: border || '1px solid #ccc',
     ...style,
   };
 

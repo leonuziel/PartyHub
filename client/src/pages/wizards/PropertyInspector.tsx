@@ -1,14 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import './PropertyInspector.css';
 const getStylePropsForComponent = (componentName: string): string[] => {
-  const commonStyleProps = ['color', 'backgroundColor', 'padding', 'borderRadius', 'border'];
-  const textStyleProps = ['fontSize', 'fontWeight', 'fontFamily', 'textAlign'];
+  const containerStyleProps = ['backgroundColor', 'padding', 'borderRadius', 'border'];
+  const textStyleProps = ['fontSize', 'fontWeight', 'fontFamily', 'color', 'textAlign'];
 
   switch (componentName) {
     case 'TextDisplay':
-      return [...textStyleProps, ...commonStyleProps];
+    case 'KeyValueDisplay':
+    case 'StateIndicator':
+    case 'Timer':
+    case 'Card':
+    case 'Dice':
+    case 'TextInput':
+      return [...textStyleProps, ...containerStyleProps];
+    case 'ImageDisplay':
+    case 'ListDisplay':
+    case 'CardContainer':
+    case 'Container':
+    case 'Grid':
+    case 'Stack':
+      return containerStyleProps;
     case 'Button':
-      return ['variant',...textStyleProps.filter(p => p !== 'textAlign'), ...commonStyleProps];
+      return ['variant', ...textStyleProps, ...containerStyleProps];
+    case 'ChoiceSelector':
+    case 'Slider':
+        return ['fontSize', 'fontWeight', 'fontFamily', 'color', ...containerStyleProps]
     default:
       return [];
   }

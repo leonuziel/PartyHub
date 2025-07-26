@@ -7,7 +7,12 @@ interface ContainerProps {
   gap?: number;
   alignItems?: string;
   justifyContent?: string;
+  backgroundColor?: string;
+  padding?: string;
+  borderRadius?: string;
+  border?: string;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 export const Container: React.FC<ContainerProps> = ({
@@ -17,7 +22,12 @@ export const Container: React.FC<ContainerProps> = ({
   gap = 0,
   alignItems,
   justifyContent,
+  backgroundColor,
+  padding,
+  borderRadius,
+  border,
   className = '',
+  style: propStyle = {},
 }) => {
   const style: React.CSSProperties = {
     display,
@@ -25,6 +35,11 @@ export const Container: React.FC<ContainerProps> = ({
     gap: `${gap}px`,
     alignItems,
     justifyContent,
+    backgroundColor,
+    padding,
+    borderRadius,
+    border,
+    ...propStyle,
   };
 
   return (

@@ -12,6 +12,12 @@ interface CardContainerProps {
   cards: CardData[];
   onCardClick?: (cardId: string) => void;
   selectedCardIds?: string[];
+  backgroundColor?: string;
+  padding?: string;
+  borderRadius?: string;
+  border?: string;
+  className?: string;
+  style?: React.CSSProperties;
 }
 
 export const CardContainer: React.FC<CardContainerProps> = ({
@@ -19,6 +25,12 @@ export const CardContainer: React.FC<CardContainerProps> = ({
   cards,
   onCardClick = () => {},
   selectedCardIds = [],
+  backgroundColor,
+  padding,
+  borderRadius,
+  border,
+  className,
+  style: propStyle = {},
 }) => {
   const containerStyle: React.CSSProperties = {
     display: 'flex', // Use flexbox for basic alignment
@@ -27,6 +39,11 @@ export const CardContainer: React.FC<CardContainerProps> = ({
     width: '100%',
     height: '100%',
     position: 'relative', // Needed for absolute positioning of fan/pile
+    backgroundColor,
+    padding,
+    borderRadius,
+    border,
+    ...propStyle,
   };
 
   const renderCard = (card: CardData, index: number, style: React.CSSProperties = {}) => (

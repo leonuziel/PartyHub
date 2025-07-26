@@ -8,9 +8,12 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   fontWeight?: string;
   fontFamily?: string;
   color?: string;
+  textAlign?: 'left' | 'center' | 'right' | 'justify';
   backgroundColor?: string;
+  padding?: string;
   borderRadius?: string;
   border?: string;
+  style?: React.CSSProperties;
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -24,9 +27,12 @@ export const Button: React.FC<ButtonProps> = ({
   fontWeight,
   fontFamily,
   color,
+  textAlign,
   backgroundColor,
+  padding,
   borderRadius,
   border,
+  style: propStyle = {},
   ...props
 }) => {
   // Basic styling - can be replaced with CSS modules or a styling library
@@ -65,7 +71,9 @@ export const Button: React.FC<ButtonProps> = ({
     fontWeight,
     fontFamily,
     color,
+    textAlign,
     backgroundColor,
+    padding,
     borderRadius,
     border,
   };
@@ -75,6 +83,7 @@ export const Button: React.FC<ButtonProps> = ({
     ...variantStyle,
     ...(disabled ? disabledStyle : {}),
     ...overrideStyle,
+    ...propStyle,
   };
 
   return (

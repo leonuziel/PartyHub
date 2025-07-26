@@ -12,14 +12,47 @@ const iconMap: Record<string, string> = {
 interface StateIndicatorProps {
   status: string;
   indicator?: 'icon' | 'text' | 'color';
+  fontSize?: string;
+  fontWeight?: string;
+  fontFamily?: string;
+  color?: string;
+  textAlign?: 'left' | 'center' | 'right' | 'justify';
+  backgroundColor?: string;
+  padding?: string;
+  borderRadius?: string;
+  border?: string;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 export const StateIndicator: React.FC<StateIndicatorProps> = ({
   status,
   indicator = 'icon',
+  fontSize,
+  fontWeight,
+  fontFamily,
+  color,
+  textAlign,
+  backgroundColor,
+  padding,
+  borderRadius,
+  border,
   className,
+  style: propStyle = {},
 }) => {
+  const containerStyle: React.CSSProperties = {
+    fontSize,
+    fontWeight,
+    fontFamily,
+    color,
+    textAlign,
+    backgroundColor,
+    padding,
+    borderRadius,
+    border,
+    ...propStyle,
+  };
+
   const renderIndicator = () => {
     switch (indicator) {
       case 'icon':
@@ -35,7 +68,7 @@ export const StateIndicator: React.FC<StateIndicatorProps> = ({
   };
 
   return (
-    <div data-testid="state-indicator" className={className}>
+    <div data-testid="state-indicator" style={containerStyle} className={className}>
       {renderIndicator()}
     </div>
   );

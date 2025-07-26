@@ -5,7 +5,12 @@ interface GridProps {
   columns?: number;
   rows?: number;
   spacing?: number;
+  backgroundColor?: string;
+  padding?: string;
+  borderRadius?: string;
+  border?: string;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 export const Grid: React.FC<GridProps> = ({
@@ -13,7 +18,12 @@ export const Grid: React.FC<GridProps> = ({
   columns,
   rows,
   spacing = 8,
+  backgroundColor,
+  padding,
+  borderRadius,
+  border,
   className,
+  style: propStyle = {},
 }) => {
   const style: React.CSSProperties = {
     display: 'grid',
@@ -22,6 +32,11 @@ export const Grid: React.FC<GridProps> = ({
     gridTemplateColumns: columns ? `repeat(${columns}, 1fr)` : undefined,
     gridTemplateRows: rows ? `repeat(${rows}, 1fr)` : undefined,
     gap: `${spacing}px`,
+    backgroundColor,
+    padding,
+    borderRadius,
+    border,
+    ...propStyle,
   };
 
   // Convert children to an array to handle single or multiple children gracefully.

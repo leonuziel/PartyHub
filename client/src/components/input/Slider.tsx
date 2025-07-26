@@ -5,8 +5,17 @@ interface SliderProps {
   max?: number;
   step?: number;
   onChange: (value: number) => void;
-  className?: string;
   defaultValue?: number;
+  fontSize?: string;
+  fontWeight?: string;
+  fontFamily?: string;
+  color?: string;
+  backgroundColor?: string;
+  padding?: string;
+  borderRadius?: string;
+  border?: string;
+  className?: string;
+  style?: React.CSSProperties;
 }
 
 export const Slider: React.FC<SliderProps> = ({
@@ -14,8 +23,17 @@ export const Slider: React.FC<SliderProps> = ({
   max = 100,
   step = 1,
   onChange = () => {},
-  className,
   defaultValue = 50,
+  fontSize,
+  fontWeight,
+  fontFamily,
+  color,
+  backgroundColor,
+  padding,
+  borderRadius,
+  border,
+  className,
+  style: propStyle = {},
 }) => {
   const [value, setValue] = useState(defaultValue);
 
@@ -25,8 +43,27 @@ export const Slider: React.FC<SliderProps> = ({
     onChange(newValue);
   };
 
+  const containerStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '16px',
+    width: '100%',
+    padding: padding,
+    borderRadius: borderRadius,
+    border: border,
+    backgroundColor: backgroundColor,
+    ...propStyle
+  };
+
+  const textStyle: React.CSSProperties = {
+    fontSize,
+    fontWeight,
+    fontFamily,
+    color,
+  };
+
   return (
-    <div className={className} style={{ display: 'flex', alignItems: 'center', gap: '16px', width: '100%' }}>
+    <div className={className} style={containerStyle}>
       <input
         type="range"
         min={min}
@@ -36,7 +73,7 @@ export const Slider: React.FC<SliderProps> = ({
         onChange={handleChange}
         style={{ flexGrow: 1 }}
       />
-      <span>{value}</span>
+      <span style={textStyle}>{value}</span>
     </div>
   );
 };

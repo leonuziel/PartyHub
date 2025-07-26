@@ -15,6 +15,16 @@ interface ChoiceSelectorProps {
   selectionMode?: 'single' | 'multiple';
   layout?: 'grid' | 'list' | 'carousel';
   disabled?: boolean;
+  fontSize?: string;
+  fontWeight?: string;
+  fontFamily?: string;
+  color?: string;
+  backgroundColor?: string;
+  padding?: string;
+  borderRadius?: string;
+  border?: string;
+  className?: string;
+  style?: React.CSSProperties;
 }
 
 export const ChoiceSelector: React.FC<ChoiceSelectorProps> = ({
@@ -23,6 +33,16 @@ export const ChoiceSelector: React.FC<ChoiceSelectorProps> = ({
   selectionMode = 'single',
   layout = 'grid',
   disabled = false,
+  fontSize,
+  fontWeight,
+  fontFamily,
+  color,
+  backgroundColor,
+  padding,
+  borderRadius,
+  border,
+  className,
+  style,
 }) => {
   const [selected, setSelected] = useState<string[]>([]);
 
@@ -79,8 +99,20 @@ export const ChoiceSelector: React.FC<ChoiceSelectorProps> = ({
   const LayoutComponent = layout === 'grid' ? Grid : Stack;
   const layoutProps = layout === 'grid' ? { columns: Math.ceil(Math.sqrt(normalizedOptions.length)) } : { direction: 'vertical' as const };
 
+  const containerStyle: React.CSSProperties = {
+    fontSize,
+    fontWeight,
+    fontFamily,
+    color,
+    backgroundColor,
+    padding,
+    borderRadius,
+    border,
+    ...style,
+  }
+
   return (
-    <div>
+    <div style={containerStyle} className={className}>
         <LayoutComponent {...layoutProps} spacing={16}>
             {normalizedOptions.map(renderOption)}
         </LayoutComponent>

@@ -5,7 +5,17 @@ interface TimerProps {
   type?: 'countdown' | 'progress';
   onComplete?: () => void;
   label?: string;
+  fontSize?: string;
+  fontWeight?: string;
+  fontFamily?: string;
+  color?: string;
+  textAlign?: 'left' | 'center' | 'right' | 'justify';
+  backgroundColor?: string;
+  padding?: string;
+  borderRadius?: string;
+  border?: string;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 export const Timer: React.FC<TimerProps> = ({
@@ -13,7 +23,17 @@ export const Timer: React.FC<TimerProps> = ({
   type = 'countdown',
   onComplete = () => {},
   label,
+  fontSize,
+  fontWeight,
+  fontFamily,
+  color,
+  textAlign,
+  backgroundColor,
+  padding,
+  borderRadius,
+  border,
   className,
+  style: propStyle = {},
 }) => {
   const [timeLeft, setTimeLeft] = useState(duration);
 
@@ -40,14 +60,22 @@ export const Timer: React.FC<TimerProps> = ({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
+        fontFamily,
+        color,
+        textAlign,
+        backgroundColor,
+        padding,
+        borderRadius,
+        border,
+        ...propStyle,
     }
 
     const numberStyle: React.CSSProperties = {
         // Use viewport width unit for scalability. 10vw could be a good starting point.
         // The actual value might need adjustment based on desired look.
-        fontSize: 'clamp(1rem, 10vw, 8rem)', // Min, preferred, max
+        fontSize: fontSize || 'clamp(1rem, 10vw, 8rem)', // Min, preferred, max
         lineHeight: 1,
-        fontWeight: 'bold',
+        fontWeight: fontWeight || 'bold',
     }
 
     const labelStyle: React.CSSProperties = {

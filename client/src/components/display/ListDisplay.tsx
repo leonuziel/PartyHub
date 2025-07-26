@@ -4,6 +4,15 @@ import { ComponentRenderer } from '../utility/ComponentRenderer';
 interface ListDisplayProps<T> {
   items: T[];
   renderItem: any; // In config, this is a component definition object
+  fontSize?: string;
+  fontWeight?: string;
+  fontFamily?: string;
+  color?: string;
+  textAlign?: 'left' | 'center' | 'right' | 'justify';
+  backgroundColor?: string;
+  padding?: string;
+  borderRadius?: string;
+  border?: string;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -11,6 +20,15 @@ interface ListDisplayProps<T> {
 export function ListDisplay<T>({
   items,
   renderItem,
+  fontSize,
+  fontWeight,
+  fontFamily,
+  color,
+  textAlign,
+  backgroundColor,
+  padding,
+  borderRadius,
+  border,
   className,
   style,
 }: ListDisplayProps<T>) {
@@ -18,13 +36,22 @@ export function ListDisplay<T>({
   const a_items = Array.isArray(items) ? items : [];
 
   const containerStyle: React.CSSProperties = {
-    ...style,
     width: '100%',
     height: '100%',
     overflowY: 'auto', // Make it scrollable if content overflows
     display: 'flex',
     flexDirection: 'column',
     gap: '8px', // Add some space between list items
+    fontSize,
+    fontWeight,
+    fontFamily,
+    color,
+    textAlign,
+    backgroundColor,
+    padding,
+    borderRadius,
+    border,
+    ...style,
   };
 
   return (

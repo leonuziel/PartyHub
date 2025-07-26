@@ -5,30 +5,36 @@ interface DiceProps {
   values?: number[];
   isRolling?: boolean;
   onRollComplete?: () => void; // This would be triggered by an animation end event
+  fontSize?: string;
+  fontWeight?: string;
+  fontFamily?: string;
+  color?: string;
+  backgroundColor?: string;
+  padding?: string;
+  borderRadius?: string;
+  border?: string;
+  className?: string;
+  style?: React.CSSProperties;
 }
 
-const Die: React.FC<{ value: number }> = ({ value }) => {
-  const dieStyle: React.CSSProperties = {
-    width: '100%',
-    height: '100%',
-    aspectRatio: '1 / 1',
-    backgroundColor: 'white',
-    color: 'black',
-    border: '1px solid black',
-    borderRadius: '5px',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontSize: '24px',
-    fontWeight: 'bold',
-  };
-  return <div style={dieStyle}>{value}</div>;
+const Die: React.FC<{ value: number; style: React.CSSProperties }> = ({ value, style }) => {
+  return <div style={style}>{value}</div>;
 };
 
 export const Dice: React.FC<DiceProps> = ({
   count = 1,
   values = [],
   isRolling = false,
+  fontSize,
+  fontWeight,
+  fontFamily,
+  color,
+  backgroundColor,
+  padding,
+  borderRadius,
+  border,
+  className,
+  style: propStyle = {},
 }) => {
   const diceToRender = values.length > 0 ? values : Array(count).fill(1);
 
@@ -36,13 +42,31 @@ export const Dice: React.FC<DiceProps> = ({
     display: 'flex',
     gap: '10px',
     animation: isRolling ? 'shake 0.5s infinite' : 'none',
+    ...propStyle,
+  };
+
+  const dieStyle: React.CSSProperties = {
+    width: '100%',
+    height: '100%',
+    aspectRatio: '1 / 1',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: fontSize || '24px',
+    fontWeight: fontWeight || 'bold',
+    fontFamily: fontFamily,
+    color: color || 'black',
+    backgroundColor: backgroundColor || 'white',
+    padding: padding,
+    borderRadius: borderRadius || '5px',
+    border: border || '1px solid black',
   };
 
   return (
-    <div style={containerStyle}>
+    <div style={containerStyle} className={className}>
       {diceToRender.map((value, index) => (
         <div key={index} className="die-wrapper">
-          <Die value={value} />
+          <Die value={value} style={dieStyle} />
         </div>
       ))}
     </div>
