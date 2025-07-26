@@ -1,12 +1,7 @@
 import React from 'react';
 import './CorrectAnswerOverlay.css';
 
-interface Player {
-  id: string;
-  nickname: string;
-  avatar: string;
-  answerId: string;
-}
+import { Player } from '../../../types/types';
 
 interface AnswerOption {
     id: string;

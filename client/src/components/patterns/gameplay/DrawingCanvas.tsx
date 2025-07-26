@@ -64,6 +64,7 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ isReadOnly, drawin
 
   const clearCanvas = () => {
       if(isReadOnly || !canvasRef.current || !contextRef.current) return;
+      console.log('Clearing canvas');
       contextRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
       onDraw('');
   }
@@ -79,12 +80,13 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ isReadOnly, drawin
         onMouseMove={draw}
         onMouseLeave={finishDrawing}
         className={isReadOnly ? 'read-only' : ''}
+        data-testid="drawing-canvas"
       />
       {!isReadOnly && (
         <div className="drawing-controls">
             <input type="color" data-testid="color-picker" value={color} onChange={(e) => setColor(e.target.value)} />
             <input type="range" min="1" max="20" value={brushSize} onChange={(e) => setBrushSize(parseInt(e.target.value, 10))} />
-            <button onClick={clearCanvas}>Clear</button>
+            <button onClick={clearCanvas} data-testid="clear-button">Clear</button>
         </div>
       )}
     </div>

@@ -1,11 +1,7 @@
 import React from 'react';
 import { Card } from './Card'; // Assuming CardProps are exported from Card.tsx
 
-interface CardData {
-    id: string;
-    content: React.ReactNode;
-    faceUp: boolean;
-}
+import { CardData } from '../../types/types';
 
 interface CardContainerProps {
   layout?: 'fan' | 'grid' | 'stack' | 'pile';

@@ -24,6 +24,9 @@ import { getComponentDefaultProps } from './componentDefaultProps';
 
 
 const COMPONENT_CATEGORIES = {
+    "Host Views": ['HostQuestionView', 'HostLeaderboardView', 'HostResultView'],
+    "Player Views": ['PlayerLobbyView', 'PlayerAnswerView', 'PlayerVotingView', 'PlayerResultView'],
+    "Card Game Components": ['PlayerHandView', 'CommunityCardsView', 'BiddingView'],
     "Patterns": ['WordGuesserInput', 'DrawingCanvas', 'RoleRevealCard', 'TeamSelectionGrid', 'InstructionCarousel', 'PhaseBanner', 'AvatarCustomizer', 'ReadyCheckDisplay', 'SubmissionReel', 'VotingGrid', 'CorrectAnswerOverlay', 'ScoreAccumulationBar', 'InGameNotification'],
     "Layout & Structure": ['Container', 'Stack', 'Grid', 'Spacer'],
     "Display": ['TextDisplay', 'ImageDisplay', 'ListDisplay', 'KeyValueDisplay', 'PlayerAvatar'],

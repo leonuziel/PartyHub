@@ -43,6 +43,16 @@ import { CorrectAnswerOverlay } from './patterns/results/CorrectAnswerOverlay';
 import { ScoreAccumulationBar } from './patterns/results/ScoreAccumulationBar';
 import { VotingGrid } from './patterns/results/VotingGrid';
 import { InGameNotification } from './patterns/meta/InGameNotification';
+import { PlayerHandView } from './patterns/card_games/PlayerHandView';
+import { CommunityCardsView } from './patterns/card_games/CommunityCardsView';
+import { BiddingView } from './patterns/card_games/BiddingView';
+import { HostQuestionView } from './patterns/host/HostQuestionView';
+import { HostLeaderboardView } from './patterns/host/HostLeaderboardView';
+import { HostResultView } from './patterns/host/HostResultView';
+import { PlayerLobbyView } from './patterns/player/PlayerLobbyView';
+import { PlayerAnswerView } from './patterns/player/PlayerAnswerView';
+import { PlayerVotingView } from './patterns/player/PlayerVotingView';
+import { PlayerResultView } from './patterns/player/PlayerResultView';
 
 
 // --- Old Components (for backward compatibility) ---
@@ -142,6 +152,16 @@ export const ComponentRegistry: Record<string, React.ComponentType<any>> = {
     RoleRevealCard,
     DrawingCanvas,
     WordGuesserInput,
+    PlayerHandView,
+    CommunityCardsView,
+    BiddingView,
+    HostQuestionView,
+    HostLeaderboardView,
+    HostResultView,
+    PlayerLobbyView,
+    PlayerAnswerView,
+    PlayerVotingView,
+    PlayerResultView,
 
 
     // --- Old Components ---

@@ -12,7 +12,8 @@ export interface Player {
   avatar?: string;
   hasAnswered?: boolean;
   score: number;
-
+  scoreChange?: number;
+  answerId?: string;
 }
 
 export interface RoomData {
@@ -84,6 +85,12 @@ export interface Card {
   rank: number;
   value: number;
   name: string;
+}
+
+export interface CardData {
+    id: string;
+    content: React.ReactNode;
+    faceUp: boolean;
 }
 
 export interface CardsWarGameState {

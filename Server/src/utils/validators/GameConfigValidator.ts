@@ -387,6 +387,70 @@ const WordGuesserInputProps = baseStylingProps.extend({
   onGuess: uiActionSchema,
 }).passthrough();
 
+const PlayerHandViewProps = baseStylingProps.extend({
+  cards: z.string(),
+  onPlayCard: uiActionSchema,
+  onDrawCard: uiActionSchema,
+  onPass: uiActionSchema,
+  selectedCardIds: z.string(),
+}).passthrough();
+
+const CommunityCardsViewProps = baseStylingProps.extend({
+  cards: z.string(),
+  potSize: z.number().optional(),
+}).passthrough();
+
+const BiddingViewProps = baseStylingProps.extend({
+  currentBid: z.number(),
+  onBid: uiActionSchema,
+  onCheck: uiActionSchema,
+  onFold: uiActionSchema,
+}).passthrough();
+
+const HostQuestionViewProps = baseStylingProps.extend({
+  question: z.string(),
+  imageUrl: z.string().optional(),
+  choices: z.string(),
+  players: z.string(),
+  timeLimit: z.number(),
+}).passthrough();
+
+const HostLeaderboardViewProps = baseStylingProps.extend({
+  players: z.string(),
+}).passthrough();
+
+const HostResultViewProps = baseStylingProps.extend({
+  question: z.string(),
+  options: z.string(),
+  correctAnswerId: z.string(),
+  players: z.string(),
+  winner: z.string().optional(),
+}).passthrough();
+
+const PlayerLobbyViewProps = baseStylingProps.extend({
+  onReady: uiActionSchema,
+  isReady: z.union([z.boolean(), z.string()]),
+}).passthrough();
+
+const PlayerAnswerViewProps = baseStylingProps.extend({
+  questionType: z.enum(['multiple-choice', 'text']),
+  prompt: z.string().optional(),
+  options: z.string().optional(),
+  onAnswer: uiActionSchema,
+}).passthrough();
+
+const PlayerVotingViewProps = baseStylingProps.extend({
+  prompt: z.string(),
+  options: z.string(),
+  onVote: uiActionSchema,
+}).passthrough();
+
+const PlayerResultViewProps = baseStylingProps.extend({
+  isCorrect: z.union([z.boolean(), z.string()]),
+  pointsEarned: z.number(),
+  rankChange: z.number(),
+}).passthrough();
+
 const InstructionCarouselProps = baseStylingProps.extend({
   slides: z.string(), // Expect a template variable like "{{gameData.instructions}}"
   autoPlayInterval: z.number().optional(),
@@ -452,6 +516,16 @@ const componentSchema: z.ZodType<any> = z.lazy(() => z.discriminatedUnion('compo
   z.object({ component: z.literal('DrawingCanvas'), props: DrawingCanvasProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('WordGuesserInput'), props: WordGuesserInputProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('InstructionCarousel'), props: InstructionCarouselProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('PlayerHandView'), props: PlayerHandViewProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('CommunityCardsView'), props: CommunityCardsViewProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('BiddingView'), props: BiddingViewProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('HostQuestionView'), props: HostQuestionViewProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('HostLeaderboardView'), props: HostLeaderboardViewProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('HostResultView'), props: HostResultViewProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('PlayerLobbyView'), props: PlayerLobbyViewProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('PlayerAnswerView'), props: PlayerAnswerViewProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('PlayerVotingView'), props: PlayerVotingViewProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('PlayerResultView'), props: PlayerResultViewProps, layout: layoutSchema.optional() }),
 
   // Old Components
   z.object({ component: z.literal('DebugPanel'), props: DebugPanelProps, layout: layoutSchema.optional() }),
