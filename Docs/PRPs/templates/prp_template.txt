@@ -25,6 +25,7 @@ PartyHub is a real-time, interactive social gaming platform. The architecture is
 │   │   │   ├── kahoot-clone.json
 │   │   │   ├── new-component-test.json
 │   │   │   ├── quizclash.json
+│   │   │   ├── test-basic-flow.json
 │   │   │   ├── test-game.json
 │   │   │   └── ui-layout-test.json
 │   │   ├── engine/
@@ -34,18 +35,27 @@ PartyHub is a real-time, interactive social gaming platform. The architecture is
 │   │   │   ├── StateTimer.ts
 │   │   │   ├── UIStateBuilder.ts
 │   │   │   └── ValueResolver.ts
+│   │   │   └── __tests__/
+│   │   │       ├── EffectExecutor.test.ts
+│   │   │       ├── GameEventHandler.test.ts
+│   │   │       ├── GameStateInitializer.test.ts
+│   │   │       ├── StateTimer.test.ts
+│   │   │       ├── UIStateBuilder.test.ts
+│   │   │       └── ValueResolver.test.ts
 │   │   ├── GameFactory.ts
 │   │   ├── GameManager.ts
-│   │   └── games/
-│   │       ├── cardGames/
-│   │       │   ├── cards.ts
-│   │       │   ├── CardsWarGame.ts
-│   │       │   ├── handEvaluator.ts
-│   │       │   └── TexasHoldemGame.ts
-│   │       ├── ConfigurableGame.ts
-│   │       ├── FakeNewsGame.ts
-│   │       ├── QuizClashGame.ts
-│   │       └── quizclash_questions.json
+│   │   ├── games/
+│   │   │   ├── cardGames/
+│   │   │   │   ├── cards.ts
+│   │   │   │   ├── CardsWarGame.ts
+│   │   │   │   ├── handEvaluator.ts
+│   │   │   │   └── TexasHoldemGame.ts
+│   │   │   ├── ConfigurableGame.ts
+│   │   │   ├── FakeNewsGame.ts
+│   │   │   ├── QuizClashGame.ts
+│   │   │   └── quizclash_questions.json
+│   │   └── __tests__/
+│   │       └── ConfigurableGame.test.ts
 │   ├── room/
 │   │   ├── Room.ts
 │   │   └── RoomManager.ts
@@ -58,8 +68,12 @@ PartyHub is a real-time, interactive social gaming platform. The architecture is
 │   │   └── interfaces.ts
 │   └── utils/
 │       ├── codeGenerator.ts
-│       └── validators/
-│           └── GameConfigValidator.ts
+│       ├── validators/
+│       │   ├── GameConfigValidator.ts
+│       │   └── __tests__/
+│       │       └── GameConfigValidator.test.ts
+│       └── __tests__/
+│           └── codeGenerator.test.ts
 ```
 
 #### Frontend (`/client`)
@@ -73,30 +87,18 @@ PartyHub is a real-time, interactive social gaming platform. The architecture is
 │   ├── components/
 │   │   ├── card_game_components.txt
 │   │   ├── ComponentRegistry.ts
-│   │   ├── display/
-│   │   │   ├── ImageDisplay.tsx
-│   │   │   ├── KeyValueDisplay.tsx
-│   │   │   ├── ListDisplay.tsx
-│   │   │   └── TextDisplay.tsx
-│   │   ├── feedback/
-│   │   │   ├── StateIndicator.tsx
-│   │   │   └── Timer.tsx
-│   │   ├── game-tools/
+│   │   ├── elements/
 │   │   │   ├── Card.tsx
 │   │   │   ├── CardContainer.tsx
 │   │   │   ├── Dice.tsx
 │   │   │   ├── GameBoard.tsx
-│   │   │   └── GamePiece.tsx
-│   │   ├── input/
-│   │   │   ├── Button.tsx
-│   │   │   ├── ChoiceSelector.tsx
-│   │   │   ├── Slider.tsx
-│   │   │   └── TextInput.tsx
-│   │   ├── layout/
-│   │   │   ├── Container.tsx
-│   │   │   ├── Grid.tsx
-│   │   │   ├── Spacer.tsx
-│   │   │   └── Stack.tsx
+│   │   │   ├── GamePiece.tsx
+│   │   │   └── __tests__/
+│   │   │       ├── Card.test.tsx
+│   │   │       ├── CardContainer.test.tsx
+│   │   │       ├── Dice.test.tsx
+│   │   │       ├── GameBoard.test.tsx
+│   │   │       └── GamePiece.test.tsx
 │   │   ├── missing_components.txt
 │   │   ├── old/
 │   │   │   ├── cards/
@@ -141,7 +143,7 @@ PartyHub is a real-time, interactive social gaming platform. The architecture is
 │   │   │   │   ├── VotingOptions.css
 │   │   │   │   └── VotingOptions.tsx
 │   │   │   ├── display/
-���   │   │   │   └── AnswerResult.css
+│   │   │   │   ├── AnswerResult.css
 │   │   │   │   ├── AnswerResult.tsx
 │   │   │   │   ├── AwardDisplay.css
 │   │   │   │   ├── AwardDisplay.tsx
@@ -194,9 +196,139 @@ PartyHub is a real-time, interactive social gaming platform. The architecture is
 │   │   │   │   ├── PlayerViewContainer.css
 │   │   │   │   └── PlayerViewContainer.tsx
 │   │   │   └── player/
+│   │   ├── patterns/
+│   │   │   ├── card_games/
+│   │   │   │   ├── BiddingView.tsx
+│   │   │   │   ├── CommunityCardsView.tsx
+│   │   │   │   ├── PlayerHandView.tsx
+│   │   │   │   └── __tests__/
+│   │   │   │       ├── BiddingView.test.tsx
+│   │   │   │       ├── CommunityCardsView.test.tsx
+│   │   │   │       └── PlayerHandView.test.tsx
+│   │   │   ├── feedback/
+│   │   │   │   ├── EmojiReactionToolbar.css
+│   │   │   │   ├── EmojiReactionToolbar.tsx
+│   │   │   │   └── __tests__/
+│   │   │   │       └── EmojiReactionToolbar.test.tsx
+│   │   │   ├── gameplay/
+│   │   │   │   ├── DrawingCanvas.css
+│   │   │   │   ├── DrawingCanvas.tsx
+│   │   │   │   ├── MatchupDisplay.css
+│   │   │   │   ├── MatchupDisplay.tsx
+│   │   │   │   ├── PhaseBanner.css
+│   │   │   │   ├── PhaseBanner.tsx
+│   │   │   │   ├── RoleRevealCard.css
+│   │   │   │   ├── RoleRevealCard.tsx
+│   │   │   │   ├── SubmissionReel.css
+│   │   │   │   ├── SubmissionReel.tsx
+│   │   │   │   ├── TurnOrderDisplay.css
+│   │   │   │   ├── TurnOrderDisplay.tsx
+│   │   │   │   ├── WordGuesserInput.css
+│   │   │   │   ├── WordGuesserInput.tsx
+│   │   │   │   └── __tests__/
+│   │   │   │       ├── DrawingCanvas.test.tsx
+│   │   │   │       ├── MatchupDisplay.test.tsx
+│   │   │   │       ├── PhaseBanner.test.tsx
+│   │   │   │       ├── RoleRevealCard.test.tsx
+│   │   │   │       ├── SubmissionReel.test.tsx
+│   │   │   │       ├── TurnOrderDisplay.test.tsx
+│   │   │   │       └── WordGuesserInput.test.tsx
+│   │   │   ├── host/
+│   │   │   │   ├── HostLeaderboardView.tsx
+│   │   │   │   ├── HostQuestionView.tsx
+│   │   │   │   ├── HostResultView.tsx
+│   │   │   │   └── __tests__/
+│   │   │   │       ├── HostLeaderboardView.test.tsx
+│   │   │   │       ├── HostQuestionView.test.tsx
+│   │   │   │       └── HostResultView.test.tsx
+│   │   │   ├── lobby/
+│   │   │   │   ├── AvatarCustomizer.css
+│   │   │   │   ├── AvatarCustomizer.tsx
+│   │   │   │   ├── InstructionCarousel.css
+│   │   │   │   ├── InstructionCarousel.tsx
+│   │   │   │   ├── ReadyCheckDisplay.css
+│   │   │   │   ├── ReadyCheckDisplay.tsx
+│   │   │   │   ├── TeamSelectionGrid.css
+│   │   │   │   ├── TeamSelectionGrid.tsx
+│   │   │   │   └── __tests__/
+│   │   │   │       ├── AvatarCustomizer.test.tsx
+│   │   │   │       ├── InstructionCarousel.test.tsx
+│   │   │   │       ├── ReadyCheckDisplay.test.tsx
+│   │   │   │       └── TeamSelectionGrid.test.tsx
+│   │   │   ├── meta/
+│   │   │   │   ├── InGameNotification.css
+│   │   │   │   ├── InGameNotification.tsx
+│   │   │   │   └── __tests__/
+│   │   │   │       └── InGameNotification.test.tsx
+│   │   │   ├── player/
+│   │   │   │   ├── PlayerAnswerView.tsx
+│   │   │   │   ├── PlayerLobbyView.tsx
+│   │   │   │   ├── PlayerResultView.tsx
+│   │   │   │   ├── PlayerVotingView.tsx
+│   │   │   │   └── __tests__/
+│   │   │   │       ├── PlayerAnswerView.test.tsx
+│   │   │   │       ├── PlayerLobbyView.test.tsx
+│   │   │   │       ├── PlayerResultView.test.tsx
+│   │   │   │       └── PlayerVotingView.test.tsx
+│   │   │   └── results/
+│   │   │       ├── CorrectAnswerOverlay.css
+│   │   │       ├── CorrectAnswerOverlay.tsx
+│   │   │       ├── FinalResultsScreen.css
+│   │   │       ├── FinalResultsScreen.tsx
+│   │   │       ├── PersonalScoreCard.css
+│   │   │       ├── PersonalScoreCard.tsx
+│   │   │       ├── ScoreAccumulationBar.css
+│   │   │       ├── ScoreAccumulationBar.tsx
+│   │   │       ├── VotingGrid.css
+│   │   │       ├── VotingGrid.tsx
+│   │   │       └── __tests__/
+│   │   │           ├── CorrectAnswerOverlay.test.tsx
+│   │   │           ├── FinalResultsScreen.test.tsx
+│   │   │           ├── PersonalScoreCard.test.tsx
+│   │   │           ├── ScoreAccumulationBar.test.tsx
+│   │   │           └── VotingGrid.test.tsx
+│   │   ├── primitives/
+│   │   │   ├── display/
+│   │   │   │   ├── ImageDisplay.tsx
+│   │   │   │   ├── KeyValueDisplay.tsx
+│   │   │   │   ├── ListDisplay.tsx
+│   │   │   │   ├── TextDisplay.tsx
+│   │   │   │   └── __tests__/
+│   │   │   │       ├── ImageDisplay.test.tsx
+│   │   │   │       ├── KeyValueDisplay.test.tsx
+│   │   │   │       ├── ListDisplay.test.tsx
+│   │   │   │       └── TextDisplay.test.tsx
+│   │   │   ├── feedback/
+│   │   │   │   ├── StateIndicator.tsx
+│   │   │   │   ├── Timer.tsx
+│   │   │   │   └── __tests__/
+│   │   │   │       ├── StateIndicator.test.tsx
+│   │   │   │       └── Timer.test.tsx
+│   │   │   ├── input/
+│   │   │   │   ├── Button.tsx
+│   │   │   │   ���── ChoiceSelector.tsx
+│   │   │   │   ├── Slider.tsx
+│   │   │   │   ├── TextInput.tsx
+│   │   │   │   └── __tests__/
+│   │   │   │       ├── Button.test.tsx
+│   │   │   │       ├── ChoiceSelector.test.tsx
+│   │   │   │       ├── Slider.test.tsx
+│   │   │   │       └── TextInput.test.tsx
+│   │   │   └── layout/
+│   │   │       ├── Container.tsx
+│   │   │       ├── Grid.tsx
+│   │   │       ├── Spacer.tsx
+│   │   │       ├── Stack.tsx
+│   │   │       └── __tests__/
+│   │   │           ├── Container.test.tsx
+│   │   │           ├── Grid.test.tsx
+│   │   │           ├── Spacer.test.tsx
+│   │   │           └── Stack.test.tsx
 │   │   ├── reusable_components.txt
 │   │   └── utility/
-│   │       └── ComponentRenderer.tsx
+│   │       ├── ComponentRenderer.tsx
+│   │       └── __tests__/
+│   │           └── ComponentRenderer.test.tsx
 │   ├── game/
 │   │   ├── CardsWar/
 │   │   │   ├── CardsWarHostView.css
@@ -261,7 +393,9 @@ PartyHub is a real-time, interactive social gaming platform. The architecture is
 │   │           ├── PlayerPlayingView.tsx
 │   │           └── PlayerStartingView.tsx
 │   ├── hooks/
-│   │   └── usePlayerRole.ts
+│   │   ├── usePlayerRole.ts
+│   │   └── __tests__/
+│   │       └── usePlayerRole.test.ts
 │   ├── index.css
 │   ├── index.tsx
 │   ├── logo.svg
@@ -303,10 +437,15 @@ PartyHub is a real-time, interactive social gaming platform. The architecture is
 │   │   └── socketService.ts
 │   ├── setupTests.ts
 │   ├── store/
+│   │   ├── debugStore.test.ts
 │   │   ├── debugStore.ts
+│   │   ├── gameStore.test.ts
 │   │   ├── gameStore.ts
+│   │   ├── playerHandStore.test.ts
 │   │   ├── playerHandStore.ts
+│   │   ├── playerStore.test.ts
 │   │   ├── playerStore.ts
+│   │   ├── roomStore.test.ts
 │   │   └── roomStore.ts
 │   ├── types/
 │   │   └── types.ts

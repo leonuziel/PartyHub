@@ -41,14 +41,14 @@ The primary obstacle to a UGC-driven party game platform is the technical barrie
 *   **PartyHub's Solution:** **Server-Driven UI**. The backend sends a precise UI definition to each client based on the current game state and the specific player's context. The frontend is a "dumb" renderer, simply displaying the components requested by the server. This allows a game creator to design highly conditional UIs (e.g., *"Show a 'Waiting' message only to players who have answered"*), without ever touching React code.
 
 ### Challenge 3: Onboarding Creators is Difficult
-*   **Problem:** Even with a JSON configuration, the initial learning curve can be steep for non-technical users.
-*   **PartyHub's Solution:** A **Visual Game Creator Wizard**. This user-friendly, multi-stage interface guides creators through the process of building a game.
-    1.  **Metadata Stage:** Define the game's title, description, and player count.
-    2.  **States Stage:** Visually map out the game's flow by drawing connections between states.
-    3.  **Screens Stage:** Drag-and-drop UI components onto a canvas for both the host and player views for each state.
-    4.  **Review Stage:** Preview and save the game, which is then instantly playable.
+*   **Problem:** Even with a JSON configuration, the initial learning curve is steep for non-technical users. The current system requires creators to understand and manipulate a complex data structure, which is a significant barrier.
+*   **PartyHub's Vision:** The ultimate goal is to build a **Visual Game Creator Wizard**. This user-friendly, multi-stage interface will guide creators through the process of building a game, abstracting away the underlying JSON. The planned stages include:
+    1.  **Metadata Stage:** Defining the game's title, description, and player count.
+    2.  **States Stage:** Visually mapping out the game's flow by drawing connections between states.
+    3.  **Screens Stage:** Dragging and dropping UI components onto a canvas for both host and player views.
+    4.  **Review Stage:** Previewing and saving the game, making it instantly playable.
 
-This "Canva-like" experience is the key to unlocking the creativity of a massive, non-technical audience.
+This "Canva-like" experience is the key to unlocking the creativity of a massive, non-technical audience and represents the core of PartyHub's future development.
 
 ---
 
@@ -77,13 +77,13 @@ The power of PartyHub's architecture is best demonstrated through the variety of
 *   **Engine Implementation:** This game serves as the baseline for the engine's capabilities.
     *   **States:** `STARTING`, `ASKING_QUESTION`, `REVEAL_ANSWER`, `FINISHED`.
     *   **Logic:** The `onEnter` effect of `ASKING_QUESTION` uses `incrementProperty` to advance the question index and `setProperty` to load the new question data. A `startTimer` effect dictates the round's length. Player answers trigger a `submitAnswer` event, which stores their choice.
-    *   **UI:** The player view uses a conditional UI: it shows an `AnswerGrid` by default, but once the player answers, it switches to a `CenteredMessage` showing "Waiting...".
+*   **UI:** The player view uses a conditional UI: it shows a `ChoiceSelector` component by default for the multiple-choice question. Once the player answers, it switches to a `TextDisplay` component showing "Waiting...".
 
 ### Case Study 2: `FakeNewsGame` (Creative Input & Voting)
 *   **Description:** Players are given a trivia question and must submit a believable fake answer. Everyone then votes on which answer they think is the real one.
 *   **Engine Implementation:** This game highlights the engine's ability to handle complex data manipulation.
     *   **Logic:** This requires more advanced effects. An `arrayPush` function is used to collect all player submissions into a `gameState.submissions` array. The real answer is also added. `arrayShuffle` then randomizes this list before the voting phase. Points are awarded based on who voted for whose answer, requiring nested `forEachPlayer` loops.
-    *   **UI:** The player's writing view uses a `TextAreaWithCounter` component. The voting view dynamically renders `VotingOptions` based on the shuffled submissions array.
+*   **UI:** The player's writing view uses a `TextInput` component with a character counter. The voting view dynamically renders a `ChoiceSelector` based on the shuffled submissions array.
 
 ---
 

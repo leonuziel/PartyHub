@@ -111,7 +111,8 @@ A game configuration is a single JSON object. The sections below describe each o
     ],
     "calculateWinner": [
       {
-        "function": "calculateWinner"
+        "function": "calculateWinner",
+        "args": ["score"]
       }
     ]
   },
@@ -122,7 +123,8 @@ A game configuration is a single JSON object. The sections below describe each o
         {
           "function": "startTimer",
           "args": [
-            3
+            3,
+            { "function": "dispatchEvent", "args": ["timerExpires"] }
           ]
         }
       ]
@@ -135,7 +137,8 @@ A game configuration is a single JSON object. The sections below describe each o
         {
           "function": "startTimer",
           "args": [
-            10
+            10,
+            { "function": "dispatchEvent", "args": ["timerExpires"] }
           ]
         }
       ]
@@ -145,7 +148,8 @@ A game configuration is a single JSON object. The sections below describe each o
         {
           "function": "startTimer",
           "args": [
-            5
+            5,
+            { "function": "dispatchEvent", "args": ["timerExpires"] }
           ]
         },
         {
@@ -298,7 +302,7 @@ A game configuration is a single JSON object. The sections below describe each o
               "props": {
                 "options": "{{gameState.currentQuestion.options}}",
                 "onSelect": {
-                  "dispatchEvent": "submitAnswer"
+                  "function": "dispatchEvent", "args": ["submitAnswer"]
                 }
               }
             }
@@ -491,7 +495,7 @@ Anywhere you can define a list of effects (e.g., in an `onEnter` block or an `ev
 "states": {
   "REVEAL_ANSWER": {
     "onEnter": [
-      { "function": "startTimer", "args": [5] },
+      { "function": "startTimer", "args": [5, { "function": "dispatchEvent", "args": ["timerExpires"] }] },
       { "forEachPlayer": { "effects": [ { "runAction": "awardPointsAndResetAnswer" } ] } }
     ]
   }
@@ -545,8 +549,7 @@ Controls the size of the component.
 *   **Type**: `string`
 *   **Allowed Values**:
     *   **Percentage:** A string ending in `%` (e.g., `"50%"`). Sets the size relative to the parent container.
-    *   **Fixed:** A string ending in `px` (e.g., `"100px"`). Sets a fixed size.
-    *   **`"fill"`**: The  expands to fill all available space in that dimension (stretches). This is the default behavior if unspecified.
+    *   **`"fill"`**: The component expands to fill all available space in that dimension (stretches). This is the default behavior if unspecified.
     *   **`"hug"`**: The component shrinks to wrap its content.
 
 **Example**:
@@ -641,9 +644,9 @@ Both properties are objects that can contain `top`, `bottom`, `left`, and `right
 While the current system is powerful, there are several clear areas for improvement:
 
 1.  **Limited `effects` Functions**: The list of available functions (`setProperty`, `incrementProperty`, `startTimer`, `calculateWinner`) is very small. To create more complex games, this needs to be expanded. Examples include:
-    -   Array manipulation (`push`, `pop`, `filter`).
+    -   Array manipulation (`push`, `pop`, `filter`, `shuffle`).
     -   More complex data manipulation (`max`, `min`, `sort`).
-    -   String manipulation?.
+    -   String manipulation.
     -   Saving player-specific input more robustly.
 
 2.  **Lack of Complex Conditions**: The `condition` field in transitions is powerful but limited to single expressions. There's no way to define a reusable function or a more complex block of logic.
@@ -655,4 +658,3 @@ While the current system is powerful, there are several clear areas for improvem
 5.  **Player-to-Player Interaction**: The action system is primarily designed for player-to-server interaction. There is no direct way for one player's action to target another player specifically.
 
 6.  **Error Handling for Expressions**: The `resolveValue` function uses `try...catch` blocks, but errors are simply logged. A more robust system might invalidate the action or transition, or even expose the error to the host for debugging.
-

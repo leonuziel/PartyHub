@@ -99,7 +99,7 @@ This section summarizes the key points from the source documents provided for th
 *   **Technical Architecture:** A client-server model using a Node.js/Express/Socket.IO backend and a React/TypeScript frontend.
 *   **Key Architectural Feature:** A dual-system `GameFactory` on the backend. It can run legacy, hardcoded games (e.g., `QuizClashGame`) or dynamically instantiate a `ConfigurableGame` engine using rules defined in a JSON file. This is the foundation of the platform's UGC strategy.
 *   **Creator Tooling:** A `GameCreatorPage` exists on the frontend, providing a user interface for a full CRUD API (`/api/game-configs`) that allows for the creation and management of the game configuration JSON files.
-*   **Available Assets:** The platform is not a cold start. It includes four pre-built games (CardsWar, FakeNews, QuizClash, TexasHoldem) and an extensive library of reusable UI components for displaying leaderboards, questions, player avatars, and various game controls.
+*   **Available Assets:** The platform is not a cold start. It includes four pre-built games (CardsWar, FakeNews, QuizClash, TexasHoldem) and an extensive library of reusable UI components, now organized into a clear hierarchy: **primitives** (e.g., Button, TextDisplay), **elements** (e.g., Card, Dice), and **patterns** (e.g., VotingGrid, PlayerHandView).
 
 ### A.2: Market Validation & Risk Summary (from `validation_report.md`)
 

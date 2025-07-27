@@ -105,14 +105,16 @@ A single-page application built with React that renders views for both the host 
 
 ```
 /client/src/
-├── components/     # Reusable UI components, categorized by function.
-│   ├── ComponentRegistry.ts # Maps component names (strings) to their React components.
-│   └── utility/
-│       └── ComponentRenderer.tsx # Renders UI dynamically based on server definitions.
-├── game/           # Views for the legacy, hardcoded games.
-├── pages/          # Top-level page components (e.g., HomePage, GamePage).
+├── components/     # Reusable UI components.
+│   ├── componentDefaultProps.ts # Default properties for components in the wizard.
+│   ├── primitives/   # Basic building blocks (e.g., Button, TextDisplay).
+│   ├── elements/     # Game-specific elements (e.g., Card, Dice).
+│   ├── patterns/     # Complex composite components (e.g., PlayerHandView, VotingGrid).
+│   ├── old/          # Deprecated components, for backward compatibility.
+│   └── ComponentRegistry.ts # Maps component names to their React components.
+├── game/           # Views for the legacy, hardcoded games (e.g., QuizClash, FakeNews).
+├── pages/          # Top-level page components (e.g., HomePage, GamePage, LobbyPage).
 │   └── wizards/      # Components for the multi-stage Game Creator UI.
-│       └── componentDefaultProps.ts # Default properties for components in the wizard.
 ├── services/       # Encapsulates the Socket.IO client logic.
 └── store/          # Zustand stores for global state management.
 ```

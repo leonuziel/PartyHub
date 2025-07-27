@@ -20,7 +20,7 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import './ScreensStage.css';
 import { PropertyInspector } from './PropertyInspector';
-import { getComponentDefaultProps } from './componentDefaultProps';
+import { getComponentDefaultProps } from '../../components/componentDefaultProps';
 
 
 const COMPONENT_CATEGORIES = {

@@ -69,28 +69,6 @@ Resets a property to its initial value as defined in `initialGameState` or `play
       }
     }
     ```
--   **Aliasing**: You can use the `as` property to alias the loop variable, which is useful for nested loops.
-    ```json
-    {
-      "forEachPlayer": {
-        "as": "voter",
-        "effects": [
-          {
-            "forEachPlayer": {
-              "as": "submitter",
-              "effects": [
-                {
-                  "condition": "{{voter.currentVote === submitter.currentSubmission}}",
-                  "function": "incrementProperty",
-                  "args": ["playerAttributes.{{submitter.id}}.score", 500]
-                }
-              ]
-            }
-          }
-        ]
-      }
-    }
-    ```
 
 ---
 
@@ -291,9 +269,49 @@ Dispatches an event that can be caught by a transition.
     }
     ```
 
+### `recordEvent`
+A specialized function for analytics. It records a significant game event with an associated message. This is useful for tracking key moments in a game for later analysis.
+
+-   **`args`**:
+    1.  `eventName` (string): The name of the event to record (e.g., `"PlayerBuzzedIn"`, `"IncorrectAnswer"`).
+    2.  `eventMessage` (string): A descriptive message, which can include resolved expressions.
+
+-   **Example**: Record when a player uses a lifeline.
+    ```json
+    {
+      "function": "recordEvent",
+      "args": ["LifelineUsed", "Player {{player.nickname}} used the 50/50 lifeline on question {{gameState.currentQuestionIndex}}."]
+    }
+    ```
+
 ---
 
-## 6. Player Management Functions
+## 6. Control Flow Structures
+
+These structures allow for more complex logic, such as iterating over players.
+
+### `forEachPlayer`
+Executes a series of effects for each player in the game. This is not a function itself, but a wrapper that contains an `effects` array.
+
+-   **Structure**:
+    - `effects` (array): A list of effect objects to execute for each player.
+    - `as` (string, optional): An alias for the player variable within the loop (e.g., `"voter"`, `"submitter"`). This is crucial for nested loops to avoid ambiguity.
+
+-   **Example**: Award 100 points to every player.
+    ```json
+    {
+      "forEachPlayer": {
+        "effects": [{
+          "function": "incrementProperty",
+          "args": ["playerAttributes.{{player.id}}.score", 100]
+        }]
+      }
+    }
+    ```
+
+---
+
+## 7. Player Management Functions
 
 Functions for managing players.
 
