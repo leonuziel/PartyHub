@@ -38,38 +38,6 @@ Sets a value at a specified path in the game state. If the path does not exist, 
     }
     ```
 
-### `unsetProperty`
-Removes a property from an object in the game state.
-
--   **`args`**:
-    1.  `target` (string): The path to the property to remove.
-
--   **Example**: Clear a player's temporary answer.
-    ```json
-    {
-      "function": "unsetProperty",
-      "args": ["playerAttributes.{{player.id}}.currentAnswer"]
-    }
-    ```
-
-### `resetProperty`
-Resets a property to its initial value as defined in `initialGameState` or `playerAttributes`.
-
--   **`args`**:
-    1.  `target` (string): The path to the property to reset.
-
--   **Example**: Reset all player scores at the start of a new round.
-    ```json
-    {
-      "forEachPlayer": {
-        "effects": [{
-          "function": "resetProperty",
-          "args": ["playerAttributes.{{player.id}}.score"]
-        }]
-      }
-    }
-    ```
-
 ---
 
 ## 3. Numeric Functions
@@ -86,42 +54,6 @@ Adds a value to a numeric property. Initializes to the value if the property doe
 -   **Example**: Add 10 points to a player's score.
     ```json
     { "function": "incrementProperty", "args": ["playerAttributes.{{player.id}}.score", 10] }
-    ```
-
-### `decrementProperty`
-Subtracts a value from a numeric property.
-
--   **`args`**:
-    1.  `target` (string): The path to the numeric property.
-    2.  `amount` (number, optional): The value to subtract. Defaults to `1`.
-
--   **Example**: Decrease a player's lives.
-    ```json
-    { "function": "decrementProperty", "args": ["playerAttributes.{{player.id}}.lives"] }
-    ```
-
-### `setNumberToMax`
-Sets a numeric property to the maximum of its current value and a new value.
-
--   **`args`**:
-    1.  `target` (string): The path to the numeric property.
-    2.  `value` (number): The new value to compare against.
-
--   **Example**: Ensure a player's high score is always recorded.
-    ```json
-    { "function": "setNumberToMax", "args": ["playerAttributes[player.id].highScore", "{{gameState.currentRoundScore}}"] }
-    ```
-
-### `setNumberToMin`
-Sets a numeric property to the minimum of its current value and a new value.
-
--   **`args`**:
-    1.  `target` (string): The path to the numeric property.
-    2.  `value` (number): The new value to compare against.
-
--   **Example**: Record the fastest answer time.
-    ```json
-    { "function": "setNumberToMin", "args": ["fastestTime", "{{payload.submissionTime}}"] }
     ```
 
 ---
@@ -162,19 +94,6 @@ Randomly shuffles the elements of an array in place.
 -   **Example**: Shuffle the order of questions at the start of the game.
     ```json
     { "function": "shuffleArray", "args": ["gameData.questions"] }
-    ```
-
-### `arraySortBy`
-Sorts an array of objects based on a specified property.
-
--   **`args`**:
-    1.  `target` (string): The path to the array to sort.
-    2.  `key` (string): The property key to sort by.
-    3.  `order` (string, optional): The sort order, `"asc"` or `"desc"`. Defaults to `"asc"`.
-
--   **Example**: Sort players by score for the leaderboard.
-    ```json
-    { "function": "arraySortBy", "args": ["leaderboard", "score", "desc"] }
     ```
 
 ---
@@ -241,20 +160,6 @@ A specialized function that calculates a winner based on player scores. It ident
     { "function": "calculateWinner", "args": ["score"] }
     ```
 
-### `endGame`
-Immediately stops the game and triggers the `onGameEnd` callback.
-
--   **`args`**: None.
-
--   **Example**: Forcibly end the game if a critical condition is met.
-    ```json
-    {
-      "condition": "{{gameState.players.length < 2}}",
-      "function": "endGame",
-      "args": []
-    }
-    ```
-
 ### `dispatchEvent`
 Dispatches an event that can be caught by a transition.
 
@@ -274,13 +179,13 @@ A specialized function for analytics. It records a significant game event with a
 
 -   **`args`**:
     1.  `eventName` (string): The name of the event to record (e.g., `"PlayerBuzzedIn"`, `"IncorrectAnswer"`).
-    2.  `eventMessage` (string): A descriptive message, which can include resolved expressions.
+    2.  `targetPath` (string): The path in game state where the event data should be stored.
 
 -   **Example**: Record when a player uses a lifeline.
     ```json
     {
       "function": "recordEvent",
-      "args": ["LifelineUsed", "Player {{player.nickname}} used the 50/50 lifeline on question {{gameState.currentQuestionIndex}}."]
+      "args": ["LifelineUsed", "gameState.lifelineEvents"]
     }
     ```
 
@@ -311,33 +216,123 @@ Executes a series of effects for each player in the game. This is not a function
 
 ---
 
-## 7. Player Management Functions
+## 7. Action Execution
 
-Functions for managing players.
+### `runAction`
+Executes a named action defined in the `actions` section of the game configuration.
 
-### `assignRole`
-Assigns a temporary role to a player, which can be used for conditional logic.
-
--   **`args`**:
-    1.  `playerId` (string): The ID of the player to assign the role to.
-    2.  `role` (string): The role to assign (e.g., `"impostor"`, `"dealer"`).
-
--   **Example**: Randomly assign one player to be the "impostor".
+-   **Usage**: This is not a function but a special effect type that can be used anywhere effects are defined.
+-   **Structure**:
     ```json
     {
-      "function": "assignRole",
-      "args": ["{{players[_.random(0, players.length - 1)].id}}", "impostor"]
+      "runAction": "actionName"
     }
     ```
 
-### `clearRole`
-Removes a role from a player.
-
--   **`args`**:
-    1.  `playerId` (string): The ID of the player to clear the role from.
-    2.  `role` (string): The role to remove.
-
--   **Example**: Clear the "dealer" role at the end of a round.
+-   **Example**: Run the `awardPointsAndResetAnswer` action.
     ```json
-    { "function": "clearRole", "args": ["{{gameState.dealerId}}", "dealer"] }
+    { "runAction": "awardPointsAndResetAnswer" }
     ```
+
+---
+
+## 8. Conditional Execution
+
+### `condition`
+Allows effects to be executed only when certain conditions are met.
+
+-   **Usage**: This is not a function but a property that can be added to any effect.
+-   **Structure**:
+    ```json
+    {
+      "condition": "{{expression}}",
+      "function": "functionName",
+      "args": [...]
+    }
+    ```
+
+-   **Example**: Only increment score if the answer is correct.
+    ```json
+    {
+      "condition": "{{player.currentAnswer === gameState.currentQuestion.correctAnswer}}",
+      "function": "incrementProperty",
+      "args": ["playerAttributes.{{player.id}}.score", 10]
+    }
+    ```
+
+---
+
+## 9. Currently Unimplemented Functions
+
+The following functions are documented in the schema but not yet implemented in the current `EffectExecutor.ts`. They may be added in future versions:
+
+- `unsetProperty` - Remove a property from the game state
+- `resetProperty` - Reset a property to its initial value
+- `decrementProperty` - Subtract from a numeric property
+- `setNumberToMax` - Set a property to the maximum of current and new value
+- `setNumberToMin` - Set a property to the minimum of current and new value
+- `arraySortBy` - Sort an array by a specific property
+- `endGame` - Immediately end the game
+- `assignRole` - Assign a temporary role to a player
+- `clearRole` - Remove a role from a player
+
+---
+
+## 10. Best Practices
+
+1. **Use Actions for Reusable Logic**: Define common sequences of effects in the `actions` section and reference them with `runAction`.
+
+2. **Leverage Conditions**: Use the `condition` property to create dynamic, player-specific effects.
+
+3. **Iterate with forEachPlayer**: Use `forEachPlayer` when you need to perform the same operation on all players.
+
+4. **Combine Functions**: Chain multiple effects together to create complex game logic.
+
+5. **Use Template Strings**: Leverage the `{{ }}` syntax to reference dynamic game state in your effects.
+
+---
+
+## 11. Example: Complete Game Round
+
+Here's an example of how these functions work together to create a complete game round:
+
+```json
+{
+  "actions": {
+    "startNewRound": [
+      {
+        "function": "setProperty",
+        "args": ["currentRound", "{{gameState.currentRound + 1}}"]
+      },
+      {
+        "function": "arrayClear",
+        "args": ["playerAnswers"]
+      },
+      {
+        "function": "startTimer",
+        "args": [30, {
+          "function": "dispatchEvent",
+          "args": ["roundTimeUp"]
+        }]
+      }
+    ],
+    "processPlayerAnswer": [
+      {
+        "function": "arrayPush",
+        "args": ["playerAnswers", {
+          "playerId": "{{player.id}}",
+          "answer": "{{payload.answer}}",
+          "timestamp": "{{timeSinceStateEntry}}"
+        }]
+      },
+      {
+        "condition": "{{playerAnswers.length === players.length}}",
+        "function": "dispatchEvent",
+        "args": ["allPlayersAnswered"]
+      }
+    ]
+  }
+}
+```
+
+This example shows how to combine multiple functions to create a complete round system with automatic progression when all players have answered.

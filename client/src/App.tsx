@@ -26,7 +26,7 @@ function App() {
         <Route path="/game/:roomCode" element={<GamePage />} />
         <Route path="/debug" element={<DebugPage />} />
         <Route path="/test/components" element={<TestComponentsPage />} />
-        <Route path="/test/ui" element={<GameUITestPage />} />
+        <Route path="/test/ui/*" element={<GameUITestPage />} />
         <Route path="/create" element={<GameCreatorPage />} />
       </Routes>
 

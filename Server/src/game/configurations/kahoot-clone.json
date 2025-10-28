@@ -11,18 +11,33 @@
     "questions": [
       {
         "questionText": "What is the chemical symbol for gold?",
-        "correctAnswer": "Au",
-        "options": [ "Ag", "Go", "Gd", "Au" ]
+        "correctAnswerId": "Au",
+        "options": [
+          { "id": "Ag", "text": "Ag" },
+          { "id": "Go", "text": "Go" },
+          { "id": "Gd", "text": "Gd" },
+          { "id": "Au", "text": "Au" }
+        ]
       },
       {
         "questionText": "Which planet is known as the Red Planet?",
-        "correctAnswer": "Mars",
-        "options": [ "Jupiter", "Venus", "Saturn", "Mars" ]
+        "correctAnswerId": "Mars",
+        "options": [
+          { "id": "Jupiter", "text": "Jupiter" },
+          { "id": "Venus", "text": "Venus" },
+          { "id": "Saturn", "text": "Saturn" },
+          { "id": "Mars", "text": "Mars" }
+        ]
       },
       {
         "questionText": "What is the most abundant gas in Earth's atmosphere?",
-        "correctAnswer": "Nitrogen",
-        "options": [ "Oxygen", "Carbon Dioxide", "Argon", "Nitrogen" ]
+        "correctAnswerId": "Nitrogen",
+        "options": [
+          { "id": "Oxygen", "text": "Oxygen" },
+          { "id": "Carbon Dioxide", "text": "Carbon Dioxide" },
+          { "id": "Argon", "text": "Argon" },
+          { "id": "Nitrogen", "text": "Nitrogen" }
+        ]
       }
     ]
   },
@@ -40,7 +55,7 @@
   },
   "playerAttributes": {
     "score": 0,
-    "currentAnswer": null,
+    "answerId": null,
     "submittedAt": null,
     "lastScoreGained": 0,
     "rank": 0,
@@ -56,14 +71,14 @@
       { "function": "shuffleArray", "args": [ "shuffledAnswers" ] }
     ],
     "recordPlayerAnswer": [
-      { "function": "setProperty", "args": [ "playerAttributes.{{actorId}}.currentAnswer", "{{payload.text}}" ] },
+      { "function": "setProperty", "args": [ "playerAttributes.{{actorId}}.answerId", "{{payload.id}}" ] },
       { "function": "setProperty", "args": [ "playerAttributes.{{actorId}}.submittedAt", "{{Date.now()}}" ] },
       { "function": "incrementProperty", "args": [ "playersAnswered" ] }
     ],
     "calculateScores": [
       { "function": "setProperty", "args": [ "playerAttributes.{{player.id}}.lastScoreGained", 0 ] },
       {
-        "condition": "{{player.currentAnswer === gameState.currentQuestion.correctAnswer}}",
+        "condition": "{{player.answerId === gameState.currentQuestion.correctAnswerId}}",
         "function": "setProperty",
         "args": [
           "playerAttributes.{{player.id}}.lastScoreGained",
@@ -74,12 +89,12 @@
     ],
     "updateStreaks": [
       {
-        "condition": "{{player.currentAnswer === gameState.currentQuestion.correctAnswer}}",
+        "condition": "{{player.answerId === gameState.currentQuestion.correctAnswerId}}",
         "function": "incrementProperty",
         "args": [ "playerAttributes.{{player.id}}.streak" ]
       },
       {
-        "condition": "{{player.currentAnswer !== gameState.currentQuestion.correctAnswer}}",
+        "condition": "{{player.answerId !== gameState.currentQuestion.correctAnswerId}}",
         "function": "setProperty",
         "args": [ "playerAttributes.{{player.id}}.streak", 0 ]
       }
@@ -89,7 +104,7 @@
       {
         "forEachPlayer": {
           "effects": [
-            { "function": "incrementProperty", "args": [ "answerStats.{{player.currentAnswer}}", 1 ] }
+            { "function": "incrementProperty", "args": [ "answerStats.{{player.answerId}}", 1 ] }
           ]
         }
       }
@@ -98,7 +113,7 @@
       {
         "forEachPlayer": {
            "effects": [
-             { "function": "setProperty", "args": [ "playerAttributes.{{player.id}}.previousRank", "{{player.rank}}" ] }
+             { "function": "setProperty", "args": [ "playerAttributes.{{player.id}}.previousRank", "{{player.rank || players.length}}" ] }
            ]
         }
       },
@@ -117,7 +132,7 @@
         "forEachPlayer": {
           "effects": [
              { "function": "setProperty", "args": [ "playerAttributes.{{player.id}}.submittedAt", null ] },
-             { "function": "setProperty", "args": [ "playerAttributes.{{player.id}}.currentAnswer", null ] }
+             { "function": "unsetProperty", "args": [ "playerAttributes.{{player.id}}.answerId" ] }
           ]
         }
       }
@@ -126,9 +141,9 @@
       { "function": "calculateWinner", "args": [] }
     ]
   },
-  "initialState": "STARTING",
+  "initialState": "GET_READY",
   "states": {
-    "STARTING": {
+    "GET_READY": {
       "onEnter": [
         { "function": "shuffleArray", "args": [ "gameData.questions" ] },
         { "function": "startTimer", "args": [ 5, { "function": "dispatchEvent", "args": ["timerExpires"] } ] }
@@ -189,10 +204,10 @@
         ]
     },
     "allPlayersAnswered": { "permissions": ["server"] },
-    "timerExpires": { "permissions": [ "server" ] }
+    "timerExpires": { "permissions": [ "server", "host" ] }
   },
   "transitions": [
-    { "from": "STARTING", "to": "ASKING_QUESTION", "event": "timerExpires" },
+    { "from": "GET_READY", "to": "ASKING_QUESTION", "event": "timerExpires" },
     { "from": "ASKING_QUESTION", "to": "REVEAL_ANSWER", "event": "timerExpires" },
     { "from": "ASKING_QUESTION", "to": "REVEAL_ANSWER", "event": "allPlayersAnswered" },
     { "from": "REVEAL_ANSWER", "to": "SHOW_STATS", "event": "timerExpires" },
@@ -201,19 +216,12 @@
     { "from": "LEADERBOARD", "to": "FINISHED", "event": "timerExpires", "condition": "{{gameState.currentQuestionIndex >= gameState.totalRounds - 1}}" }
   ],
   "ui": {
-    "STARTING": {
+    "GET_READY": {
       "host": {
         "components": [
           { 
-            "component": "Stack", 
-            "props": { "direction": "vertical", "spacing": 24, "alignItems": "center", "justifyContent": "center" }, 
-            "layout": { "alignment": "Center", "height": "hug", "width": "100%" },
-            "children": [
-              { "component": "ImageDisplay", "props": { "src": "{{metadata.artUrl}}", "alt": "{{metadata.title}} Logo" }, "layout": { "height": "200px", "width": "200px" } },
-              { "component": "TextDisplay", "props": { "text": "{{metadata.title}}", "fontSize": "3.5rem", "fontWeight": "bold" } },
-              { "component": "TextDisplay", "props": { "text": "Get ready to clash!", "fontSize": "1.5rem" } },
-              { "component": "Timer", "props": { "duration": 5, "type": "countdown" } }
-            ]
+            "component": "PhaseBanner", 
+            "props": { "title": "{{metadata.title}}", "subtitle": "The game is about to start!", "duration": 5 }
           }
         ]
       },
@@ -256,7 +264,7 @@
                 "columns": 2,
                 "rows": 2,
                 "spacing": 16,
-                "children": "{{gameState.shuffledAnswers.map(answer => ({ 'component': 'Button', 'props': { 'text': answer, 'disabled': true, 'variant': 'secondary' } }))}}"
+                "children": "{{gameState.shuffledAnswers.map(answer => ({ 'component': 'Button', 'props': { 'text': answer.text, 'disabled': true, 'variant': 'secondary' } }))}}"
             },
              "layout": { "alignment": "BottomCenter", "height": "hug", "width": "90%", "offset": {"bottom": 20}}
            }
@@ -264,7 +272,7 @@
       },
       "player": [
         { 
-          "condition": "{{player.currentAnswer !== null}}", 
+          "condition": "{{player.answerId !== null}}", 
           "components": [ 
             { 
               "component": "Stack",
@@ -280,7 +288,7 @@
         },
         { 
           "components": [ 
-            { "component": "ChoiceSelector", "props": { "options": "{{gameState.shuffledAnswers.map(answer => ({text: answer}))}}", "layout": "grid", "onSelect": { "action": "submitAnswer" } }, 
+            { "component": "ChoiceSelector", "props": { "options": "{{gameState.shuffledAnswers}}", "layout": "grid", "onSelect": { "action": "submitAnswer", "payload": "{{payload}}" } }, 
               "layout": { "alignment": "Center", "width": "100%", "height": "100%", "padding": {"top": 16, "bottom": 16, "left": 16, "right": 16 } } 
             } 
           ] 
@@ -290,7 +298,7 @@
     "REVEAL_ANSWER": {
       "host": {
         "components": [
-          { "component": "TextDisplay", "props": { "text": "The correct answer is...", "fontSize": "2.5rem", "fontWeight": "bold" }, "layout": { "alignment": "Center", "height": "hug" } }
+          { "component": "CorrectAnswerOverlay", "props": { "options": "{{gameState.currentQuestion.options}}", "correctAnswerId": "{{gameState.currentQuestion.correctAnswerId}}", "players": "{{players}}", "onComplete": { "action": "timerExpires" } } }
         ]
       },
       "player": {
@@ -317,7 +325,7 @@
                     "props": {
                         "direction": "vertical",
                         "spacing": 16,
-                        "children": "{{gameState.currentQuestion.options.map(option => ({ 'component': 'Stack', 'props': { 'direction': 'vertical', 'spacing': 8, 'width': '100%' }, 'children': [ { 'component': 'TextDisplay', 'props': { 'text': `${option} (${gameState.answerStats[option] || 0})`, 'fontWeight': option === gameState.currentQuestion.correctAnswer ? 'bold' : 'normal' } }, { 'component': 'Container', 'props': { 'backgroundColor': '#444', 'borderRadius': '5px', 'width': '100%', 'height': '40px' }, 'children': [{ 'component': 'Container', 'props': { 'backgroundColor': option === gameState.currentQuestion.correctAnswer ? '#28a745' : '#8A2BE2', 'height': '100%', 'borderRadius': '5px', 'width': `${ ((gameState.answerStats[option] || 0) / players.length) * 100 }%` } }] } ] }))}}"
+                        "children": "{{gameState.currentQuestion.options.map(option => ({ 'component': 'Stack', 'props': { 'direction': 'vertical', 'spacing': 8, 'width': '100%' }, 'children': [ { 'component': 'TextDisplay', 'props': { 'text': `${option.text} (${gameState.answerStats[option.id] || 0})`, 'fontWeight': option.id === gameState.currentQuestion.correctAnswerId ? 'bold' : 'normal' } }, { 'component': 'Container', 'props': { 'backgroundColor': '#444', 'borderRadius': '5px', 'width': '100%', 'height': '40px' }, 'children': [{ 'component': 'Container', 'props': { 'backgroundColor': option.id === gameState.currentQuestion.correctAnswerId ? '#28a745' : '#8A2BE2', 'height': '100%', 'borderRadius': '5px', 'width': `${ ((gameState.answerStats[option.id] || 0) / players.length) * 100 }%` } }] } ] }))}}"
                     },
                     "layout": { "alignment": "Center", "width": "70%", "height": "hug" }
                 }
@@ -366,20 +374,27 @@
                 ]
               }
             },
-            "layout": { "alignment": "Center", "width": "60%", "height": "hug" }
+            "layout": { "alignment": "Center", "width": "60%", "height": "hug", "spacing": 16 }
           }
         ]
       },
       "player": {
         "components": [
           {
-            "component": "Stack", "props": { "direction": "vertical", "spacing": 16, "alignItems": "center" }, "layout": { "alignment": "Center", "height": "hug", "width": "80%" },
+            "component": "Stack", "props": { "direction": "vertical", "spacing": 8, "alignItems": "center" }, "layout": { "alignment": "Center", "height": "hug", "width": "80%" },
             "children": [
               { "component": "TextDisplay", "props": { "text": "Your Rank", "fontSize": "1.5rem", "color": "#aaa" } },
-              { "component": "TextDisplay", "props": { "text": "{{player.rank}} / {{players.length}}", "fontSize": "5rem", "fontWeight": "bold" } },
+              { 
+                "component": "Stack", "props": {"direction": "horizontal", "alignItems": "center", "spacing": 16},
+                "children": [
+                  { "component": "TextDisplay", "props": { "text": "{{player.rank}} / {{players.length}}", "fontSize": "5rem", "fontWeight": "bold" } },
+                  { "component": "TextDisplay", "props": { "text": "{{player.rank < player.previousRank ? '▲' : (player.rank > player.previousRank ? '▼' : '')}}", "fontSize": "2rem", "color": "{{player.rank < player.previousRank ? '#28a745' : '#dc3545'}}" } }
+                ]
+              },
               { 
                 "component": "Stack", 
-                "props": { "direction": "horizontal", "spacing": 24, "alignItems": "center" }, 
+                "props": { "direction": "horizontal", "spacing": 24, "alignItems": "center" },
+                "layout": {"offset": {"top": 16}},
                 "children": [
                   { "component": "TextDisplay", "props": { "text": "Score: {{player.score}}", "fontSize": "1.2rem" } },
                   { "component": "TextDisplay", "props": { "text": "{{player.streak > 1 ? '🔥 ' + player.streak : ''}}", "fontSize": "1.2rem" } }

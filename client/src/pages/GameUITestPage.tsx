@@ -1,6 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '../components/old/controls/Button';
-import { Player } from '../types/types';
+import { Player, RoomData, RoomState } from '../types/types';
+import { DynamicViewRenderer } from '../game/DynamicViewRenderer';
+import { useGameStore } from '../store/gameStore';
+import { usePlayerStore } from '../store/playerStore';
+import { useRoomStore } from '../store/roomStore';
 
 // QuizClash Views
 import { HostStartingView as QuizClashHostStartingView } from '../game/QuizClash/views/HostStartingView';
@@ -37,6 +42,7 @@ import { PlayerFinishedView as CardsWarPlayerFinishedView } from '../game/CardsW
 import { PlayerWarTransitionView as CardsWarPlayerWarTransitionView } from '../game/CardsWar/views/PlayerWarTransitionView';
 import HostFrame from '../components/old/layout/HostFrame';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'https://partyhubback.onrender.com';
 
 const dummyPlayer: Player = {
   id: '1',
@@ -123,6 +129,47 @@ const cardsWarViews = {
   }
 };
 
+const hardcodedViews = {
+  'QuizClash': quizClashViews,
+  'FakeNews': fakeNewsViews,
+  'CardsWar': cardsWarViews,
+};
+
+const ServerGameViewRenderer: React.FC<{ game: any; view: string; role: 'host' | 'player' }> = ({ game, view, role }) => {
+  const setGameState = useGameStore(state => state.setGameState);
+  const setSocketId = usePlayerStore(state => state.setSocketId);
+  const setRoom = useRoomStore(state => state.setRoom);
+
+  useEffect(() => {
+    const hostId = 'host-id';
+    const playerId = role === 'host' ? hostId : '1';
+
+    // Set up the game state with the correct structure for DynamicViewRenderer
+    const gameState = {
+      ...game,
+      currentState: view,
+      players: dummyPlayers,
+      hostId: hostId,
+      // The UI should contain the entire UI object, not just the specific view
+      ui: game.ui
+    };
+
+    setGameState(gameState, true);
+    setSocketId(playerId);
+    const roomData: RoomData = {
+      roomCode: 'test',
+      host: dummyPlayers[0],
+      hostId: hostId,
+      players: dummyPlayers,
+      state: RoomState.IN_GAME,
+      gameId: game.metadata.gameId,
+    };
+    setRoom(roomData);
+
+  }, [game, view, role, setGameState, setSocketId, setRoom]);
+
+  return <DynamicViewRenderer />;
+};
 
 const HostResolutions = {
   'Desktop (Default)': { width: '100%', height: '100%' },
@@ -140,43 +187,103 @@ const playerResolutions = {
   'iPad Pro 12.9"': { width: '1024px', height: '1366px' },
 };
 
-const allViews = {
-  'QuizClash': quizClashViews,
-  'FakeNews': fakeNewsViews,
-  'CardsWar': cardsWarViews,
-};
-
-
 const GameUITestPage: React.FC = () => {
-  const [currentGame, setCurrentGame] = useState<keyof typeof allViews>('QuizClash');
-  const [currentStateName, setCurrentStateName] = useState(Object.keys(allViews['QuizClash'])[0]);
+  const { '*': path } = useParams();
+  const navigate = useNavigate();
+  const [gameName, viewName] = path?.split('/') || [];
+
+  const [allViews, setAllViews] = useState<any>(hardcodedViews);
+  const [currentGame, setCurrentGame] = useState<string>('QuizClash');
+  const [currentStateName, setCurrentStateName] = useState(Object.keys(hardcodedViews['QuizClash'])[0]);
   const [viewType, setViewType] = useState<'host' | 'player'>('host');
   const [resolutions, setResolutions] = useState({
     host: 'Desktop (Default)',
     player: 'iPhone 14 Pro Max',
   });
 
+  useEffect(() => {
+    const fetchServerGames = async () => {
+      try {
+        const response = await fetch(`${BACKEND_URL}/api/game-configs`);
+        const gameslist: { gameId: string }[] = await response.json();
+        const gameConfigs = await Promise.all(
+          gameslist.map((game) =>
+            fetch(`${BACKEND_URL}/api/game-configs/${game.gameId}`).then((res) => res.json())
+          )
+        );
+
+        const serverViews: { [key: string]: any } = {};
+        gameConfigs.forEach((game: any) => {
+          const views: { [key: string]: any } = {};
+          Object.keys(game.ui).forEach((stateName: string) => {
+            views[stateName] = {
+              host: { game, view: stateName, role: 'host' },
+              player: { game, view: stateName, role: 'player' },
+            };
+          });
+          serverViews[game.metadata.gameId] = views;
+        });
+
+        setAllViews({ ...hardcodedViews, ...serverViews });
+      } catch (error) {
+        console.error("Failed to fetch server games", error);
+      }
+    };
+
+    fetchServerGames();
+  }, []);
+
+  useEffect(() => {
+    if (gameName && allViews[gameName]) {
+      setCurrentGame(gameName);
+      if (viewName && allViews[gameName][viewName]) {
+        setCurrentStateName(viewName);
+      } else {
+        setCurrentStateName(Object.keys(allViews[gameName])[0]);
+      }
+    } else {
+      setCurrentGame('QuizClash');
+      setCurrentStateName(Object.keys(hardcodedViews['QuizClash'])[0]);
+    }
+  }, [gameName, viewName, allViews]);
+
   const handleGameChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newGame = event.target.value as keyof typeof allViews;
-    setCurrentGame(newGame);
-    setCurrentStateName(Object.keys(allViews[newGame])[0]);
+    const newGame = event.target.value;
+    navigate(`/test/ui/${newGame}`);
+  };
+
+  const handleStateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const newState = event.target.value;
+    navigate(`/test/ui/${currentGame}/${newState}`);
   };
 
   const gameViews = allViews[currentGame];
-  const gameStates = Object.keys(gameViews);
+  const gameStates = gameViews ? Object.keys(gameViews) : [];
   const currentStateIndex = gameStates.indexOf(currentStateName);
 
   const handleNextView = () => {
     const nextIndex = (currentStateIndex + 1) % gameStates.length;
-    setCurrentStateName(gameStates[nextIndex]);
+    navigate(`/test/ui/${currentGame}/${gameStates[nextIndex]}`);
   };
 
   const handlePrevView = () => {
     const prevIndex = (currentStateIndex - 1 + gameStates.length) % gameStates.length;
-    setCurrentStateName(gameStates[prevIndex]);
+    navigate(`/test/ui/${currentGame}/${gameStates[prevIndex]}`);
   };
 
-  const currentView = gameViews[currentStateName as keyof typeof gameViews]?.[viewType];
+  const currentView = gameViews?.[currentStateName]?.[viewType];
+
+  // Check if this is a server view (has game, view, role properties) or a hardcoded view
+  const isServerView = currentView && typeof currentView === 'object' && 'game' in currentView;
+
+  let renderedView;
+  if (isServerView) {
+    // Render the ServerGameViewRenderer for server views
+    renderedView = <ServerGameViewRenderer game={currentView.game} view={currentView.view} role={currentView.role} />;
+  } else {
+    // Use the hardcoded view directly
+    renderedView = currentView;
+  }
 
   const currentResolutionSet = viewType === 'host' ? HostResolutions : playerResolutions;
   const currentResolutionName = resolutions[viewType];
@@ -204,9 +311,10 @@ const GameUITestPage: React.FC = () => {
         <div style={{ textAlign: 'center' }}>
           <div style={{ marginBottom: '1rem' }}>
             <select value={currentGame} onChange={handleGameChange} style={{ marginRight: '1rem' }}>
-              <option value="QuizClash">QuizClash</option>
-              <option value="FakeNews">FakeNews</option>
-              <option value="CardsWar">CardsWar</option>
+              {Object.keys(allViews).map(game => <option key={game} value={game}>{game}</option>)}
+            </select>
+            <select value={currentStateName} onChange={handleStateChange} style={{ marginRight: '1rem' }}>
+              {gameStates.map(state => <option key={state} value={state}>{state}</option>)}
             </select>
             <label style={{ marginRight: '1rem' }}>
               <input type="radio" name="viewType" value="host" checked={viewType === 'host'} onChange={() => setViewType('host')} /> Host
@@ -220,12 +328,11 @@ const GameUITestPage: React.FC = () => {
               {Object.keys(currentResolutionSet).map(res => <option key={res} value={res}>{res}</option>)}
             </select>
           </div>
-          <h2 style={{ marginTop: '1rem' }}>{currentStateName}</h2>
         </div>
         <Button onClick={handleNextView} disabled={gameStates.length < 2}>Next State</Button>
       </div>
       <div style={containerStyle}>
-        {currentView ? currentView : <p>No {viewType} view defined for this state.</p>}
+        {renderedView}
       </div>
     </div>
   );

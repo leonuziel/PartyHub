@@ -96,13 +96,6 @@ A component for displaying key-value pairs.
 - Supports all **Common Styling Props**.
 - `className` (string): Optional CSS class.
 
-### PlayerAvatar
-Displays a player's avatar.
-
-**Props:**
-- `player` (Player): The player object.
-- `size` ('small' | 'medium' | 'large'): The size of the avatar. Defaults to `medium`.
-
 ---
 
 ## Input & Controls
@@ -180,19 +173,63 @@ A component to indicate a status or state.
 - Supports **Common Styling Props**.
 - `className` (string): Optional CSS class.
 
-### Modal
-A modal dialog that can be displayed over the main content.
+---
+
+## Game Tools
+
+Specialized components for building games.
+
+### Card
+Represents a single playing card.
 
 **Props:**
-- `isOpen` (boolean): Controls whether the modal is open or closed.
-- `onClose` (() => void): Callback function for when the modal is closed.
-- `children` (React.ReactNode): The content to be displayed inside the modal.
+- `faceUp` (boolean): Whether the card's face is visible. Defaults to `false`.
+- `content` (React.ReactNode): The content for the card's face.
+- `back` (React.ReactNode): The content for the card's back.
+- `isSelectable` (boolean): If `true`, the card can be clicked.
+- `isSelected` (boolean): If `true`, the card is styled as selected.
+- `onClick` (() => void): Callback function for when the card is clicked.
+- Supports all **Common Styling Props**.
+- `className` (string): Optional CSS class.
+- `style` (React.CSSProperties): Optional inline styles.
 
-### Spinner
-A loading spinner to indicate that content is being loaded.
+### CardContainer
+A container for arranging and displaying multiple cards.
 
 **Props:**
-- `None`
+- `layout` ('fan' | 'grid' | 'stack' | 'pile'): The layout style for the cards. Defaults to `grid`.
+- `cards` (CardData[]): An array of card data objects.
+- `onCardClick` ((cardId: string) => void): Callback for when a card is clicked.
+- `selectedCardIds` (string[]): An array of IDs of the currently selected cards.
+- Also supports container-related **Common Styling Props** like `backgroundColor`, `padding`, `borderRadius`, and `border`.
+
+### Dice
+A component to display one or more dice.
+
+**Props:**
+- `count` (number): The number of dice to display. Defaults to `1`.
+- `values` (number[]): The values to show on the dice faces.
+- `isRolling` (boolean): If `true`, applies a rolling animation.
+- `onRollComplete` (() => void): A callback for when the rolling animation finishes.
+- Each die supports all **Common Styling Props**.
+
+### GameBoard
+A grid-based board for games.
+
+**Props:**
+- `size` ({ rows: number; cols: number }): The dimensions of the board.
+- `onCellClick` ((row: number, col: number) => void): Callback for when a cell is clicked.
+- `children` (React.ReactNode): For placing `GamePiece` components on the board.
+
+### GamePiece
+Represents a piece on a game board.
+
+**Props:**
+- `shape` ('circle' | 'square'): The shape of the piece. Defaults to `circle`.
+- `color` (string): The color of the piece.
+- `image` (string): An image URL for the piece.
+- `position` ({ row: number; col: number }): The grid position on a `GameBoard`.
+- `style` (React.CSSProperties): Optional inline styles.
 
 ---
 
@@ -313,58 +350,46 @@ A prominent, temporary banner that appears to announce a new phase of a round (e
 
 ---
 
-## Game Tools
+## Legacy Components (Deprecated)
 
-Specialized components for building games.
+The following components are maintained for backward compatibility but are not recommended for new development. They are primarily used by the legacy hardcoded games.
 
-### Card
-Represents a single playing card.
+### Legacy Display Components
+- `AnswerResult` - Use `CorrectAnswerOverlay` instead
+- `AwardDisplay` - Use `InGameNotification` instead
+- `GameBranding` - Use `TextDisplay` with custom styling
+- `GameTitle` - Use `TextDisplay` with custom styling
+- `Leaderboard` - Use `ListDisplay` with custom rendering
+- `PlayerAvatar` - Use `ImageDisplay` with custom styling
+- `PlayerCard` - Use `Container` with custom content
+- `PlayerInfo` - Use `KeyValueDisplay` instead
+- `PlayerStatusContainer` - Use `Container` with custom content
+- `PlayerStatusGrid` - Use `Grid` with custom rendering
+- `Podium` - Use `ListDisplay` with custom rendering
+- `QuestionDisplay` - Use `TextDisplay` instead
+- `QuestionHeader` - Use `TextDisplay` instead
+- `RankDisplay` - Use `TextDisplay` instead
+- `WinnerDisplay` - Use `TextDisplay` instead
 
-**Props:**
-- `faceUp` (boolean): Whether the card's face is visible. Defaults to `false`.
-- `content` (React.ReactNode): The content for the card's face.
-- `back` (React.ReactNode): The content for the card's back.
-- `isSelectable` (boolean): If `true`, the card can be clicked.
-- `isSelected` (boolean): If `true`, the card is styled as selected.
-- `onClick` (() => void): Callback function for when the card is clicked.
-- Supports all **Common Styling Props**.
-- `className` (string): Optional CSS class.
-- `style` (React.CSSProperties): Optional inline styles.
+### Legacy Control Components
+- `ActionButton` - Use `Button` instead
+- `AnswerGrid` - Use `ChoiceSelector` instead
+- `OldButton` - Use `Button` instead
+- `TextAreaWithCounter` - Use `TextInput` with `showCounter: true` instead
+- `VotingOptions` - Use `VotingGrid` instead
 
-### CardContainer
-A container for arranging and displaying multiple cards.
+### Legacy Layout Components
+- `CenteredMessage` - Use `Container` with `alignment: "Center"` instead
+- `HostFrame` - Use `Container` with custom styling instead
+- `HostViewContainer` - Use `Container` instead
+- `PlayArea` - Use `Container` instead
+- `PlayerViewContainer` - Use `Container` instead
 
-**Props:**
-- `layout` ('fan' | 'grid' | 'stack' | 'pile'): The layout style for the cards. Defaults to `grid`.
-- `cards` (CardData[]): An array of card data objects.
-- `onCardClick` ((cardId: string) => void): Callback for when a card is clicked.
-- `selectedCardIds` (string[]): An array of IDs of the currently selected cards.
-- Also supports container-related **Common Styling Props** like `backgroundColor`, `padding`, `borderRadius`, and `border`.
+### Legacy Gameplay Components
+- `CountdownTimer` - Use `Timer` with `type: "countdown"` instead
 
-### Dice
-A component to display one or more dice.
+---
 
-**Props:**
-- `count` (number): The number of dice to display. Defaults to `1`.
-- `values` (number[]): The values to show on the dice faces.
-- `isRolling` (boolean): If `true`, applies a rolling animation.
-- `onRollComplete` (() => void): A callback for when the rolling animation finishes.
-- Each die supports all **Common Styling Props**.
+## Component Registry
 
-### GameBoard
-A grid-based board for games.
-
-**Props:**
-- `size` ({ rows: number; cols: number }): The dimensions of the board.
-- `onCellClick` ((row: number, col: number) => void): Callback for when a cell is clicked.
-- `children` (React.ReactNode): For placing `GamePiece` components on the board.
-
-### GamePiece
-Represents a piece on a game board.
-
-**Props:**
-- `shape` ('circle' | 'square'): The shape of the piece. Defaults to `circle`.
-- `color` (string): The color of the piece.
-- `image` (string): An image URL for the piece.
-- `position` ({ row: number; col: number }): The grid position on a `GameBoard`.
-- `style` (React.CSSProperties): Optional inline styles.
+All components are registered in `ComponentRegistry.ts` and can be referenced by name in game configuration files. The registry automatically maps component names to their React implementations, allowing the `DynamicViewRenderer` to instantiate them dynamically based on server-side UI definitions.

@@ -27,7 +27,6 @@ A game configuration is a single JSON object. The sections below describe each o
   "transitions": [],
   "ui": {}
 }
-
 ```
 
 **Example:**
@@ -184,6 +183,10 @@ A game configuration is a single JSON object. The sections below describe each o
       "effects": [
         {
           "runAction": "recordPlayerAnswer"
+        },
+        {
+          "function": "dispatchEvent",
+          "args": ["playerAnswered"]
         }
       ]
     },
@@ -217,7 +220,7 @@ A game configuration is a single JSON object. The sections below describe each o
       "condition": "{{gameState.currentQuestionIndex >= gameData.questions.length - 1}}"
     }
   ],
-"ui": {
+  "ui": {
     "STARTING": {
       "host": {
         "components": [
@@ -402,6 +405,7 @@ A game configuration is a single JSON object. The sections below describe each o
   }
 }
 ```
+
 ### `metadata`
 
 **(Object)** Defines basic, static information about the game. This is used for display in lobbies and for setting game rules.
@@ -639,22 +643,68 @@ Both properties are objects that can contain `top`, `bottom`, `left`, and `right
 -   **Zod Schema**: This file uses the `zod` library to define a strict schema (`gameConfigurationSchema`) that covers every aspect of the game configuration, from metadata to the props of every single UI component.
 -   **Error Handling**: If a configuration fails validation, `ConfigurableGame` throws an error and refuses to start, preventing crashes from malformed JSON. The errors are logged to the console for debugging.
 
-## 5. Obvious Missing Capabilities & Future Improvements
+## 5. Available Game Configurations
+
+The following game configurations are currently available in the system:
+
+### QuizClash (`quizclash.json`)
+A complete trivia game implementation with questions, scoring, and conditional UI based on player state.
+
+### FakeNews (`fakenews.json`)
+A game where players submit fake answers and vote on what they believe is correct.
+
+### Kahoot Clone (`kahoot-clone.json`)
+A Kahoot-style quiz game with multiple choice questions and real-time scoring.
+
+### Test Configurations
+- `test-basic-flow.json` - Basic state machine testing
+- `new-component-test.json` - Component testing configuration
+- `ui-layout-test.json` - Layout system testing
+- `test-game.json` - Simple test game
+
+## 6. Component Usage Patterns
+
+### Modern Components (Recommended)
+The following components are the current standard and should be used for new game development:
+
+- **Layout**: `Container`, `Grid`, `Stack`, `Spacer`
+- **Display**: `TextDisplay`, `ImageDisplay`, `ListDisplay`, `KeyValueDisplay`
+- **Input**: `Button`, `ChoiceSelector`, `TextInput`, `Slider`
+- **Feedback**: `Timer`, `StateIndicator`
+- **Game Tools**: `Card`, `CardContainer`, `Dice`, `GameBoard`, `GamePiece`
+- **Patterns**: `PhaseBanner`, `DrawingCanvas`, `RoleRevealCard`, `VotingGrid`, etc.
+
+### Legacy Components (Deprecated)
+The following components are maintained for backward compatibility but are not recommended for new development:
+
+- **Display**: `AnswerResult`, `Leaderboard`, `PlayerAvatar`, `QuestionDisplay`, etc.
+- **Controls**: `ActionButton`, `AnswerGrid`, `VotingOptions`, etc.
+- **Layout**: `CenteredMessage`, `HostFrame`, `PlayerViewContainer`, etc.
+
+## 7. Current Limitations & Future Improvements
 
 While the current system is powerful, there are several clear areas for improvement:
 
-1.  **Limited `effects` Functions**: The list of available functions (`setProperty`, `incrementProperty`, `startTimer`, `calculateWinner`) is very small. To create more complex games, this needs to be expanded. Examples include:
-    -   Array manipulation (`push`, `pop`, `filter`, `shuffle`).
-    -   More complex data manipulation (`max`, `min`, `sort`).
-    -   String manipulation.
-    -   Saving player-specific input more robustly.
+1.  **Limited `effects` Functions**: The list of available functions is currently limited to: `setProperty`, `incrementProperty`, `startTimer`, `cancelTimer`, `calculateWinner`, `dispatchEvent`, `arrayPush`, `arrayClear`, `shuffleArray`, and `recordEvent`. To create more complex games, this needs to be expanded.
 
 2.  **Lack of Complex Conditions**: The `condition` field in transitions is powerful but limited to single expressions. There's no way to define a reusable function or a more complex block of logic.
 
-3.  **No "For Each Player" Logic in Transitions**: While `onEnter` and `effects` blocks can iterate over players using a `forEachPlayer` directive, this logic isn't available for `transitions` directly. This makes it hard to perform player-specific state changes as a condition for a transition.
+3.  **No "For Each Player" Logic in Transitions**: While `onEnter` and `effects` blocks can iterate over players using a `forEachPlayer` directive, this logic isn't available for `transitions` directly.
 
-4.  **Static `gameData`**: The `gameData` (e.g., the list of questions) is loaded once at the start of the game. There is no built-in mechanism to fetch or modify this data dynamically during gameplay (e.g., loading questions from an external API or a database).
+4.  **Static `gameData`**: The `gameData` is loaded once at the start of the game. There is no built-in mechanism to fetch or modify this data dynamically during gameplay.
 
 5.  **Player-to-Player Interaction**: The action system is primarily designed for player-to-server interaction. There is no direct way for one player's action to target another player specifically.
 
 6.  **Error Handling for Expressions**: The `resolveValue` function uses `try...catch` blocks, but errors are simply logged. A more robust system might invalidate the action or transition, or even expose the error to the host for debugging.
+
+## 8. Migration from Legacy Games
+
+To migrate existing hardcoded games to the configurable system:
+
+1. **Analyze the Game Logic**: Break down the game into states, events, and transitions.
+2. **Identify Reusable Actions**: Extract common operations into named actions.
+3. **Map UI Components**: Replace hardcoded UI with component definitions from the `ui` section.
+4. **Test Incrementally**: Start with a simple state and gradually add complexity.
+5. **Validate Configuration**: Use the built-in validator to catch configuration errors early.
+
+The configurable system is designed to be more powerful and flexible than the legacy hardcoded approach, while maintaining backward compatibility for existing games.

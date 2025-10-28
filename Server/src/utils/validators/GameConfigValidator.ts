@@ -480,11 +480,6 @@ const EmojiReactionToolbarProps = baseStylingProps.extend({
     allowedReactions: z.array(z.string()).optional(),
 }).passthrough();
 
-const InstructionCarouselProps = baseStylingProps.extend({
-  slides: z.string(), // Expect a template variable like "{{gameData.instructions}}"
-  autoPlayInterval: z.number().optional(),
-}).passthrough();
-
 
 // --- New schemas for layout properties based on ui_layout_config_plan.md ---
 
@@ -544,7 +539,6 @@ const componentSchema: z.ZodType<any> = z.lazy(() => z.discriminatedUnion('compo
   z.object({ component: z.literal('RoleRevealCard'), props: RoleRevealCardProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('DrawingCanvas'), props: DrawingCanvasProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('WordGuesserInput'), props: WordGuesserInputProps, layout: layoutSchema.optional() }),
-  z.object({ component: z.literal('InstructionCarousel'), props: InstructionCarouselProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('PlayerHandView'), props: PlayerHandViewProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('CommunityCardsView'), props: CommunityCardsViewProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('BiddingView'), props: BiddingViewProps, layout: layoutSchema.optional() }),

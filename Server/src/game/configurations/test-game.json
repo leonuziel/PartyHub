@@ -6,8 +6,8 @@
     "minPlayers": 2,
     "maxPlayers": 8
   },
-    "initialState": "STARTING",
-    "currentState": "STARTING",
+  "initialState": "STARTING",
+  "currentState": "STARTING",
   "states": {
     "STARTING": {},
     "VOTING": {},
@@ -27,7 +27,7 @@
             "id": "gt-1",
             "component": "GameTitle",
             "props": {
-              "text": "My Awesome Game"
+              "title": "My Awesome Game"
             }
           },
           {
@@ -43,7 +43,7 @@
             "id": "cm-1",
             "component": "CenteredMessage",
             "props": {
-              "message": "Waiting for the game to start..."
+              "children": "Waiting for the game to start..."
             }
           }
         ]
