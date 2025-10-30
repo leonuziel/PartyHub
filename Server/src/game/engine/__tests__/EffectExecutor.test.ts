@@ -1,96 +1,281 @@
-import { EffectExecutor } from '../EffectExecutor.js';
-import { ValueResolver } from '../ValueResolver.js';
-import { StateTimer } from '../StateTimer.js';
-import { GameEventHandler } from '../GameEventHandler.js';
-import { jest } from '@jest/globals';
-
-// Mocks
-jest.mock('../ValueResolver.js');
-jest.mock('../StateTimer.js');
-jest.mock('../GameEventHandler.js');
+import { TestBed } from './helpers/TestBed';
 
 describe('EffectExecutor', () => {
-  let gameState: any;
-  let config: any;
-  let valueResolver: jest.Mocked<ValueResolver>;
-  let handleInternalAction: jest.Mock;
-  let stateTimer: jest.Mocked<StateTimer>;
-  let eventHandler: jest.Mocked<GameEventHandler>;
-  let effectExecutor: EffectExecutor;
-
-  beforeEach(() => {
-    gameState = {
-      playerAttributes: {
-        player1: { score: 100 },
-        player2: { score: 200 },
-      },
-      currentRound: 1,
-    };
-    config = {
-        actions: {}
-    };
-    valueResolver = {
-      resolve: jest.fn((val) => val),
-    } as any;
-    handleInternalAction = jest.fn();
-    stateTimer = {
-      startTimer: jest.fn(),
-      cancelTimer: jest.fn(),
-    } as any;
-    eventHandler = {
-        handle: jest.fn(),
-    } as any;
-
-    effectExecutor = new EffectExecutor(gameState, config, valueResolver, handleInternalAction, stateTimer);
-    effectExecutor.setEventHandler(eventHandler);
-  });
-
   describe('setProperty', () => {
     it('should set a property on the gameState', () => {
+      const initialState = { currentRound: 1 };
+      const testBed = new TestBed(initialState);
       const effect = {
         function: 'setProperty',
         args: ['currentRound', 2],
       };
-      effectExecutor.execute(effect);
-      expect(gameState.currentRound).toBe(2);
+
+      testBed.executeEffect(effect);
+
+      expect(testBed.getGameState().currentRound).toBe(2);
+    });
+  });
+
+  describe('arrayPush', () => {
+    it('should push a value into an existing array', () => {
+      const initialState = { gameData: { items: ['a', 'b'] } };
+      const testBed = new TestBed(initialState);
+
+      const effect = { function: 'arrayPush', args: ['gameData.items', 'c'] };
+      testBed.executeEffect(effect);
+
+      expect(testBed.getGameState().gameData.items).toEqual(['a', 'b', 'c']);
     });
 
-    it('should set a nested property on the gameState', () => {
-      const effect = {
-        function: 'setProperty',
-        args: ['playerAttributes.player1.score', 150],
-      };
-      effectExecutor.execute(effect);
-      expect(gameState.playerAttributes.player1.score).toBe(150);
+    it('should not fail if the target is not an array', () => {
+      const initialState = { gameData: { items: 'not-an-array' } };
+      const testBed = new TestBed(initialState);
+
+      const effect = { function: 'arrayPush', args: ['gameData.items', 'c'] };
+      testBed.executeEffect(effect);
+
+      expect(testBed.getGameState().gameData.items).toEqual('not-an-array');
     });
+  });
+
+  describe('arrayClear', () => {
+    it('should clear all elements from an array', () => {
+      const initialState = { gameData: { items: ['a', 'b', 'c'] } };
+      const testBed = new TestBed(initialState);
+
+      const effect = { function: 'arrayClear', args: ['gameData.items'] };
+      testBed.executeEffect(effect);
+
+      expect(testBed.getGameState().gameData.items).toEqual([]);
+    });
+  });
+
+  describe('Timers', () => {
+    beforeEach(() => {
+      jest.useFakeTimers();
+    });
+
+    afterEach(() => {
+      jest.useRealTimers();
+    });
+
+    it('should start a timer and execute effects on expiration', () => {
+      const initialState = { gameData: { status: 'waiting' } };
+      const testBed = new TestBed(initialState);
+
+      const onExpireEffect = { function: 'setProperty', args: ['gameData.status', 'finished'] };
+      const startTimerEffect = { function: 'startTimer', args: [5000, onExpireEffect] };
+
+      testBed.executeEffect(startTimerEffect);
+
+      // At this point, the status should still be 'waiting'
+      expect(testBed.getGameState().gameData.status).toBe('waiting');
+
+      // Fast-forward time by 5 seconds
+      jest.advanceTimersByTime(5000);
+
+      // Now the onExpire effect should have executed
+      expect(testBed.getGameState().gameData.status).toBe('finished');
+    });
+
+    it('should cancel an active timer', () => {
+      const initialState = { gameData: { status: 'waiting' } };
+      const testBed = new TestBed(initialState);
+
+      const onExpireEffect = { function: 'setProperty', args: ['gameData.status', 'finished'] };
+      const startTimerEffect = { function: 'startTimer', args: [5000, onExpireEffect] };
+      const cancelTimerEffect = { function: 'cancelTimer' };
+
+      testBed.executeEffect(startTimerEffect);
+      testBed.executeEffect(cancelTimerEffect);
+
+      // Fast-forward time
+      jest.advanceTimersByTime(5000);
+
+      // The status should NOT have changed because the timer was cancelled
+      expect(testBed.getGameState().gameData.status).toBe('waiting');
+    });
+  });
+
+  describe('calculateWinner', () => {
+    it('should correctly determine the winner and top three players from scores', () => {
+      const initialState = {
+        players: {
+          'p1': { id: 'p1', nickname: 'Alice' },
+          'p2': { id: 'p2', nickname: 'Bob' },
+          'p3': { id: 'p3', nickname: 'Charlie' },
+          'p4': { id: 'p4', nickname: 'David' },
+        },
+        playerAttributes: {
+          'p1': { score: 150 },
+          'p2': { score: 200 },
+          'p3': { score: 100 },
+          'p4': { score: 175 },
+        },
+      };
+      const testBed = new TestBed(initialState);
+      const effect = { function: 'calculateWinner' };
+
+      testBed.executeEffect(effect);
+
+      const state = testBed.getGameState();
+      expect(state.winner.playerId).toBe('p2');
+      expect(state.winner.score).toBe(200);
+      expect(state.topThreePlayers).toHaveLength(3);
+      expect(state.topThreePlayers.map((p: any) => p.playerId)).toEqual(['p2', 'p4', 'p1']);
+    });
+  });
+
+  describe('recordEvent', () => {
+    it('should record the event name and time to the specified path', () => {
+      const initialState = { gameData: {} };
+      const testBed = new TestBed(initialState);
+
+      // Mocking getTimeSinceStateEntry to return a predictable value
+      (testBed as any).valueResolver.stateTimer.getTimeSinceStateEntry = jest.fn(() => 1234);
+
+      const effect = { function: 'recordEvent', args: ['playerAnswered', 'gameData.lastAnswer'] };
+      testBed.executeEffect(effect);
+
+      const recordedEvent = testBed.getGameState().gameData.lastAnswer;
+      expect(recordedEvent.eventName).toBe('playerAnswered');
+      expect(recordedEvent.eventTime).toBe(1234);
+    });
+  });
+
+  it('should set a nested property on the gameState', () => {
+    const initialState = {
+      playerAttributes: {
+        player1: { score: 100 },
+      },
+    };
+    const testBed = new TestBed(initialState);
+    const effect = {
+      function: 'setProperty',
+      args: ['playerAttributes.player1.score', 150],
+    };
+
+    testBed.executeEffect(effect);
+
+    expect(testBed.getGameState().playerAttributes.player1.score).toBe(150);
   });
 
   describe('incrementProperty', () => {
     it('should increment a property by a given value', () => {
+      const initialState = {
+        playerAttributes: {
+          player1: { score: 100 },
+        },
+      };
+      const testBed = new TestBed(initialState);
       const effect = {
         function: 'incrementProperty',
         args: ['playerAttributes.player1.score', 50],
       };
-      effectExecutor.execute(effect);
-      expect(gameState.playerAttributes.player1.score).toBe(150);
+
+      testBed.executeEffect(effect);
+
+      expect(testBed.getGameState().playerAttributes.player1.score).toBe(150);
     });
 
     it('should increment a property by 1 if no value is given', () => {
+      const initialState = { currentRound: 1 };
+      const testBed = new TestBed(initialState);
       const effect = {
         function: 'incrementProperty',
         args: ['currentRound'],
       };
-      effectExecutor.execute(effect);
-      expect(gameState.currentRound).toBe(2);
+
+      testBed.executeEffect(effect);
+
+      expect(testBed.getGameState().currentRound).toBe(2);
     });
 
     it('should initialize a property to the increment value if it does not exist', () => {
+      const initialState = {
+        playerAttributes: {
+          player1: {},
+        },
+      };
+      const testBed = new TestBed(initialState);
       const effect = {
         function: 'incrementProperty',
         args: ['playerAttributes.player1.bonusPoints', 10],
       };
-      effectExecutor.execute(effect);
-      expect(gameState.playerAttributes.player1.bonusPoints).toBe(10);
+
+      testBed.executeEffect(effect);
+
+      expect(testBed.getGameState().playerAttributes.player1.bonusPoints).toBe(10);
+    });
+  });
+
+  describe('shuffleArray', () => {
+    it('should shuffle an array in place', () => {
+      const initialState = {
+        items: [1, 2, 3, 4, 5],
+      };
+      const testBed = new TestBed(initialState);
+      const originalItems = [...initialState.items];
+      const effect = {
+        function: 'shuffleArray',
+        args: ['items'],
+      };
+
+      testBed.executeEffect(effect);
+
+      const shuffledItems = testBed.getGameState().items;
+      expect(shuffledItems).not.toEqual(originalItems);
+      expect(shuffledItems.sort()).toEqual(originalItems.sort());
+    });
+  });
+
+  describe('dispatchEvent', () => {
+    it('should execute the effects of a configured event and broadcast a state update', () => {
+      // 1. Setup Initial State and Configuration
+      const initialState = {
+        roomCode: 'ABCD',
+        gameData: {
+          counter: 0,
+        },
+        players: {},
+      };
+
+      const config = {
+        events: {
+          incrementCounter: {
+            permissions: ['server' as const],
+            effects: [
+              {
+                function: 'incrementProperty',
+                args: ['gameData.counter', 10],
+              },
+            ],
+          },
+        },
+        transitions: [], // No transitions for this test
+      };
+
+      const testBed = new TestBed(initialState, config);
+      const socketManager = testBed.getSocketManager();
+
+      const effect = {
+        function: 'dispatchEvent',
+        args: ['incrementCounter'],
+      };
+
+      // 2. Execute
+      testBed.executeEffect(effect);
+
+      // 3. Assert
+      // Check that the event's effect was executed
+      expect(testBed.getGameState().gameData.counter).toBe(10);
+
+      // Check that a state update was broadcast to the room
+      expect(socketManager.emitToRoom).toHaveBeenCalledWith(
+        'ABCD',
+        'game:state_update',
+        expect.any(Object)
+      );
     });
   });
 });

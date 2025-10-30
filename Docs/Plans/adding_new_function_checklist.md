@@ -87,7 +87,42 @@ Let's use the example of adding a new function called `arrayShuffle`.
         ```
     ```
 
-### ☐ 4. (Optional) Create or Update a Test Game Configuration
+### ☐ 4. Add Unit Tests Using the `TestBed`
+
+-   **Objective:** Verify the function's logic in isolation.
+-   **File:** `Server/src/game/engine/__tests__/EffectExecutor.test.ts`
+-   **Action:**
+    -   Open the test file for the `EffectExecutor`.
+    -   Add a new `describe` block for your function.
+    -   Write test cases for the "happy path," edge cases, and invalid inputs.
+    -   Use the `TestBed` helper to initialize state and execute the effect.
+
+    **Example (`arrayShuffle`):**
+    ```typescript
+    import { TestBed } from './helpers/TestBed';
+
+    describe('EffectExecutor: shuffleArray', () => {
+      it('should shuffle the elements of a target array', () => {
+        // 1. Setup
+        const initialState = { gameData: { items: [1, 2, 3, 4, 5] } };
+        const testBed = new TestBed(initialState);
+        const originalItems = [...initialState.gameData.items];
+
+        // 2. Execute
+        const effect = { function: 'shuffleArray', args: ['gameData.items'] };
+        testBed.executeEffect(effect);
+
+        // 3. Assert
+        const shuffledItems = testBed.getGameState().gameData.items;
+        expect(shuffledItems).toHaveLength(originalItems.length);
+        expect(shuffledItems.sort()).toEqual(originalItems.sort());
+        // Note: There's a small chance the shuffled array is the same as the original.
+        // For a robust test, this is acceptable.
+      });
+    });
+    ```
+
+### ☐ 5. (Optional) Create or Update a Test Game Configuration
 
 -   **Objective:** Verify that the new function works as expected in a live game environment.
 -   **File:** `Server/src/game/configurations/test-game.json` (or any relevant game config)
