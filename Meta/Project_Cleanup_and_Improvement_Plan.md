@@ -88,7 +88,7 @@ The engine is powerful but can be made even more versatile.
 -   **Action**: Configure Jest to enforce a minimum test coverage threshold (e.g., 80%).
 -   **Action**: Integrate testing into a Continuous Integration (CI) pipeline (e.g., GitHub Actions) to automatically run all tests on every pull request, preventing regressions.
 
-### 3.5. Documentation Cleanup and Reorganization
+### 3.5. Documentation Cleanup and Reorganization (done)
 
 The `Docs/` directory is a valuable asset but is currently disorganized. The structure is a mix of high-quality specifications, brainstorming notes, and outdated plans. A clearer structure will make it easier for new and existing developers to find information.
 

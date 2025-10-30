@@ -9,7 +9,17 @@ The goal of this testing strategy is to enable rapid, confident development. Our
 *   **Automation:** The testing process should be as automated as possible to fit seamlessly into the development workflow.
 *   **Clarity:** Tests should be easy to read and understand. A good test serves as living documentation for a piece of code.
 
-## 2. The Testing Pyramid
+## 2. Core Philosophies
+
+### 2.1. Backend: Test Functions, Not Games
+
+The foundation of our backend testing is to focus on individual functions (e.g., effects in `EffectExecutor`) in isolation. We achieve this by creating a lightweight, "headless" testing environment that simulates the necessary parts of the game engine. This provides speed, isolation, and reliability, as tests can run in milliseconds without timers, sockets, or complex game state setups. A `TestBed` helper class is used to initialize a mock game state, execute a single function, and assert the outcome.
+
+### 2.2. Frontend: Test Components, Not Pages
+
+Similarly, the frontend testing strategy focuses on individual components in isolation. A custom `renderWithProviders` utility function creates a "headless" rendering environment that simulates the necessary application state (via Zustand) and user interactions. This allows us to verify a component's rendering, behavior, and state integration without requiring a live backend server, leading to fast, self-contained, and reusable tests.
+
+## 3. The Testing Pyramid
 
 We will adopt the classic testing pyramid model to structure our test suite.
 
@@ -34,6 +44,30 @@ We will adopt the classic testing pyramid model to structure our test suite.
     *   **Validators (`/src/utils/validators`):**
         *   `GameConfigValidator`: Test the Zod schema with both valid and invalid game configuration snippets. Ensure that it catches missing properties, incorrect types, and structural errors. This is vital for engine stability.
 *   **Execution:** Run via `npm test` in the `/Server` directory.
+
+#### 3.1.1. Flow for Testing a New Backend Function
+1.  **Create Test File**: Add tests to the file corresponding to the engine component (e.g., `EffectExecutor.test.ts`).
+2.  **Write Test Cases**: Use `describe` for the function and `it` for each scenario:
+    *   **Happy Path**: Does it work as expected with valid arguments?
+    *   **Edge Cases**: How does it behave with empty arrays, zero values, etc.?
+    *   **Invalid Input**: Does it fail gracefully if arguments are incorrect?
+3.  **Implement with `TestBed`**: Use the `TestBed` helper to create a controlled environment for the test.
+    ```typescript
+    it('should correctly add a value to an array', () => {
+      // 1. Setup: Define the initial state and the effect to test.
+      const initialState = { gameData: { items: ['apple'] } };
+      const effect = { function: 'addToArray', args: ['gameData.items', 'cherry'] };
+
+      // 2. Initialize TestBed
+      const testBed = new TestBed(initialState);
+
+      // 3. Execute
+      testBed.executeEffect(effect);
+
+      // 4. Assert
+      expect(testBed.getGameState().gameData.items).toEqual(['apple', 'cherry']);
+    });
+    ```
 
 ### 3.2. Frontend (`/client`)
 
@@ -69,6 +103,27 @@ We will adopt the classic testing pyramid model to structure our test suite.
     *   **Hooks (`/src/hooks`):**
         *   `usePlayerRole`: Mock the Zustand store (`useRoomStore`) and test that the hook returns the correct role (`host`, `player`, or `none`) based on the mocked state.
 *   **Execution:** Run via `npm test` in the `/client` directory.
+
+#### 3.2.1. Flow for Testing a New UI Component
+1.  **Create Test File**: Alongside the component, create `[ComponentName].test.tsx`.
+2.  **Write Test Cases**: Use `describe` for the component and `it` for each scenario:
+    *   Does it render correctly with various props and states?
+    *   Does it handle conditional rendering logic?
+    *   Does it correctly display data from a Zustand store?
+    *   Do user interactions trigger the correct callbacks?
+3.  **Implement with `renderWithProviders`**: Use the custom utility to render the component with a specified initial state for any required stores, simulating the application's context.
+    ```typescript
+    it('should display the player score from the player store', () => {
+      // Setup the initial state needed for the component
+      const initialState = {
+        playerStore: { player: { id: 'p1', score: 1200 } }
+      };
+      // Render the component within the simulated environment
+      renderWithProviders(<PlayerScoreDisplay />, { initialState });
+      // Assert the outcome
+      expect(screen.getByText('1200')).toBeInTheDocument();
+    });
+    ```
 
 ---
 
