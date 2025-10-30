@@ -68,7 +68,9 @@ export class EffectExecutor {
       return;
     }
     
-    if (effect.condition && !this.valueResolver.resolve(effect.condition, context)) {
+    const conditionResult = effect.condition ? this.valueResolver.resolve(effect.condition, context, true) : true;
+
+    if (!conditionResult) {
       return; // Skip this effect if condition is not met
     }
 

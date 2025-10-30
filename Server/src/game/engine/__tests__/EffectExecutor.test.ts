@@ -279,4 +279,94 @@ describe('EffectExecutor', () => {
       );
     });
   });
+
+  describe('runAction', () => {
+    it('should execute a named action from the config', () => {
+      // 1. Setup
+      const initialState = { gameData: { value: 0 } };
+      const config = {
+        actions: {
+          myTestAction: [
+            { function: 'setProperty', args: ['gameData.value', 100] }
+          ]
+        },
+        events: {},
+        transitions: [],
+      };
+      const testBed = new TestBed(initialState, config);
+
+      // 2. Execute
+      const effect = { runAction: 'myTestAction' };
+      testBed.executeEffect(effect);
+
+      // 3. Assert
+      expect(testBed.getGameState().gameData.value).toBe(100);
+    });
+  });
+
+  describe('forEachPlayer', () => {
+    it('should execute effects for each player with the correct context', () => {
+      // 1. Setup
+      const initialState = {
+        players: {
+          'p1': { id: 'p1', nickname: 'Alice' },
+          'p2': { id: 'p2', nickname: 'Bob' },
+        },
+        playerAttributes: {
+          'p1': { score: 0 },
+          'p2': { score: 0 },
+        },
+      };
+      const testBed = new TestBed(initialState);
+
+      // 2. Execute
+      const effect = {
+        forEachPlayer: {
+          as: 'playerCtx',
+          effects: [
+            {
+              function: 'setProperty',
+              args: ['playerAttributes.{{playerCtx.id}}.score', 10],
+            },
+          ],
+        },
+      };
+      testBed.executeEffect(effect);
+
+      // 3. Assert
+      const state = testBed.getGameState();
+      expect(state.playerAttributes.p1.score).toBe(10);
+      expect(state.playerAttributes.p2.score).toBe(10);
+    });
+  });
+
+  describe('Conditional Effects', () => {
+    it('should only execute an effect if the condition is met', () => {
+      // 1. Setup
+      const initialState = { gameData: { proceed: true, value: 0 } };
+      const testBed = new TestBed(initialState);
+
+      // 2. Execute Effect with TRUE condition
+      const effectWithTrueCondition = {
+        function: 'setProperty',
+        args: ['gameData.value', 1],
+        condition: 'gameData.proceed === true',
+      };
+      testBed.executeEffect(effectWithTrueCondition);
+
+      // 3. Assert it ran
+      expect(testBed.getGameState().gameData.value).toBe(1);
+
+      // 4. Execute Effect with FALSE condition
+      const effectWithFalseCondition = {
+        function: 'setProperty',
+        args: ['gameData.value', 2],
+        condition: 'gameData.proceed === false',
+      };
+      testBed.executeEffect(effectWithFalseCondition);
+
+      // 5. Assert it did NOT run (value remains 1)
+      expect(testBed.getGameState().gameData.value).toBe(1);
+    });
+  });
 });

@@ -22,14 +22,28 @@ export class ValueResolver {
     };
   }
 
-  public resolve(value: any, additionalContext: any = {}): any {
+  public resolve(value: any, additionalContext: any = {}, evaluate = false): any {
     const context = { 
         ...this.fullContext, 
         ...additionalContext,
         timeSinceStateEntry: this.stateTimer.getTimeSinceStateEntry(),
     };
 
-    if (typeof value !== 'string' || !value.includes('{{')) {
+    if (typeof value !== 'string') {
+      return value;
+    }
+
+    if (evaluate) {
+      try {
+        const func = new Function(...Object.keys(context), `return ${value};`);
+        return func(...Object.values(context));
+      } catch (e) {
+        console.error(`Error evaluating expression: "${value}"`, e);
+        return value;
+      }
+    }
+
+    if (!value.includes('{{')) {
       return value;
     }
 
