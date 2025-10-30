@@ -13,7 +13,9 @@ export class EffectExecutor {
     private valueResolver: ValueResolver,
     private handleInternalAction: (eventType: string, payload?: any) => void,
     private stateTimer: StateTimer
-  ) {}
+  ) {
+    this.stateTimer.setEffectExecutor(this);
+  }
 
   public setEventHandler(eventHandler: GameEventHandler) {
     this.eventHandler = eventHandler;
@@ -103,9 +105,7 @@ export class EffectExecutor {
           console.warn('Invalid arguments for startTimer:', args);
           return;
         }
-        this.stateTimer.startTimer(duration, () => {
-          this.execute(onExpire);
-        });
+        this.stateTimer.startTimer(duration, onExpire);
         break;
     case 'cancelTimer':
         this.stateTimer.cancelTimer();

@@ -1,4 +1,5 @@
 import { TestBed } from './helpers/TestBed';
+import { jest } from '@jest/globals';
 
 describe('EffectExecutor', () => {
   describe('setProperty', () => {
@@ -63,8 +64,8 @@ describe('EffectExecutor', () => {
       const initialState = { gameData: { status: 'waiting' } };
       const testBed = new TestBed(initialState);
 
-      const onExpireEffect = { function: 'setProperty', args: ['gameData.status', 'finished'] };
-      const startTimerEffect = { function: 'startTimer', args: [5000, onExpireEffect] };
+      const onExpireEffect = [{ function: 'setProperty', args: ['gameData.status', 'finished'] }];
+      const startTimerEffect = { function: 'startTimer', args: [5, onExpireEffect] };
 
       testBed.executeEffect(startTimerEffect);
 
