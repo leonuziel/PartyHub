@@ -24,7 +24,7 @@ To test components in isolation, we need a simulated environment that provides t
 
 The cornerstone of our component testing will be a custom render function that wraps `@testing-library/react`'s `render` method. This function will set up the necessary context providers and mock stores that our components rely on.
 
--   **Location:** `client/src/utils/__tests__/test-utils.tsx`
+-   **Location:** `client/src/utils/renderWithProviders.tsx`
 
 -   **Responsibilities:**
     1.  **Wrap with Providers:** Automatically wraps the component-under-test with any necessary React Context providers (e.g., ThemeProvider, Router).
@@ -110,7 +110,7 @@ For the new component, create a `describe` block. Inside, write `it` blocks for 
 ```typescript
 // file: client/src/components/display/__tests__/PlayerScoreDisplay.test.tsx
 
-import { renderWithProviders, screen } from '../../../utils/__tests__/test-utils';
+import { renderWithProviders, screen } from '../../../utils/renderWithProviders';
 import { PlayerScoreDisplay } from '../PlayerScoreDisplay';
 
 describe('<PlayerScoreDisplay />', () => {
@@ -164,7 +164,7 @@ describe('<PlayerScoreDisplay />', () => {
 By adopting the `renderWithProviders` utility, we establish a robust and consistent testing framework for all frontend components. This approach ensures that components are tested in an environment that closely mimics the real application's structure but without the dependencies of a live server.
 
 **Immediate Actions:**
-1.  Implement the `renderWithProviders` utility function in `client/src/utils/__tests__/test-utils.tsx`.
+1.  Implement the `renderWithProviders` utility function in `client/src/utils/renderWithProviders.tsx`.
 2.  Create mock setups for the Zustand stores (`useGameStore`, `usePlayerStore`, `useRoomStore`).
 3.  Refactor one or two existing component tests to use the new utility, demonstrating its value.
 4.  Update the `adding_new_ui_component_checklist.md` to include a mandatory step: "Add unit tests using `renderWithProviders`."

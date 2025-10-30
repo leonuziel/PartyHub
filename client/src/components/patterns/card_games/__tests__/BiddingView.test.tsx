@@ -1,14 +1,16 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { renderWithProviders } from '../../../../utils/renderWithProviders';
 import { BiddingView } from '../BiddingView';
 
 describe('BiddingView', () => {
-  it('renders bidding view and handles actions', () => {
+  it('renders bidding view and handles actions', async () => {
     const onBid = jest.fn();
     const onCheck = jest.fn();
     const onFold = jest.fn();
 
-    render(
+    renderWithProviders(
       <BiddingView
         currentBid={10}
         onBid={onBid}
@@ -19,13 +21,13 @@ describe('BiddingView', () => {
 
     expect(screen.getByText('Current Bid: 10')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByText('Bid'));
+    await userEvent.click(screen.getByText('Bid'));
     expect(onBid).toHaveBeenCalledWith(10);
 
-    fireEvent.click(screen.getByText('Check'));
+    await userEvent.click(screen.getByText('Check'));
     expect(onCheck).toHaveBeenCalled();
 
-    fireEvent.click(screen.getByText('Fold'));
+    await userEvent.click(screen.getByText('Fold'));
     expect(onFold).toHaveBeenCalled();
   });
 });

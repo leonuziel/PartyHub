@@ -1,6 +1,8 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
+import { renderWithProviders } from '../../../../utils/renderWithProviders';
 import { SubmissionReel } from '../SubmissionReel';
 
 const mockSubmissions = [
@@ -11,65 +13,65 @@ const mockSubmissions = [
 
 describe('SubmissionReel', () => {
   it('renders the first submission by default', () => {
-    render(<SubmissionReel submissions={mockSubmissions} showAuthor={false} />);
+    renderWithProviders(<SubmissionReel submissions={mockSubmissions} showAuthor={false} />);
     expect(screen.getByText('This is submission 1.')).toBeInTheDocument();
     expect(screen.getByText('1 / 3')).toBeInTheDocument();
   });
 
-  it('navigates to the next and previous submissions', () => {
-    render(<SubmissionReel submissions={mockSubmissions} showAuthor={false} />);
+  it('navigates to the next and previous submissions', async () => {
+    renderWithProviders(<SubmissionReel submissions={mockSubmissions} showAuthor={false} />);
     const nextButton = screen.getByRole('button', { name: /next/i });
     const prevButton = screen.getByRole('button', { name: /prev/i });
 
     // Go to next
-    fireEvent.click(nextButton);
+    await userEvent.click(nextButton);
     expect(screen.getByRole('img')).toHaveAttribute('src', '/image.png');
     expect(screen.getByText('2 / 3')).toBeInTheDocument();
 
     // Go to next again
-    fireEvent.click(nextButton);
+    await userEvent.click(nextButton);
     expect(screen.getByText('This is submission 3.')).toBeInTheDocument();
     expect(screen.getByText('3 / 3')).toBeInTheDocument();
 
     // Go to previous
-    fireEvent.click(prevButton);
+    await userEvent.click(prevButton);
     expect(screen.getByRole('img')).toHaveAttribute('src', '/image.png');
     expect(screen.getByText('2 / 3')).toBeInTheDocument();
   });
 
-  it('wraps around when navigating', () => {
-    render(<SubmissionReel submissions={mockSubmissions} showAuthor={false} />);
+  it('wraps around when navigating', async () => {
+    renderWithProviders(<SubmissionReel submissions={mockSubmissions} showAuthor={false} />);
     const nextButton = screen.getByRole('button', { name: /next/i });
     const prevButton = screen.getByRole('button', { name: /prev/i });
 
     // Go to previous from the first item
-    fireEvent.click(prevButton);
+    await userEvent.click(prevButton);
     expect(screen.getByText('This is submission 3.')).toBeInTheDocument();
     expect(screen.getByText('3 / 3')).toBeInTheDocument();
 
     // Go to next from the last item
-    fireEvent.click(nextButton);
+    await userEvent.click(nextButton);
     expect(screen.getByText('This is submission 1.')).toBeInTheDocument();
     expect(screen.getByText('1 / 3')).toBeInTheDocument();
   });
 
   it('shows author when showAuthor is true', () => {
-    render(<SubmissionReel submissions={mockSubmissions} showAuthor={true} />);
+    renderWithProviders(<SubmissionReel submissions={mockSubmissions} showAuthor={true} />);
     expect(screen.getByText('by PlayerOne')).toBeInTheDocument();
   });
 
   it('hides author when showAuthor is false', () => {
-    render(<SubmissionReel submissions={mockSubmissions} showAuthor={false} />);
+    renderWithProviders(<SubmissionReel submissions={mockSubmissions} showAuthor={false} />);
     expect(screen.queryByText('by PlayerOne')).not.toBeInTheDocument();
   });
 
   it('renders an empty state message if there are no submissions', () => {
-    render(<SubmissionReel submissions={[]} showAuthor={false} />);
+    renderWithProviders(<SubmissionReel submissions={[]} showAuthor={false} />);
     expect(screen.getByText('No submissions yet.')).toBeInTheDocument();
   });
 
   it('disables navigation buttons if there is only one submission', () => {
-    render(<SubmissionReel submissions={[mockSubmissions[0]]} showAuthor={false} />);
+    renderWithProviders(<SubmissionReel submissions={[mockSubmissions[0]]} showAuthor={false} />);
     expect(screen.getByRole('button', { name: /next/i })).toBeDisabled();
     expect(screen.getByRole('button', { name: /prev/i })).toBeDisabled();
   });

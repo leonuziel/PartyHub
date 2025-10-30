@@ -1,5 +1,7 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { renderWithProviders } from '../../../../utils/renderWithProviders';
 import { PlayerHandView } from '../PlayerHandView';
 import { CardData } from '../../../../types/types';
 
@@ -15,7 +17,7 @@ describe('PlayerHandView', () => {
     const onDrawCard = jest.fn();
     const onPass = jest.fn();
 
-    render(
+    renderWithProviders(
       <PlayerHandView
         cards={mockCards}
         onPlayCard={onPlayCard}
@@ -34,12 +36,12 @@ describe('PlayerHandView', () => {
     expect(screen.getByText('Pass')).toBeInTheDocument();
   });
 
-  it('calls the correct callbacks when buttons are clicked', () => {
+  it('calls the correct callbacks when buttons are clicked', async () => {
     const onPlayCard = jest.fn();
     const onDrawCard = jest.fn();
     const onPass = jest.fn();
 
-    render(
+    renderWithProviders(
       <PlayerHandView
         cards={mockCards}
         onPlayCard={onPlayCard}
@@ -49,13 +51,13 @@ describe('PlayerHandView', () => {
       />
     );
 
-    fireEvent.click(screen.getByText('Play Card'));
+    await userEvent.click(screen.getByText('Play Card'));
     expect(onPlayCard).toHaveBeenCalledWith('1');
 
-    fireEvent.click(screen.getByText('Draw'));
+    await userEvent.click(screen.getByText('Draw'));
     expect(onDrawCard).toHaveBeenCalled();
 
-    fireEvent.click(screen.getByText('Pass'));
+    await userEvent.click(screen.getByText('Pass'));
     expect(onPass).toHaveBeenCalled();
   });
 });

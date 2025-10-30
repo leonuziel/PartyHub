@@ -1,21 +1,23 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
+import { renderWithProviders } from '../../../../utils/renderWithProviders';
 import { TeamSelectionGrid } from '../TeamSelectionGrid';
 
 // Mock dnd-kit components
 jest.mock('@dnd-kit/core', () => ({
-    DndContext: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-    useDraggable: ({ id, disabled }: { id: string, disabled: boolean }) => ({
-      attributes: {},
-      listeners: {},
-      setNodeRef: jest.fn(),
-      transform: null,
-    }),
-    useDroppable: ({ id }: { id: string }) => ({
-      setNodeRef: jest.fn(),
-      isOver: false,
-    }),
+  DndContext: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  useDraggable: ({ id, disabled }: { id: string, disabled: boolean }) => ({
+    attributes: {},
+    listeners: {},
+    setNodeRef: jest.fn(),
+    transform: null,
+  }),
+  useDroppable: ({ id }: { id: string }) => ({
+    setNodeRef: jest.fn(),
+    isOver: false,
+  }),
 }));
 
 const mockTeams = [
@@ -24,7 +26,7 @@ const mockTeams = [
 ];
 
 const mockUnassignedPlayers = [
-    { id: 'p2', nickname: 'PlayerTwo', avatar: '/avatar2.png' },
+  { id: 'p2', nickname: 'PlayerTwo', avatar: '/avatar2.png' },
 ];
 
 describe('TeamSelectionGrid', () => {
@@ -37,7 +39,7 @@ describe('TeamSelectionGrid', () => {
   });
 
   it('renders team columns and players', () => {
-    render(
+    renderWithProviders(
       <TeamSelectionGrid
         teams={mockTeams}
         players={mockUnassignedPlayers}
@@ -52,8 +54,8 @@ describe('TeamSelectionGrid', () => {
     expect(screen.getByText('PlayerOne')).toBeInTheDocument();
   });
 
-  it('shows "Join Team" buttons for players', () => {
-    render(
+  it('shows "Join Team" buttons for players', async () => {
+    renderWithProviders(
       <TeamSelectionGrid
         teams={mockTeams}
         players={mockUnassignedPlayers}
@@ -62,41 +64,41 @@ describe('TeamSelectionGrid', () => {
         onMovePlayer={onMovePlayer}
       />
     );
-    
+
     const joinButtons = screen.getAllByRole('button', { name: /join team/i });
     expect(joinButtons.length).toBe(2);
 
-    fireEvent.click(joinButtons[1]); // Click to join Team Blue
+    await userEvent.click(joinButtons[1]); // Click to join Team Blue
     expect(onJoinTeam).toHaveBeenCalledWith('t2');
   });
 
   it('shows the unassigned players column for the host', () => {
-    render(
-        <TeamSelectionGrid
-          teams={mockTeams}
-          players={mockUnassignedPlayers}
-          isHost={true}
-          onJoinTeam={onJoinTeam}
-          onMovePlayer={onMovePlayer}
-        />
-      );
+    renderWithProviders(
+      <TeamSelectionGrid
+        teams={mockTeams}
+        players={mockUnassignedPlayers}
+        isHost={true}
+        onJoinTeam={onJoinTeam}
+        onMovePlayer={onMovePlayer}
+      />
+    );
 
-      expect(screen.getByText('Unassigned')).toBeInTheDocument();
-      expect(screen.getByText('PlayerTwo')).toBeInTheDocument();
+    expect(screen.getByText('Unassigned')).toBeInTheDocument();
+    expect(screen.getByText('PlayerTwo')).toBeInTheDocument();
   });
 
   it('does not show "Join Team" buttons for the host', () => {
-    render(
-        <TeamSelectionGrid
-          teams={mockTeams}
-          players={mockUnassignedPlayers}
-          isHost={true}
-          onJoinTeam={onJoinTeam}
-          onMovePlayer={onMovePlayer}
-        />
-      );
-      
-      const joinButtons = screen.queryAllByRole('button', { name: /join team/i });
-      expect(joinButtons.length).toBe(0);
+    renderWithProviders(
+      <TeamSelectionGrid
+        teams={mockTeams}
+        players={mockUnassignedPlayers}
+        isHost={true}
+        onJoinTeam={onJoinTeam}
+        onMovePlayer={onMovePlayer}
+      />
+    );
+
+    const joinButtons = screen.queryAllByRole('button', { name: /join team/i });
+    expect(joinButtons.length).toBe(0);
   });
 });

@@ -1,6 +1,8 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
+import { renderWithProviders } from '../../../../utils/renderWithProviders';
 import { CorrectAnswerOverlay } from '../CorrectAnswerOverlay';
 
 const mockOptions = [
@@ -16,14 +18,14 @@ const mockPlayers = [
 ];
 
 describe('CorrectAnswerOverlay', () => {
-    const onComplete = jest.fn();
+  const onComplete = jest.fn();
 
-    beforeEach(() => {
-        onComplete.mockClear();
-    });
+  beforeEach(() => {
+    onComplete.mockClear();
+  });
 
   it('highlights the correct answer', () => {
-    render(
+    renderWithProviders(
       <CorrectAnswerOverlay
         options={mockOptions}
         correctAnswerId="a1"
@@ -40,7 +42,7 @@ describe('CorrectAnswerOverlay', () => {
   });
 
   it('displays player avatars under the answer they chose', () => {
-    render(
+    renderWithProviders(
       <CorrectAnswerOverlay
         options={mockOptions}
         correctAnswerId="a1"
@@ -61,18 +63,18 @@ describe('CorrectAnswerOverlay', () => {
     expect(avatarsInCard3.length).toBe(0);
   });
 
-  it('calls onComplete when the overlay is clicked', () => {
-    render(
-        <CorrectAnswerOverlay
-          options={mockOptions}
-          correctAnswerId="a1"
-          players={mockPlayers}
-          onComplete={onComplete}
-        />
-      );
+  it('calls onComplete when the overlay is clicked', async () => {
+    renderWithProviders(
+      <CorrectAnswerOverlay
+        options={mockOptions}
+        correctAnswerId="a1"
+        players={mockPlayers}
+        onComplete={onComplete}
+      />
+    );
 
-      const overlay = screen.getByTestId('correct-answer-overlay');
-      fireEvent.click(overlay);
-      expect(onComplete).toHaveBeenCalledTimes(1);
+    const overlay = screen.getByTestId('correct-answer-overlay');
+    await userEvent.click(overlay);
+    expect(onComplete).toHaveBeenCalledTimes(1);
   });
 });

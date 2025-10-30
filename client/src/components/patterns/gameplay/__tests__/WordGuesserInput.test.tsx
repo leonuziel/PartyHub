@@ -1,6 +1,8 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
+import { renderWithProviders } from '../../../../utils/renderWithProviders';
 import { WordGuesserInput } from '../WordGuesserInput';
 
 describe('WordGuesserInput', () => {
@@ -11,7 +13,7 @@ describe('WordGuesserInput', () => {
   });
 
   it('renders the correct number of inputs and correct letters', () => {
-    render(
+    renderWithProviders(
       <WordGuesserInput
         wordLength={5}
         correctLetters={{ 1: 'P', 3: 'L' }}
@@ -26,41 +28,38 @@ describe('WordGuesserInput', () => {
     expect(screen.getByText('L')).toBeInTheDocument();
   });
 
-  it('moves focus to the next input when a letter is typed', () => {
-    render(<WordGuesserInput wordLength={3} correctLetters={{}} onGuess={onGuess} />);
+  it('moves focus to the next input when a letter is typed', async () => {
+    renderWithProviders(<WordGuesserInput wordLength={3} correctLetters={{}} onGuess={onGuess} />);
     const inputs = screen.getAllByRole('textbox');
-    
-    fireEvent.change(inputs[0], { target: { value: 'A' } });
+
+    await userEvent.type(inputs[0], 'A');
     expect(inputs[1]).toHaveFocus();
   });
 
-  it('moves focus to the previous input on backspace', () => {
-    render(<WordGuesserInput wordLength={3} correctLetters={{}} onGuess={onGuess} />);
+  it('moves focus to the previous input on backspace', async () => {
+    renderWithProviders(<WordGuesserInput wordLength={3} correctLetters={{}} onGuess={onGuess} />);
     const inputs = screen.getAllByRole('textbox');
-    
-    fireEvent.change(inputs[0], { target: { value: 'A' } });
-    fireEvent.change(inputs[1], { target: { value: 'B' } });
-    
-    fireEvent.keyDown(inputs[1], { key: 'Backspace' });
-    // Since the input now has a value, backspace just deletes it.
-    fireEvent.change(inputs[1], { target: { value: '' } });
-    // Now that it's empty, backspace should move focus.
-    fireEvent.keyDown(inputs[1], { key: 'Backspace' });
 
+    await userEvent.type(inputs[0], 'A');
+    await userEvent.type(inputs[1], 'B');
+
+    await userEvent.clear(inputs[1]);
+    await userEvent.keyboard('{backspace}');
+    
     expect(inputs[0]).toHaveFocus();
   });
 
-  it('calls onGuess with the full word on submit', () => {
-    render(<WordGuesserInput wordLength={3} correctLetters={{}} onGuess={onGuess} />);
+  it('calls onGuess with the full word on submit', async () => {
+    renderWithProviders(<WordGuesserInput wordLength={3} correctLetters={{}} onGuess={onGuess} />);
     const inputs = screen.getAllByRole('textbox');
     const form = screen.getByTestId('word-guesser-form');
-    
-    fireEvent.change(inputs[0], { target: { value: 'C' } });
-    fireEvent.change(inputs[1], { target: { value: 'A' } });
-    fireEvent.change(inputs[2], { target: { value: 'T' } });
-    
-    fireEvent.submit(form);
-    
+
+    await userEvent.type(inputs[0], 'C');
+    await userEvent.type(inputs[1], 'A');
+    await userEvent.type(inputs[2], 'T');
+
+    form.submit();
+
     expect(onGuess).toHaveBeenCalledWith('CAT');
   });
 });
