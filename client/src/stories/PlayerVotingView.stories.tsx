@@ -1,5 +1,5 @@
 
-import type { Meta, StoryObj } from '@storybook/com/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { PlayerVotingView } from '../components/patterns/player/PlayerVotingView';
 
 const meta: Meta<typeof PlayerVotingView> = {

@@ -18,10 +18,10 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     children: [
-      <Card suit="hearts" rank="A" />,
-      <Card suit="diamonds" rank="K" />,
-      <Card suit="clubs" rank="Q" />,
-      <Card suit="spades" rank="J" />,
+      <Card suit="hearts" rank="A" faceUp={true} />,
+      <Card suit="diamonds" rank="K" faceUp={true} />,
+      <Card suit="clubs" rank="Q" faceUp={true} />,
+      <Card suit="spades" rank="J" faceUp={true} />,
     ],
   },
 };

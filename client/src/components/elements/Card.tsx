@@ -1,6 +1,8 @@
 import React from 'react';
 
 interface CardProps {
+  suit?: 'hearts' | 'diamonds' | 'clubs' | 'spades';
+  rank?: 'A' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | 'J' | 'Q' | 'K';
   faceUp?: boolean;
   content?: React.ReactNode; // Content for the front of the card
   back?: React.ReactNode; // Content for the back of the card
@@ -21,6 +23,8 @@ interface CardProps {
 }
 
 export const Card: React.FC<CardProps> = ({
+  suit,
+  rank,
   faceUp = false,
   content,
   back,
@@ -72,9 +76,23 @@ export const Card: React.FC<CardProps> = ({
 
   const backContent = back || <div data-testid="default-card-back" style={{backgroundColor: '#555', width: '100%', height: '100%', borderRadius: '10px' }}></div>;
 
+  const suitSymbol = {
+    hearts: '♥',
+    diamonds: '♦',
+    clubs: '♣',
+    spades: '♠',
+  };
+
+  const cardContent = content || (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+      <div style={{ fontSize: '2em', lineHeight: '1' }}>{rank}</div>
+      {suit && <div style={{ fontSize: '1.5em', lineHeight: '1' }}>{suitSymbol[suit]}</div>}
+    </div>
+  );
+
   return (
     <div style={finalStyle} onClick={onClick} className={className}>
-      {faceUp ? content : backContent}
+      {faceUp ? cardContent : backContent}
     </div>
   );
 };

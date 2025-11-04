@@ -18,5 +18,6 @@ export const Default: Story = {
   args: {
     suit: 'hearts',
     rank: 'A',
+    faceUp: true,
   },
 };
