@@ -19,5 +19,6 @@ export const Default: Story = {
     suit: 'hearts',
     rank: 'A',
     faceUp: true,
+    style: { width: '60px' }
   },
 };

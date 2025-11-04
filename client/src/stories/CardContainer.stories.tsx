@@ -17,11 +17,12 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    children: [
-      <Card suit="hearts" rank="A" faceUp={true} />,
-      <Card suit="diamonds" rank="K" faceUp={true} />,
-      <Card suit="clubs" rank="Q" faceUp={true} />,
-      <Card suit="spades" rank="J" faceUp={true} />,
+    cards: [
+      { id: '1', content: 'Card 1', faceUp: true },
+      { id: '2', content: 'Card 2', faceUp: true },
+      { id: '3', content: 'Card 3', faceUp: true },
+      { id: '4', content: 'Card 4', faceUp: false },
     ],
+    onCardClick: (cardId: string) => alert(`Card clicked: ${cardId}`),
   },
 };
