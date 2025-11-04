@@ -14,10 +14,21 @@ const meta: Meta<typeof PersonalScoreCard> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+const mockPlayer = {
+  id: 'p1',
+  nickname: 'Alice',
+  avatar: '/avatars/avatar1.png',
+  score: 150,
+};
+
 export const Default: Story = {
   args: {
-    player: 'Player 1',
-    score: 100,
-    rank: 2,
+    player: mockPlayer,
+    scoreDetails: {
+      'Round 1': 50,
+      'Round 2': 70,
+      'Bonus Points': 30,
+    },
+    totalScore: 150,
   },
 };

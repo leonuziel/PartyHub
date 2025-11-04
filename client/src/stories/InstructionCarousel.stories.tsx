@@ -16,10 +16,10 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    instructions: [
-      'Instruction 1',
-      'Instruction 2',
-      'Instruction 3',
+    slides: [
+      { title: 'Step 1', text: 'Welcome to the game! Follow these instructions to get started.' },
+      { title: 'Step 2', text: 'Your main objective is to complete the tasks shown on the screen.' },
+      { title: 'Step 3', text: 'Have fun and may the best player win! Good luck!' },
     ],
   },
 };

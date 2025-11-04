@@ -17,9 +17,14 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    hand: [
-      { suit: 'hearts', rank: 'A' },
-      { suit: 'diamonds', rank: 'K' },
+    cards: [
+      { id: '1', content: <Card suit="hearts" rank="A" />, faceUp: true },
+      { id: '2', content: <Card suit="diamonds" rank="K" />, faceUp: true },
+      { id: '3', content: <Card suit="clubs" rank="Q" />, faceUp: true },
     ],
+    selectedCardIds: [],
+    onPlayCard: (cardId) => alert(`Playing card ${cardId}`),
+    onDrawCard: () => alert('Drawing a card'),
+    onPass: () => alert('Passing the turn'),
   },
 };
