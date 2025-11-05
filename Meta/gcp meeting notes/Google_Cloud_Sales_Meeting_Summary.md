@@ -5,11 +5,19 @@
 
 ---
 
-## The "Crawl, Walk, Run" Strategy
+## Our Three-Stage Strategy for Growth
 
-Our adoption of Google Cloud is planned in two distinct phases. We need credits to manage costs, de-risk critical transitions, and invest in the high-value features that will define our success.
+Our adoption of Google Cloud is planned in three distinct stages. We need credits to accelerate our development, de-risk our launch, and invest in the high-value features that will define our long-term success.
 
-### Phase 1: Alpha to Launch (Crawl & Walk)
+### Phase 1: Accelerating Development (Today)
+
+This phase is about maximizing our small team's efficiency to reach our goals faster.
+
+**1. Developer Productivity (Gemini for Google Cloud):**
+*   **Strategy:** As a small team, developer velocity is our most valuable asset. Empowering our developers with AI-powered tools is a direct investment in our ability to iterate and innovate quickly.
+*   **Ask for Credits:** Access to Gemini for Google Cloud allows our team to build faster, debug more efficiently, and ship more features. This is a crucial force multiplier that lets us compete with larger teams.
+
+### Phase 2: Building for Launch (Crawl & Walk)
 
 This phase is about establishing a stable, scalable foundation while managing unpredictable initial costs.
 
@@ -32,9 +40,9 @@ This phase is about establishing a stable, scalable foundation while managing un
 
 ---
 
-### Phase 2: Growth & Differentiation (Run)
+### Phase 3: Scaling for Success (Run)
 
-This phase is about investing in the high-value, high-cost services that will be our key competitive advantages. This is our justification for a higher credit tier.
+This phase is about investing in the high-value, high-cost services that will be our key competitive advantages post-launch. This is our justification for a higher credit tier.
 
 **1. AI-Assisted Game Creation (Vertex AI - Gemini API):**
 *   **Strategy:** This is our "moonshot" feature and our single biggest differentiator. It's also our most expensive and variable cost.
@@ -48,20 +56,14 @@ This phase is about investing in the high-value, high-cost services that will be
 *   **Strategy:** This is our "business brain," essential for finding product-market fit. In the early stages, we will be running numerous exploratory queries to understand user behavior.
 *   **Ask for Credits:** Credits will allow us to ask the questions we need to find product-market fit without worrying that every query is a direct cost.
 
-**4. Developer Productivity (Gemini for Google Cloud):**
-*   **Strategy:** As a small team, developer velocity is our most valuable asset. Empowering our developers with AI-powered tools is a direct investment in our ability to iterate and innovate quickly.
-*   **Ask for Credits:** Access to Gemini for Google Cloud allows our team to build faster, debug more efficiently, and ship more features. This is a crucial force multiplier that lets us compete with larger teams.
-
 ---
 
 ## Summary of Our "Ask"
 
-We are seeking credits to:
+We are seeking credits to fund our journey through three critical stages:
 
-1.  **De-risk Technical Unknowns:** Specifically, the unpredictable cost of WebSockets on Cloud Run.
-2.  **Fund Key Transitions:** Bridge the significant cost increase of migrating from a serverless (Cloud Run) to a provisioned (GKE) architecture for our real-time services.
-3.  **Invest in "Moonshot" Differentiators:** Fund the R&D for our core competitive advantage—AI Game Creation with Vertex AI.
-4.  **Cover "Costs of Success":** Absorb the costs of high user engagement (Firestore, Vision API, BigQuery) until our revenue can support them.
-5.  **Boost Developer Velocity:** Equip our small team with force-multiplying tools like Gemini for Google Cloud to accelerate our time-to-market.
+1.  **Accelerate Development:** Equip our small team with force-multiplying tools like Gemini for Google Cloud to accelerate our time-to-market *before* launch.
+2.  **De-risk Our Launch:** Fund the technical unknowns and key infrastructure transitions (Cloud Run to GKE) required for a stable and scalable launch.
+3.  **Invest in Future Growth:** Cover the "costs of success" from high user engagement and fund the R&D for our "moonshot" differentiators like AI Game Creation on Vertex AI.
 
 By strategically applying credits, we can confidently build a high-growth, scalable business on the Google Cloud platform.

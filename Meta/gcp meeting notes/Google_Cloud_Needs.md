@@ -18,9 +18,28 @@ PartyHub is a next-generation social gaming platform built on a "Canva for party
 
 ---
 
-## 2. Current Infrastructure & Needs (Alpha Stage)
+## Our Three-Stage Plan for Cloud Adoption
 
-Currently, our infrastructure is minimal, designed for local development and small-scale testing. As we move towards a closed beta and then a public launch, we need to establish a robust, scalable, and cost-effective cloud foundation.
+Our journey with Google Cloud is planned in three strategic phases, each with distinct goals and needs.
+
+---
+
+## Stage 1: Accelerate Development & Time-to-Market
+
+Our immediate priority is to maximize the productivity of our small development team to build and refine our platform as quickly as possible.
+
+### Developer Productivity & Velocity
+
+*   **Vision:** A small, highly effective development team that can iterate on the product quickly, deploying new features and bug fixes with speed and confidence.
+*   **Need:** Tools that accelerate the development lifecycle, from writing code to diagnosing issues in production.
+*   **Google Cloud Solution:**
+    *   **Gemini for Google Cloud:** Integrating Gemini for Code into our IDEs will significantly boost developer productivity. For a small team like ours, this means faster feature development, quicker bug resolution, and the ability to write more robust and well-documented code. This is a direct investment in our team's efficiency and our primary need in this stage.
+
+---
+
+## Stage 2: Build for a Scalable Launch
+
+As we approach our public launch, our focus shifts to building a robust, scalable, and cost-effective cloud foundation capable of handling real-world traffic.
 
 ### Core Application Hosting
 
@@ -47,9 +66,9 @@ Currently, our infrastructure is minimal, designed for local development and sma
 
 ---
 
-## 3. Future Growth & Advanced Needs (Post-Launch)
+## Stage 3: Scale and Differentiate Post-Launch
 
-As PartyHub grows, our infrastructure needs will evolve. We've identified several key areas where Google Cloud services can provide a significant competitive advantage.
+Once the platform is live and growing, our focus will be on leveraging advanced Google Cloud services to build a competitive moat and manage the costs associated with a successful, engaged user base.
 
 ### AI-Assisted Game Creation
 
@@ -73,12 +92,7 @@ As PartyHub grows, our infrastructure needs will evolve. We've identified severa
     *   **BigQuery:** As our analytics needs grow, BigQuery will be the ideal solution for storing and analyzing large volumes of event data from our application. We can use it to track key metrics, understand user behavior, and make data-driven decisions about our product roadmap.
     *   **Looker Studio:** For visualizing the data stored in BigQuery and creating dashboards for our team to monitor the health of the platform and the engagement of our users.
 
-### Developer Productivity & Velocity
 
-*   **Vision:** A small, highly effective development team that can iterate on the product quickly, deploying new features and bug fixes with speed and confidence.
-*   **Need:** Tools that accelerate the development lifecycle, from writing code to diagnosing issues in production.
-*   **Google Cloud Solution:**
-    *   **Gemini for Google Cloud:** Integrating Gemini for Code into our IDEs will significantly boost developer productivity. For a small team like ours, this means faster feature development, quicker bug resolution, and the ability to write more robust and well-documented code. This is a direct investment in our team's efficiency.
 
 ### Global Scalability & Low Latency
 
@@ -92,16 +106,16 @@ As PartyHub grows, our infrastructure needs will evolve. We've identified severa
 
 ## 4. Summary of Google Cloud Needs
 
-| **Phase**   | **Need**                        | **Recommended Google Cloud Service(s)**                                |
-|-------------|---------------------------------|----------------------------------------------------------------------|
-| **Alpha**   | Core Application Hosting        | **Cloud Run**                                                        |
-|             | Real-time Communication         | **Cloud Run (with session affinity)**, moving to **GKE** as we scale       |
-|             | Game Configuration Storage      | **Cloud Storage**, evolving to **Firestore**                           |
-| **Growth**  | AI-Assisted Game Creation       | **Vertex AI (Gemini API)**                                           |
-|             | UGC Moderation                  | **Cloud Vision API**, **Natural Language API**                         |
-|             | Analytics & BI                  | **BigQuery**, **Looker Studio**                                        |
-|             | Global Scalability              | **Cloud CDN**, **Global Load Balancing**                             |
-| **All**   | Developer Productivity          | **Gemini for Google Cloud (Cloud Code IDE assistance)**              |
+| **Stage** | **Focus** | **Need** | **Recommended Google Cloud Service(s)** |
+| :--- | :--- | :--- | :--- |
+| **1: Development** | **Speed** | Developer Productivity | **Gemini for Google Cloud** |
+| **2: Launch** | **Stability** | Core Application Hosting | **Cloud Run** |
+| | | Real-time Communication | **Cloud Run** → **GKE** |
+| | | Game Configuration Storage | **Cloud Storage**, **Firestore** |
+| **3: Scale** | **Differentiation** | AI-Assisted Game Creation | **Vertex AI (Gemini API)** |
+| | | UGC Moderation | **Cloud Vision API**, **Natural Language API** |
+| | | Analytics & BI | **BigQuery**, **Looker Studio** |
+| | | Global Scalability | **Cloud CDN**, **Global Load Balancing** |
 
 ---
 
