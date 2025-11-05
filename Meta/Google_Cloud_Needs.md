@@ -73,6 +73,13 @@ As PartyHub grows, our infrastructure needs will evolve. We've identified severa
     *   **BigQuery:** As our analytics needs grow, BigQuery will be the ideal solution for storing and analyzing large volumes of event data from our application. We can use it to track key metrics, understand user behavior, and make data-driven decisions about our product roadmap.
     *   **Looker Studio:** For visualizing the data stored in BigQuery and creating dashboards for our team to monitor the health of the platform and the engagement of our users.
 
+### Developer Productivity & Velocity
+
+*   **Vision:** A small, highly effective development team that can iterate on the product quickly, deploying new features and bug fixes with speed and confidence.
+*   **Need:** Tools that accelerate the development lifecycle, from writing code to diagnosing issues in production.
+*   **Google Cloud Solution:**
+    *   **Gemini for Google Cloud:** Integrating Gemini for Code into our IDEs will significantly boost developer productivity. For a small team like ours, this means faster feature development, quicker bug resolution, and the ability to write more robust and well-documented code. This is a direct investment in our team's efficiency.
+
 ### Global Scalability & Low Latency
 
 *   **Vision:** A seamless, low-latency experience for players around the world.
@@ -94,6 +101,7 @@ As PartyHub grows, our infrastructure needs will evolve. We've identified severa
 |             | UGC Moderation                  | **Cloud Vision API**, **Natural Language API**                         |
 |             | Analytics & BI                  | **BigQuery**, **Looker Studio**                                        |
 |             | Global Scalability              | **Cloud CDN**, **Global Load Balancing**                             |
+| **All**   | Developer Productivity          | **Gemini for Google Cloud (Cloud Code IDE assistance)**              |
 
 ---
 
