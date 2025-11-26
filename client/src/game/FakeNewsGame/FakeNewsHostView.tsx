@@ -3,8 +3,8 @@ import { useGameStore } from '../../store/gameStore';
 import { useRoomStore } from '../../store/roomStore';
 import { FakeNewsGameState } from '../../types/types';
 
-import { Spinner } from '../../components/common/Spinner';
-import { HostViewContainer } from '../../components/layout/HostViewContainer';
+import { Spinner } from '../../components/old/common/Spinner';
+import { HostViewContainer } from '../../components/old/layout/HostViewContainer';
 import { HostStartingView } from './views/HostStartingView';
 import { HostWritingView } from './views/HostWritingView';
 import { HostVotingView } from './views/HostVotingView';

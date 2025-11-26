@@ -1,0 +1,161 @@
+/* PropertyInspector.css */
+
+.property-inspector {
+    /* ... existing styles ... */
+    background-color: #2c2c3e;
+    color: #e0e0e0;
+    border-left: 1px solid #4a4a6a;
+    display: flex;
+    flex-direction: column;
+}
+
+.inspector-header {
+    padding: 1rem;
+    background-color: #1e1e2f;
+    border-bottom: 1px solid #4a4a6a;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.inspector-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: #e0e0e0;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.inspector-body {
+    padding: 1rem;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.inspector-body h4,
+.inspector-body h5 {
+    color: #8a2be2;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid #4a4a6a;
+    padding-bottom: 0.25rem;
+}
+
+.inspector-body label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-size: 0.9rem;
+    color: #b0b0d0;
+}
+
+.inspector-body textarea,
+.inspector-body input[type="text"],
+.inspector-body input[type="number"],
+.inspector-body select {
+    width: 100%;
+    background-color: #1e1e2f;
+    border: 1px solid #4a4a6a;
+    color: #e0e0e0;
+    padding: 0.5rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+.layout-group {
+    margin-bottom: 1rem;
+}
+
+.alignment-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+    margin-bottom: 1rem;
+    width: 50%;
+    height: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.alignment-grid button {
+    background-color: #1e1e2f;
+    border: 1px solid #4a4a6a;
+    color: #e0e0e0;
+    aspect-ratio: 1 / 1;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.alignment-grid button:hover {
+    background-color: #3a3a5a;
+}
+
+.alignment-grid button.active {
+    background-color: #8a2be2;
+    border-color: #a04be2;
+}
+
+.spacing-inputs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+}
+
+.spacing-inputs input {
+    margin-bottom: 0;
+    /* Override default margin for compact layout */
+}
+
+.style-prop-input {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 0.5rem;
+}
+
+.style-prop-input label {
+    flex-basis: 120px;
+    flex-shrink: 0;
+    margin-bottom: 0;
+}
+
+.style-prop-input input[type="color"] {
+    flex-basis: 30px;
+    padding: 2px;
+    min-width: 30px;
+}
+
+.style-prop-input input[type="text"] {
+    flex-grow: 1;
+    margin-bottom: 0;
+}
+
+.style-prop-input .style-prop-input-text {
+    flex-basis: auto;
+    flex-grow: 1;
+}
+
+.inspector-footer {
+    padding: 1rem;
+    background-color: #1e1e2f;
+    border-top: 1px solid #4a4a6a;
+}
+
+.inspector-footer button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #8a2be2;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+}

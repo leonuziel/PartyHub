@@ -4,7 +4,7 @@ import { useRoomStore } from '../../store/roomStore';
 import { usePlayerRole } from '../../hooks/usePlayerRole';
 import { socketService } from '../../services/socketService';
 import { QuizClashGameState, QuizClashRevealState } from '../../types/types';
-import { Spinner } from '../../components/common/Spinner';
+import { Spinner } from '../../components/old/common/Spinner';
 import { PlayerStartingView } from './views/PlayerStartingView';
 import { PlayerFinishedView } from './views/PlayerFinishedView';
 import { PlayerAnsweringView } from './views/PlayerAnsweringView';
@@ -22,8 +22,8 @@ export const QuizClashPlayerView: React.FC = () => {
 
   const playersWithScores = useMemo(() => {
     return gameState.players.map(p => ({
-        ...p,
-        score: gameState.scores[p.id] || 0
+      ...p,
+      score: gameState.scores[p.id] || 0
     })).sort((a, b) => b.score - a.score);
   }, [gameState.players, gameState.scores]);
 
@@ -87,15 +87,15 @@ export const QuizClashPlayerView: React.FC = () => {
   if (!gameState.question) {
     return <Spinner />;
   }
-  
+
   if (gameState.status === 'ASKING_QUESTION') {
     return (
-        <PlayerAnsweringView
-          answers={gameState.question.answers}
-          onAnswer={handleAnswer}
-          disabled={answered !== null}
-          selectedAnswer={answered}
-        />
+      <PlayerAnsweringView
+        answers={gameState.question.answers}
+        onAnswer={handleAnswer}
+        disabled={answered !== null}
+        selectedAnswer={answered}
+      />
     );
   }
   return <Spinner />

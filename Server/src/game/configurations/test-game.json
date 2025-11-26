@@ -1,0 +1,78 @@
+{
+  "metadata": {
+    "gameId": "test-game",
+    "title": "My test Game",
+    "description": "ieojgtoig oiujfoiew pu oipu",
+    "minPlayers": 2,
+    "maxPlayers": 8
+  },
+  "initialState": "STARTING",
+  "currentState": "STARTING",
+  "states": {
+    "STARTING": {},
+    "VOTING": {},
+    "REVEAL": {},
+    "SCORE_SUMMARY": {},
+    "FINISHED": {},
+    "TESTING_ROUND": {}
+  },
+  "playerAttributes": {},
+  "actions": {},
+  "transitions": [],
+  "ui": {
+    "STARTING": {
+      "host": {
+        "components": [
+          {
+            "id": "gt-1",
+            "component": "GameTitle",
+            "props": {
+              "title": "My Awesome Game"
+            }
+          },
+          {
+            "id": "psg-1",
+            "component": "PlayerStatusGrid",
+            "props": {}
+          }
+        ]
+      },
+      "player": {
+        "components": [
+          {
+            "id": "cm-1",
+            "component": "CenteredMessage",
+            "props": {
+              "children": "Waiting for the game to start..."
+            }
+          }
+        ]
+      }
+    },
+    "TESTING_ROUND": {
+      "player": {
+        "components": [
+          {
+            "id": "answerresult-1751895175337",
+            "component": "AnswerResult",
+            "props": {}
+          }
+        ]
+      },
+      "host": {
+        "components": [
+          {
+            "id": "awarddisplay-1751895177122",
+            "component": "AwardDisplay",
+            "props": {}
+          },
+          {
+            "id": "rankdisplay-1751895178969",
+            "component": "RankDisplay",
+            "props": {}
+          }
+        ]
+      }
+    }
+  }
+}

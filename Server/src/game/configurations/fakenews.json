@@ -1,0 +1,380 @@
+{
+  "metadata": {
+    "gameId": "fakenews",
+    "title": "Fake News (Config)",
+    "description": "A game about deception and voting.",
+    "minPlayers": 2,
+    "maxPlayers": 8
+  },
+  "gameData": {
+    "questions": [
+        { "question": "The original name for the search engine Google was ________.", "answer": "Backrub" },
+        { "question": "In the 1970s, a new brand of pet food was introduced: a three-course meal for dogs, with an appetizer, main course, and dessert, all in one can. It was called ________.", "answer": "Gourmet Goulash" },
+        { "question": "The world's largest rubber duck was created by a Dutch artist and is named ________.", "answer": "Florentijn Hofman's Rubber Duck" }
+    ]
+  },
+  "initialGameState": {
+    "currentQuestionIndex": -1,
+    "currentQuestion": null,
+    "submissions": [],
+    "votes": {},
+    "winner": null,
+    "playersSubmitted": 0,
+    "playersVoted": 0
+  },
+  "playerAttributes": {
+    "score": 0,
+    "currentSubmission": null,
+    "currentVote": null
+  },
+  "actions": {
+    "goToNextQuestion": [
+      {
+        "function": "incrementProperty",
+        "args": ["currentQuestionIndex"]
+      },
+      {
+        "function": "setProperty",
+        "args": ["currentQuestion", "{{gameData.questions[gameState.currentQuestionIndex]}}"]
+      }
+    ],
+    "recordSubmission": [
+      {
+        "function": "setProperty",
+        "args": ["playerAttributes.{{actorId}}.currentSubmission", "{{payload}}"]
+      },
+      {
+        "function": "incrementProperty",
+        "args": ["playersSubmitted"]
+      }
+    ],
+    "populateSubmissions": [
+      {
+        "function": "arrayClear",
+        "args": ["gameState.submissions"]
+      },
+      {
+        "forEachPlayer": {
+          "effects": [
+            {
+              "function": "arrayPush",
+              "args": ["gameState.submissions", "{{player.currentSubmission}}"]
+            }
+          ]
+        }
+      },
+      {
+        "function": "arrayPush",
+        "args": ["gameState.submissions", "{{gameState.currentQuestion.answer}}"]
+      },
+      {
+        "function": "shuffleArray",
+        "args": ["gameState.submissions"]
+      }
+    ],
+    "calculateScores": [
+        {
+            "forEachPlayer": {
+                "as": "voter",
+                "effects": [
+                    {
+                        "condition": "{{voter.currentVote === gameState.currentQuestion.answer}}",
+                        "function": "incrementProperty",
+                        "args": ["playerAttributes.{{voter.id}}.score", 1000]
+                    },
+                    {
+                        "forEachPlayer": {
+                            "as": "submitter",
+                            "effects": [
+                                {
+                                    "condition": "{{voter.currentVote === submitter.currentSubmission}}",
+                                    "function": "incrementProperty",
+"args": ["playerAttributes.{{submitter.id}}.score", 500]
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "recordVote": [
+      {
+        "function": "setProperty",
+        "args": ["playerAttributes.{{actorId}}.currentVote", "{{payload}}"]
+      },
+      {
+        "function": "incrementProperty",
+        "args": ["playersVoted"]
+      }
+    ],
+    "calculateWinner": [
+      {
+        "function": "calculateWinner"
+      }
+    ]
+  },
+  "initialState": "STARTING",
+  "states": {
+    "STARTING": {
+        "onEnter": [
+            {
+                "function": "startTimer",
+                "args": [3]
+            }
+        ]
+    },
+    "WRITING": {
+        "onEnter": [
+            {
+                "runAction": "goToNextQuestion"
+            }
+        ]
+    },
+    "VOTING": {
+        "onEnter": [
+            {
+                "runAction": "populateSubmissions"
+            }
+        ]
+    },
+    "REVEAL": {
+"onEnter": [
+            {
+                "runAction": "calculateScores"
+            },
+            {
+                "function": "startTimer",
+                "args": [10]
+            }
+        ]
+    },
+    "FINISHED": {
+        "onEnter": [
+            {
+                "runAction": "calculateWinner"
+            }
+        ]
+    }
+  },
+  "events": {
+    "submitLie": {
+      "permissions": ["player"],
+      "effects": [
+        { "runAction": "recordSubmission" },
+        { "function": "dispatchEvent", "args": ["playerSubmitted"] }
+      ]
+    },
+    "playerSubmitted": {
+      "permissions": ["server"]
+    },
+    "submitVote": {
+      "permissions": ["player"],
+      "effects": [
+        { "runAction": "recordVote" },
+        {"function": "dispatchEvent", "args": ["playerVoted"] }
+      ]
+    },
+    "playerVoted": {
+      "permissions": ["server"]
+    },
+    "timerExpires": {
+        "permissions": [
+            "server"
+        ]
+    }
+  },
+  "transitions": [
+    {
+      "from": "STARTING",
+      "to": "WRITING",
+      "event": "timerExpires"
+    },
+    {
+      "from": "WRITING",
+      "to": "VOTING",
+      "event": "playerSubmitted",
+      "condition": "{{gameState.playersSubmitted === players.length - 1}}"
+    },
+    {
+      "from": "VOTING",
+      "to": "REVEAL",
+      "event": "playerVoted",
+      "condition": "{{gameState.playersVoted === players.length -1}}"
+    },
+    {
+      "from": "REVEAL",
+      "to": "WRITING",
+      "event": "timerExpires",
+      "condition": "{{gameState.currentQuestionIndex < gameData.questions.length - 1}}"
+    },
+    {
+      "from": "REVEAL",
+      "to": "FINISHED",
+      "event": "timerExpires",
+      "condition": "{{gameState.currentQuestionIndex >= gameData.questions.length - 1}}"
+    }
+  ],
+  "ui": {
+    "STARTING": {
+        "host": {
+            "components": [
+                {
+                    "component": "GameTitle",
+                    "props": { "title": "Fake News" }
+                },
+                {
+                    "component": "CountdownTimer",
+                    "props": { "initialValue": 3 }
+                }
+            ]
+        },
+        "player": {
+            "components": [
+                {
+                    "component": "CenteredMessage",
+                    "props": { "children": "Get ready to lie!" }
+                }
+            ]
+        }
+    },
+    "WRITING": {
+        "host": {
+            "components": [
+                {
+                    "component": "QuestionDisplay",
+                    "props": { "question": "{{gameState.currentQuestion.question}}"}
+                },
+                {
+                    "component": "PlayerStatusGrid",
+                    "props": { "players": "{{players}}" }
+                }
+            ]
+        },
+"player": [
+            {
+                "condition": "{{player.currentSubmission !== null}}",
+                "components": [
+                    {
+                        "component": "CenteredMessage",
+                        "props": { "children": "Submission received! Waiting for others..." }
+                    }
+                ]
+            },
+            {
+                "components": [
+                    {
+                        "component": "QuestionDisplay",
+                        "props": { "question": "{{gameState.currentQuestion.question}}"}
+                    },
+                    {
+                        "component": "TextAreaWithCounter",
+                        "props": {
+                            "maxLength": 140,
+                            "placeholder": "Write your lie here...",
+                            "onChange": {
+                                "action": "submitLie"
+                            }
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    "VOTING": {
+        "host": {
+            "components": [
+                {
+                    "component": "QuestionDisplay",
+                    "props": { "question": "{{gameState.currentQuestion.question}}"}
+                },
+                {
+                    "component": "PlayerStatusGrid",
+                    "props": { "players": "{{players}}" }
+                }
+            ]
+        },
+        "player": [
+             {
+                "condition": "{{player.currentVote !== null}}",
+                "components": [
+                    {
+                        "component": "CenteredMessage",
+                        "props": { "children": "Vote received! Waiting for others..." }
+                    }
+                ]
+            },
+            {
+                "components": [
+                     {
+                        "component": "QuestionDisplay",
+                        "props": { "question": "{{gameState.currentQuestion.question}}"}
+                    },
+                    {
+                        "component": "VotingOptions",
+                        "props": {
+                            "options": "{{gameState.submissions}}",
+                            "onVote": {
+                                "action": "submitVote"
+                            }
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    "REVEAL": {
+        "host": {
+            "components": [
+                {
+                    "component": "ResultsList",
+                    "props": {
+                        "options": "{{gameState.submissions}}",
+                        "votes": "{{gameState.votes}}",
+                        "correctAnswer": "{{gameState.currentQuestion.answer}}",
+                        "players": "{{players}}"
+                    }
+                }
+            ]
+        },
+        "player": {
+            "components": [
+                {
+                    "component": "Leaderboard",
+                    "props": {
+                        "players": "{{players}}"
+                    }
+                }
+            ]
+        }
+    },
+    "FINISHED": {
+        "host": {
+            "components": [
+                {
+                    "component": "WinnerDisplay",
+                    "props": {
+                        "winnerName": "{{gameState.winner.nickname}}"
+                    }
+                },
+                {
+                    "component": "Podium",
+                    "props": {
+                        "players": "{{gameState.topThreePlayers}}"
+                    }
+                }
+            ]
+        },
+        "player": {
+            "components": [
+                {
+                    "component": "RankDisplay",
+                    "props": {
+                        "rank": "{{player.rank}}"
+                    }
+                }
+            ]
+        }
+    }
+  }
+}

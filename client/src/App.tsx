@@ -7,8 +7,9 @@ import DebugPage from './pages/DebugPage';
 import JoinPage from './pages/JoinPage';
 import TestComponentsPage from './pages/TestComponentsPage';
 import GameUITestPage from './pages/GameUITestPage';
+import GameCreatorPage from './pages/GameCreatorPage';
 import { socketService } from './services/socketService';
-import { DebugPanel } from './components/common/DebugPanel';
+import { DebugPanel } from './components/old/common/DebugPanel';
 
 function App() {
   // Establish socket connection when the app loads
@@ -25,7 +26,8 @@ function App() {
         <Route path="/game/:roomCode" element={<GamePage />} />
         <Route path="/debug" element={<DebugPage />} />
         <Route path="/test/components" element={<TestComponentsPage />} />
-        <Route path="/test/ui" element={<GameUITestPage />} />
+        <Route path="/test/ui/*" element={<GameUITestPage />} />
+        <Route path="/create" element={<GameCreatorPage />} />
       </Routes>
 
       {/*process.env.NODE_ENV === 'development' &&*/ <DebugPanel />}

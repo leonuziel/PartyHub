@@ -1,0 +1,39 @@
+# Backend Plan for Configurable Games
+
+This document outlines the backend development plan to enable loading games from configuration files.
+
+## 1. Create `ConfigurableGame.ts`
+
+- **Objective:** Create a generic game engine that can run any game defined by a configuration file.
+- **Action:**
+    - Create a new file `Server/src/game/games/ConfigurableGame.ts`.
+    - This class will extend `BaseGame.ts`.
+    - The constructor will accept a game configuration object.
+    - Methods like `handleAction` and `getState` will be implemented to interpret the configuration's `states`, `actions`, and `transitions` to manage the game logic.
+
+## 2. Update `GameFactory.ts`
+
+- **Objective:** Modify the `GameFactory` to support both hardcoded and configuration-based games.
+- **Action:**
+    - The `createGame(gameId, players, hostId)` method will be updated.
+    - It will first check if a configuration file exists for the given `gameId`.
+    - If a configuration file is found, it will instantiate `ConfigurableGame` with the loaded configuration.
+    - Otherwise, it will fall back to the existing `switch` statement to create an instance of a hardcoded game.
+
+## 3. Implement Storage for Game Configurations
+
+- **Objective:** Store and manage game configuration files.
+- **Action:**
+    - Store game configurations as JSON files in the `Server/src/game/configurations/` directory.
+
+## 4. Create a Game Configuration API
+
+- **Objective:** Create a set of API endpoints to manage game configurations.
+- **Action:**
+    - Create a new file `Server/src/routes/gameConfig.ts`.
+    - Implement the following RESTful endpoints:
+        - `GET /api/game-configs`: List all available game configurations.
+        - `GET /api/game-configs/:gameId`: Get a specific game configuration.
+        - `POST /api/game-configs`: Create a new game configuration.
+        - `PUT /api/game-configs/:gameId`: Update an existing game configuration.
+        - `DELETE /api/game-configs/:gameId`: Delete a game configuration.

@@ -1,0 +1,64 @@
+.score-accumulation-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    max-width: 500px;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  .bar-label {
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+  
+  .score-bar {
+    flex-grow: 1;
+    background-color: #12101f;
+    border: 2px solid #332f4e;
+    border-radius: 2rem;
+    padding: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .score-text {
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    padding: 0 1rem;
+  }
+  
+  .score-change {
+    font-weight: 700;
+    padding: 0.5rem 1rem;
+    border-radius: 1.5rem;
+    animation: popIn 0.5s ease-out forwards;
+  }
+  
+  .score-change.positive {
+    background-color: #39e686;
+    color: #12101f;
+  }
+  
+  .score-change.negative {
+    background-color: #e63946;
+    color: #fff;
+  }
+  
+  @keyframes popIn {
+    from {
+      transform: scale(0.5);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  

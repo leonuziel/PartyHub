@@ -29,4 +29,5 @@ router.get('/rooms', (_req, res) => {
     res.json(sanitizedRooms);
 });
 
+
 export default router;

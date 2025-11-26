@@ -1,0 +1,81 @@
+.team-selection-grid {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .team-column, .unassigned-players-column {
+    flex: 1;
+    background-color: #1c192b;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+  }
+  
+  .team-header {
+    padding: 1rem;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    color: #fff;
+    text-align: center;
+  }
+  
+  .team-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+  
+  .team-players {
+    padding: 1rem;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: background-color 0.2s;
+  }
+
+  .team-column.is-over .team-players {
+    background-color: #332f4e;
+  }
+  
+  .team-player-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #12101f;
+    padding: 0.5rem;
+    border-radius: 8px;
+    color: #fff;
+    cursor: grab;
+  }
+
+  .team-player-item:active {
+    cursor: grabbing;
+  }
+  
+  .team-player-item img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+  }
+
+  .team-column button {
+    margin: 1rem;
+    padding: 0.8rem;
+    border: none;
+    background-color: #8a2be2;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .team-column button:hover {
+      background-color: #701ebd;
+  }
+  

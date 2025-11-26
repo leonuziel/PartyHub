@@ -1,0 +1,80 @@
+{
+  "metadata": {
+    "gameId": "ui-layout-test",
+    "title": "UI Layout Test",
+    "description": "A test for the dynamic UI layout system.",
+    "minPlayers": 1,
+    "maxPlayers": 8
+  },
+  "gameData": {},
+  "initialGameState": {},
+  "playerAttributes": {},
+  "actions": {},
+  "initialState": "DEFAULT",
+  "states": {
+    "DEFAULT": {
+      "onEnter": []
+    }
+  },
+  "events": {},
+  "transitions": [],
+  "ui": {
+    "DEFAULT": {
+      "host": {
+        "layout": {
+            "alignment": "TopLeft"
+        },
+        "components": [
+          {
+            "component": "GameTitle",
+            "props": { "title": "Layout Test" },
+            "layout": {
+              "alignment": "TopCenter",
+              "offset": { "top": 20, "bottom": 20 }
+            }
+          },
+          {
+            "component": "CenteredMessage",
+            "props": { "children": "This component is set to 50% width and centered." },
+            "layout": {
+              "width": "50%",
+              "alignment": "Center",
+              "padding": { "top": 20, "bottom": 20, "left": 20, "right": 20 },
+              "offset": { "bottom": 20 }
+            }
+          },
+           {
+            "component": "CenteredMessage",
+            "props": { "children": "This component is set to hug its content" },
+            "layout": {
+              "width": "hug",
+              "alignment": "Center",
+              "padding": { "top": 20, "bottom": 20, "left": 20, "right": 20 },
+               "offset": { "bottom": 20 }
+            }
+          },
+          {
+            "component": "Button",
+            "props": { "children": "BottomRight Aligned" },
+            "layout": {
+              "alignment": "BottomRight",
+              "offset": { "right": 20, "bottom": 20 }
+            }
+          }
+        ]
+      },
+      "player": {
+        "components": [
+           {
+            "component": "GameTitle",
+            "props": { "title": "Layout Test (Player)" },
+            "layout": {
+              "alignment": "TopCenter",
+              "offset": { "top": 20, "bottom": 20 }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

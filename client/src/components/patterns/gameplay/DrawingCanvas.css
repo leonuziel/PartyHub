@@ -1,0 +1,56 @@
+.drawing-canvas-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  canvas {
+    background-color: #fff;
+    border-radius: 8px;
+    cursor: crosshair;
+  }
+  
+  canvas.read-only {
+    cursor: not-allowed;
+  }
+  
+  .drawing-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem;
+    background-color: #1c192b;
+    border-radius: 8px;
+  }
+  
+  .drawing-controls input[type="color"] {
+    -webkit-appearance: none;
+    width: 40px;
+    height: 40px;
+    border: none;
+    cursor: pointer;
+    background: none;
+  }
+  .drawing-controls input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+  .drawing-controls input[type="color"]::-webkit-color-swatch {
+    border-radius: 50%;
+    border: 2px solid #fff;
+  }
+
+  .drawing-controls input[type="range"] {
+      cursor: pointer;
+  }
+
+  .drawing-controls button {
+    padding: 0.5rem 1rem;
+    border: none;
+    background-color: #8a2be2;
+    color: #fff;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  

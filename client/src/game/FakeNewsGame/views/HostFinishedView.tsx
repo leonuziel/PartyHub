@@ -1,12 +1,12 @@
 import React from 'react';
-import { Podium } from '../../../components/display/Podium';
-import { GameTitle } from '../../../components/display/GameTitle';
-import { SpecialAwards } from '../../../components/display/SpecialAwards';
+import { Podium } from '../../../components/old/display/Podium';
+import { GameTitle } from '../../../components/old/display/GameTitle';
+import { SpecialAwards } from '../../../components/old/display/SpecialAwards';
 import { Player } from '../../../types/types';
 
 export interface Award {
-    awardName: string;
-    player: Player | null;
+  awardName: string;
+  player: Player | null;
 }
 
 interface HostFinishedViewProps {

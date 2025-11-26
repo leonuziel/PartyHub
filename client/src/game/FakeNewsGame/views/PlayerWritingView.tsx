@@ -1,6 +1,6 @@
 import React from 'react';
-import { TextAreaWithCounter } from '../../../components/controls/TextAreaWithCounter';
-import { Button } from '../../../components/controls/Button';
+import { TextAreaWithCounter } from '../../../components/old/controls/TextAreaWithCounter';
+import { Button } from '../../../components/old/controls/Button';
 
 interface PlayerWritingViewProps {
   question: string;

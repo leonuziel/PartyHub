@@ -1,8 +1,8 @@
 import React from 'react';
-import { QuestionHeader } from '../../../components/display/QuestionHeader';
-import { QuestionDisplay } from '../../../components/display/QuestionDisplay';
-import { AnswerGrid } from '../../../components/controls/AnswerGrid';
-import { HostViewContainer } from '../../../components/layout/HostViewContainer';
+import { QuestionHeader } from '../../../components/old/display/QuestionHeader';
+import { QuestionDisplay } from '../../../components/old/display/QuestionDisplay';
+import { AnswerGrid } from '../../../components/old/controls/AnswerGrid';
+import { HostViewContainer } from '../../../components/old/layout/HostViewContainer';
 
 interface HostAskingQuestionViewProps {
   round: number;
@@ -25,7 +25,7 @@ export const HostAskingQuestionView: React.FC<HostAskingQuestionViewProps> = ({ 
         totalPlayers={totalPlayers}
       />
       <QuestionDisplay question={question} />
-      <AnswerGrid answers={answers} onAnswer={() => {}} disabled={true} />
+      <AnswerGrid answers={answers} onAnswer={() => { }} disabled={true} />
     </HostViewContainer>
   );
 };

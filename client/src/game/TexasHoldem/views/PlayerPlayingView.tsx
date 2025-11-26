@@ -5,9 +5,9 @@ import { usePlayerStore } from '../../../store/playerStore';
 import { useRoomStore } from '../../../store/roomStore';
 import { socketService } from '../../../services/socketService';
 import { TexasHoldemGameState, TexasHoldemAction } from '../../../types/types';
-import { CardSlot } from '../../../components/cards/CardSlot';
-import { Button } from '../../../components/controls/Button';
-import { CenteredMessage } from '../../../components/layout/CenteredMessage';
+import { CardSlot } from '../../../components/old/cards/CardSlot';
+import { Button } from '../../../components/old/controls/Button';
+import { CenteredMessage } from '../../../components/old/layout/CenteredMessage';
 import '../TexasHoldemPlayerView.css';
 
 const SMALL_BLIND = 10; // This should ideally come from a shared config
@@ -22,7 +22,7 @@ export const PlayerPlayingView: React.FC = () => {
     if (!gameState) {
         return <div>Loading...</div>;
     }
-    
+
     const me = gameState.players.find(p => p.id === socketId);
     const isMyTurn = gameState.currentPlayerId === socketId;
 
@@ -30,7 +30,7 @@ export const PlayerPlayingView: React.FC = () => {
         if (!isMyTurn || !room) return;
         socketService.sendPlayerAction(room.roomCode, { type: actionType, amount });
     };
-    
+
     const canCheck = me && me.currentBet === gameState.currentBet;
     const canBet = me && gameState.currentBet === 0;
 
@@ -41,7 +41,7 @@ export const PlayerPlayingView: React.FC = () => {
                     <CardSlot key={index} card={card} isFaceUp={true} />
                 ))}
             </div>
-            
+
             {isMyTurn && (
                 <div className="action-buttons">
                     <Button onClick={() => handleAction('FOLD')} disabled={!isMyTurn || me?.isFolded}>Fold</Button>
@@ -59,11 +59,11 @@ export const PlayerPlayingView: React.FC = () => {
             )}
 
             {isMyTurn && (canBet || gameState.currentBet > 0) && (
-                 <div className="bet-slider-container">
-                    <input 
-                        type="range" 
+                <div className="bet-slider-container">
+                    <input
+                        type="range"
                         min={gameState.minRaise}
-                        max={me?.chips || 100} 
+                        max={me?.chips || 100}
                         value={betAmount}
                         onChange={(e) => setBetAmount(Number(e.target.value))}
                         step={SMALL_BLIND}
@@ -73,7 +73,7 @@ export const PlayerPlayingView: React.FC = () => {
             )}
 
             {!isMyTurn && !me?.isFolded && (
-                 <CenteredMessage>Waiting for other players...</CenteredMessage>
+                <CenteredMessage>Waiting for other players...</CenteredMessage>
             )}
             {me?.isFolded && (
                 <CenteredMessage>You have folded.</CenteredMessage>

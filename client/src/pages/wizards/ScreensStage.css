@@ -1,0 +1,299 @@
+/* ScreensStage.css */
+
+/* --- Main Layout Orchestrator --- */
+.screen-builder-layout {
+    display: grid;
+    /* Default state: 1:1:1 ratio for visible panels, inspector is hidden. Always 4 columns. */
+    grid-template-columns: 1fr 1fr 1fr 0fr;
+    gap: 1rem;
+    transition: grid-template-columns 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --- STATE 1: Inspector OPEN for HOST view --- */
+.screen-builder-layout.inspector-open.active-view-host {
+    /* Palette=0, Host=1fr, Player=0, Inspector=2fr */
+    grid-template-columns: 0fr 1fr 0fr 2fr;
+}
+
+/* --- STATE 2: Inspector OPEN for PLAYER view --- */
+.screen-builder-layout.inspector-open.active-view-player {
+    /* Palette=0, Host=0, Player=1fr, Inspector=2fr */
+    grid-template-columns: 0fr 0fr 1fr 2fr;
+}
+
+
+/* --- Base Styles & Transitions for Grid Children --- */
+.component-palette,
+.view-editor,
+.property-inspector {
+    opacity: 1;
+    transform: scale(1);
+    /* Transition opacity and transform for smooth fade/scale effect */
+    transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+    border-radius: 6px;
+    padding: 1rem;
+    overflow: hidden;
+    border: 1px solid #444;
+}
+
+/* --- Grid Children Placement & Specific Styles --- */
+.component-palette {
+    grid-column: 1;
+    background-color: #12101F;
+}
+
+/* Use adjacent sibling selectors for robust placement */
+.component-palette + .view-editor {
+    grid-column: 2;
+    background-color: #1C192B;
+}
+
+.component-palette + .view-editor + .view-editor {
+    grid-column: 3;
+    background-color: #1C192B;
+}
+
+.property-inspector {
+    grid-column: 4;
+    background-color: #12101F;
+    /* Inspector is invisible by default because its track is 0fr and it has 0 opacity */
+    opacity: 0;
+}
+
+
+/* --- Child Visibility Toggles for Inspector States --- */
+
+/* When inspector's column grows, fade it in */
+.screen-builder-layout.inspector-open .property-inspector {
+    opacity: 1;
+}
+
+/* When HOST is active, hide Player view and Palette */
+.screen-builder-layout.inspector-open.active-view-host .component-palette,
+.screen-builder-layout.inspector-open.active-view-host .component-palette + .view-editor + .view-editor {
+    opacity: 0;
+}
+
+/* When PLAYER is active, hide Host view and Palette */
+.screen-builder-layout.inspector-open.active-view-player .component-palette,
+.screen-builder-layout.inspector-open.active-view-player .component-palette + .view-editor {
+    opacity: 0;
+}
+
+
+/* --- General Inner Component Styles (largely unchanged) --- */
+
+.component-palette h3 {
+    margin-top: 0;
+    font-size: 1.1rem;
+    color: #8A2BE2;
+}
+
+.component-category-details {
+    margin-bottom: 0.5rem;
+}
+
+.component-category-summary {
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0.5rem;
+    background-color: #333;
+    border-radius: 4px;
+    outline: none;
+    transition: background-color 0.2s;
+}
+
+.component-category-summary:hover {
+    background-color: #444;
+}
+
+.component-category-details[open] > .component-category-summary {
+    background-color: #4a4a7a;
+    color: white;
+}
+
+.component-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    padding-top: 0.75rem;
+}
+
+.draggable-component {
+    padding: 0.5rem;
+    font-size: 0.85rem;
+    background-color: #333;
+    border-radius: 4px;
+    cursor: grab;
+    text-align: center;
+    font-weight: bold;
+    user-select: none;
+}
+
+.draggable-component.is-overlay {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    transform: scale(1.05);
+    z-index: 1000;
+}
+
+.view-editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.view-editor h4 {
+    margin: 0;
+}
+
+.preview-button {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.85rem;
+    background-color: #333;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.preview-button:hover {
+    background-color: #444;
+}
+
+.conditional-view-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.conditional-view-header label {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+.dropzone {
+    min-height: 300px;
+    background-color: rgba(0,0,0,0.2);
+    border: 2px dashed #333;
+    border-radius: 4px;
+    padding: 0.5rem;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.dropzone.is-over {
+    background-color: rgba(138, 43, 226, 0.2);
+    border-color: #8A2BE2;
+}
+
+.dropzone p {
+    color: #888;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.sortable-item {
+    position: relative;
+    width: 100%;
+    z-index: 10;
+    pointer-events: auto;
+    background-color: #2a263e;
+    border: 1px solid #4a4a7a;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    user-select: none;
+    margin-bottom: 0.5rem;
+    transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.sortable-item.is-selected {
+    box-shadow: 0 0 12px #4a4a7a, 0 0 2px white;
+    border-color: white;
+}
+
+.sortable-item-header {
+    background-color: #4a4a7a;
+    color: white;
+    padding: 0.5rem 0.75rem;
+    font-weight: bold;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    cursor: grab;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sortable-item-header .remove-component-btn {
+    background: none;
+    border: none;
+    color: #ddd;
+    font-size: 1.4rem;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    transition: color 0.2s ease;
+    width: auto;
+    margin: 0;
+}
+
+.sortable-item-header .remove-component-btn:hover {
+    color: white;
+}
+
+.sortable-item-body {
+    padding: 0.75rem;
+    font-size: 0.8rem;
+    color: #ccc;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.sortable-item-body p {
+    margin: 0 0 0.25rem 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.sortable-item-body strong {
+    color: #aaa;
+}
+
+.nested-dropzone {
+    margin: 0.5rem;
+    padding: 0.5rem;
+    background-color: rgba(0,0,0,0.1);
+    border: 1px dashed #555;
+    border-radius: 4px;
+}
+
+.conditional-view-container {
+    border: 1px solid #333;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: #12101F;
+    position: relative;
+}
+.view-editor button {
+    background-color: #4a4a7a;
+}
+
+.view-editor button.add-view-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #4a4a7a;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 1rem;
+}
+
+.view-editor .button-subtle {
+    background-color: #444;
+    margin-top: 0.5rem;
+}

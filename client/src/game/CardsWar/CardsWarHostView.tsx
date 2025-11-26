@@ -2,8 +2,8 @@ import React from 'react';
 import { useGameStore } from '../../store/gameStore';
 import { useRoomStore } from '../../store/roomStore';
 import { CardsWarGameState, Player } from '../../types/types';
-import { Spinner } from '../../components/common/Spinner';
-import { HostViewContainer } from '../../components/layout/HostViewContainer';
+import { Spinner } from '../../components/old/common/Spinner';
+import { HostViewContainer } from '../../components/old/layout/HostViewContainer';
 import { HostStartingView } from './views/HostStartingView';
 import { HostFinishedView } from './views/HostFinishedView';
 import { HostRoundInProgressView } from './views/HostRoundInProgressView';
@@ -11,12 +11,12 @@ import { HostWarDeclaredView } from './views/HostWarDeclaredView';
 import './CardsWarHostView.css';
 
 export const CardsWarHostView: React.FC = () => {
-    const gameState = useGameStore((state) => state.gameState) as CardsWarGameState;
-    const hostId = useRoomStore((state) => state.room?.hostId);
+  const gameState = useGameStore((state) => state.gameState) as CardsWarGameState;
+  const hostId = useRoomStore((state) => state.room?.hostId);
 
-    if (!gameState) {
-        return <Spinner />;
-    }
+  if (!gameState) {
+    return <Spinner />;
+  }
 
   const { status, players, timer, winnerId } = gameState;
 

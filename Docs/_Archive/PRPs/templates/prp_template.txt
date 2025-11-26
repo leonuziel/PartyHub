@@ -1,0 +1,557 @@
+# Product Requirements Prompt (PRP) for PartyHub
+
+## Project Overview
+
+PartyHub is a real-time, interactive social gaming platform. The architecture is designed to support a host (on a large screen) and multiple players (on mobile phones) interacting in a shared game room.
+
+---
+
+## **Appendix: Project Context**
+
+### Project Structure
+
+#### Backend (`/Server`)
+```
+/Server
+|
+├── src/
+│   ├── app.ts
+│   ├── core/
+│   │   └── SocketManager.ts
+│   ├── game/
+│   │   ├── BaseGame.ts
+│   │   ├── configurations/
+│   │   │   ├── fakenews.json
+│   │   │   ├── kahoot-clone.json
+│   │   │   ├── new-component-test.json
+│   │   │   ├── quizclash.json
+│   │   │   ├── test-basic-flow.json
+│   │   │   ├── test-game.json
+│   │   │   └── ui-layout-test.json
+│   │   ├── engine/
+│   │   │   ├── EffectExecutor.ts
+│   │   │   ├── GameEventHandler.ts
+│   │   │   ├── GameStateInitializer.ts
+│   │   │   ├── StateTimer.ts
+│   │   │   ├── UIStateBuilder.ts
+│   │   │   └── ValueResolver.ts
+│   │   │   └── __tests__/
+│   │   │       ├── EffectExecutor.test.ts
+│   │   │       ├── GameEventHandler.test.ts
+│   │   │       ├── GameStateInitializer.test.ts
+│   │   │       ├── StateTimer.test.ts
+│   │   │       ├── UIStateBuilder.test.ts
+│   │   │       └── ValueResolver.test.ts
+│   │   ├── GameFactory.ts
+│   │   ├── GameManager.ts
+│   │   ├── games/
+│   │   │   ├── cardGames/
+│   │   │   │   ├── cards.ts
+│   │   │   │   ├── CardsWarGame.ts
+│   │   │   │   ├── handEvaluator.ts
+│   │   │   │   └── TexasHoldemGame.ts
+│   │   │   ├── ConfigurableGame.ts
+│   │   │   ├── FakeNewsGame.ts
+│   │   │   ├── QuizClashGame.ts
+│   │   │   └── quizclash_questions.json
+│   │   └── __tests__/
+│   │       └── ConfigurableGame.test.ts
+│   ├── room/
+│   │   ├── Room.ts
+│   │   └── RoomManager.ts
+│   ├── routes/
+│   │   ├── debug.ts
+│   │   └── gameConfig.ts
+│   ├── server.ts
+│   ├── types/
+│   │   ├── enums.ts
+│   │   └── interfaces.ts
+│   └── utils/
+│       ├── codeGenerator.ts
+│       ├── validators/
+│       │   ├── GameConfigValidator.ts
+│       │   └── __tests__/
+│       │       └── GameConfigValidator.test.ts
+│       └── __tests__/
+│           └── codeGenerator.test.ts
+```
+
+#### Frontend (`/client`)
+```
+/client
+|
+├── src/
+│   ├── App.css
+│   ├── App.test.tsx
+│   ├── App.tsx
+│   ├── components/
+│   │   ├── card_game_components.txt
+│   │   ├── ComponentRegistry.ts
+│   │   ├── elements/
+│   │   │   ├── Card.tsx
+│   │   │   ├── CardContainer.tsx
+│   │   │   ├── Dice.tsx
+│   │   │   ├── GameBoard.tsx
+│   │   │   ├── GamePiece.tsx
+│   │   │   └── __tests__/
+│   │   │       ├── Card.test.tsx
+│   │   │       ├── CardContainer.test.tsx
+│   │   │       ├── Dice.test.tsx
+│   │   │       ├── GameBoard.test.tsx
+│   │   │       └── GamePiece.test.tsx
+│   │   ├── missing_components.txt
+│   │   ├── old/
+│   │   │   ├── cards/
+│   │   │   │   ├── BiddingPopup.tsx
+│   │   │   │   ├── Card.css
+│   │   │   │   ├── Card.tsx
+│   │   │   │   ├── CardFan.tsx
+│   │   │   │   ├── CardSlot.css
+│   │   │   │   ├── CardSlot.tsx
+│   │   │   │   ├── Deck.css
+│   │   │   │   ├── Deck.tsx
+│   │   │   │   ├── DiscardPile.css
+│   │   │   │   ├── DiscardPile.tsx
+│   │   │   │   ├── Hand.css
+│   │   │   │   ├── Hand.tsx
+│   │   │   │   ├── LastPlayedCard.tsx
+│   │   │   │   ├── Meld.css
+│   │   │   │   ├── Meld.tsx
+│   │   │   │   ├── PlayerHandDisplay.css
+│   │   │   │   ├── PlayerHandDisplay.tsx
+│   │   │   │   ├── Scoreboard.css
+│   │   │   │   ├── Scoreboard.tsx
+│   │   │   │   ├── Trick.css
+│   │   │   │   ├── Trick.tsx
+│   │   │   │   └── TrumpIndicator.tsx
+│   │   │   ├── common/
+│   │   │   │   ├── DebugPanel.tsx
+│   │   │   │   ├── Modal.css
+│   │   │   │   ├── Modal.tsx
+│   │   │   │   ├── Spinner.css
+│   │   │   │   └── Spinner.tsx
+│   │   │   ├── controls/
+│   │   │   │   ├── ActionButton.tsx
+│   │   │   │   ├── AnswerGrid.css
+│   │   │   │   ├── AnswerGrid.tsx
+│   │   │   │   ├── Button.css
+│   │   │   │   ├── Button.tsx
+│   │   │   │   ├── GameCard.css
+│   │   │   │   ├── GameCard.tsx
+│   │   │   │   ├── TextAreaWithCounter.css
+│   │   │   │   ├── TextAreaWithCounter.tsx
+│   │   │   │   ├── VotingOptions.css
+│   │   │   │   └── VotingOptions.tsx
+│   │   │   ├── display/
+│   │   │   │   ├── AnswerResult.css
+│   │   │   │   ├── AnswerResult.tsx
+│   │   │   │   ├── AwardDisplay.css
+│   │   │   │   ├── AwardDisplay.tsx
+│   │   │   │   ├── GameBranding.css
+│   │   │   │   ├── GameBranding.tsx
+│   │   │   │   ├── GameTitle.css
+│   │   │   │   ├── GameTitle.tsx
+│   │   │   │   ├── Leaderboard.css
+│   │   │   │   ├── Leaderboard.tsx
+│   │   │   │   ├── PlayerAvatar.css
+│   │   │   │   ├── PlayerAvatar.tsx
+│   │   │   │   ├── PlayerCard.css
+│   │   │   │   ├── PlayerCard.tsx
+│   │   │   │   ├── PlayerInfo.css
+│   │   │   │   ├── PlayerInfo.tsx
+│   │   │   │   ├── PlayerStatusContainer.css
+│   │   │   │   ├── PlayerStatusContainer.tsx
+│   │   │   │   ├── PlayerStatusGrid.css
+│   │   │   │   ├── PlayerStatusGrid.tsx
+│   │   │   │   ├── Podium.css
+│   │   │   │   ├── Podium.tsx
+│   │   │   │   ├── PodiumList.css
+│   │   │   │   ├── PodiumList.tsx
+│   │   │   │   ├── QuestionDisplay.css
+│   │   │   │   ├── QuestionDisplay.tsx
+│   │   │   │   ├── QuestionHeader.css
+│   │   │   │   ├── QuestionHeader.tsx
+│   │   │   │   ├── RankDisplay.css
+│   │   │   │   ├── RankDisplay.tsx
+│   │   │   │   ├── RankUpdate.css
+│   │   │   │   ├── RankUpdate.tsx
+│   │   │   │   ├── ResultsList.css
+│   │   │   │   ├── ResultsList.tsx
+│   │   │   │   ├── SpecialAwards.css
+│   │   │   │   ├── SpecialAwards.tsx
+│   │   │   │   ├── WinnerDisplay.css
+│   │   │   │   └── WinnerDisplay.tsx
+│   │   │   ├── gameplay/
+│   │   │   │   ├── CountdownTimer.css
+│   │   │   │   └── CountdownTimer.tsx
+│   │   │   ├── layout/
+│   │   │   │   ├── CenteredMessage.css
+│   │   │   │   ├── CenteredMessage.tsx
+│   │   │   │   ├── HostFrame.css
+│   │   │   │   ├── HostFrame.tsx
+│   │   │   │   ├── HostViewContainer.css
+│   │   │   │   ├── HostViewContainer.tsx
+│   │   │   │   ├── PlayArea.css
+│   │   │   │   ├── PlayArea.tsx
+│   │   │   │   ├── PlayerViewContainer.css
+│   │   │   │   └── PlayerViewContainer.tsx
+│   │   │   └── player/
+│   │   ├── patterns/
+│   │   │   ├── card_games/
+│   │   │   │   ├── BiddingView.tsx
+│   │   │   │   ├── CommunityCardsView.tsx
+│   │   │   │   ├── PlayerHandView.tsx
+│   │   │   │   └── __tests__/
+│   │   │   │       ├── BiddingView.test.tsx
+│   │   │   │       ├── CommunityCardsView.test.tsx
+│   │   │   │       └── PlayerHandView.test.tsx
+│   │   │   ├── feedback/
+│   │   │   │   ├── EmojiReactionToolbar.css
+│   │   │   │   ├── EmojiReactionToolbar.tsx
+│   │   │   │   └── __tests__/
+│   │   │   │       └── EmojiReactionToolbar.test.tsx
+│   │   │   ├── gameplay/
+│   │   │   │   ├── DrawingCanvas.css
+│   │   │   │   ├── DrawingCanvas.tsx
+│   │   │   │   ├── MatchupDisplay.css
+│   │   │   │   ├── MatchupDisplay.tsx
+│   │   │   │   ├── PhaseBanner.css
+│   │   │   │   ├── PhaseBanner.tsx
+│   │   │   │   ├── RoleRevealCard.css
+│   │   │   │   ├── RoleRevealCard.tsx
+│   │   │   │   ├── SubmissionReel.css
+│   │   │   │   ├── SubmissionReel.tsx
+│   │   │   │   ├── TurnOrderDisplay.css
+│   │   │   │   ├── TurnOrderDisplay.tsx
+│   │   │   │   ├── WordGuesserInput.css
+│   │   │   │   ├── WordGuesserInput.tsx
+│   │   │   │   └── __tests__/
+│   │   │   │       ├── DrawingCanvas.test.tsx
+│   │   │   │       ├── MatchupDisplay.test.tsx
+│   │   │   │       ├── PhaseBanner.test.tsx
+│   │   │   │       ├── RoleRevealCard.test.tsx
+│   │   │   │       ├── SubmissionReel.test.tsx
+│   │   │   │       ├── TurnOrderDisplay.test.tsx
+│   │   │   │       └── WordGuesserInput.test.tsx
+│   │   │   ├── host/
+│   │   │   │   ├── HostLeaderboardView.tsx
+│   │   │   │   ├── HostQuestionView.tsx
+│   │   │   │   ├── HostResultView.tsx
+│   │   │   │   └── __tests__/
+│   │   │   │       ├── HostLeaderboardView.test.tsx
+│   │   │   │       ├── HostQuestionView.test.tsx
+│   │   │   │       └── HostResultView.test.tsx
+│   │   │   ├── lobby/
+│   │   │   │   ├── AvatarCustomizer.css
+│   │   │   │   ├── AvatarCustomizer.tsx
+│   │   │   │   ├── InstructionCarousel.css
+│   │   │   │   ├── InstructionCarousel.tsx
+│   │   │   │   ├── ReadyCheckDisplay.css
+│   │   │   │   ├── ReadyCheckDisplay.tsx
+│   │   │   │   ├── TeamSelectionGrid.css
+│   │   │   │   ├── TeamSelectionGrid.tsx
+│   │   │   │   └── __tests__/
+│   │   │   │       ├── AvatarCustomizer.test.tsx
+│   │   │   │       ├── InstructionCarousel.test.tsx
+│   │   │   │       ├── ReadyCheckDisplay.test.tsx
+│   │   │   │       └── TeamSelectionGrid.test.tsx
+│   │   │   ├── meta/
+│   │   │   │   ├── InGameNotification.css
+│   │   │   │   ├── InGameNotification.tsx
+│   │   │   │   └── __tests__/
+│   │   │   │       └── InGameNotification.test.tsx
+│   │   │   ├── player/
+│   │   │   │   ├── PlayerAnswerView.tsx
+│   │   │   │   ├── PlayerLobbyView.tsx
+│   │   │   │   ├── PlayerResultView.tsx
+│   │   │   │   ├── PlayerVotingView.tsx
+│   │   │   │   └── __tests__/
+│   │   │   │       ├── PlayerAnswerView.test.tsx
+│   │   │   │       ├── PlayerLobbyView.test.tsx
+│   │   │   │       ├── PlayerResultView.test.tsx
+│   │   │   │       └── PlayerVotingView.test.tsx
+│   │   │   └── results/
+│   │   │       ├── CorrectAnswerOverlay.css
+│   │   │       ├── CorrectAnswerOverlay.tsx
+│   │   │       ├── FinalResultsScreen.css
+│   │   │       ├── FinalResultsScreen.tsx
+│   │   │       ├── PersonalScoreCard.css
+│   │   │       ├── PersonalScoreCard.tsx
+│   │   │       ├── ScoreAccumulationBar.css
+│   │   │       ├── ScoreAccumulationBar.tsx
+│   │   │       ├── VotingGrid.css
+│   │   │       ├── VotingGrid.tsx
+│   │   │       └── __tests__/
+│   │   │           ├── CorrectAnswerOverlay.test.tsx
+│   │   │           ├── FinalResultsScreen.test.tsx
+│   │   │           ├── PersonalScoreCard.test.tsx
+│   │   │           ├── ScoreAccumulationBar.test.tsx
+│   │   │           └── VotingGrid.test.tsx
+│   │   ├── primitives/
+│   │   │   ├── display/
+│   │   │   │   ├── ImageDisplay.tsx
+│   │   │   │   ├── KeyValueDisplay.tsx
+│   │   │   │   ├── ListDisplay.tsx
+│   │   │   │   ├── TextDisplay.tsx
+│   │   │   │   └── __tests__/
+│   │   │   │       ├── ImageDisplay.test.tsx
+│   │   │   │       ├── KeyValueDisplay.test.tsx
+│   │   │   │       ├── ListDisplay.test.tsx
+│   │   │   │       └── TextDisplay.test.tsx
+│   │   │   ├── feedback/
+│   │   │   │   ├── StateIndicator.tsx
+│   │   │   │   ├── Timer.tsx
+│   │   │   │   └── __tests__/
+│   │   │   │       ├── StateIndicator.test.tsx
+│   │   │   │       └── Timer.test.tsx
+│   │   │   ├── input/
+│   │   │   │   ├── Button.tsx
+│   │   │   │   ���── ChoiceSelector.tsx
+│   │   │   │   ├── Slider.tsx
+│   │   │   │   ├── TextInput.tsx
+│   │   │   │   └── __tests__/
+│   │   │   │       ├── Button.test.tsx
+│   │   │   │       ├── ChoiceSelector.test.tsx
+│   │   │   │       ├── Slider.test.tsx
+│   │   │   │       └── TextInput.test.tsx
+│   │   │   └── layout/
+│   │   │       ├── Container.tsx
+│   │   │       ├── Grid.tsx
+│   │   │       ├── Spacer.tsx
+│   │   │       ├── Stack.tsx
+│   │   │       └── __tests__/
+│   │   │           ├── Container.test.tsx
+│   │   │           ├── Grid.test.tsx
+│   │   │           ├── Spacer.test.tsx
+│   │   │           └── Stack.test.tsx
+│   │   ├── reusable_components.txt
+│   │   └── utility/
+│   │       ├── ComponentRenderer.tsx
+│   │       └── __tests__/
+│   │           └── ComponentRenderer.test.tsx
+│   ├── game/
+│   │   ├── CardsWar/
+│   │   │   ├── CardsWarHostView.css
+│   │   │   ├── CardsWarHostView.tsx
+│   │   │   ├── CardsWarPlayerView.css
+│   │   │   ├── CardsWarPlayerView.tsx
+│   │   │   └── views/
+│   │   │       ├── HostFinishedView.tsx
+│   │   │       ├── HostRoundInProgressView.tsx
+│   │   │       ├── HostStartingView.tsx
+│   │   │       ├── HostWarDeclaredView.tsx
+│   │   │       ├── PlayerFinishedView.tsx
+│   │   │       ├── PlayerPlayingView.tsx
+│   │   │       ├── PlayerStartingView.tsx
+│   │   │       ├── PlayerWarDeclaredView.tsx
+│   │   │       └── PlayerWarTransitionView.tsx
+│   │   ├── DynamicViewRenderer.tsx
+│   │   ├── FakeNewsGame/
+│   │   │   ├── FakeNews.css
+│   │   │   ├── FakeNewsHostView.css
+│   │   │   ├── FakeNewsHostView.tsx
+│   │   │   ├── FakeNewsPlayerView.css
+│   │   │   ├── FakeNewsPlayerView.tsx
+│   │   │   └── views/
+│   │   │       ├── HostFinishedView.tsx
+│   │   │       ├── HostRevealView.tsx
+│   │   │       ├── HostStartingView.tsx
+│   │   │       ├── HostVotingView.tsx
+│   │   │       ├── HostWritingView.tsx
+│   │   │       ├── PlayerFinishedView.tsx
+│   │   │       ├── PlayerRevealView.tsx
+│   │   │       ├── PlayerStartingView.tsx
+│   │   │       ├── PlayerVotingView.tsx
+│   │   │       └── PlayerWritingView.tsx
+│   │   ├── GameContainer.tsx
+│   │   ├── GameView.css
+│   │   ├── QuizClash/
+│   │   │   ├── QuizClashHostView.css
+│   │   │   ├── QuizClashHostView.tsx
+│   │   │   ├── QuizClashPlayerView.css
+│   │   │   ├── QuizClashPlayerView.tsx
+│   │   │   └── views/
+│   │   │       ├── HostAskingQuestionView.tsx
+│   │   │       ├── HostFinishedView.tsx
+│   │   │       ├── HostRevealView.tsx
+│   │   │       ├── HostStartingView.tsx
+│   │   │       ├── PlayerAnsweredView.tsx
+│   │   │       ├── PlayerAnsweringView.tsx
+│   │   │       ├── PlayerFinishedView.tsx
+│   │   │       ├── PlayerRevealingAnswerView.tsx
+│   │   │       └── PlayerStartingView.tsx
+│   │   └── TexasHoldem/
+│   │       ├── TexasHoldemHostView.css
+│   │       ├── TexasHoldemHostView.tsx
+│   │       ├── TexasHoldemPlayerView.css
+│   │       ├── TexasHoldemPlayerView.tsx
+│   │       └── views/
+│   │           ├── HostFinishedView.tsx
+│   │           ├── HostPlayingView.tsx
+│   │           ├── HostStartingView.tsx
+│   │           ├── PlayerFinishedView.tsx
+│   │           ├── PlayerPlayingView.tsx
+│   │           └── PlayerStartingView.tsx
+│   ├── hooks/
+│   │   ├── usePlayerRole.ts
+│   │   └── __tests__/
+│   │       └── usePlayerRole.test.ts
+│   ├── index.css
+│   ├── index.tsx
+│   ├── logo.svg
+│   ├── pages/
+│   │   ├── DebugPage.css
+│   │   ├── DebugPage.tsx
+│   │   ├── GameCreatorPage.css
+│   │   ├── GameCreatorPage.tsx
+│   │   ├── GamePage.css
+│   │   ├── GamePage.tsx
+│   │   ├── GameUITestPage.tsx
+│   │   ├── HomePage.css
+│   │   ├── HomePage.tsx
+│   │   ├── JoinPage.css
+│   │   ├── JoinPage.tsx
+│   │   ├── LobbyPage.css
+│   │   ├── LobbyPage.tsx
+│   │   ├── PageLayouts.css
+│   │   ├── TestComponentsPage.tsx
+│   │   └── wizards/
+│   │       ├── componentDefaultProps.ts
+│   │       ├── GameFlowCanvas.tsx
+│   │       ├── GameFlowStage.css
+│   │       ├── GameFlowStage.tsx
+│   │       ├── MetadataStage.tsx
+│   │       ├── PreviewModal.tsx
+│   │       ├── PropertyInspector.css
+│   │       ├── PropertyInspector.tsx
+│   │       ├── ReviewStage.css
+│   │       ├── ReviewStage.tsx
+│   │       ├── ScreensStage.css
+│   │       ├── ScreensStage.tsx
+│   │       ├── StateNode.tsx
+│   │       ├── StatesStage.tsx
+│   │       └── useGameFlow.ts
+│   ├── react-app-env.d.ts
+│   ├── reportWebVitals.ts
+│   ├── services/
+│   │   └── socketService.ts
+│   ├── setupTests.ts
+│   ├── store/
+│   │   ├── debugStore.test.ts
+│   │   ├── debugStore.ts
+│   │   ├── gameStore.test.ts
+│   │   ├── gameStore.ts
+│   │   ├── playerHandStore.test.ts
+│   │   ├── playerHandStore.ts
+│   │   ├── playerStore.test.ts
+│   │   ├── playerStore.ts
+│   │   ├── roomStore.test.ts
+│   │   └── roomStore.ts
+│   ├── types/
+│   │   └── types.ts
+│   └── utils/
+│       └── layoutUtils.ts
+```
+
+#### Docs (`/Docs`)
+```
+/Docs
+|
+├── Architecture.txt
+├── components.md
+├── component_layout_report.md
+├── component_plan.md
+├── configurable_game_effects.md
+├── Design/
+│   ├── design_system.txt
+│   └── game ideas.txt
+├── expected_new_components.md
+├── Games/
+│   ├── QuizClash.txt
+│   └── quizclash_flow.md
+├── game_config_spec.md
+├── layout_capabilities.md
+├── missing_elements.md
+├── old/
+│   ├── add_game_template.txt
+│   ├── PRD.txt
+│   ├── Requirements.txt
+│   └── TexasHoldemPoker.txt
+├── PartyHub_Whitepaper.md
+├── Plans/
+│   ├── adding_new_function_checklist.md
+│   ├── adding_new_game_checklist.md
+│   ├── adding_new_ui_component_checklist.md
+│   ├── backend_config_plan.txt
+│   ├── component_preview_checklist.md
+│   ├── declerative conditional ui .txt
+│   ├── game_creator_ui_guide.md
+│   ├── next_steps_checklist.md
+│   ├── Old/
+│   │   └── adding a game checklist.txt
+│   └── ui_layout_config_plan.md
+├── PRPs/
+│   └── templates/
+│       └── prp_template.txt
+├── Requirements/
+│   └── compound_functions_feature.md
+├── strategic_analysis.md
+├── UX/
+│   ├── CardsWar.txt
+│   ├── fakeNews.txt
+│   ├── Game design strategy.txt
+│   ├── mainScreens.txt
+│   ├── quizClash.txt
+│   └── ui_ux_update_plan.txt
+└── validation_report.md
+```
+
+### Design & Architecture Summaries
+
+#### 1. Overall Architecture Summary
+
+The system uses a client-server model with a Node.js/Express/Socket.IO backend and a React/TypeScript frontend. The backend manages game rooms, player state, and real-time communication. The frontend is a single-page application that renders different views for the host and players. State synchronization is achieved through `game:state_update` events broadcast from the server.
+
+#### 2. Backend Design Summary
+
+- **Room Management**: `RoomManager` manages all `Room` instances. A `Room` contains players, state (lobby, in-game, finished), and a `GameManager`.
+- **Game Logic**: `GameManager` manages the lifecycle of a game using a `GameFactory`. The factory now implements a **dual-system approach**:
+    1. It first checks for a `[gameId].json` file in `/src/game/configurations/`.
+    2. If a configuration file is found, it instantiates the generic `ConfigurableGame` engine, which runs the game based on the rules and states defined in the JSON. This configuration is first validated against a strict schema defined in `GameConfigValidator.ts`.
+    3. If no configuration is found, it falls back to the legacy system, creating a specific hardcoded game instance (e.g., `QuizClashGame`) that extends `BaseGame`.
+- **Communication**: The backend uses Socket.IO for real-time communication, managed by `SocketManager`. The primary event is `game:state_update`, which sends the complete game state to all clients. A REST API is also exposed via Express for two purposes:
+    - `/debug`: Endpoints for server debugging.
+    - `/api/game-configs`: A full CRUD API for creating, reading, updating, and deleting game configuration JSON files.
+
+#### 3. Frontend Design Summary
+
+- **State Management**: Zustand is used for global state, split into multiple stores within the `/store` directory. `gameStore` now holds an `isConfigurable` flag to inform the UI which rendering system to use.
+- **Component Structure**: The UI is divided into pages (`/pages`). The `HomePage` now fetches a list of all games (both hardcoded and from the `/api/game-configs` endpoint) to populate the game selection screen.
+- **Dynamic Rendering**: The `GamePage` contains a `GameContainer` that acts as a router.
+    - If `isConfigurable` is `false`, it renders the specific, hardcoded game view (e.g., `QuizClashHostView`).
+    - If `isConfigurable` is `true`, it renders the `DynamicViewRenderer`. This component is a pure renderer; it receives a complete UI definition from the server that can change for each player. It is responsible not only for rendering the specified components but also for applying dynamic layout rules (sizing, alignment, spacing) defined in the configuration. The server can now define different UIs for players within the same game state (e.g., showing a "Waiting" message to a player who has answered, while others still see the question). This server-driven conditional logic makes the client simpler and the game's configuration more powerful. See `Docs/layout_capabilities.md` for more details on the layout system.
+- **Game Creation**: A new `GameCreatorPage` has been added, providing a user interface that communicates with the `/api/game-configs` endpoint to allow users to create and save their own game configuration files.
+- **Communication**: `services/socketService.ts` encapsulates all Socket.IO logic. It listens for `game:state_update` events and updates the Zustand stores, including the `isConfigurable` flag based on the incoming data structure. UI components do not interact with the socket directly.
+
+#### 4. Design System Summary
+
+- **Color Palette**: A dual-layer system. The "Platform" layer uses a modern dark theme with deep purples/blues (`#12101F`, `#1C192B`) and a vibrant purple accent (`#8A2BE2`). Each "Game" layer has its own unique, energetic palette.
+- **Typography**: The platform uses 'Inter' for clean, modern UI text. Games use more expressive, thematic fonts like 'Bangers' and 'Luckiest Guy'.
+- **Spacing**: Uses a base unit of 1rem (16px) for consistent margins, padding, and gaps.
+- **Implementation**: All design tokens are defined as CSS Custom Properties in `index.css` for global consistency.
+
+#### 5. Sonic System Summary
+- **Platform Sounds**: Subtle, clean, and functional UI sounds (clicks, notifications) to provide feedback without being intrusive.
+- **Game Sounds**: Each game has a unique, energetic soundtrack and memorable sound effects (stingers for correct/wrong answers, timers, etc.) to enhance the "party" feel. The platform has a main audio jingle and a universal "achievement unlocked" sound.
+
+#### 6. Voice & Tone Summary
+- **Platform Voice**: Clear, concise, and helpful (like a "Concierge"). Used for system messages, settings, and menus.
+- **Game Voice**: Witty, energetic, and playful (like a "Host"). Used for in-game instructions, questions, and results to entertain players.
+
+### Available Games (`client/src/game/`)
+
+- **CardsWar**: A simple card game where players compare cards, and the higher card wins. Ties result in a "war". Contains views for both host and player.
+- **FakeNewsGame**: A trivia game where players submit fake answers to a question, and then vote on what they believe is the real answer. Contains views for writing, voting, and revealing answers for both host and player.
+- **QuizClash**: A multiple-choice trivia game where players answer questions as quickly as possible. Contains views for asking questions and revealing answers for both host and player.
+- **TexasHoldem**: A poker game where players are dealt two private cards and share five community cards, betting on the strength of their hand.
+- **(Dynamically Created Games)**: The new system allows for an unlimited number of games to be created via JSON configuration. These games are powered by the `ConfigurableGame` engine and the `DynamicViewRenderer` on the frontend.

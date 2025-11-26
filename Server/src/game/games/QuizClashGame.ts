@@ -2,9 +2,12 @@ import { BaseGame } from '../BaseGame.js';
 import { Player, QuizClashGameState, QuizClashQuestion } from '../../types/interfaces.js';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 // Load questions from the new JSON file
-const questionsPath = path.resolve(process.cwd(), 'src/game/games/quizclash_questions.json');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const questionsPath = path.resolve(__dirname, 'quizclash_questions.json');
 const questionsData = JSON.parse(fs.readFileSync(questionsPath, 'utf-8'));
 const allQuestions = questionsData.questions;
 

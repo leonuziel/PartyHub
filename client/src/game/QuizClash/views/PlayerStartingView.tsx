@@ -1,5 +1,5 @@
 import React from 'react';
-import { PlayerStatusContainer } from '../../../components/display/PlayerStatusContainer';
+import { PlayerStatusContainer } from '../../../components/old/display/PlayerStatusContainer';
 import { Player } from '../../../types/types';
 
 interface PlayerStartingViewProps {

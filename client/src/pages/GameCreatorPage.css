@@ -1,0 +1,662 @@
+/* The .disable-scroll class has been removed */
+
+.page-content {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #1c192b;
+    padding: 2rem;
+    border-radius: 8px;
+    transition: max-width 0.4s ease-in-out;
+}
+
+.page-content.is-wide {
+    max-width: 1200px;
+}
+
+.wizard-progress-bar {
+    width: 100%;
+    height: 10px;
+    background-color: #333;
+    border-radius: 5px;
+    margin-bottom: 0.5rem;
+    overflow: hidden;
+}
+
+.wizard-progress {
+    height: 100%;
+    background-color: #8A2BE2; /* Accent Purple */
+    transition: width 0.3s ease-in-out;
+}
+
+.form-section {
+    margin-bottom: 0rem;
+    padding: 1.5rem;
+    border: 1px solid #333;
+    border-radius: 6px;
+    width:100%;
+}
+
+.form-section h2 {
+    margin-top: 0;
+    color: #8A2BE2;
+}
+
+.form-section p {
+    font-size: 0.9rem;
+    color: #aaa;
+    margin-bottom: 1.5rem;
+}
+
+.wizard-navigation {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Input and Label Styles */
+label {
+    display: block;
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+    color: #eee;
+}
+
+input[type="text"],
+input[type="number"],
+textarea {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background-color: #12101F;
+    color: #eee;
+    font-size: 1rem;
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* State management specific styles */
+.states-stage-layout {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+}
+.states-add-column {
+    flex: 1;
+    background-color: #12101F;
+    padding: 1rem;
+    border-radius: 6px;
+}
+.states-list-column {
+    flex: 1.5;
+    background-color: #12101F;
+    padding: 1rem;
+    border-radius: 6px;
+}
+.states-add-column h3, .states-list-column h3 {
+    margin-top: 0;
+    color: #8A2BE2;
+}
+.initial-state-instruction {
+    font-size: 0.9rem;
+    color: #aaa;
+    margin: 0 0 1rem 0;
+}
+
+.state-input-group {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.state-input-group input {
+    flex-grow: 1;
+    margin-top: 0;
+}
+
+.state-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.state-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background-color: #12101F;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+}
+
+.state-list li span {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.state-list li input[type="radio"] {
+    width: auto; /* Override default width for radio */
+    margin: 0;
+}
+
+.remove-state-btn {
+    background: none;
+    border: none;
+    color: #ff4d4d;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0 0.5rem;
+}
+.remove-state-btn:disabled {
+    color: #666;
+    cursor: not-allowed;
+}
+
+.state-selector {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1.5rem;
+    background-color: #12101F;
+    color: #eee;
+    border: 1px solid #444;
+    border-radius: 4px;
+}
+
+.screen-builder-container {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.component-palette {
+    flex-basis: 150px;
+    /* Use flex-basis instead of width */
+    flex-shrink: 0;
+    flex-grow: 0;
+    /* Prevent growing by default */
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 1rem;
+    background-color: #12101F;
+    transition: flex-basis 0.4s ease-in-out;
+    /* Smooth transition */
+    overflow: hidden;
+    /* Prevents content from spilling during transition */
+}
+
+.component-palette.is-expanded {
+    flex-basis: 650px;
+    /* Expanded width */
+}
+
+.component-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 0.5rem;
+    padding-top: 0.75rem;
+}
+
+.draggable-component {
+    padding: 0.5rem;
+    /* Reduced padding for smaller grid items */
+    font-size: 0.85rem;
+    /* Smaller font size */
+    background-color: #333;
+    border-radius: 4px;
+    cursor: grab;
+    text-align: center;
+    font-weight: bold;
+    user-select: none;
+    /* Prevent text selection while dragging */
+}
+
+.component-palette h3 {
+    margin-top: 0;
+    font-size: 1.1rem;
+    color: #8A2BE2;
+}
+
+.component-category-details {
+    margin-bottom: 0.5rem;
+}
+
+.component-category-details .component-grid {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.component-category-details[open] .component-grid {
+    max-height: 500px;
+    /* Adjust as needed, large enough for content */
+    transition: max-height 0.5s ease-in;
+}
+
+.component-category-summary {
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0.5rem;
+    background-color: #333;
+    border-radius: 4px;
+    outline: none;
+    transition: background-color 0.2s;
+}
+
+.component-category-summary:hover {
+    background-color: #444;
+}
+
+.component-category-details[open] > .component-category-summary {
+    background-color: #8A2BE2;
+    color: white;
+}
+
+.component-category-details[open] {
+    padding-bottom: 0.5rem;
+}
+
+/* This style block is now combined with the .draggable-component block above */
+
+.draggable-component.is-overlay {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    transform: scale(1.05);
+    z-index: 1000; /* Ensure it's on top */
+}
+
+.component-palette small {
+    display: block;
+    margin-top: 1rem;
+    color: #888;
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+.view-editors {
+    flex-grow: 1;
+    display: flex;
+    gap: 1.5rem; /* Change direction to row for side-by-side layout */
+}
+
+.view-editor {
+    flex: 1; /* Make each editor take up equal space */
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 1rem;
+}
+
+.view-editor {
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 1rem;
+}
+
+.view-editor h4 {
+    margin-top: 0;
+    position: relative;
+    padding-right: 80px; /* Add padding to make space for the button */
+}
+
+.dropzone {
+    min-height: 200px;
+    background-color: rgba(0,0,0,0.2);
+    border: 2px dashed #333;
+    border-radius: 4px;
+    padding: 1rem;
+    transition: border-color 0.2s;
+}
+
+.dropzone p {
+    color: #888;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.dropped-component-placeholder {
+    padding: 0.75rem;
+    background-color: #8A2BE2;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    color: white;
+    font-weight: bold;
+}
+
+.flow-columns {
+    display: flex;
+    gap: 2rem;
+}
+
+.flow-column {
+    flex: 1;
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 1.5rem;
+    background-color: #12101F;
+}
+
+.flow-column h3 {
+    margin-top: 0;
+    color: #8A2BE2;
+    border-bottom: 1px solid #333;
+    padding-bottom: 0.5rem;
+}
+
+.form-subsection {
+    margin-bottom: 1.5rem;
+}
+
+.form-subsection select {
+     width: 100%;
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background-color: #12101F;
+    color: #eee;
+}
+
+.list-display h4 {
+    margin-top: 2rem;
+    border-top: 1px solid #333;
+    padding-top: 1rem;
+}
+
+.list-display ul {
+    list-style: none;
+    padding: 0;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.list-display li {
+    padding: 0.5rem;
+    background-color: #333;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+}
+
+.conditional-view-container {
+    border: 1px solid #333;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: #12101F;
+    position: relative;
+}
+
+.preview-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.preview-modal-content {
+    background-color: #12101F;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 90%;
+    height: 90%;
+    overflow: auto;
+    position: relative;
+    border: 1px solid #8A2BE2;
+}
+
+.preview-modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.preview-container {
+    width: 100%;
+    height: 100%;
+}
+
+.host-preview {
+    background: linear-gradient(135deg, #1e1e32, #12101F);
+}
+
+.player-preview {
+    background: linear-gradient(135deg, #1c192b, #12101F);
+    max-width: 400px;
+    max-height: 800px;
+    margin: auto;
+    border: 10px solid black;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+.conditional-view-container label {
+    font-size: 0.9rem;
+    color: #aaa;
+    margin-bottom: 0.5rem;
+}
+
+.view-editor button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #8A2BE2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 1rem;
+}
+
+.view-editor button:hover {
+    background-color: #7B24CB;
+}
+
+.view-editor .button-subtle {
+    background-color: #444;
+    margin-top: 0.5rem;
+}
+
+.view-editor .button-subtle:hover {
+    background-color: #555;
+}
+
+/* --- State Canvas Styles --- */
+
+.wizard-page-title {
+  font-family: var(--ph-font-family-platform);
+  font-weight: 300; /* Inter Semibold */
+  font-size: 1.5rem;
+  color: var(--ph-color-text-primary);
+  text-align: center;
+  margin:0;
+}
+.state-canvas-wrapper {
+    width: 100%;
+    height: 280px;
+    /* Drastically reduced height for a compact default view */
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid #444;
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+}
+
+
+.zoom-indicator {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: rgba(0,0,0,0.5);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    z-index: 20; /* Ensure it's above the drag handle */
+}
+
+.background-drag-handle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    cursor: grab;
+}
+
+.nodes-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform-origin: top left;
+    pointer-events: none; /* Make container invisible to clicks */
+}
+
+/* The .canvas-drag-handle class has been removed as it is no longer used. */
+
+.state-node {
+    position: absolute;
+    width: 220px;
+    z-index: 10; /* Ensure nodes are on top of the drag handle */
+    pointer-events: auto; /* Re-enable clicks on nodes */
+    background-color: #1C192B;
+    border: 1px solid #8A2BE2;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    user-select: none;
+}
+
+.state-node-header {
+    background-color: #8A2BE2;
+    color: white;
+    padding: 0.5rem 0.75rem;
+    font-weight: bold;
+    cursor: grab;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.state-node-body {
+    padding: 0.75rem;
+}
+
+.event-section {
+    background-color: #12101F;
+    padding: 0.5rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.event-section strong {
+    font-size: 0.9rem;
+}
+
+.add-event-btn {
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 1.2rem;
+    line-height: 24px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.event-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.event-list li {
+    padding: 0.3rem 0.5rem;
+    background-color: #333;
+    border-radius: 3px;
+    margin-bottom: 0.25rem;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.canvas-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Re-center since description is gone */
+    margin-bottom: 1rem;
+}
+
+.canvas-description {
+    font-size: 0.9rem;
+    color: #aaa;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+.canvas-header p {
+    margin-bottom: 0;
+}
+
+/* Fullscreen mode for the canvas */
+.canvas-fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #12101F;
+    z-index: 2000;
+    margin: 0;
+    padding: 1rem;
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.canvas-fullscreen .state-canvas-wrapper {
+    flex-grow: 1; /* Make canvas fill remaining space */
+    height: auto;
+}
+
+/* Hide wizard navigation and other page elements when canvas is fullscreen */
+.page-container:has(.canvas-fullscreen) .wizard-navigation,
+.page-container:has(.canvas-fullscreen) ~ .page-title, /* This may not work depending on DOM structure, but the idea is to hide siblings */
+.page-container:has(.canvas-fullscreen) .wizard-progress-bar {
+    display: none;
+}
+body:has(.canvas-fullscreen) .page-title {
+    display: none;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

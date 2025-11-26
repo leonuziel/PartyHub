@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { RoomData, RoomState } from '../types/types';
+import { RoomData } from '../types/types';
 
 interface RoomStateStore {
   room: RoomData | null;

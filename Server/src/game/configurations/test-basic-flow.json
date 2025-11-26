@@ -1,0 +1,52 @@
+{
+  "metadata": {
+    "gameId": "test-basic-flow",
+    "title": "Basic Flow Test",
+    "description": "A test for basic state transitions.",
+    "minPlayers": 1,
+    "maxPlayers": 8
+  },
+  "gameData": {},
+  "initialGameState": {
+    "testCounter": 0
+  },
+  "playerAttributes": {},
+  "actions": {
+    "incrementCounter": [
+      {
+        "function": "incrementProperty",
+        "args": ["testCounter"]
+      }
+    ]
+  },
+  "initialState": "LOBBY",
+  "states": {
+    "LOBBY": {},
+    "GAME": {
+      "onEnter": [
+        {
+          "runAction": "incrementCounter"
+        }
+      ]
+    },
+    "END": {}
+  },
+  "events": {
+    "next": {
+      "permissions": ["host"]
+    }
+  },
+  "transitions": [
+    {
+      "from": "LOBBY",
+      "to": "GAME",
+      "event": "next"
+    },
+    {
+      "from": "GAME",
+      "to": "END",
+      "event": "next"
+    }
+  ],
+  "ui": {}
+}

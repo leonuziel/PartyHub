@@ -7,12 +7,13 @@ import FakeNewsHostView from './FakeNewsGame/FakeNewsHostView';
 import FakeNewsPlayerView from './FakeNewsGame/FakeNewsPlayerView';
 import { CardsWarHostView } from './CardsWar/CardsWarHostView';
 import { CardsWarPlayerView } from './CardsWar/CardsWarPlayerView';
-import HostFrame from '../components/layout/HostFrame';
+import HostFrame from '../components/old/layout/HostFrame';
 import TexasHoldemHostView from './TexasHoldem/TexasHoldemHostView';
 import TexasHoldemPlayerView from './TexasHoldem/TexasHoldemPlayerView';
+import { DynamicViewRenderer } from './DynamicViewRenderer';
 
 export const GameContainer: React.FC = () => {
-  const gameState = useGameStore((state) => state.gameState);
+  const { gameState, isConfigurable } = useGameStore();
   const { isHost } = usePlayerRole();
 
   if (!gameState) {
@@ -20,6 +21,10 @@ export const GameContainer: React.FC = () => {
   }
 
   const renderGameView = () => {
+    if (isConfigurable) {
+      return <DynamicViewRenderer />;
+    }
+
     switch (gameState.gameId) {
       case 'quizclash':
         return isHost ? <QuizClashHostView /> : <QuizClashPlayerView />;
@@ -36,7 +41,7 @@ export const GameContainer: React.FC = () => {
 
   const gameView = renderGameView();
 
-  if (isHost) {
+  if (isHost && !isConfigurable && gameState.gameId !== 'quizclash') { // The HostFrame is part of the dynamic layout system
     return (
       <HostFrame>
         {gameView}

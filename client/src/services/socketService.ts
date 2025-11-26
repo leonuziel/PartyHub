@@ -57,7 +57,9 @@ class SocketService {
     this.socket.on('game:state_update', (data: any) => {
       debugStore.setLastEvent('game:state_update');
       console.log('Game state update received:', data);
-      useGameStore.getState().setGameState(data);
+      const gameState = Array.isArray(data) ? data[0] : data;
+      const isConfigurable = gameState.hasOwnProperty('ui');
+      useGameStore.getState().setGameState(gameState, isConfigurable);
     });
 
     this.socket.onAny((event, ...args) => {
@@ -99,6 +101,17 @@ class SocketService {
 
   public sendPlayerAction(roomCode: string, action: any) {
     this.emit('player:action', { roomCode, action });
+  }
+  
+  public sendGameAction(actionType: string, payload: any) {
+    const roomCode = useRoomStore.getState().room?.roomCode;
+    if (!roomCode) {
+      console.error("Cannot send game action, no room code found.");
+      return;
+    }
+    const action = { type: actionType, payload };
+    console.log(`[SocketService] Emitting game:action:`, action);
+    this.emit('game:action', { roomCode, action });
   }
 }
 

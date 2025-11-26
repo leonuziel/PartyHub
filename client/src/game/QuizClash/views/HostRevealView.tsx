@@ -1,7 +1,7 @@
 import React from 'react';
-import { QuestionDisplay } from '../../../components/display/QuestionDisplay';
-import { AnswerResult } from '../../../components/display/AnswerResult';
-import { Leaderboard } from '../../../components/display/Leaderboard';
+import { QuestionDisplay } from '../../../components/old/display/QuestionDisplay';
+import { AnswerResult } from '../../../components/old/display/AnswerResult';
+import { Leaderboard } from '../../../components/old/display/Leaderboard';
 import { Player } from '../../../types/types';
 
 interface HostRevealViewProps {

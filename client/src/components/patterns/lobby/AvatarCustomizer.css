@@ -1,0 +1,88 @@
+.avatar-customizer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    background-color: #1c192b;
+    border-radius: 12px;
+    max-width: 500px;
+    margin: auto;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  .avatar-customizer h2 {
+    color: #fff;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+  }
+  
+  .avatar-selection-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .avatar-option {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .avatar-option:hover {
+    transform: scale(1.1);
+  }
+  
+  .avatar-option.selected {
+    border-color: #8a2be2;
+    box-shadow: 0 0 15px rgba(138, 43, 226, 0.7);
+  }
+  
+  .nickname-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .nickname-form input {
+    padding: 0.8rem 1rem;
+    border: 2px solid #332f4e;
+    background-color: #12101f;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    transition: border-color 0.2s;
+  }
+  
+  .nickname-form input:focus {
+    outline: none;
+    border-color: #8a2be2;
+  }
+  
+  .nickname-form button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    background-color: #8a2be2;
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .nickname-form button:hover:not(:disabled) {
+    background-color: #701ebd;
+  }
+  
+  .nickname-form button:disabled {
+    background-color: #332f4e;
+    cursor: not-allowed;
+  }
+  

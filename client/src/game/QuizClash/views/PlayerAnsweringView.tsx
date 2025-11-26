@@ -1,6 +1,6 @@
 import React from 'react';
-import { AnswerGrid } from '../../../components/controls/AnswerGrid';
-import { PlayerViewContainer } from '../../../components/layout/PlayerViewContainer';
+import { AnswerGrid } from '../../../components/old/controls/AnswerGrid';
+import { PlayerViewContainer } from '../../../components/old/layout/PlayerViewContainer';
 
 interface PlayerAnsweringViewProps {
   answers: string[];

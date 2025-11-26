@@ -1,7 +1,7 @@
 import React from 'react';
-import { RankDisplay } from '../../../components/display/RankDisplay';
-import { PodiumList } from '../../../components/display/PodiumList';
-import { Button } from '../../../components/controls/Button';
+import { RankDisplay } from '../../../components/old/display/RankDisplay';
+import { PodiumList } from '../../../components/old/display/PodiumList';
+import { Button } from '../../../components/old/controls/Button';
 import { Player } from '../../../types/types';
 
 interface PlayerFinishedViewProps {

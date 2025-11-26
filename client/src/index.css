@@ -4,7 +4,7 @@
   --ph-color-bg-secondary: #1C192B; /* Deep Hive */
   --ph-color-text-primary: #EAE8FF; /* Ghost White */
   --ph-color-text-secondary: #A09CC9; /* Lunar */
-  --ph-color-accent: #8A2BE2; /* Electric Orchid */
+  --ph-color-accent: #4a4a7a; /* Electric Orchid */
   --ph-color-border-subtle: #33304D;
 
   /* Typography */
@@ -25,6 +25,8 @@
   --border-radius-md: 0.5rem;
   --border-radius-lg: 1rem;
 }
+
+/* The overflow-y: scroll rule has been removed as it's no longer the preferred method */
 
 body {
   margin: 0;

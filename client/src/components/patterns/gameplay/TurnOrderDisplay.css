@@ -1,0 +1,51 @@
+.turn-order-display {
+    padding: 1rem;
+    background-color: #1c192b;
+    border-radius: 12px;
+    width: 100%;
+  }
+  
+  .turn-order-display h4 {
+    color: #fff;
+    text-align: center;
+    margin: 0 0 1rem;
+    font-size: 1.2rem;
+  }
+  
+  .player-avatar-list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .player-avatar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0.5;
+    transition: all 0.3s;
+  }
+  
+  .player-avatar-container.active {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  
+  .player-avatar-container img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 3px solid #4a4564;
+  }
+  
+  .player-avatar-container.active img {
+    border-color: #39e686;
+  }
+  
+  .player-nickname-label {
+    color: #fff;
+    font-size: 0.9rem;
+  }
+  

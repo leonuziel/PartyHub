@@ -12,7 +12,8 @@ export interface Player {
   avatar?: string;
   hasAnswered?: boolean;
   score: number;
-
+  scoreChange?: number;
+  answerId?: string;
 }
 
 export interface RoomData {
@@ -32,8 +33,9 @@ export interface QuizClashQuestion {
 
 
 export interface GameState {
+  isConfigurable: boolean;
   gameState: any | null; // Can be any game's state
-  setGameState: (state: any) => void;
+  setGameState: (state: any, isConfigurable?: boolean) => void;
   clearGameState: () => void;
 }
 
@@ -83,6 +85,12 @@ export interface Card {
   rank: number;
   value: number;
   name: string;
+}
+
+export interface CardData {
+    id: string;
+    content: React.ReactNode;
+    faceUp: boolean;
 }
 
 export interface CardsWarGameState {

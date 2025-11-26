@@ -1,7 +1,7 @@
 import React from 'react';
-import { CenteredMessage } from '../../../components/layout/CenteredMessage';
-import { GameTitle } from '../../../components/display/GameTitle';
-import { WinnerDisplay } from '../../../components/display/WinnerDisplay';
+import { CenteredMessage } from '../../../components/old/layout/CenteredMessage';
+import { GameTitle } from '../../../components/old/display/GameTitle';
+import { WinnerDisplay } from '../../../components/old/display/WinnerDisplay';
 import { Player } from '../../../types/types';
 
 interface HostFinishedViewProps {

@@ -1,0 +1,49 @@
+The Core Idea: Declarative Conditional UI
+Instead of the client having to manage its own "waiting" state, the server would be responsible for deciding which UI to show each player based on their individual properties (playerAttributes).
+
+In the quizclash.json config, the ui for a specific role would change from a static array of components to an array of potential views, each with a condition. The server would evaluate these conditions for each player and send them only the component list that they should render.
+
+How it Would Look in the Config
+Let's redesign the ASKING_QUESTION state in quizclash.json to use this new pattern. The player's UI would become an array of views, and the server would pick the first one whose condition evaluates to true.
+
+How this works:
+
+The player key for the ASKING_QUESTION state is now an array of view objects.
+The server processes this array in order for each player when building the UI state.
+For Player A (who has not answered):
+It checks the first view's condition: {{player.currentAnswer !== null}} is false.
+It moves to the second view, which has no condition, making it the default.
+Player A is sent the UI containing the QuestionDisplay and AnswerGrid.
+For Player B (who *has* answered):
+It checks the first view's condition: {{player.currentAnswer !== null}} is true.
+It uses this view and stops processing.
+Player B is sent the UI containing only the CenteredMessage.
+Pros and Cons of This Approach
+👍 Pros:
+Massively Increased Declarative Power: This makes your configuration truly drive the entire game experience. Complex UI logic can be defined in JSON instead of hardcoded in React components.
+Centralized Logic: All game flow and UI logic now lives in one place (the config), managed by the server. The client becomes a pure, "dumb" renderer of what it's told to render.
+Simplified Client Code: You could completely remove the selectedAnswer state from your gameStore and the complex logic from DynamicViewRenderer. The renderer would once again become a simple loop that displays the components it receives.
+More Than Just Answering: This pattern is incredibly flexible. You can use it to show different UIs for players who are:
+"Out" in an elimination round.
+A special role, like a judge or spy.
+Affected by a power-up or status effect.
+👎 Cons:
+Slightly Increased Latency for Feedback: The "instant" feedback from the optimistic UI update is lost. Now, the feedback is only as fast as a round trip to the server (submitAnswer event sent -> server processes and sends new gameState -> client renders). This is usually fast enough (under 100ms) to feel near-instant, but it is a trade-off.
+More Server-Side Work: The UIStateBuilder on the server becomes more complex. It needs to loop through each player and evaluate their potential UI views individually.
+Potentially Larger State Object: Though unlikely to be an issue, the ui object within the main gameState could become slightly larger if players have very different UIs.
+Implementation Steps
+If you want to proceed, here's the high-level plan:
+
+Backend: Update `UIStateBuilder.ts`
+This is the most significant change.
+When building the ui.players object, the logic needs to change.
+Instead of just resolving props for a static component list, it must first check if the ui[currentState][role] is an array of these new view objects.
+If it is, it must iterate through that array for each player, resolve the condition string for that player, and use the components from the first matching view.
+Frontend: Simplify `DynamicViewRenderer.tsx`
+You would revert the changes we just discussed.
+Remove the selectedAnswer state from useGameStore.
+Remove the useEffect hook that resets the state.
+Remove the special logic that injects disabled and selectedAnswer props into AnswerGrid.
+The renderer becomes simple again, as the server now does all the heavy lifting of deciding which components to show.
+Recommendation
+I highly recommend you adopt this new approach.
