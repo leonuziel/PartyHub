@@ -226,40 +226,40 @@ const NewButtonProps = baseStylingProps.extend({
 }).passthrough();
 
 const ChoiceSelectorProps = baseStylingProps.extend({
-    options: z.string(), // template variable
-    onSelect: uiActionSchema.optional(),
-    selectionMode: z.enum(['single', 'multiple']).optional(),
-    layout: z.enum(['grid', 'list', 'carousel']).optional(),
-    disabled: z.union([z.boolean(), z.string()]).optional(),
+  options: z.string(), // template variable
+  onSelect: uiActionSchema.optional(),
+  selectionMode: z.enum(['single', 'multiple']).optional(),
+  layout: z.enum(['grid', 'list', 'carousel']).optional(),
+  disabled: z.union([z.boolean(), z.string()]).optional(),
 }).passthrough();
 
 const TextInputProps = baseStylingProps.extend({
-    placeholder: z.string().optional(),
-    maxLength: z.number().optional(),
-    showCounter: z.boolean().optional(),
-    onChange: uiActionSchema.optional(),
-    multiline: z.boolean().optional(),
+  placeholder: z.string().optional(),
+  maxLength: z.number().optional(),
+  showCounter: z.boolean().optional(),
+  onChange: uiActionSchema.optional(),
+  multiline: z.boolean().optional(),
 }).passthrough();
 
 const SliderProps = baseStylingProps.extend({
-    min: z.number().optional(),
-    max: z.number().optional(),
-    step: z.number().optional(),
-    onChange: uiActionSchema.optional(),
-    defaultValue: z.number().optional(),
+  min: z.number().optional(),
+  max: z.number().optional(),
+  step: z.number().optional(),
+  onChange: uiActionSchema.optional(),
+  defaultValue: z.number().optional(),
 }).passthrough();
 
 // Feedback & State
 const TimerProps = baseStylingProps.extend({
-    duration: z.number(),
-    type: z.enum(['countdown', 'progress']).optional(),
-    onComplete: uiActionSchema.optional(),
-    label: z.string().optional(),
+  duration: z.number(),
+  type: z.enum(['countdown', 'progress']).optional(),
+  onComplete: uiActionSchema.optional(),
+  label: z.string().optional(),
 }).passthrough();
 
 const StateIndicatorProps = baseStylingProps.extend({
-    status: z.string(), // template variable
-    indicator: z.enum(['icon', 'text', 'color']).optional(),
+  status: z.string(), // template variable
+  indicator: z.enum(['icon', 'text', 'color']).optional(),
 }).passthrough();
 
 // Game Tools
@@ -334,10 +334,10 @@ const VotingGridProps = baseStylingProps.extend({
 }).passthrough();
 
 const CorrectAnswerOverlayProps = baseStylingProps.extend({
-    options: z.string(), // template variable
-    correctAnswerId: z.string(), // template variable
-    players: z.string(), // template variable
-    onComplete: uiActionSchema.optional(),
+  options: z.string(), // template variable
+  correctAnswerId: z.string(), // template variable
+  players: z.string(), // template variable
+  onComplete: uiActionSchema.optional(),
 }).passthrough();
 
 const ScoreAccumulationBarProps = baseStylingProps.extend({
@@ -453,31 +453,31 @@ const PlayerResultViewProps = baseStylingProps.extend({
 }).passthrough();
 
 const TurnOrderDisplayProps = baseStylingProps.extend({
-    players: z.string(),
-    activePlayerId: z.string(),
+  players: z.string(),
+  activePlayerId: z.string(),
 }).passthrough();
 
 const MatchupDisplayProps = baseStylingProps.extend({
-    player1: z.string(),
-    player2: z.string(),
-    matchupTitle: z.string().optional(),
+  player1: z.string(),
+  player2: z.string(),
+  matchupTitle: z.string().optional(),
 }).passthrough();
 
 const PersonalScoreCardProps = baseStylingProps.extend({
-    player: z.string(),
-    scoreDetails: z.string(),
-    totalScore: z.number(),
+  player: z.string(),
+  scoreDetails: z.string(),
+  totalScore: z.number(),
 }).passthrough();
 
 const FinalResultsScreenProps = baseStylingProps.extend({
-    players: z.string(),
-    onPlayAgain: uiActionSchema,
-    onExit: uiActionSchema,
+  players: z.string(),
+  onPlayAgain: uiActionSchema,
+  onExit: uiActionSchema,
 }).passthrough();
 
 const EmojiReactionToolbarProps = baseStylingProps.extend({
-    onReaction: uiActionSchema,
-    allowedReactions: z.array(z.string()).optional(),
+  onReaction: uiActionSchema,
+  allowedReactions: z.array(z.string()).optional(),
 }).passthrough();
 
 
@@ -508,7 +508,7 @@ const layoutSchema = z.object({
 const componentSchema: z.ZodType<any> = z.lazy(() => z.discriminatedUnion('component', [
   // New Generic Components
   z.object({ component: z.literal('Container'), props: ContainerProps, layout: layoutSchema.optional() }),
-  z.object({ component: z.literal('Grid'), props: GridProps, layout: layoutSchema.optional(), children: z.array(componentSchema).optional()}),
+  z.object({ component: z.literal('Grid'), props: GridProps, layout: layoutSchema.optional(), children: z.array(componentSchema).optional() }),
   z.object({ component: z.literal('Spacer'), props: SpacerProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('Stack'), props: StackProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('TextDisplay'), props: TextDisplayProps, layout: layoutSchema.optional() }),
@@ -550,10 +550,10 @@ const componentSchema: z.ZodType<any> = z.lazy(() => z.discriminatedUnion('compo
   z.object({ component: z.literal('PlayerVotingView'), props: PlayerVotingViewProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('PlayerResultView'), props: PlayerResultViewProps, layout: layoutSchema.optional() }),
   z.object({ component: z.literal('TurnOrderDisplay'), props: TurnOrderDisplayProps, layout: layoutSchema.optional() }),
-    z.object({ component: z.literal('MatchupDisplay'), props: MatchupDisplayProps, layout: layoutSchema.optional() }),
-    z.object({ component: z.literal('PersonalScoreCard'), props: PersonalScoreCardProps, layout: layoutSchema.optional() }),
-    z.object({ component: z.literal('FinalResultsScreen'), props: FinalResultsScreenProps, layout: layoutSchema.optional() }),
-    z.object({ component: z.literal('EmojiReactionToolbar'), props: EmojiReactionToolbarProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('MatchupDisplay'), props: MatchupDisplayProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('PersonalScoreCard'), props: PersonalScoreCardProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('FinalResultsScreen'), props: FinalResultsScreenProps, layout: layoutSchema.optional() }),
+  z.object({ component: z.literal('EmojiReactionToolbar'), props: EmojiReactionToolbarProps, layout: layoutSchema.optional() }),
 
   // Old Components
   z.object({ component: z.literal('DebugPanel'), props: DebugPanelProps, layout: layoutSchema.optional() }),
@@ -619,7 +619,7 @@ const uiSchema = z.record(z.object({
   }).optional(),
   // Player's UI can be a simple component list or an array of conditional views
   player: z.union([
-    z.object({ 
+    z.object({
       components: z.array(componentSchema),
       layout: layoutSchema.optional(), // Allow layout settings on the simple player view
     }),
@@ -632,7 +632,7 @@ const baseEffectSchema = z.object({
 });
 
 // Define a placeholder for the recursive schema
-const effectSchema: z.ZodType<any> = z.lazy(() => 
+const effectSchema: z.ZodType<any> = z.lazy(() =>
   z.union([
     runActionSchema,
     forEachPlayerSchema,
@@ -669,13 +669,14 @@ const functionEffectSchema = z.discriminatedUnion('function', [
 ]);
 
 const stateSchema = z.object({
-    onEnter: z.array(effectSchema).optional(),
-  });
+  onEnter: z.array(effectSchema).optional(),
+  allowedEvents: z.array(z.string()).optional(),
+});
 
 const gameEventSchema = z.object({
   permissions: z.array(z.enum(['host', 'player', 'server'])),
   effects: z.array(effectSchema).optional(),
-  });
+});
 
 const gameTransitionSchema = z.object({
   from: z.string(),

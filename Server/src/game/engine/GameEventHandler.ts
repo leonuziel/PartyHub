@@ -12,7 +12,7 @@ export class GameEventHandler {
     private broadcast: (event: string, payload: any) => void,
     private getSanitizedGameState: () => any,
     private hostId: string
-  ) {}
+  ) { }
 
   public handle(type: string, actorId: string, payload?: any) {
     console.log(`Executing event: ${type} for actor: ${actorId}`);
@@ -26,7 +26,16 @@ export class GameEventHandler {
       console.warn(`Event ${type} denied for ${actorId}.`);
       return;
     }
-    
+
+    // State-based Event Whitelisting
+    const currentStateConfig = this.config.states[this.gameState.status];
+    const allowedEvents = currentStateConfig?.allowedEvents || [];
+
+    if (!allowedEvents.includes(type) && actorId !== 'server') {
+      console.warn(`Event ${type} blocked: Not allowed in state ${this.gameState.status}`);
+      return;
+    }
+
     let stateChanged = false;
     if (eventConfig.effects) {
       this.effectExecutor.execute(eventConfig.effects, { actorId, payload });

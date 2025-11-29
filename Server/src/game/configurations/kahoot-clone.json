@@ -13,30 +13,66 @@
         "questionText": "What is the chemical symbol for gold?",
         "correctAnswerId": "Au",
         "options": [
-          { "id": "Ag", "text": "Ag" },
-          { "id": "Go", "text": "Go" },
-          { "id": "Gd", "text": "Gd" },
-          { "id": "Au", "text": "Au" }
+          {
+            "id": "Ag",
+            "text": "Ag"
+          },
+          {
+            "id": "Go",
+            "text": "Go"
+          },
+          {
+            "id": "Gd",
+            "text": "Gd"
+          },
+          {
+            "id": "Au",
+            "text": "Au"
+          }
         ]
       },
       {
         "questionText": "Which planet is known as the Red Planet?",
         "correctAnswerId": "Mars",
         "options": [
-          { "id": "Jupiter", "text": "Jupiter" },
-          { "id": "Venus", "text": "Venus" },
-          { "id": "Saturn", "text": "Saturn" },
-          { "id": "Mars", "text": "Mars" }
+          {
+            "id": "Jupiter",
+            "text": "Jupiter"
+          },
+          {
+            "id": "Venus",
+            "text": "Venus"
+          },
+          {
+            "id": "Saturn",
+            "text": "Saturn"
+          },
+          {
+            "id": "Mars",
+            "text": "Mars"
+          }
         ]
       },
       {
         "questionText": "What is the most abundant gas in Earth's atmosphere?",
         "correctAnswerId": "Nitrogen",
         "options": [
-          { "id": "Oxygen", "text": "Oxygen" },
-          { "id": "Carbon Dioxide", "text": "Carbon Dioxide" },
-          { "id": "Argon", "text": "Argon" },
-          { "id": "Nitrogen", "text": "Nitrogen" }
+          {
+            "id": "Oxygen",
+            "text": "Oxygen"
+          },
+          {
+            "id": "Carbon Dioxide",
+            "text": "Carbon Dioxide"
+          },
+          {
+            "id": "Argon",
+            "text": "Argon"
+          },
+          {
+            "id": "Nitrogen",
+            "text": "Nitrogen"
+          }
         ]
       }
     ]
@@ -64,19 +100,70 @@
   },
   "actions": {
     "goToNextQuestion": [
-      { "function": "incrementProperty", "args": [ "currentQuestionIndex" ] },
-      { "function": "setProperty", "args": [ "playersAnswered", 0 ] },
-      { "function": "setProperty", "args": [ "currentQuestion", "{{gameData.questions[gameState.currentQuestionIndex]}}" ] },
-      { "function": "setProperty", "args": [ "shuffledAnswers", "{{gameState.currentQuestion.options}}" ] },
-      { "function": "shuffleArray", "args": [ "shuffledAnswers" ] }
+      {
+        "function": "incrementProperty",
+        "args": [
+          "currentQuestionIndex"
+        ]
+      },
+      {
+        "function": "setProperty",
+        "args": [
+          "playersAnswered",
+          0
+        ]
+      },
+      {
+        "function": "setProperty",
+        "args": [
+          "currentQuestion",
+          "{{gameData.questions[gameState.currentQuestionIndex]}}"
+        ]
+      },
+      {
+        "function": "setProperty",
+        "args": [
+          "shuffledAnswers",
+          "{{gameState.currentQuestion.options}}"
+        ]
+      },
+      {
+        "function": "shuffleArray",
+        "args": [
+          "shuffledAnswers"
+        ]
+      }
     ],
     "recordPlayerAnswer": [
-      { "function": "setProperty", "args": [ "playerAttributes.{{actorId}}.answerId", "{{payload.id}}" ] },
-      { "function": "setProperty", "args": [ "playerAttributes.{{actorId}}.submittedAt", "{{Date.now()}}" ] },
-      { "function": "incrementProperty", "args": [ "playersAnswered" ] }
+      {
+        "function": "setProperty",
+        "args": [
+          "playerAttributes.{{actorId}}.answerId",
+          "{{payload.id}}"
+        ]
+      },
+      {
+        "function": "setProperty",
+        "args": [
+          "playerAttributes.{{actorId}}.submittedAt",
+          "{{Date.now()}}"
+        ]
+      },
+      {
+        "function": "incrementProperty",
+        "args": [
+          "playersAnswered"
+        ]
+      }
     ],
     "calculateScores": [
-      { "function": "setProperty", "args": [ "playerAttributes.{{player.id}}.lastScoreGained", 0 ] },
+      {
+        "function": "setProperty",
+        "args": [
+          "playerAttributes.{{player.id}}.lastScoreGained",
+          0
+        ]
+      },
       {
         "condition": "{{player.answerId === gameState.currentQuestion.correctAnswerId}}",
         "function": "setProperty",
@@ -85,26 +172,49 @@
           "{{ Math.round((1 - ( (player.submittedAt - gameState.timerStart) / 10000)) * 500) + 500 }}"
         ]
       },
-      { "function": "incrementProperty", "args": [ "playerAttributes.{{player.id}}.score", "{{player.lastScoreGained}}" ] }
+      {
+        "function": "incrementProperty",
+        "args": [
+          "playerAttributes.{{player.id}}.score",
+          "{{player.lastScoreGained}}"
+        ]
+      }
     ],
     "updateStreaks": [
       {
         "condition": "{{player.answerId === gameState.currentQuestion.correctAnswerId}}",
         "function": "incrementProperty",
-        "args": [ "playerAttributes.{{player.id}}.streak" ]
+        "args": [
+          "playerAttributes.{{player.id}}.streak"
+        ]
       },
       {
         "condition": "{{player.answerId !== gameState.currentQuestion.correctAnswerId}}",
         "function": "setProperty",
-        "args": [ "playerAttributes.{{player.id}}.streak", 0 ]
+        "args": [
+          "playerAttributes.{{player.id}}.streak",
+          0
+        ]
       }
     ],
     "calculateAnswerStats": [
-      { "function": "setProperty", "args": [ "answerStats", {} ] },
+      {
+        "function": "setProperty",
+        "args": [
+          "answerStats",
+          {}
+        ]
+      },
       {
         "forEachPlayer": {
           "effects": [
-            { "function": "incrementProperty", "args": [ "answerStats.{{player.answerId}}", 1 ] }
+            {
+              "function": "incrementProperty",
+              "args": [
+                "answerStats.{{player.answerId}}",
+                1
+              ]
+            }
           ]
         }
       }
@@ -112,293 +222,773 @@
     "updateLeaderboardAndRanks": [
       {
         "forEachPlayer": {
-           "effects": [
-             { "function": "setProperty", "args": [ "playerAttributes.{{player.id}}.previousRank", "{{player.rank || players.length}}" ] }
-           ]
+          "effects": [
+            {
+              "function": "setProperty",
+              "args": [
+                "playerAttributes.{{player.id}}.previousRank",
+                "{{player.rank || players.length}}"
+              ]
+            }
+          ]
         }
       },
-      { "function": "setProperty", "args": [ "leaderboard", "{{players.map(p => ({ id: p.id, nickname: p.nickname, score: p.score, streak: p.streak }))}}" ] },
-      { "function": "arraySortBy", "args": [ "leaderboard", "score", "desc" ] },
+      {
+        "function": "setProperty",
+        "args": [
+          "leaderboard",
+          "{{players.map(p => ({ id: p.id, nickname: p.nickname, score: p.score, streak: p.streak }))}}"
+        ]
+      },
+      {
+        "function": "arraySortBy",
+        "args": [
+          "leaderboard",
+          "score",
+          "desc"
+        ]
+      },
       {
         "forEachPlayer": {
           "effects": [
-             { "function": "setProperty", "args": [ "playerAttributes.{{player.id}}.rank", "{{gameState.leaderboard.findIndex(p => p.id === player.id) + 1}}" ] }
+            {
+              "function": "setProperty",
+              "args": [
+                "playerAttributes.{{player.id}}.rank",
+                "{{gameState.leaderboard.findIndex(p => p.id === player.id) + 1}}"
+              ]
+            }
           ]
         }
       }
     ],
     "resetPlayerTurnData": [
-       {
+      {
         "forEachPlayer": {
           "effects": [
-             { "function": "setProperty", "args": [ "playerAttributes.{{player.id}}.submittedAt", null ] },
-             { "function": "unsetProperty", "args": [ "playerAttributes.{{player.id}}.answerId" ] }
+            {
+              "function": "setProperty",
+              "args": [
+                "playerAttributes.{{player.id}}.submittedAt",
+                null
+              ]
+            },
+            {
+              "function": "unsetProperty",
+              "args": [
+                "playerAttributes.{{player.id}}.answerId"
+              ]
+            }
           ]
         }
       }
     ],
     "calculateWinner": [
-      { "function": "calculateWinner", "args": [] }
+      {
+        "function": "calculateWinner",
+        "args": []
+      }
     ]
   },
   "initialState": "GET_READY",
   "states": {
     "GET_READY": {
+      "allowedEvents": [],
       "onEnter": [
-        { "function": "shuffleArray", "args": [ "gameData.questions" ] },
-        { "function": "startTimer", "args": [ 5, { "function": "dispatchEvent", "args": ["timerExpires"] } ] }
+        {
+          "function": "shuffleArray",
+          "args": [
+            "gameData.questions"
+          ]
+        },
+        {
+          "function": "startTimer",
+          "args": [
+            5,
+            {
+              "function": "dispatchEvent",
+              "args": [
+                "timerExpires"
+              ]
+            }
+          ]
+        }
       ]
     },
     "ASKING_QUESTION": {
+      "allowedEvents": [
+        "submitAnswer"
+      ],
       "onEnter": [
-        { "function": "setProperty", "args": [ "timerStart", "{{Date.now()}}" ] },
-        { "runAction": "goToNextQuestion" },
-        { "function": "startTimer", "args": [ 10, { "function": "dispatchEvent", "args": ["timerExpires"] } ] }
+        {
+          "function": "setProperty",
+          "args": [
+            "timerStart",
+            "{{Date.now()}}"
+          ]
+        },
+        {
+          "runAction": "goToNextQuestion"
+        },
+        {
+          "function": "startTimer",
+          "args": [
+            10,
+            {
+              "function": "dispatchEvent",
+              "args": [
+                "timerExpires"
+              ]
+            }
+          ]
+        }
       ]
     },
     "REVEAL_ANSWER": {
+      "allowedEvents": [],
       "onEnter": [
-        { "forEachPlayer": { "effects": [{ "runAction": "calculateScores" }, { "runAction": "updateStreaks" }] } },
-        { "function": "startTimer", "args": [ 5, { "function": "dispatchEvent", "args": ["timerExpires"] } ] }
+        {
+          "forEachPlayer": {
+            "effects": [
+              {
+                "runAction": "calculateScores"
+              },
+              {
+                "runAction": "updateStreaks"
+              }
+            ]
+          }
+        },
+        {
+          "function": "startTimer",
+          "args": [
+            5,
+            {
+              "function": "dispatchEvent",
+              "args": [
+                "timerExpires"
+              ]
+            }
+          ]
+        }
       ]
     },
     "SHOW_STATS": {
+      "allowedEvents": [],
       "onEnter": [
-        { "runAction": "calculateAnswerStats" },
-        { "function": "startTimer", "args": [ 8, { "function": "dispatchEvent", "args": ["timerExpires"] } ] }
+        {
+          "runAction": "calculateAnswerStats"
+        },
+        {
+          "function": "startTimer",
+          "args": [
+            8,
+            {
+              "function": "dispatchEvent",
+              "args": [
+                "timerExpires"
+              ]
+            }
+          ]
+        }
       ]
     },
     "LEADERBOARD": {
-        "onEnter": [
-            { "runAction": "updateLeaderboardAndRanks" },
-            { "runAction": "resetPlayerTurnData" },
-            { "function": "startTimer", "args": [ 8, { "function": "dispatchEvent", "args": ["timerExpires"] } ] }
-        ]
+      "allowedEvents": [],
+      "onEnter": [
+        {
+          "runAction": "updateLeaderboardAndRanks"
+        },
+        {
+          "runAction": "resetPlayerTurnData"
+        },
+        {
+          "function": "startTimer",
+          "args": [
+            8,
+            {
+              "function": "dispatchEvent",
+              "args": [
+                "timerExpires"
+              ]
+            }
+          ]
+        }
+      ]
     },
     "FINISHED": {
+      "allowedEvents": [],
       "onEnter": [
-        { "runAction": "calculateWinner" }
+        {
+          "runAction": "calculateWinner"
+        }
       ]
     }
   },
   "events": {
     "submitAnswer": {
-      "permissions": [ "player" ],
+      "permissions": [
+        "player"
+      ],
       "effects": [
-        { "runAction": "recordPlayerAnswer" },
-        { "function": "dispatchEvent", "args": ["playerAnswered"] }
+        {
+          "runAction": "recordPlayerAnswer"
+        },
+        {
+          "function": "dispatchEvent",
+          "args": [
+            "playerAnswered"
+          ]
+        }
       ]
     },
     "playerAnswered": {
-        "permissions": ["server"],
-        "effects": [
-          {
-            "condition": "{{gameState.playersAnswered === players.length}}",
-            "function": "cancelTimer"
-          },
-          {
-            "condition": "{{gameState.playersAnswered === players.length}}",
-            "function": "dispatchEvent",
-            "args": ["allPlayersAnswered"]
-          }
-        ]
+      "permissions": [
+        "server"
+      ],
+      "effects": [
+        {
+          "condition": "{{gameState.playersAnswered === players.length}}",
+          "function": "cancelTimer"
+        },
+        {
+          "condition": "{{gameState.playersAnswered === players.length}}",
+          "function": "dispatchEvent",
+          "args": [
+            "allPlayersAnswered"
+          ]
+        }
+      ]
     },
-    "allPlayersAnswered": { "permissions": ["server"] },
-    "timerExpires": { "permissions": [ "server", "host" ] }
+    "allPlayersAnswered": {
+      "permissions": [
+        "server"
+      ]
+    },
+    "timerExpires": {
+      "permissions": [
+        "server",
+        "host"
+      ]
+    }
   },
   "transitions": [
-    { "from": "GET_READY", "to": "ASKING_QUESTION", "event": "timerExpires" },
-    { "from": "ASKING_QUESTION", "to": "REVEAL_ANSWER", "event": "timerExpires" },
-    { "from": "ASKING_QUESTION", "to": "REVEAL_ANSWER", "event": "allPlayersAnswered" },
-    { "from": "REVEAL_ANSWER", "to": "SHOW_STATS", "event": "timerExpires" },
-    { "from": "SHOW_STATS", "to": "LEADERBOARD", "event": "timerExpires" },
-    { "from": "LEADERBOARD", "to": "ASKING_QUESTION", "event": "timerExpires", "condition": "{{gameState.currentQuestionIndex < gameState.totalRounds - 1}}" },
-    { "from": "LEADERBOARD", "to": "FINISHED", "event": "timerExpires", "condition": "{{gameState.currentQuestionIndex >= gameState.totalRounds - 1}}" }
+    {
+      "from": "GET_READY",
+      "to": "ASKING_QUESTION",
+      "event": "timerExpires"
+    },
+    {
+      "from": "ASKING_QUESTION",
+      "to": "REVEAL_ANSWER",
+      "event": "timerExpires"
+    },
+    {
+      "from": "ASKING_QUESTION",
+      "to": "REVEAL_ANSWER",
+      "event": "allPlayersAnswered"
+    },
+    {
+      "from": "REVEAL_ANSWER",
+      "to": "SHOW_STATS",
+      "event": "timerExpires"
+    },
+    {
+      "from": "SHOW_STATS",
+      "to": "LEADERBOARD",
+      "event": "timerExpires"
+    },
+    {
+      "from": "LEADERBOARD",
+      "to": "ASKING_QUESTION",
+      "event": "timerExpires",
+      "condition": "{{gameState.currentQuestionIndex < gameState.totalRounds - 1}}"
+    },
+    {
+      "from": "LEADERBOARD",
+      "to": "FINISHED",
+      "event": "timerExpires",
+      "condition": "{{gameState.currentQuestionIndex >= gameState.totalRounds - 1}}"
+    }
   ],
   "ui": {
     "GET_READY": {
       "host": {
         "components": [
-          { 
-            "component": "PhaseBanner", 
-            "props": { "title": "{{metadata.title}}", "subtitle": "The game is about to start!", "duration": 5 }
+          {
+            "component": "PhaseBanner",
+            "props": {
+              "title": "{{metadata.title}}",
+              "subtitle": "The game is about to start!",
+              "duration": 5
+            }
           }
         ]
       },
-      "player": { 
-        "components": [ 
-          { 
-            "component": "Stack", 
-            "props": { "direction": "vertical", "spacing": 16, "alignItems": "center" },
-            "layout": { "alignment": "Center", "height": "hug" },
+      "player": {
+        "components": [
+          {
+            "component": "Stack",
+            "props": {
+              "direction": "vertical",
+              "spacing": 16,
+              "alignItems": "center"
+            },
+            "layout": {
+              "alignment": "Center",
+              "height": "hug"
+            },
             "children": [
-              { "component": "TextDisplay", "props": { "text": "Get Ready!", "fontSize": "2rem", "fontWeight": "bold" } },
-              { "component": "TextDisplay", "props": { "text": "The game is about to begin." } }
+              {
+                "component": "TextDisplay",
+                "props": {
+                  "text": "Get Ready!",
+                  "fontSize": "2rem",
+                  "fontWeight": "bold"
+                }
+              },
+              {
+                "component": "TextDisplay",
+                "props": {
+                  "text": "The game is about to begin."
+                }
+              }
             ]
-          } 
-        ] 
+          }
+        ]
       }
     },
     "ASKING_QUESTION": {
       "host": {
         "components": [
-           { 
-             "component": "TextDisplay", 
-             "props": { "text": "Question {{gameState.currentQuestionIndex + 1}} / {{gameState.totalRounds}}", "fontSize": "1.2rem" }, 
-             "layout": { "alignment": "TopLeft", "height": "hug", "offset": {"top": 20, "left": 20} } 
-           },
-           { "component": "Timer", "props": { "duration": 10, "type": "progress" }, "layout": { "alignment": "TopCenter", "height": "hug", "width": "fill", "padding": { "left": 100, "right": 100 } } },
-           { 
-             "component": "TextDisplay", 
-             "props": { "text": "{{gameState.playersAnswered}} / {{players.length}}", "fontSize": "1.2rem" }, 
-             "layout": { "alignment": "TopRight", "height": "hug", "offset": {"top": 20, "right": 20} } 
-           },
-           { 
-             "component": "TextDisplay", 
-             "props": { "text": "{{gameState.currentQuestion.questionText}}", "fontSize": "2.5rem", "fontWeight": "bold", "textAlign": "center" }, 
-             "layout": { "alignment": "Center", "height": "hug", "width": "80%"} 
-           },
-           {
-             "component": "Grid",
-             "props": { 
-                "columns": 2,
-                "rows": 2,
-                "spacing": 16,
-                "children": "{{gameState.shuffledAnswers.map(answer => ({ 'component': 'Button', 'props': { 'text': answer.text, 'disabled': true, 'variant': 'secondary' } }))}}"
+          {
+            "component": "TextDisplay",
+            "props": {
+              "text": "Question {{gameState.currentQuestionIndex + 1}} / {{gameState.totalRounds}}",
+              "fontSize": "1.2rem"
             },
-             "layout": { "alignment": "BottomCenter", "height": "hug", "width": "90%", "offset": {"bottom": 20}}
-           }
+            "layout": {
+              "alignment": "TopLeft",
+              "height": "hug",
+              "offset": {
+                "top": 20,
+                "left": 20
+              }
+            }
+          },
+          {
+            "component": "Timer",
+            "props": {
+              "duration": 10,
+              "type": "progress"
+            },
+            "layout": {
+              "alignment": "TopCenter",
+              "height": "hug",
+              "width": "fill",
+              "padding": {
+                "left": 100,
+                "right": 100
+              }
+            }
+          },
+          {
+            "component": "TextDisplay",
+            "props": {
+              "text": "{{gameState.playersAnswered}} / {{players.length}}",
+              "fontSize": "1.2rem"
+            },
+            "layout": {
+              "alignment": "TopRight",
+              "height": "hug",
+              "offset": {
+                "top": 20,
+                "right": 20
+              }
+            }
+          },
+          {
+            "component": "TextDisplay",
+            "props": {
+              "text": "{{gameState.currentQuestion.questionText}}",
+              "fontSize": "2.5rem",
+              "fontWeight": "bold",
+              "textAlign": "center"
+            },
+            "layout": {
+              "alignment": "Center",
+              "height": "hug",
+              "width": "80%"
+            }
+          },
+          {
+            "component": "Grid",
+            "props": {
+              "columns": 2,
+              "rows": 2,
+              "spacing": 16,
+              "children": "{{gameState.shuffledAnswers.map(answer => ({ 'component': 'Button', 'props': { 'text': answer.text, 'disabled': true, 'variant': 'secondary' } }))}}"
+            },
+            "layout": {
+              "alignment": "BottomCenter",
+              "height": "hug",
+              "width": "90%",
+              "offset": {
+                "bottom": 20
+              }
+            }
+          }
         ]
       },
       "player": [
-        { 
-          "condition": "{{player.answerId !== null}}", 
-          "components": [ 
-            { 
+        {
+          "condition": "{{player.answerId !== null}}",
+          "components": [
+            {
               "component": "Stack",
-              "props": { "direction": "vertical", "spacing": 16, "alignItems": "center" },
-              "layout": { "alignment": "Center", "height": "hug" },
+              "props": {
+                "direction": "vertical",
+                "spacing": 16,
+                "alignItems": "center"
+              },
+              "layout": {
+                "alignment": "Center",
+                "height": "hug"
+              },
               "children": [
-                { "component": "Spinner" },
-                { "component": "TextDisplay", "props": { "text": "Answer locked in!", "fontSize": "1.5rem" } },
-                { "component": "TextDisplay", "props": { "text": "Waiting for others..." } }
+                {
+                  "component": "Spinner"
+                },
+                {
+                  "component": "TextDisplay",
+                  "props": {
+                    "text": "Answer locked in!",
+                    "fontSize": "1.5rem"
+                  }
+                },
+                {
+                  "component": "TextDisplay",
+                  "props": {
+                    "text": "Waiting for others..."
+                  }
+                }
               ]
-            } 
-          ] 
+            }
+          ]
         },
-        { 
-          "components": [ 
-            { "component": "ChoiceSelector", "props": { "options": "{{gameState.shuffledAnswers}}", "layout": "grid", "onSelect": { "action": "submitAnswer", "payload": "{{payload}}" } }, 
-              "layout": { "alignment": "Center", "width": "100%", "height": "100%", "padding": {"top": 16, "bottom": 16, "left": 16, "right": 16 } } 
-            } 
-          ] 
+        {
+          "components": [
+            {
+              "component": "ChoiceSelector",
+              "props": {
+                "options": "{{gameState.shuffledAnswers}}",
+                "layout": "grid",
+                "onSelect": {
+                  "action": "submitAnswer",
+                  "payload": "{{payload}}"
+                }
+              },
+              "layout": {
+                "alignment": "Center",
+                "width": "100%",
+                "height": "100%",
+                "padding": {
+                  "top": 16,
+                  "bottom": 16,
+                  "left": 16,
+                  "right": 16
+                }
+              }
+            }
+          ]
         }
       ]
     },
     "REVEAL_ANSWER": {
       "host": {
         "components": [
-          { "component": "CorrectAnswerOverlay", "props": { "options": "{{gameState.currentQuestion.options}}", "correctAnswerId": "{{gameState.currentQuestion.correctAnswerId}}", "players": "{{players}}", "onComplete": { "action": "timerExpires" } } }
-        ]
-      },
-      "player": {
-        "components": [
-           { 
-             "component": "Stack", 
-             "props": { "direction": "vertical", "spacing": 16, "alignItems": "center" }, 
-             "layout": { "alignment": "Center", "height": "hug", "width": "80%" },
-             "children": [
-                  { "component": "TextDisplay", "props": { "text": "{{player.lastScoreGained > 0 ? 'Correct!' : 'Incorrect!'}}", "fontSize": "3rem", "fontWeight": "bold", "color": "{{player.lastScoreGained > 0 ? '#28a745' : '#dc3545'}}" } },
-                  { "component": "TextDisplay", "props": { "text": "+{{player.lastScoreGained}}", "fontSize": "2.5rem" }, "layout": { "height": "hug" } },
-                  { "component": "TextDisplay", "props": { "text": "Streak: {{player.streak}} {{player.streak > 1 ? '🔥' : ''}}", "fontSize": "1.2rem" }, "layout": { "height": "hug" } }
-              ]
-           }
-        ]
-      }
-    },
-    "SHOW_STATS": {
-        "host": {
-            "components": [
-                { "component": "TextDisplay", "props": { "text": "{{gameState.currentQuestion.questionText}}", "fontSize": "1.5rem", "textAlign": "center" }, "layout": { "alignment": "TopCenter", "height": "hug", "offset": { "top": 20 }, "width": "80%" } },
-                {
-                    "component": "Stack",
-                    "props": {
-                        "direction": "vertical",
-                        "spacing": 16,
-                        "children": "{{gameState.currentQuestion.options.map(option => ({ 'component': 'Stack', 'props': { 'direction': 'vertical', 'spacing': 8, 'width': '100%' }, 'children': [ { 'component': 'TextDisplay', 'props': { 'text': `${option.text} (${gameState.answerStats[option.id] || 0})`, 'fontWeight': option.id === gameState.currentQuestion.correctAnswerId ? 'bold' : 'normal' } }, { 'component': 'Container', 'props': { 'backgroundColor': '#444', 'borderRadius': '5px', 'width': '100%', 'height': '40px' }, 'children': [{ 'component': 'Container', 'props': { 'backgroundColor': option.id === gameState.currentQuestion.correctAnswerId ? '#28a745' : '#8A2BE2', 'height': '100%', 'borderRadius': '5px', 'width': `${ ((gameState.answerStats[option.id] || 0) / players.length) * 100 }%` } }] } ] }))}}"
-                    },
-                    "layout": { "alignment": "Center", "width": "70%", "height": "hug" }
-                }
-            ]
-        },
-        "player": { 
-          "components": [ 
-            { 
-              "component": "Stack", 
-              "props": { "direction": "vertical", "spacing": 16, "alignItems": "center" },
-              "layout": { "alignment": "Center", "height": "hug" },
-              "children": [
-                { "component": "Spinner" },
-                { "component": "TextDisplay", "props": { "text": "Tallying the results...", "fontSize": "1.5rem" } }
-              ]
-            } 
-          ] 
-        }
-    },
-    "LEADERBOARD": {
-      "host": {
-        "components": [
-          { "component": "TextDisplay", "props": { "text": "Leaderboard", "fontSize": "3rem", "fontWeight": "bold" }, "layout": { "alignment": "TopCenter", "height": "hug", "offset": {"top": 40} } },
           {
-            "component": "ListDisplay",
+            "component": "CorrectAnswerOverlay",
             "props": {
-              "items": "{{gameState.leaderboard}}",
-              "renderItem": {
-                "component": "Container", 
-                "props": { 
-                  "display": "flex", "alignItems": "center", "justifyContent": "space-between", "width": "100%", 
-                  "padding": "16px", "backgroundColor": "#1C192B", "borderRadius": "8px" 
-                },
-                "children": [
-                  { 
-                    "component": "TextDisplay", 
-                    "props": { "text": "#{{gameState.leaderboard.findIndex(p => p.id === item.id) + 1}} {{item.nickname}}", "fontSize": "1.5rem", "fontWeight": "bold" } 
-                  },
-                  { 
-                    "component": "Stack", 
-                    "props": { "direction": "horizontal", "spacing": 24, "alignItems": "center" }, 
-                    "children": [
-                      { "component": "TextDisplay", "props": { "text": "{{item.streak > 1 ? '🔥 ' + item.streak : ''}}", "fontSize": "1.5rem" } },
-                      { "component": "TextDisplay", "props": { "text": "{{item.score}}", "fontSize": "1.5rem", "fontWeight": "bold" } }
-                  ]}
-                ]
+              "options": "{{gameState.currentQuestion.options}}",
+              "correctAnswerId": "{{gameState.currentQuestion.correctAnswerId}}",
+              "players": "{{players}}",
+              "onComplete": {
+                "action": "timerExpires"
               }
-            },
-            "layout": { "alignment": "Center", "width": "60%", "height": "hug", "spacing": 16 }
+            }
           }
         ]
       },
       "player": {
         "components": [
           {
-            "component": "Stack", "props": { "direction": "vertical", "spacing": 8, "alignItems": "center" }, "layout": { "alignment": "Center", "height": "hug", "width": "80%" },
+            "component": "Stack",
+            "props": {
+              "direction": "vertical",
+              "spacing": 16,
+              "alignItems": "center"
+            },
+            "layout": {
+              "alignment": "Center",
+              "height": "hug",
+              "width": "80%"
+            },
             "children": [
-              { "component": "TextDisplay", "props": { "text": "Your Rank", "fontSize": "1.5rem", "color": "#aaa" } },
-              { 
-                "component": "Stack", "props": {"direction": "horizontal", "alignItems": "center", "spacing": 16},
+              {
+                "component": "TextDisplay",
+                "props": {
+                  "text": "{{player.lastScoreGained > 0 ? 'Correct!' : 'Incorrect!'}}",
+                  "fontSize": "3rem",
+                  "fontWeight": "bold",
+                  "color": "{{player.lastScoreGained > 0 ? '#28a745' : '#dc3545'}}"
+                }
+              },
+              {
+                "component": "TextDisplay",
+                "props": {
+                  "text": "+{{player.lastScoreGained}}",
+                  "fontSize": "2.5rem"
+                },
+                "layout": {
+                  "height": "hug"
+                }
+              },
+              {
+                "component": "TextDisplay",
+                "props": {
+                  "text": "Streak: {{player.streak}} {{player.streak > 1 ? '🔥' : ''}}",
+                  "fontSize": "1.2rem"
+                },
+                "layout": {
+                  "height": "hug"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "SHOW_STATS": {
+      "host": {
+        "components": [
+          {
+            "component": "TextDisplay",
+            "props": {
+              "text": "{{gameState.currentQuestion.questionText}}",
+              "fontSize": "1.5rem",
+              "textAlign": "center"
+            },
+            "layout": {
+              "alignment": "TopCenter",
+              "height": "hug",
+              "offset": {
+                "top": 20
+              },
+              "width": "80%"
+            }
+          },
+          {
+            "component": "Stack",
+            "props": {
+              "direction": "vertical",
+              "spacing": 16,
+              "children": "{{gameState.currentQuestion.options.map(option => ({ 'component': 'Stack', 'props': { 'direction': 'vertical', 'spacing': 8, 'width': '100%' }, 'children': [ { 'component': 'TextDisplay', 'props': { 'text': `${option.text} (${gameState.answerStats[option.id] || 0})`, 'fontWeight': option.id === gameState.currentQuestion.correctAnswerId ? 'bold' : 'normal' } }, { 'component': 'Container', 'props': { 'backgroundColor': '#444', 'borderRadius': '5px', 'width': '100%', 'height': '40px' }, 'children': [{ 'component': 'Container', 'props': { 'backgroundColor': option.id === gameState.currentQuestion.correctAnswerId ? '#28a745' : '#8A2BE2', 'height': '100%', 'borderRadius': '5px', 'width': `${ ((gameState.answerStats[option.id] || 0) / players.length) * 100 }%` } }] } ] }))}}"
+            },
+            "layout": {
+              "alignment": "Center",
+              "width": "70%",
+              "height": "hug"
+            }
+          }
+        ]
+      },
+      "player": {
+        "components": [
+          {
+            "component": "Stack",
+            "props": {
+              "direction": "vertical",
+              "spacing": 16,
+              "alignItems": "center"
+            },
+            "layout": {
+              "alignment": "Center",
+              "height": "hug"
+            },
+            "children": [
+              {
+                "component": "Spinner"
+              },
+              {
+                "component": "TextDisplay",
+                "props": {
+                  "text": "Tallying the results...",
+                  "fontSize": "1.5rem"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "LEADERBOARD": {
+      "host": {
+        "components": [
+          {
+            "component": "TextDisplay",
+            "props": {
+              "text": "Leaderboard",
+              "fontSize": "3rem",
+              "fontWeight": "bold"
+            },
+            "layout": {
+              "alignment": "TopCenter",
+              "height": "hug",
+              "offset": {
+                "top": 40
+              }
+            }
+          },
+          {
+            "component": "ListDisplay",
+            "props": {
+              "items": "{{gameState.leaderboard}}",
+              "renderItem": {
+                "component": "Container",
+                "props": {
+                  "display": "flex",
+                  "alignItems": "center",
+                  "justifyContent": "space-between",
+                  "width": "100%",
+                  "padding": "16px",
+                  "backgroundColor": "#1C192B",
+                  "borderRadius": "8px"
+                },
                 "children": [
-                  { "component": "TextDisplay", "props": { "text": "{{player.rank}} / {{players.length}}", "fontSize": "5rem", "fontWeight": "bold" } },
-                  { "component": "TextDisplay", "props": { "text": "{{player.rank < player.previousRank ? '▲' : (player.rank > player.previousRank ? '▼' : '')}}", "fontSize": "2rem", "color": "{{player.rank < player.previousRank ? '#28a745' : '#dc3545'}}" } }
+                  {
+                    "component": "TextDisplay",
+                    "props": {
+                      "text": "#{{gameState.leaderboard.findIndex(p => p.id === item.id) + 1}} {{item.nickname}}",
+                      "fontSize": "1.5rem",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "component": "Stack",
+                    "props": {
+                      "direction": "horizontal",
+                      "spacing": 24,
+                      "alignItems": "center"
+                    },
+                    "children": [
+                      {
+                        "component": "TextDisplay",
+                        "props": {
+                          "text": "{{item.streak > 1 ? '🔥 ' + item.streak : ''}}",
+                          "fontSize": "1.5rem"
+                        }
+                      },
+                      {
+                        "component": "TextDisplay",
+                        "props": {
+                          "text": "{{item.score}}",
+                          "fontSize": "1.5rem",
+                          "fontWeight": "bold"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "layout": {
+              "alignment": "Center",
+              "width": "60%",
+              "height": "hug",
+              "spacing": 16
+            }
+          }
+        ]
+      },
+      "player": {
+        "components": [
+          {
+            "component": "Stack",
+            "props": {
+              "direction": "vertical",
+              "spacing": 8,
+              "alignItems": "center"
+            },
+            "layout": {
+              "alignment": "Center",
+              "height": "hug",
+              "width": "80%"
+            },
+            "children": [
+              {
+                "component": "TextDisplay",
+                "props": {
+                  "text": "Your Rank",
+                  "fontSize": "1.5rem",
+                  "color": "#aaa"
+                }
+              },
+              {
+                "component": "Stack",
+                "props": {
+                  "direction": "horizontal",
+                  "alignItems": "center",
+                  "spacing": 16
+                },
+                "children": [
+                  {
+                    "component": "TextDisplay",
+                    "props": {
+                      "text": "{{player.rank}} / {{players.length}}",
+                      "fontSize": "5rem",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "component": "TextDisplay",
+                    "props": {
+                      "text": "{{player.rank < player.previousRank ? '▲' : (player.rank > player.previousRank ? '▼' : '')}}",
+                      "fontSize": "2rem",
+                      "color": "{{player.rank < player.previousRank ? '#28a745' : '#dc3545'}}"
+                    }
+                  }
                 ]
               },
-              { 
-                "component": "Stack", 
-                "props": { "direction": "horizontal", "spacing": 24, "alignItems": "center" },
-                "layout": {"offset": {"top": 16}},
+              {
+                "component": "Stack",
+                "props": {
+                  "direction": "horizontal",
+                  "spacing": 24,
+                  "alignItems": "center"
+                },
+                "layout": {
+                  "offset": {
+                    "top": 16
+                  }
+                },
                 "children": [
-                  { "component": "TextDisplay", "props": { "text": "Score: {{player.score}}", "fontSize": "1.2rem" } },
-                  { "component": "TextDisplay", "props": { "text": "{{player.streak > 1 ? '🔥 ' + player.streak : ''}}", "fontSize": "1.2rem" } }
-              ]}
+                  {
+                    "component": "TextDisplay",
+                    "props": {
+                      "text": "Score: {{player.score}}",
+                      "fontSize": "1.2rem"
+                    }
+                  },
+                  {
+                    "component": "TextDisplay",
+                    "props": {
+                      "text": "{{player.streak > 1 ? '🔥 ' + player.streak : ''}}",
+                      "fontSize": "1.2rem"
+                    }
+                  }
+                ]
+              }
             ]
           }
         ]
@@ -407,18 +997,62 @@
     "FINISHED": {
       "host": {
         "components": [
-           { 
-            "component": "Stack", 
-            "props": { "direction": "vertical", "spacing": 24, "alignItems": "center", "justifyContent": "center" }, 
-            "layout": { "alignment": "Center", "height": "hug", "width": "100%" },
+          {
+            "component": "Stack",
+            "props": {
+              "direction": "vertical",
+              "spacing": 24,
+              "alignItems": "center",
+              "justifyContent": "center"
+            },
+            "layout": {
+              "alignment": "Center",
+              "height": "hug",
+              "width": "100%"
+            },
             "children": [
-              { "component": "TextDisplay", "props": { "text": "🏆 WINNER 🏆", "fontSize": "3.5rem", "fontWeight": "bold", "color": "#FFD700" } },
-              { "component": "TextDisplay", "props": { "text": "{{gameState.winner.nickname}}", "fontSize": "2.5rem", "fontWeight": "bold" } },
-              { "component": "TextDisplay", "props": { "text": "with {{gameState.winner.score}} points", "fontSize": "1.5rem" } },
-              { 
-                "component": "ListDisplay", 
-                "props": { "items": "{{gameState.topThreePlayers.slice(1)}}", "renderItem": { "component": "TextDisplay", "props": { "text": "{{item.nickname}}: {{item.score}}" } } }, 
-                "layout": { "alignment": "Center", "height": "hug", "offset": { "top": 40 } }
+              {
+                "component": "TextDisplay",
+                "props": {
+                  "text": "🏆 WINNER 🏆",
+                  "fontSize": "3.5rem",
+                  "fontWeight": "bold",
+                  "color": "#FFD700"
+                }
+              },
+              {
+                "component": "TextDisplay",
+                "props": {
+                  "text": "{{gameState.winner.nickname}}",
+                  "fontSize": "2.5rem",
+                  "fontWeight": "bold"
+                }
+              },
+              {
+                "component": "TextDisplay",
+                "props": {
+                  "text": "with {{gameState.winner.score}} points",
+                  "fontSize": "1.5rem"
+                }
+              },
+              {
+                "component": "ListDisplay",
+                "props": {
+                  "items": "{{gameState.topThreePlayers.slice(1)}}",
+                  "renderItem": {
+                    "component": "TextDisplay",
+                    "props": {
+                      "text": "{{item.nickname}}: {{item.score}}"
+                    }
+                  }
+                },
+                "layout": {
+                  "alignment": "Center",
+                  "height": "hug",
+                  "offset": {
+                    "top": 40
+                  }
+                }
               }
             ]
           }
@@ -427,10 +1061,34 @@
       "player": {
         "components": [
           {
-            "component": "Stack", "props": { "direction": "vertical", "spacing": 16, "alignItems": "center" }, "layout": { "alignment": "Center", "height": "hug", "width": "80%" },
+            "component": "Stack",
+            "props": {
+              "direction": "vertical",
+              "spacing": 16,
+              "alignItems": "center"
+            },
+            "layout": {
+              "alignment": "Center",
+              "height": "hug",
+              "width": "80%"
+            },
             "children": [
-              { "component": "TextDisplay", "props": { "text": "Game Over!", "fontSize": "2rem", "fontWeight": "bold" } },
-              { "component": "TextDisplay", "props": { "text": "Your final rank is {{player.rank}} with {{player.score}} points.", "fontSize": "1.2rem", "textAlign": "center" } }
+              {
+                "component": "TextDisplay",
+                "props": {
+                  "text": "Game Over!",
+                  "fontSize": "2rem",
+                  "fontWeight": "bold"
+                }
+              },
+              {
+                "component": "TextDisplay",
+                "props": {
+                  "text": "Your final rank is {{player.rank}} with {{player.score}} points.",
+                  "fontSize": "1.2rem",
+                  "textAlign": "center"
+                }
+              }
             ]
           }
         ]
