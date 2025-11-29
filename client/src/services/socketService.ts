@@ -7,9 +7,9 @@ import { RoomData } from '../types/types';
 import { useDebugStore } from '../store/debugStore';
 
 //const BACKEND_URL = 'http://localhost:4000';
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL ||'https://partyhubback.onrender.com';
-console.log('Connecting to backend at:'+BACKEND_URL);
-console.log('env variable is :'+process.env.REACT_APP_BACKEND_URL)
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'https://partyhubback.onrender.com';
+console.log('Connecting to backend at:' + BACKEND_URL);
+console.log('env variable is :' + process.env.REACT_APP_BACKEND_URL)
 
 class SocketService {
   private socket: Socket;
@@ -31,6 +31,28 @@ class SocketService {
       debugStore.setConnectionStatus('connected');
       debugStore.setLastEvent('connect');
       console.log('Connected to server with ID:', this.socket.id);
+
+      // Reconnection Logic: Check for stored session
+      const storedRoomCode = localStorage.getItem('partyhub_roomCode');
+      const storedPlayerId = localStorage.getItem('partyhub_playerId');
+      const storedNickname = localStorage.getItem('partyhub_nickname');
+      const storedAvatar = localStorage.getItem('partyhub_avatar');
+
+      if (storedRoomCode && storedPlayerId && storedNickname) {
+        console.log(`[SocketService] Attempting to reconnect to room ${storedRoomCode} as ${storedNickname} (${storedPlayerId})`);
+        this.joinRoom(storedRoomCode, storedNickname, storedAvatar || 'default-avatar', (response) => {
+          if (response.success) {
+            console.log('[SocketService] Reconnection successful');
+          } else {
+            console.warn('[SocketService] Reconnection failed:', response.message);
+            // Clear invalid session
+            localStorage.removeItem('partyhub_roomCode');
+            localStorage.removeItem('partyhub_playerId');
+            localStorage.removeItem('partyhub_nickname');
+            localStorage.removeItem('partyhub_avatar');
+          }
+        }, storedPlayerId);
+      }
     });
 
     this.socket.on('disconnect', () => {
@@ -69,13 +91,13 @@ class SocketService {
       // This is where specific event listeners are. 
       // The onAny handler runs *before* the specific listeners.
       if (event.startsWith('player:')) {
-          const playerId = event.split(':')[1];
-          const localPlayerId = usePlayerStore.getState().socketId;
-          if (playerId === localPlayerId) {
-              if(event.endsWith(':state_update')) {
-                  usePlayerHandStore.getState().setHand(args[0].hand);
-              }
+        const playerId = event.split(':')[1];
+        const localPlayerId = usePlayerStore.getState().socketId;
+        if (playerId === localPlayerId) {
+          if (event.endsWith(':state_update')) {
+            usePlayerHandStore.getState().setHand(args[0].hand);
           }
+        }
       }
     });
   }
@@ -91,10 +113,24 @@ class SocketService {
     this.emit('room:create', { nickname, gameId }, callback);
   }
 
-  public joinRoom(roomCode: string, nickname: string, avatar: string, callback: (response: { success: boolean; message?: string, roomCode?: string }) => void) {
-    this.emit('room:join', { roomCode, nickname, avatar }, callback);
+  public joinRoom(roomCode: string, nickname: string, avatar: string, callback: (response: { success: boolean; message?: string, roomCode?: string, playerId?: string }) => void, existingPlayerId?: string) {
+    this.emit('room:join', { roomCode, nickname, avatar, playerId: existingPlayerId }, (response: any) => {
+      if (response.success) {
+        // Store session data for reconnection
+        localStorage.setItem('partyhub_roomCode', roomCode);
+        localStorage.setItem('partyhub_nickname', nickname);
+        localStorage.setItem('partyhub_avatar', avatar);
+        // The server should return the playerId (either new or existing)
+        if (response.playerId) {
+          localStorage.setItem('partyhub_playerId', response.playerId);
+        } else if (existingPlayerId) {
+          localStorage.setItem('partyhub_playerId', existingPlayerId);
+        }
+      }
+      callback(response);
+    });
   }
-  
+
   public startGame(roomCode: string) {
     this.emit('game:start', { roomCode });
   }
@@ -102,7 +138,7 @@ class SocketService {
   public sendPlayerAction(roomCode: string, action: any) {
     this.emit('player:action', { roomCode, action });
   }
-  
+
   public sendGameAction(actionType: string, payload: any) {
     const roomCode = useRoomStore.getState().room?.roomCode;
     if (!roomCode) {
@@ -116,4 +152,4 @@ class SocketService {
 }
 
 export const socketService = new SocketService();
-   
+

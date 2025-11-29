@@ -18,7 +18,6 @@ export class SocketManager {
       socket.on('room:create', ({ nickname, gameId }, callback) => {
         console.log(`[SocketManager] received room:create with nickname: ${nickname} and gameId: ${gameId}`);
         const room = roomManager.createRoom(socket, nickname, gameId);
-        // The callback now expects the full RoomData object
         callback({
           roomCode: room.roomCode,
           hostId: room.hostId,
@@ -26,25 +25,26 @@ export class SocketManager {
           state: room.state,
           gameId: room.gameId,
         });
-    });
+      });
 
-      socket.on('room:join', ({ roomCode, nickname, avatar }, callback) => {
+      socket.on('room:join', ({ roomCode, nickname, avatar, playerId }, callback) => {
         const room = roomManager.getRoom(roomCode);
         if (room) {
-          room.addPlayer(socket, nickname, avatar);
-          callback({ success: true, roomCode });
+          // Pass the existing playerId (if any) to support reconnection
+          const finalPlayerId = room.addPlayer(socket, nickname, avatar, playerId);
+          callback({ success: true, roomCode, playerId: finalPlayerId });
         } else {
           callback({ success: false, message: 'Room not found' });
         }
       });
-      
+
       socket.on('game:start', ({ roomCode }) => {
         const room = roomManager.getRoom(roomCode);
-        if(room && room.hostId === socket.id) {
-            room.startGame();
+        if (room && room.hostId === socket.id) {
+          room.startGame();
         }
       });
-      
+
       socket.on('game:action', ({ roomCode, action }) => {
         const room = roomManager.getRoom(roomCode);
         if (room) {
@@ -53,7 +53,7 @@ export class SocketManager {
           console.warn(`[SocketManager] Room not found for code: ${roomCode}`);
         }
       });
-      
+
       socket.on('disconnecting', () => {
         // `socket.rooms` contains the socket ID and the room codes it's in
         for (const roomCode of socket.rooms) {
