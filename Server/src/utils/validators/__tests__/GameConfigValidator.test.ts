@@ -1,4 +1,10 @@
 import { gameConfigurationSchema } from '../GameConfigValidator.js';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const baseValidConfig = {
     metadata: {
@@ -53,6 +59,20 @@ describe('gameConfigurationSchema', () => {
             };
             const result = gameConfigurationSchema.safeParse(invalidConfig);
             expect(result.success).toBe(false);
+        });
+    });
+
+    describe('Real World Configs', () => {
+        it('should validate existing kahoot-clone.json', () => {
+            const configPath = path.resolve(__dirname, '../../../game/configurations/kahoot-clone.json');
+            const configContent = fs.readFileSync(configPath, 'utf-8');
+            const config = JSON.parse(configContent);
+
+            const result = gameConfigurationSchema.safeParse(config);
+            if (!result.success) {
+                throw new Error(`kahoot-clone.json validation failed: ${JSON.stringify(result.error, null, 2)}`);
+            }
+            expect(result.success).toBe(true);
         });
     });
 });

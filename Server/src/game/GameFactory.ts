@@ -5,7 +5,7 @@ import { CardsWarGame } from './games/cardGames/CardsWarGame.js';
 import { TexasHoldemGame } from './games/cardGames/TexasHoldemGame.js';
 import { BaseGameState, Player } from '../types/interfaces.js';
 import { ConfigurableGame } from './games/ConfigurableGame.js';
-import { GameConfiguration } from '../utils/validators/GameConfigValidator.js';
+import { GameConfiguration, gameConfigurationSchema } from '../utils/validators/GameConfigValidator.js';
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
@@ -28,7 +28,8 @@ export class GameFactory {
     if (fs.existsSync(configPath)) {
       try {
         const configContent = fs.readFileSync(configPath, 'utf-8');
-        const config: GameConfiguration = JSON.parse(configContent);
+        const rawConfig = JSON.parse(configContent);
+        const config = gameConfigurationSchema.parse(rawConfig); // Strict validation
         console.log(`Creating configurable game for ${gameId}`);
         return new ConfigurableGame(players, hostId, broadcast, onGameEnd, config);
       } catch (error) {

@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import { promises as fs } from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
+import { gameConfigurationSchema } from '../utils/validators/GameConfigValidator.js';
 
 const router = express.Router();
 
@@ -10,7 +11,7 @@ const __dirname = path.dirname(__filename);
 const configsDir = path.join(__dirname, '../game/configurations');
 
 // Error handling middleware for async routes
-const asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => Promise<any>) => 
+const asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => Promise<any>) =>
     (req: Request, res: Response, next: NextFunction) => {
         Promise.resolve(fn(req, res, next)).catch(next);
     };
@@ -26,7 +27,13 @@ router.get('/', asyncHandler(async (req: Request, res: Response) => {
                     const filePath = path.join(configsDir, file);
                     const fileContent = await fs.readFile(filePath, 'utf-8');
                     const config = JSON.parse(fileContent);
-                    return config.metadata;
+
+                    const parsed = gameConfigurationSchema.safeParse(config);
+                    if (!parsed.success) {
+                        console.warn(`File ${file} failed validation:`, parsed.error);
+                        return null;
+                    }
+                    return parsed.data.metadata;
                 } catch (err) {
                     console.error(`Could not process file ${file}.`, err);
                     return null; // Ignore corrupted files
@@ -43,10 +50,15 @@ router.get('/:gameId', asyncHandler(async (req: Request, res: Response) => {
     try {
         const data = await fs.readFile(filePath, 'utf-8');
         const config = JSON.parse(data);
-        res.json(config);
+        const parsed = gameConfigurationSchema.parse(config); // Strict validation
+        res.json(parsed);
     } catch (err: any) {
         if (err.code === 'ENOENT') {
             return res.status(404).send('Game configuration not found.');
+        }
+        if (err.name === 'ZodError') {
+            console.error(`Validation error for gameId ${gameId}.`, err);
+            return res.status(500).send('Game configuration is invalid.');
         }
         console.error(`Could not read file for gameId ${gameId}.`, err);
         res.status(500).send('Server error');
@@ -57,11 +69,13 @@ router.get('/:gameId', asyncHandler(async (req: Request, res: Response) => {
 router.post('/', asyncHandler(async (req, res) => {
     const newConfig = req.body;
 
-    if (!newConfig.metadata || !newConfig.metadata.gameId) {
-        return res.status(400).send('Invalid configuration: metadata.gameId is required.');
+    const parsed = gameConfigurationSchema.safeParse(newConfig);
+    if (!parsed.success) {
+        return res.status(400).json({ error: 'Invalid configuration', details: parsed.error });
     }
+    const validConfig = parsed.data;
 
-    const { gameId } = newConfig.metadata;
+    const { gameId } = validConfig.metadata;
     const filePath = path.join(configsDir, `${gameId}.json`);
 
     try {
@@ -70,11 +84,11 @@ router.post('/', asyncHandler(async (req, res) => {
     } catch {
         // File doesn't exist, which is what we want.
     }
-    
+
     await fs.mkdir(configsDir, { recursive: true });
-    await fs.writeFile(filePath, JSON.stringify(newConfig, null, 2));
+    await fs.writeFile(filePath, JSON.stringify(validConfig, null, 2));
     console.log(`[GameConfig] New game saved: ${gameId}.json`);
-    res.status(201).json(newConfig);
+    res.status(201).json(validConfig);
 }));
 
 // PUT /api/game-configs/:gameId - Update an existing game configuration
@@ -88,22 +102,28 @@ router.put('/:gameId', asyncHandler(async (req, res) => {
     } catch {
         return res.status(404).send('Game configuration not found.');
     }
-    
-    if (updatedConfig.metadata?.gameId !== gameId) {
+
+    const parsed = gameConfigurationSchema.safeParse(updatedConfig);
+    if (!parsed.success) {
+        return res.status(400).json({ error: 'Invalid configuration', details: parsed.error });
+    }
+    const validConfig = parsed.data;
+
+    if (validConfig.metadata.gameId !== gameId) {
         return res.status(400).send('The gameId in the request body must match the URL parameter.');
     }
 
     await fs.mkdir(configsDir, { recursive: true });
-    await fs.writeFile(filePath, JSON.stringify(updatedConfig, null, 2));
+    await fs.writeFile(filePath, JSON.stringify(validConfig, null, 2));
     console.log(`[GameConfig] Game updated: ${gameId}.json`);
-    res.json(updatedConfig);
+    res.json(validConfig);
 }));
 
 // DELETE /api/game-configs/:gameId - Delete a game configuration
 router.delete('/:gameId', asyncHandler(async (req, res) => {
     const { gameId } = req.params;
     const filePath = path.join(configsDir, `${gameId}.json`);
-    
+
     try {
         await fs.unlink(filePath);
         res.status(204).send();
