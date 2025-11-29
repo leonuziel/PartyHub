@@ -1,6 +1,6 @@
-import React from 'react';
+import { motion, HTMLMotionProps } from 'framer-motion';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends Omit<HTMLMotionProps<"button">, "ref"> {
   text?: string;
   icon?: string; // URL or name of an icon
   variant?: 'primary' | 'secondary';
@@ -14,13 +14,16 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   borderRadius?: string;
   border?: string;
   style?: React.CSSProperties;
+  children?: React.ReactNode;
 }
+
+
 
 export const Button: React.FC<ButtonProps> = ({
   text,
   icon,
   variant = 'primary',
-  onClick = () => {},
+  onClick = () => { },
   disabled,
   children,
   fontSize,
@@ -87,10 +90,17 @@ export const Button: React.FC<ButtonProps> = ({
   };
 
   return (
-    <button style={style} onClick={onClick} disabled={disabled} {...props}>
+    <motion.button
+      style={style}
+      onClick={onClick}
+      disabled={disabled}
+      whileTap={{ scale: 0.95 }}
+      transition={{ duration: 0.1 }}
+      {...props}
+    >
       {icon && <img src={icon} alt="" style={{ height: '1em' }} />}
       {text}
       {children}
-    </button>
+    </motion.button>
   );
 };

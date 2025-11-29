@@ -13,41 +13,13 @@ import TexasHoldemPlayerView from './TexasHoldem/TexasHoldemPlayerView';
 import { DynamicViewRenderer } from './DynamicViewRenderer';
 
 export const GameContainer: React.FC = () => {
-  const { gameState, isConfigurable } = useGameStore();
-  const { isHost } = usePlayerRole();
+  const { gameState } = useGameStore();
 
   if (!gameState) {
     return <p>Loading game...</p>;
   }
 
-  const renderGameView = () => {
-    if (isConfigurable) {
-      return <DynamicViewRenderer />;
-    }
-
-    switch (gameState.gameId) {
-      case 'quizclash':
-        return isHost ? <QuizClashHostView /> : <QuizClashPlayerView />;
-      case 'fakenews':
-        return isHost ? <FakeNewsHostView /> : <FakeNewsPlayerView />;
-      case 'cardswar':
-        return isHost ? <CardsWarHostView /> : <CardsWarPlayerView />;
-      case 'texas-holdem-poker':
-        return isHost ? <TexasHoldemHostView /> : <TexasHoldemPlayerView />;
-      default:
-        return <p>Error: Unknown game type '{gameState.gameId}'!</p>;
-    }
-  };
-
-  const gameView = renderGameView();
-
-  if (isHost && !isConfigurable && gameState.gameId !== 'quizclash') { // The HostFrame is part of the dynamic layout system
-    return (
-      <HostFrame>
-        {gameView}
-      </HostFrame>
-    );
-  }
-
-  return gameView;
+  // The DynamicViewRenderer handles all game types based on the state configuration.
+  // This removes the need for hardcoded switch statements and enables the "Universal Engine".
+  return <DynamicViewRenderer />;
 };
