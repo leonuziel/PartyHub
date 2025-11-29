@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { Parser } from 'expr-eval';
 
 import { StateTimer } from './StateTimer.js';
 
@@ -23,10 +24,10 @@ export class ValueResolver {
   }
 
   public resolve(value: any, additionalContext: any = {}, evaluate = false): any {
-    const context = { 
-        ...this.fullContext, 
-        ...additionalContext,
-        timeSinceStateEntry: this.stateTimer.getTimeSinceStateEntry(),
+    const context = {
+      ...this.fullContext,
+      ...additionalContext,
+      timeSinceStateEntry: this.stateTimer.getTimeSinceStateEntry(),
     };
 
     if (typeof value !== 'string') {
@@ -35,8 +36,8 @@ export class ValueResolver {
 
     if (evaluate) {
       try {
-        const func = new Function(...Object.keys(context), `return ${value};`);
-        return func(...Object.values(context));
+        const parser = new Parser();
+        return parser.evaluate(value, context);
       } catch (e) {
         console.error(`Error evaluating expression: "${value}"`, e);
         return value;
@@ -51,8 +52,8 @@ export class ValueResolver {
     const singleExprMatch = value.match(/^\{\{([\s\S]+?)\}\}$/);
     if (singleExprMatch) {
       try {
-        const func = new Function(...Object.keys(context), `return ${singleExprMatch[1]};`);
-        return func(...Object.values(context));
+        const parser = new Parser();
+        return parser.evaluate(singleExprMatch[1], context);
       } catch (e) {
         console.error(`Error evaluating expression: "${singleExprMatch[1]}"`, e);
         return value;
