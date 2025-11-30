@@ -1,100 +1,99 @@
-import { ValueResolver } from '../ValueResolver.js';
-import { StateTimer } from '../StateTimer.js';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { ValueResolver } from '../ValueResolver';
+import { StateTimer } from '../StateTimer';
 
-describe('ValueResolver', () => {
+describe('ValueResolver Security & Logic', () => {
+  let valueResolver: ValueResolver;
+  let mockStateTimer: StateTimer;
   let gameState: any;
   let gameData: any;
   let players: Map<string, any>;
-  let hostId: string;
-  let stateTimer: any;
-  let valueResolver: ValueResolver;
 
   beforeEach(() => {
-    gameState = {
-      currentQuestionIndex: 1,
-      isFinished: false,
-      scores: {
-        player1: 100,
-      },
-    };
-    gameData = {
-      questions: ['Q1', 'Q2', 'Q3'],
-    };
-    players = new Map([
-      ['player1', { id: 'player1', name: 'Alice' }],
-      ['player2', { id: 'player2', name: 'Bob' }],
-    ]);
-    hostId = 'player1';
-    stateTimer = {
-      getTimeSinceStateEntry: vi.fn().mockReturnValue(1500),
+    mockStateTimer = {
+      getTimeSinceStateEntry: vi.fn().mockReturnValue(100),
     } as any;
 
-    valueResolver = new ValueResolver(gameState, gameData, players, hostId, stateTimer);
-  });
-
-  it('should return non-string values as is', () => {
-    expect(valueResolver.resolve(123)).toBe(123);
-    expect(valueResolver.resolve(true)).toBe(true);
-    expect(valueResolver.resolve({ a: 1 })).toEqual({ a: 1 });
-  });
-
-  it('should resolve a simple value from gameState', () => {
-    expect(valueResolver.resolve('{{gameState.currentQuestionIndex}}')).toBe(1);
-  });
-
-  it('should resolve a boolean value', () => {
-    expect(valueResolver.resolve('{{gameState.isFinished}}')).toBe(false);
-  });
-
-  it('should resolve a value from gameData', () => {
-    const expression = '{{gameData.questions[gameState.currentQuestionIndex]}}';
-    expect(valueResolver.resolve(expression)).toBe('Q2');
-  });
-
-  it('should interpolate a value within a string', () => {
-    const expression = 'The current score is {{gameState.scores.player1}}';
-    expect(valueResolver.resolve(expression)).toBe('The current score is 100');
-  });
-
-  it('should resolve a value from the players array', () => {
-    expect(valueResolver.resolve("{{players[0].name}}")).toBe('Alice');
-  });
-
-  it('should use lodash in an expression', () => {
-    // Verify lodash is available and working
-    const expression = '{{_.add(1, 2)}}';
-    expect(valueResolver.resolve(expression)).toBe(3);
-  });
-
-  it('should prevent malicious code execution', () => {
-    const maliciousExpression = '{{process.exit(1)}}';
-    const result1 = valueResolver.resolve(maliciousExpression);
-    // Safe outcomes: 
-    // 1. Returns undefined (expression evaluated to nothing/blocked)
-    // 2. Returns original string (error caught)
-    expect(result1 === undefined || result1 === maliciousExpression).toBe(true);
-
-    const maliciousConstructor = '{{this.constructor.constructor("return process")().exit()}}';
-    const result2 = valueResolver.resolve(maliciousConstructor);
-    // Safe outcomes:
-    // 1. Returns undefined (blocked)
-    // 2. Returns original string (error caught)
-    // 3. Returns something else but NOT causing exit (e.g. if process is undefined)
-    // We mainly want to ensure it didn't crash the process.
-    expect(result2 === undefined || result2 === maliciousConstructor).toBe(true);
-  });
-
-  it('should handle additional context', () => {
-    const additionalContext = {
-      actor: { id: 'player2', name: 'Bob' },
+    gameState = {
+      currentRound: 1,
+      config: { maxTime: 60 }
     };
-    const expression = 'The actor is {{actor.name}}';
-    expect(valueResolver.resolve(expression, additionalContext)).toBe('The actor is Bob');
+    gameData = {
+      multiplier: 2
+    };
+    players = new Map();
+    players.set('p1', { id: 'p1', score: 10, name: 'Alice' });
+
+    valueResolver = new ValueResolver(
+      gameState,
+      gameData,
+      players,
+      'host1',
+      mockStateTimer
+    );
   });
 
-  it('should return the original string if resolution fails', () => {
-    const expression = '{{gameState.nonExistentProperty}}';
-    expect(valueResolver.resolve(expression)).toBe(undefined); // Because the expression evaluates to undefined
+  describe('Valid Math & Logic', () => {
+    it('should evaluate basic math', () => {
+      expect(valueResolver.resolve('{{ 1 + 1 }}')).toBe(2);
+    });
+
+    it('should evaluate comparisons', () => {
+      expect(valueResolver.resolve('{{ 10 > 5 }}')).toBe(true);
+    });
+
+    it('should evaluate ternary operators', () => {
+      expect(valueResolver.resolve('{{ 10 > 5 ? "High" : "Low" }}')).toBe('High');
+      expect(valueResolver.resolve('{{ 1 > 5 ? "High" : "Low" }}')).toBe('Low');
+    });
+  });
+
+  describe('Context Variable Access', () => {
+    it('should access provided data (players)', () => {
+      expect(valueResolver.resolve('{{ players[0].score + 10 }}')).toBe(20);
+    });
+
+    it('should access nested game state', () => {
+      expect(valueResolver.resolve('{{ gameState.currentRound }}')).toBe(1);
+    });
+
+    it('should access gameData', () => {
+      expect(valueResolver.resolve('{{ gameData.multiplier * 5 }}')).toBe(10);
+    });
+
+    it('should access timeSinceStateEntry', () => {
+      expect(valueResolver.resolve('{{ timeSinceStateEntry }}')).toBe(100);
+    });
+  });
+
+  describe('Security & Sandboxing (CRITICAL)', () => {
+    it('should NOT allow access to process', () => {
+      const exitSpy = vi.spyOn(process, 'exit').mockImplementation(() => { throw new Error('Process exited'); });
+      const result = valueResolver.resolve('{{ process.exit(1) }}');
+      expect(exitSpy).not.toHaveBeenCalled();
+      expect(result).toBe('{{ process.exit(1) }}');
+      exitSpy.mockRestore();
+    });
+
+    it('should NOT allow access to global', () => {
+      const result = valueResolver.resolve('{{ global }}');
+      expect(result).toBe('{{ global }}');
+    });
+
+    it('should NOT allow require', () => {
+      const result = valueResolver.resolve('{{ require("fs") }}');
+      expect(result).toBe('{{ require("fs") }}');
+    });
+
+    it('should NOT allow code injection via IIFE', () => {
+      const result = valueResolver.resolve('{{ (function(){ return "hack"; })() }}');
+      expect(result).toBe('{{ (function(){ return "hack"; })() }}');
+    });
+
+    it('should NOT allow constructor access to break sandbox', () => {
+      const attempt = '{{ "".constructor.constructor("return process")() }}';
+      const result = valueResolver.resolve(attempt);
+      expect(result).toBe(attempt);
+    });
   });
 });
