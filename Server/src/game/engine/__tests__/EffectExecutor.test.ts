@@ -374,4 +374,125 @@ describe('EffectExecutor', () => {
       expect(testBed.getGameState().gameData.value).toBe(1);
     });
   });
+
+  describe('Scoring Logic', () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2024-01-01T00:00:00Z'));
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it('should calculate scores deterministically based on time/decay using expressions', () => {
+      // 1. Setup
+      const initialState = {
+        playerAttributes: {
+          p1: { score: 0 },
+        },
+      };
+      const testBed = new TestBed(initialState);
+
+      // Simulate entering a state
+      (testBed as any).stateTimer.onStateEnter();
+
+      // 2. Advance time by 2 seconds (2000ms)
+      vi.advanceTimersByTime(2000);
+
+      // 3. Execute Effect: Score = 1000 - (timeSinceStateEntry / 10)
+      // Expected: 1000 - (2000 / 10) = 1000 - 200 = 800
+      const effect = {
+        function: 'setProperty',
+        args: ['playerAttributes.p1.score', '{{ 1000 - (timeSinceStateEntry / 10) }}'],
+      };
+
+      testBed.executeEffect(effect);
+
+      // 4. Assert
+      expect(testBed.getGameState().playerAttributes.p1.score).toBe(800);
+    });
+  });
+
+  describe('Numeric Operations', () => {
+    it('should correctly decrement values using negative increment', () => {
+      const initialState = { counter: 10 };
+      const testBed = new TestBed(initialState);
+      const effect = {
+        function: 'incrementProperty',
+        args: ['counter', -3],
+      };
+
+      testBed.executeEffect(effect);
+
+      expect(testBed.getGameState().counter).toBe(7);
+    });
+
+    it('should handle floating point increments', () => {
+      const initialState = { counter: 1.5 };
+      const testBed = new TestBed(initialState);
+      const effect = {
+        function: 'incrementProperty',
+        args: ['counter', 0.5],
+      };
+
+      testBed.executeEffect(effect);
+
+      expect(testBed.getGameState().counter).toBe(2.0);
+    });
+  });
+
+  describe('Edge Cases', () => {
+    it('should handle incrementProperty on null/undefined target by initializing it', () => {
+      const initialState = { data: {} };
+      const testBed = new TestBed(initialState);
+      const effect = {
+        function: 'incrementProperty',
+        args: ['data.newCounter', 5],
+      };
+
+      testBed.executeEffect(effect);
+
+      expect(testBed.getGameState().data.newCounter).toBe(5);
+    });
+
+    it('should handle shuffleArray on non-array target gracefully', () => {
+      const initialState = { data: { notArray: 'string' } };
+      const testBed = new TestBed(initialState);
+
+      // Spy on console.warn to verify warning
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => { });
+
+      const effect = {
+        function: 'shuffleArray',
+        args: ['data.notArray'],
+      };
+
+      testBed.executeEffect(effect);
+
+      expect(testBed.getGameState().data.notArray).toBe('string'); // Should remain unchanged
+      expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('shuffleArray target is not an array'));
+
+      consoleSpy.mockRestore();
+    });
+
+    it('should handle arrayClear on non-array target gracefully', () => {
+      const initialState = { data: { notArray: 'string' } };
+      const testBed = new TestBed(initialState);
+
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => { });
+
+      const effect = {
+        function: 'arrayClear',
+        args: ['data.notArray'],
+      };
+
+      testBed.executeEffect(effect);
+
+      expect(testBed.getGameState().data.notArray).toBe('string');
+      expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('arrayClear target is not an array'));
+
+      consoleSpy.mockRestore();
+    });
+  });
 });
