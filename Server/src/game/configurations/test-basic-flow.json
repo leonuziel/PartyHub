@@ -15,25 +15,36 @@
     "incrementCounter": [
       {
         "function": "incrementProperty",
-        "args": ["testCounter"]
+        "args": [
+          "testCounter"
+        ]
       }
     ]
   },
   "initialState": "LOBBY",
   "states": {
-    "LOBBY": {},
+    "LOBBY": {
+      "allowedEvents": [
+        "next"
+      ]
+    },
     "GAME": {
       "onEnter": [
         {
           "runAction": "incrementCounter"
         }
+      ],
+      "allowedEvents": [
+        "next"
       ]
     },
     "END": {}
   },
   "events": {
     "next": {
-      "permissions": ["host"]
+      "permissions": [
+        "host"
+      ]
     }
   },
   "transitions": [

@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { jest } from '@jest/globals';
+import { vi } from 'vitest';
 import { EffectExecutor } from '../../EffectExecutor.js';
 import { ValueResolver } from '../../ValueResolver.js';
 import { GameEventHandler } from '../../GameEventHandler.js';
@@ -8,9 +8,9 @@ import { GameConfiguration } from '../../../../utils/validators/GameConfigValida
 
 // Create a simple mock object for the SocketManager
 const mockSocketManager = {
-    emitToPlayer: jest.fn(),
-    emitToRoom: jest.fn(),
-    emitToHost: jest.fn(),
+    emitToPlayer: vi.fn(),
+    emitToRoom: vi.fn(),
+    emitToHost: vi.fn(),
 };
 
 export class TestBed {
@@ -34,11 +34,11 @@ export class TestBed {
         const players = new Map(Object.entries(initialState.players || {}));
         const hostId = initialState.hostId || 'host';
         const transitionTo = (newState: string) => { this.gameState.status = newState; };
-        const broadcast = (event: string, payload: any) => { this.mockSocketManager.emitToRoom(this.gameState.roomCode, event, payload); };
+        const broadcast = this.broadcast.bind(this);
         const getSanitizedGameState = () => ({ ...this.gameState });
-        
+
         this.stateTimer = new StateTimer();
-        
+
         this.valueResolver = new ValueResolver(
             this.gameState,
             this.gameState.gameData,
@@ -51,10 +51,10 @@ export class TestBed {
             this.gameState,
             gameConfig,
             this.valueResolver,
-            () => {}, // mock handleInternalAction
+            () => { }, // mock handleInternalAction
             this.stateTimer
         );
-        
+
         this.eventHandler = new GameEventHandler(
             this.gameState,
             gameConfig,
@@ -67,6 +67,10 @@ export class TestBed {
         );
 
         this.effectExecutor.setEventHandler(this.eventHandler);
+    }
+
+    private broadcast(event: string, payload: any) {
+        this.mockSocketManager.emitToRoom(this.gameState.roomCode, event, payload);
     }
 
     public executeEffect(effect: any) {

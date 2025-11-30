@@ -1,14 +1,14 @@
 import { UIStateBuilder } from '../UIStateBuilder.js';
 import { ValueResolver } from '../ValueResolver.js';
 import { Player } from '../../../types/interfaces.js';
-import { jest } from '@jest/globals';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-jest.mock('../ValueResolver.js');
+vi.mock('../ValueResolver.js');
 
 describe('UIStateBuilder', () => {
   let gameState: any;
   let config: any;
-  let valueResolver: jest.Mocked<ValueResolver>;
+  let valueResolver: any;
   let uiStateBuilder: UIStateBuilder;
 
   const mockPlayers = new Map<string, Player>([
@@ -27,19 +27,19 @@ describe('UIStateBuilder', () => {
     };
     // Mock ValueResolver and its internal context
     valueResolver = {
-        interpolate: jest.fn((obj, context: any) => {
-            // A simple interpolator for testing
-            if (typeof obj === 'string') {
-                if (obj.includes('{{gameTitle}}')) return obj.replace('{{gameTitle}}', gameState.gameTitle);
-                if (context && context.player && obj.includes('{{player.hasAnswered}}')) {
-                    return context.player.hasAnswered;
-                }
-            }
-            return obj; // Return object as is for component structures
-        }),
-        fullContext: {
-            players: Array.from(mockPlayers.values()),
-        },
+      interpolate: vi.fn((obj, context: any) => {
+        // A simple interpolator for testing
+        if (typeof obj === 'string') {
+          if (obj.includes('{{gameTitle}}')) return obj.replace('{{gameTitle}}', gameState.gameTitle);
+          if (context && context.player && obj.includes('{{player.hasAnswered}}')) {
+            return context.player.hasAnswered;
+          }
+        }
+        return obj; // Return object as is for component structures
+      }),
+      fullContext: {
+        players: Array.from(mockPlayers.values()),
+      },
     } as any;
   });
 

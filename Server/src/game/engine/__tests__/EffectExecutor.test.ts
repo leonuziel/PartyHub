@@ -1,5 +1,5 @@
 import { TestBed } from './helpers/TestBed';
-import { jest } from '@jest/globals';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 describe('EffectExecutor', () => {
   describe('setProperty', () => {
@@ -53,11 +53,11 @@ describe('EffectExecutor', () => {
 
   describe('Timers', () => {
     beforeEach(() => {
-      jest.useFakeTimers();
+      vi.useFakeTimers();
     });
 
     afterEach(() => {
-      jest.useRealTimers();
+      vi.useRealTimers();
     });
 
     it('should start a timer and execute effects on expiration', () => {
@@ -73,7 +73,7 @@ describe('EffectExecutor', () => {
       expect(testBed.getGameState().gameData.status).toBe('waiting');
 
       // Fast-forward time by 5 seconds
-      jest.advanceTimersByTime(5000);
+      vi.advanceTimersByTime(5000);
 
       // Now the onExpire effect should have executed
       expect(testBed.getGameState().gameData.status).toBe('finished');
@@ -91,7 +91,7 @@ describe('EffectExecutor', () => {
       testBed.executeEffect(cancelTimerEffect);
 
       // Fast-forward time
-      jest.advanceTimersByTime(5000);
+      vi.advanceTimersByTime(5000);
 
       // The status should NOT have changed because the timer was cancelled
       expect(testBed.getGameState().gameData.status).toBe('waiting');
@@ -133,7 +133,7 @@ describe('EffectExecutor', () => {
       const testBed = new TestBed(initialState);
 
       // Mocking getTimeSinceStateEntry to return a predictable value
-      (testBed as any).valueResolver.stateTimer.getTimeSinceStateEntry = jest.fn(() => 1234);
+      (testBed as any).valueResolver.stateTimer.getTimeSinceStateEntry = vi.fn(() => 1234);
 
       const effect = { function: 'recordEvent', args: ['playerAnswered', 'gameData.lastAnswer'] };
       testBed.executeEffect(effect);
@@ -242,6 +242,11 @@ describe('EffectExecutor', () => {
       };
 
       const config = {
+        states: {
+          waiting: {
+            allowedEvents: ['playerAnswered'],
+          }
+        },
         events: {
           incrementCounter: {
             permissions: ['server' as const],
@@ -350,7 +355,7 @@ describe('EffectExecutor', () => {
       const effectWithTrueCondition = {
         function: 'setProperty',
         args: ['gameData.value', 1],
-        condition: 'gameData.proceed === true',
+        condition: 'gameData.proceed == true',
       };
       testBed.executeEffect(effectWithTrueCondition);
 
@@ -361,7 +366,7 @@ describe('EffectExecutor', () => {
       const effectWithFalseCondition = {
         function: 'setProperty',
         args: ['gameData.value', 2],
-        condition: 'gameData.proceed === false',
+        condition: 'gameData.proceed == false',
       };
       testBed.executeEffect(effectWithFalseCondition);
 

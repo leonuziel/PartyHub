@@ -1,17 +1,17 @@
 import { Room } from '../Room.js';
 import { Server, Socket } from 'socket.io';
-import { jest } from '@jest/globals';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // Mock socket.io Server and Socket
 const mockIo = {
-    to: jest.fn().mockReturnThis(),
-    emit: jest.fn(),
+    to: vi.fn().mockReturnThis(),
+    emit: vi.fn(),
 } as unknown as Server;
 
 const createMockSocket = (id: string) => ({
     id,
-    join: jest.fn(),
-    emit: jest.fn(),
+    join: vi.fn(),
+    emit: vi.fn(),
 } as unknown as Socket);
 
 describe('Room Session Persistence', () => {

@@ -1,6 +1,6 @@
 import { ConfigurableGame } from '../games/ConfigurableGame.js';
 import { Player } from '../../types/interfaces.js';
-import { jest } from '@jest/globals';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -23,13 +23,13 @@ describe('ConfigurableGame Integration Test', () => {
     ['player2', { id: 'player2', nickname: 'Player 2', avatar: '' }],
   ]);
   const mockHostId = 'host-id';
-  let mockOnUpdate: jest.Mock;
-  let mockOnGameEnd: jest.Mock;
+  let mockOnUpdate: any;
+  let mockOnGameEnd: any;
 
   describe('Basic State Transitions', () => {
     beforeEach(() => {
-      mockOnUpdate = jest.fn();
-      mockOnGameEnd = jest.fn();
+      mockOnUpdate = vi.fn();
+      mockOnGameEnd = vi.fn();
       const config = loadConfig('test-basic-flow.json');
       game = new ConfigurableGame(
         mockPlayers,
@@ -49,26 +49,26 @@ describe('ConfigurableGame Integration Test', () => {
     });
 
     it('should transition from LOBBY to GAME on "next" event', () => {
-        game.handlePlayerAction(mockHostId, { type: 'next' });
-        const lastCall: any = mockOnUpdate.mock.calls[mockOnUpdate.mock.calls.length - 1][1];
-        expect(lastCall.currentState).toBe('GAME');
+      game.handlePlayerAction(mockHostId, { type: 'next' });
+      const lastCall: any = mockOnUpdate.mock.calls[mockOnUpdate.mock.calls.length - 1][1];
+      expect(lastCall.currentState).toBe('GAME');
     });
 
     it('should execute onEnter effects when transitioning', () => {
-        game.handlePlayerAction(mockHostId, { type: 'next' }); // LOBBY -> GAME
-        const lastCall: any = mockOnUpdate.mock.calls[mockOnUpdate.mock.calls.length - 1][1];
-        expect(lastCall.currentState).toBe('GAME');
-        expect(lastCall.testCounter).toBe(1);
-      });
+      game.handlePlayerAction(mockHostId, { type: 'next' }); // LOBBY -> GAME
+      const lastCall: any = mockOnUpdate.mock.calls[mockOnUpdate.mock.calls.length - 1][1];
+      expect(lastCall.currentState).toBe('GAME');
+      expect(lastCall.testCounter).toBe(1);
+    });
 
     it('should complete a full game flow', () => {
-        game.handlePlayerAction(mockHostId, { type: 'next' }); // LOBBY -> GAME
-        let lastCall: any = mockOnUpdate.mock.calls[mockOnUpdate.mock.calls.length - 1][1];
-        expect(lastCall.currentState).toBe('GAME');
-        
-        game.handlePlayerAction(mockHostId, { type: 'next' }); // GAME -> END
-        lastCall = mockOnUpdate.mock.calls[mockOnUpdate.mock.calls.length - 1][1];
-        expect(lastCall.currentState).toBe('END');
-      });
+      game.handlePlayerAction(mockHostId, { type: 'next' }); // LOBBY -> GAME
+      let lastCall: any = mockOnUpdate.mock.calls[mockOnUpdate.mock.calls.length - 1][1];
+      expect(lastCall.currentState).toBe('GAME');
+
+      game.handlePlayerAction(mockHostId, { type: 'next' }); // GAME -> END
+      lastCall = mockOnUpdate.mock.calls[mockOnUpdate.mock.calls.length - 1][1];
+      expect(lastCall.currentState).toBe('END');
+    });
   });
 });

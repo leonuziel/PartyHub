@@ -20,10 +20,13 @@ export class ValueResolver {
       hostId: this.hostId,
       //lodash can be used in expressions
       _: _,
+      Math: Math,
+      Date: Date,
     };
   }
 
   public resolve(value: any, additionalContext: any = {}, evaluate = false): any {
+    console.log(`[ValueResolver] resolve called with value: "${value}", evaluate: ${evaluate}`);
     const context = {
       ...this.fullContext,
       ...additionalContext,
@@ -37,9 +40,12 @@ export class ValueResolver {
     if (evaluate) {
       try {
         const parser = new Parser();
-        return parser.evaluate(value, context);
+        const result = parser.evaluate(value, context);
+        // console.log(`[ValueResolver] Evaluated "${value}" ->`, result);
+        return result;
       } catch (e) {
         console.error(`Error evaluating expression: "${value}"`, e);
+        console.log('Context keys:', Object.keys(context));
         return value;
       }
     }

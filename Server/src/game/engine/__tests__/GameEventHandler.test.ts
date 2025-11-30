@@ -1,22 +1,22 @@
 import { GameEventHandler } from '../GameEventHandler.js';
 import { ValueResolver } from '../ValueResolver.js';
 import { EffectExecutor } from '../EffectExecutor.js';
-import { jest } from '@jest/globals';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // Mocks for all dependencies
-jest.mock('../ValueResolver.js');
-jest.mock('../EffectExecutor.js');
+vi.mock('../ValueResolver.js');
+vi.mock('../EffectExecutor.js');
 
 describe('GameEventHandler', () => {
   let gameState: any;
   let config: any;
-  let valueResolver: jest.Mocked<ValueResolver>;
-  let effectExecutor: jest.Mocked<EffectExecutor>;
-  let transitionTo: jest.Mock;
-  let broadcast: jest.Mock;
-  let getSanitizedGameState: jest.Mock;
+  let valueResolver: any;
+  let effectExecutor: any;
+  let transitionTo: any;
+  let broadcast: any;
+  let getSanitizedGameState: any;
   let gameEventHandler: GameEventHandler;
-  
+
   const hostId = 'host-player';
 
   beforeEach(() => {
@@ -24,30 +24,35 @@ describe('GameEventHandler', () => {
       status: 'CURRENT_STATE',
     };
     valueResolver = {
-      resolve: jest.fn(val => val),
+      resolve: vi.fn(val => val),
     } as any;
     effectExecutor = {
-      execute: jest.fn(),
+      execute: vi.fn(),
     } as any;
-    transitionTo = jest.fn();
-    broadcast = jest.fn();
-    getSanitizedGameState = jest.fn(() => ({ ...gameState }));
+    transitionTo = vi.fn();
+    broadcast = vi.fn();
+    getSanitizedGameState = vi.fn(() => ({ ...gameState }));
 
     config = {
+      states: {
+        CURRENT_STATE: {
+          allowedEvents: ['playerAction', 'transitionAction'],
+        }
+      },
       events: {
         playerAction: {
           permissions: ['player'],
           effects: [{ function: 'setProperty', args: ['foo', 'bar'] }],
         },
         hostAction: {
-            permissions: ['host'],
+          permissions: ['host'],
         },
         transitionAction: {
-            permissions: ['player'],
+          permissions: ['player'],
         },
       },
       transitions: [
-          { from: 'CURRENT_STATE', to: 'NEXT_STATE', event: 'transitionAction' }
+        { from: 'CURRENT_STATE', to: 'NEXT_STATE', event: 'transitionAction' }
       ],
     };
 
@@ -66,8 +71,8 @@ describe('GameEventHandler', () => {
   it('should execute effects for a permitted event', () => {
     gameEventHandler.handle('playerAction', 'player1');
     expect(effectExecutor.execute).toHaveBeenCalledWith(
-        config.events.playerAction.effects,
-        { actorId: 'player1', payload: undefined }
+      config.events.playerAction.effects,
+      { actorId: 'player1', payload: undefined }
     );
     expect(broadcast).toHaveBeenCalledWith('game:state_update', expect.any(Object));
   });

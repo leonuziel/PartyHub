@@ -169,14 +169,14 @@
         "function": "setProperty",
         "args": [
           "playerAttributes.{{player.id}}.lastScoreGained",
-          "{{ Math.round((1 - ( (player.submittedAt - gameState.timerStart) / 10000)) * 500) + 500 }}"
+          "{{ round((1 - ( (player.submittedAt - gameState.timerStart) / 10000)) * 500) + 500 }}"
         ]
       },
       {
         "function": "incrementProperty",
         "args": [
           "playerAttributes.{{player.id}}.score",
-          "{{player.lastScoreGained}}"
+          "{{ _.get(gameState, ['playerAttributes', player.id, 'lastScoreGained']) }}"
         ]
       }
     ],

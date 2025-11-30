@@ -1,13 +1,13 @@
 import { ValueResolver } from '../ValueResolver.js';
 import { StateTimer } from '../StateTimer.js';
-import { jest } from '@jest/globals';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 describe('ValueResolver', () => {
   let gameState: any;
   let gameData: any;
   let players: Map<string, any>;
   let hostId: string;
-  let stateTimer: jest.Mocked<StateTimer>;
+  let stateTimer: any;
   let valueResolver: ValueResolver;
 
   beforeEach(() => {
@@ -27,7 +27,7 @@ describe('ValueResolver', () => {
     ]);
     hostId = 'player1';
     stateTimer = {
-      getTimeSinceStateEntry: jest.fn().mockReturnValue(1500),
+      getTimeSinceStateEntry: vi.fn().mockReturnValue(1500),
     } as any;
 
     valueResolver = new ValueResolver(gameState, gameData, players, hostId, stateTimer);
