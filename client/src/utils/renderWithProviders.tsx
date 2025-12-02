@@ -5,14 +5,7 @@ import { useGameStore } from '../store/gameStore';
 import { usePlayerStore } from '../store/playerStore';
 import { useRoomStore } from '../store/roomStore';
 
-// Mock the stores and services
-jest.mock('../store/gameStore');
-jest.mock('../store/playerStore');
-jest.mock('../store/roomStore');
-jest.mock('../services/socketService');
-jest.mock('react-router-dom', () => ({
-  useNavigate: () => jest.fn(),
-}));
+// Mocks are handled in setupTests.ts
 
 const mockUseGameStore = useGameStore as unknown as jest.Mock;
 const mockUsePlayerStore = usePlayerStore as unknown as jest.Mock;

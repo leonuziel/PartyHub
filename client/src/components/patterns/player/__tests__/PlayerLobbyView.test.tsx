@@ -8,7 +8,7 @@ jest.mock('../../lobby/AvatarCustomizer', () => ({
   AvatarCustomizer: () => <div data-testid="avatar-customizer" />,
 }));
 jest.mock('../../../primitives/feedback/StateIndicator', () => ({
-  StateIndicator: (props: any) => <div data-testid="state-indicator" {...props} />,
+  StateIndicator: (props: any) => <div data-testid="state-indicator" data-status={props.status} {...props} />,
 }));
 
 describe('PlayerLobbyView', () => {
@@ -20,7 +20,7 @@ describe('PlayerLobbyView', () => {
     expect(screen.getByText("You're in! See your name on the main screen.")).toBeInTheDocument();
 
     const stateIndicator = screen.getByTestId('state-indicator');
-    expect(stateIndicator).toHaveAttribute('status', 'Not Ready');
+    expect(stateIndicator).toHaveAttribute('data-status', 'Not Ready');
 
     await userEvent.click(screen.getByText('Ready'));
     expect(onReady).toHaveBeenCalled();

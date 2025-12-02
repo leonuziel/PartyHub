@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import { renderWithProviders } from '../../../../utils/renderWithProviders';
@@ -45,7 +45,7 @@ describe('WordGuesserInput', () => {
 
     await userEvent.clear(inputs[1]);
     await userEvent.keyboard('{backspace}');
-    
+
     expect(inputs[0]).toHaveFocus();
   });
 
@@ -58,7 +58,7 @@ describe('WordGuesserInput', () => {
     await userEvent.type(inputs[1], 'A');
     await userEvent.type(inputs[2], 'T');
 
-    form.submit();
+    fireEvent.submit(form);
 
     expect(onGuess).toHaveBeenCalledWith('CAT');
   });

@@ -1,0 +1,28 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DynamicViewRenderer > matches snapshot for complex UI 1`] = `
+<div>
+  <div
+    style="justify-self: center; align-self: center; padding-top: 20px;"
+  >
+    <div
+      data-testid="stack"
+    >
+      <div
+        style="grid-area: main-area;"
+      >
+        <span>
+          Welcome
+        </span>
+      </div>
+      <div
+        style="grid-area: main-area;"
+      >
+        <button>
+          Start
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -1,4 +1,7 @@
 import { useRoomStore } from './roomStore';
+import { vi } from 'vitest';
+
+vi.unmock('./roomStore');
 import { RoomData } from '../types/types';
 
 // Mock initial state for testing
@@ -35,12 +38,12 @@ describe('useRoomStore', () => {
 
   it('should clear the room data', () => {
     const newRoomData: RoomData = {
-        roomCode: 'TEST',
-        players: [{ id: '1', nickname: 'Player1', score: 0 }],
-        host: { id: 'host1', nickname: 'Host', score: 0 },
-        hostId: 'host1',
-        state: 'LOBBY' as any,
-        gameId: 'quizclash',
+      roomCode: 'TEST',
+      players: [{ id: '1', nickname: 'Player1', score: 0 }],
+      host: { id: 'host1', nickname: 'Host', score: 0 },
+      hostId: 'host1',
+      state: 'LOBBY' as any,
+      gameId: 'quizclash',
     };
     useRoomStore.getState().setRoom(newRoomData);
 

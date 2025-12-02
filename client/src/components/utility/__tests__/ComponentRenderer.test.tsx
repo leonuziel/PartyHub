@@ -2,20 +2,21 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { ComponentRenderer } from '../ComponentRenderer';
-import * as ComponentRegistry from '../../ComponentRegistry';
+import { vi } from 'vitest';
 
-// Mock simple components for testing purposes
-const MockTextDisplay = ({ text }: { text: string }) => <div>{text}</div>;
-const MockContainer = ({ children }: { children: React.ReactNode }) => <section>{children}</section>;
+vi.mock('../../ComponentRegistry', () => {
+  const React = require('react');
+  const MockTextDisplay = ({ text }: { text: string }) => React.createElement('div', null, text);
+  const MockContainer = ({ children }: { children: any }) => React.createElement('section', null, children);
+  return {
+    ComponentRegistry: {
+      MockTextDisplay,
+      MockContainer,
+    }
+  };
+});
 
 describe('ComponentRenderer', () => {
-  beforeAll(() => {
-    // Override the actual registry with a mock for controlled testing
-    (ComponentRegistry as any).ComponentRegistry = {
-      MockTextDisplay: MockTextDisplay,
-      MockContainer: MockContainer,
-    };
-  });
 
   it('renders a simple component from the registry', () => {
     const config = {
@@ -33,13 +34,13 @@ describe('ComponentRenderer', () => {
 
   it('renders a "not found" message for an unknown component and suppresses console warning', () => {
     // Mock console.warn to prevent logging during this specific test
-    const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => { });
 
     const config = { component: 'UnknownComponent', props: {} };
     render(<ComponentRenderer config={config} context={{}} />);
-    
+
     expect(screen.getByText('Component not found: UnknownComponent')).toBeInTheDocument();
-    
+
     // Verify that the warning was called, and then restore the original implementation
     expect(consoleWarnSpy).toHaveBeenCalledWith('Component "UnknownComponent" not found in registry.');
     consoleWarnSpy.mockRestore();
@@ -75,8 +76,8 @@ describe('ComponentRenderer', () => {
     // Based on implementation, this won't be "Welcome, Charlie!". It will be just the value.
     // Let's test the actual behavior.
     const config_full_match = {
-        component: 'MockTextDisplay',
-        props: { text: '{{user.name}}' }
+      component: 'MockTextDisplay',
+      props: { text: '{{user.name}}' }
     }
     render(<ComponentRenderer config={config_full_match} context={context} />);
     expect(screen.getByText('Charlie')).toBeInTheDocument();

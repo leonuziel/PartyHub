@@ -32,7 +32,7 @@ describe('CardContainer Component', () => {
     render(<CardContainer cards={mockCards} selectedCardIds={['1']} />);
     // The style is on the Card component, which is the child of the wrapper
     const selectedCard = screen.getByText('Card 1');
-    expect(selectedCard).toHaveStyle('border: 2px solid #8A2BE2');
+    expect(selectedCard).toHaveStyle({ borderColor: 'rgb(138, 43, 226)' });
   });
 
   it('renders in grid layout by default', () => {

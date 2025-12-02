@@ -20,7 +20,7 @@ describe('GamePiece Component', () => {
 
   it('applies the correct background color', () => {
     const { container } = render(<GamePiece color="blue" />);
-    expect(container.firstChild).toHaveStyle('background-color: blue');
+    expect(container.firstChild).toHaveStyle('background-color: rgb(0, 0, 255)');
   });
 
   it('displays an image when the image prop is provided', () => {

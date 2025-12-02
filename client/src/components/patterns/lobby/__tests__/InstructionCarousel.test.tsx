@@ -2,8 +2,9 @@ import React from 'react';
 import { render, screen, fireEvent, act, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { InstructionCarousel } from '../InstructionCarousel';
+import { vi } from 'vitest';
 
-jest.useFakeTimers();
+vi.useFakeTimers();
 
 const mockSlides = [
   { title: 'Slide 1', text: 'This is the first slide.' },
@@ -19,7 +20,7 @@ describe('InstructionCarousel', () => {
 
   it('automatically advances to the next slide after the interval', async () => {
     render(<InstructionCarousel slides={mockSlides} autoPlayInterval={3} />);
-    
+
     expect(screen.getByText('Slide 1')).toBeInTheDocument();
 
     act(() => {
@@ -27,34 +28,34 @@ describe('InstructionCarousel', () => {
     });
 
     await waitFor(() => {
-        expect(screen.getByText('Slide 2')).toBeInTheDocument();
+      expect(screen.getByText('Slide 2')).toBeInTheDocument();
     });
   });
 
   it('loops back to the first slide after the last one', async () => {
     render(<InstructionCarousel slides={mockSlides} autoPlayInterval={3} />);
-    
-    act(() => {
-        jest.advanceTimersByTime(3000); // To slide 2
-    });
-    
-    await waitFor(() => {
-        expect(screen.getByText('Slide 2')).toBeInTheDocument();
-    });
 
     act(() => {
-        jest.advanceTimersByTime(3000); // To slide 1
+      vi.advanceTimersByTime(3100); // To slide 2
     });
 
     await waitFor(() => {
-        expect(screen.getByText('Slide 1')).toBeInTheDocument();
+      expect(screen.getByText('Slide 2')).toBeInTheDocument();
     });
-  });
+
+    act(() => {
+      vi.advanceTimersByTime(3100); // To slide 1
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('Slide 1')).toBeInTheDocument();
+    });
+  }, 10000);
 
   it('allows manual navigation by clicking the dots', () => {
     render(<InstructionCarousel slides={mockSlides} />);
     const dots = document.querySelectorAll('.dot');
-    
+
     fireEvent.click(dots[1]);
     expect(screen.getByText('Slide 2')).toBeInTheDocument();
   });

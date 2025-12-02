@@ -21,7 +21,7 @@ describe('Spacer', () => {
     expect(spacer).toBeInTheDocument();
     expect(spacer).toHaveStyle('flex-grow: 1');
     expect(spacer).toHaveStyle('height: 50px');
-    expect(spacer).toHaveStyle('background-color: red');
+    expect(spacer).toHaveStyle('background-color: rgb(255, 0, 0)');
   });
 
   test('can override default styles', () => {

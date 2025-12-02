@@ -1,4 +1,7 @@
 import { usePlayerStore } from './playerStore';
+import { vi } from 'vitest';
+
+vi.unmock('./playerStore');
 
 // Mock initial state for testing
 const initialState = {
@@ -36,11 +39,11 @@ describe('usePlayerStore', () => {
 
   it('should be able to clear the socket ID', () => {
     usePlayerStore.getState().setSocketId('test-socket-id');
-    
+
     // Ensure state is set
     let state = usePlayerStore.getState();
     expect(state.socketId).not.toBeNull();
-    
+
     usePlayerStore.getState().setSocketId(null);
 
     state = usePlayerStore.getState();

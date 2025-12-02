@@ -68,7 +68,7 @@ export const StateIndicator: React.FC<StateIndicatorProps> = ({
   };
 
   return (
-    <div data-testid="state-indicator" style={containerStyle} className={className}>
+    <div data-testid="state-indicator" data-status={status} style={containerStyle} className={className}>
       {renderIndicator()}
     </div>
   );

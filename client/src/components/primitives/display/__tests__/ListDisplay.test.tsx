@@ -4,10 +4,12 @@ import '@testing-library/jest-dom';
 import { ListDisplay } from '../ListDisplay';
 import { ComponentRenderer } from '../../../utility/ComponentRenderer';
 
+import { vi } from 'vitest';
+
 // Mock the ComponentRenderer as ListDisplay depends on it.
 // This allows us to inspect the props passed to it.
-jest.mock('../../../utility/ComponentRenderer', () => ({
-  ComponentRenderer: jest.fn(() => null),
+vi.mock('../../../utility/ComponentRenderer', () => ({
+  ComponentRenderer: vi.fn(() => null),
 }));
 
 // A simple component to use for rendering items in tests
@@ -29,7 +31,7 @@ describe('ListDisplay Component', () => {
 
   beforeEach(() => {
     // Clear mock calls before each test
-    (ComponentRenderer as jest.Mock).mockClear();
+    vi.mocked(ComponentRenderer).mockClear();
   });
 
   // 1. Smoke test

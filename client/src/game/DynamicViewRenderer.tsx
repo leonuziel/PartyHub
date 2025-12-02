@@ -16,7 +16,17 @@ const transformProps = (props: Record<string, any>): Record<string, any> => {
         const value = props[key];
         if (value && typeof value === 'object' && value.action) {
             newProps[key] = (...args: any[]) => {
-                const payload = args.length > 0 ? args[0] : value.payload;
+                let payload = value.payload;
+                // If the component passes arguments (like an event or input value), use them,
+                // UNLESS it's a React SyntheticEvent, in which case we prefer the static payload
+                // if available, or just ignore the event if we don't want to send it.
+                if (args.length > 0) {
+                    const arg = args[0];
+                    const isEvent = arg && typeof arg === 'object' && ('nativeEvent' in arg || 'preventDefault' in arg);
+                    if (!isEvent) {
+                        payload = arg;
+                    }
+                }
                 socketService.sendGameAction(value.action, payload);
             };
         } else {
@@ -37,30 +47,30 @@ export const DynamicViewRenderer: React.FC = () => {
         if (!Component) {
             return <div key={index}>Error: Component '{config.component}' not found in registry.</div>;
         }
-    
+
         const transformedProps = transformProps(config.props);
-    
+
         // Children can be a top-level property or inside props. This checks both.
         const childrenSource = config.children || (config.props ? config.props.children : undefined);
         const isParentGrid = config.component === 'Grid';
-    
+
         if (Array.isArray(childrenSource)) {
             // Recursively render children, passing the isGridChild flag if the parent is a Grid.
             transformedProps.children = childrenSource.map((childConfig, childIndex) =>
                 renderComponent(childConfig, childIndex, isParentGrid)
             );
         }
-    
+
         // If this component is a child of a Grid, it should not be wrapped in a layout div.
         // The parent Grid component is responsible for its layout.
         if (isGridChild) {
             return <Component key={index} {...transformedProps} />;
         }
-    
+
         // This is a top-level component. Wrap it in a div to apply layout styles.
         const wrapperStyle: CSSProperties = { gridArea: 'main-area' };
         Object.assign(wrapperStyle, config.layout ? getStyleFromLayout(config.layout) : {});
-    
+
         return (
             <div key={index} style={wrapperStyle}>
                 <Component {...transformedProps} />
@@ -85,7 +95,7 @@ export const DynamicViewRenderer: React.FC = () => {
             viewConfig = gameState.ui.players[playerId];
         }
     }
-    
+
     if (!viewConfig || !Array.isArray(viewConfig.components)) {
         return (
             <CenteredMessage>
@@ -93,7 +103,7 @@ export const DynamicViewRenderer: React.FC = () => {
             </CenteredMessage>
         );
     }
-    
+
     // The main view is a grid container that defines a single area.
     // All components are placed into this area and align themselves within it.
     const viewStyle: CSSProperties = viewConfig.layout ? getStyleFromLayout(viewConfig.layout) : {

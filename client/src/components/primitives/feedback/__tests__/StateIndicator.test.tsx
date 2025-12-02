@@ -33,7 +33,7 @@ describe('StateIndicator Component', () => {
     render(<StateIndicator status="Ready" indicator="color" />);
     const colorDiv = screen.getByTestId('color-indicator');
     expect(colorDiv).toBeInTheDocument();
-    expect(colorDiv).toHaveStyle({ backgroundColor: 'green' });
+    expect(colorDiv).toHaveStyle({ backgroundColor: 'rgb(0, 128, 0)' });
   });
 
   // Test 4: className prop

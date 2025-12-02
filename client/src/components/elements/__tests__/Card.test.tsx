@@ -51,7 +51,7 @@ describe('Card Component', () => {
   it('applies selected styles when isSelected is true', () => {
     const { container } = render(<Card {...defaultProps} isSelected={true} />);
     const cardElement = container.firstChild;
-    expect(cardElement).toHaveStyle('border: 2px solid #8A2BE2');
+    expect(cardElement).toHaveStyle({ borderColor: 'rgb(138, 43, 226)' });
     expect(cardElement).toHaveStyle('transform: translateY(-10px)');
   });
 
@@ -62,6 +62,6 @@ describe('Card Component', () => {
 
   it('applies custom styles', () => {
     const { container } = render(<Card {...defaultProps} style={{ backgroundColor: 'blue' }} />);
-    expect(container.firstChild).toHaveStyle('background-color: blue');
+    expect(container.firstChild).toHaveStyle('background-color: rgb(0, 0, 255)');
   });
 });

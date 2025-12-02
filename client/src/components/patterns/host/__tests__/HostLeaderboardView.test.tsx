@@ -1,12 +1,14 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { HostLeaderboardView } from '../HostLeaderboardView';
-import { Player } from '../../../types/types';
+import { Player } from '../../../../types/types';
 
-jest.mock('../../../primitives/display/ListDisplay', () => ({
-    ListDisplay: (props: any) => {
-        return <div data-testid="list-display">{props.items.map((item: any) => <div key={item.id}>{item.nickname}</div>)}</div>;
-    }
+import { vi } from 'vitest';
+
+vi.mock('../../../primitives/display/ListDisplay', () => ({
+  ListDisplay: (props: any) => {
+    return <div data-testid="list-display">{props.items.map((item: any) => <div key={item.id}>{item.nickname}</div>)}</div>;
+  }
 }));
 
 
@@ -18,7 +20,7 @@ const mockPlayers: Player[] = [
 describe('HostLeaderboardView', () => {
   it('renders the leaderboard view with sorted players', () => {
     render(<HostLeaderboardView players={mockPlayers} />);
-    
+
     // The component sorts players internally. Let's check the first player in the sorted list.
     // In this case, it should be Player 2
     expect(screen.getByText('Player 2')).toBeInTheDocument();

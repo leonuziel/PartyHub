@@ -1,4 +1,7 @@
 import { useGameStore } from './gameStore';
+import { vi } from 'vitest';
+
+vi.unmock('./gameStore');
 import { GameState } from '../types/types';
 
 // Mock initial state for testing

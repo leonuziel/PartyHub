@@ -2,8 +2,9 @@ import React from 'react';
 import { render, screen, act, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { ScoreAccumulationBar } from '../ScoreAccumulationBar';
+import { vi } from 'vitest';
 
-jest.useFakeTimers();
+vi.useFakeTimers();
 
 describe('ScoreAccumulationBar', () => {
   const onComplete = jest.fn();
@@ -34,7 +35,7 @@ describe('ScoreAccumulationBar', () => {
 
     // Fast-forward timers
     act(() => {
-      jest.runAllTimers();
+      vi.advanceTimersByTime(5000);
     });
 
     // Check final state
@@ -43,28 +44,28 @@ describe('ScoreAccumulationBar', () => {
     });
 
     expect(onComplete).toHaveBeenCalledTimes(1);
-  });
+  }, 10000);
 
   it('handles a score change of zero gracefully', async () => {
     render(
-        <ScoreAccumulationBar
-          initialScore={1000}
-          scoreChange={0}
-          label="Player 1"
-          onComplete={onComplete}
-        />
-      );
-  
-      act(() => {
-        jest.runAllTimers();
-      });
-  
-      await waitFor(() => {
-        expect(screen.getByText('1,000')).toBeInTheDocument();
-      });
-      expect(screen.queryByText('+0')).not.toBeInTheDocument();
-      expect(onComplete).toHaveBeenCalledTimes(1);
-  });
+      <ScoreAccumulationBar
+        initialScore={1000}
+        scoreChange={0}
+        label="Player 1"
+        onComplete={onComplete}
+      />
+    );
+
+    act(() => {
+      vi.advanceTimersByTime(5000);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('1,000')).toBeInTheDocument();
+    });
+    expect(screen.queryByText('+0')).not.toBeInTheDocument();
+    expect(onComplete).toHaveBeenCalledTimes(1);
+  }, 10000);
 
   it('animates the score decreasing over time', async () => {
     render(
@@ -80,7 +81,7 @@ describe('ScoreAccumulationBar', () => {
     expect(screen.getByText('-500')).toBeInTheDocument();
 
     act(() => {
-      jest.runAllTimers();
+      vi.advanceTimersByTime(5000);
     });
 
     await waitFor(() => {
@@ -88,53 +89,53 @@ describe('ScoreAccumulationBar', () => {
     });
 
     expect(onComplete).toHaveBeenCalledTimes(1);
-  });
+  }, 10000);
 
   it('respects the start delay', async () => {
     render(
-        <ScoreAccumulationBar
-          initialScore={1000}
-          scoreChange={100}
-          label="Player 1"
-          startDelay={500}
-          onComplete={onComplete}
-        />
-      );
-      
-      // Right after render, score should be initial
+      <ScoreAccumulationBar
+        initialScore={1000}
+        scoreChange={100}
+        label="Player 1"
+        startDelay={500}
+        onComplete={onComplete}
+      />
+    );
+
+    // Right after render, score should be initial
+    expect(screen.getByText('1,000')).toBeInTheDocument();
+
+    // Advance time by less than the delay
+    act(() => {
+      vi.advanceTimersByTime(499);
+    });
+    await waitFor(() => {
       expect(screen.getByText('1,000')).toBeInTheDocument();
+    });
 
-      // Advance time by less than the delay
-      act(() => {
-          jest.advanceTimersByTime(499);
-      });
-      await waitFor(() => {
-        expect(screen.getByText('1,000')).toBeInTheDocument();
-      });
-      
-      // Advance time past the delay
-      act(() => {
-        jest.advanceTimersByTime(1);
-      });
-      
-      // Now the animation should start, but not be finished
-      act(() => {
-        jest.advanceTimersByTime(50);
-      });
-      await waitFor(() => {
-          const score = parseInt(screen.getByText(/,/).textContent!.replace(/,/g, ''), 10);
-          expect(score).toBeGreaterThan(1000);
-          expect(score).toBeLessThan(1100);
-      });
+    // Advance time past the delay
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
 
-      // Run all timers to finish
-      act(() => {
-          jest.runAllTimers();
-      });
-      await waitFor(() => {
-        expect(screen.getByText('1,100')).toBeInTheDocument();
-      });
+    // Now the animation should start, but not be finished
+    act(() => {
+      vi.advanceTimersByTime(50);
+    });
+    await waitFor(() => {
+      const score = parseInt(screen.getByText(/,/).textContent!.replace(/,/g, ''), 10);
+      expect(score).toBeGreaterThan(1000);
+      expect(score).toBeLessThan(1100);
+    });
 
-      expect(onComplete).toHaveBeenCalledTimes(1);
-  });
+    // Run all timers to finish
+    act(() => {
+      vi.advanceTimersByTime(5000);
+    });
+    await waitFor(() => {
+      expect(screen.getByText('1,100')).toBeInTheDocument();
+    });
+
+    expect(onComplete).toHaveBeenCalledTimes(1);
+  }, 10000);
 });

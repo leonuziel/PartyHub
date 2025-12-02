@@ -32,7 +32,7 @@ describe('TextDisplay Component', () => {
       'font-size': styleProps.fontSize,
       'font-weight': styleProps.fontWeight,
       'font-family': styleProps.fontFamily,
-      color: styleProps.color,
+      color: 'rgb(0, 0, 255)',
       'text-align': styleProps.textAlign,
     });
   });

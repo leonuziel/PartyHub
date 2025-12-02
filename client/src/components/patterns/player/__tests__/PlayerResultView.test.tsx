@@ -2,11 +2,13 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { PlayerResultView } from '../PlayerResultView';
 
+import { vi } from 'vitest';
+
 // Mock the child components to inspect their props
-jest.mock('../../../primitives/feedback/StateIndicator', () => ({
+vi.mock('../../../primitives/feedback/StateIndicator', () => ({
   StateIndicator: ({ status }: any) => <div data-testid="state-indicator" data-status={status} />,
 }));
-jest.mock('../../../old/display/RankUpdate', () => ({
+vi.mock('../../../old/display/RankUpdate', () => ({
   RankUpdate: ({ oldRank, newRank }: any) => <div data-testid="rank-update" data-oldrank={oldRank} data-newrank={newRank} />,
 }));
 
